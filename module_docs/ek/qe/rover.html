@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.rover &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.qe.signals" href="signals.html" />
+    <link rel="prev" title="ek.qe.decide" href="decide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.qe.rover</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.AgreementSignal"><code class="docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.DEFAULT_CONF_WEIGHT"><code class="docutils literal notranslate"><span class="pre">DEFAULT_CONF_WEIGHT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.DEFAULT_MAX_TOKENS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_MAX_TOKENS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.DEFAULT_NULL_CONF"><code class="docutils literal notranslate"><span class="pre">DEFAULT_NULL_CONF</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.DEFAULT_TOKEN_CONF"><code class="docutils literal notranslate"><span class="pre">DEFAULT_TOKEN_CONF</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.RoverConsensus"><code class="docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.rover.RoverConsensus.mean_agreement"><code class="docutils literal notranslate"><span class="pre">RoverConsensus.mean_agreement</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.rover.RoverConsensus.text"><code class="docutils literal notranslate"><span class="pre">RoverConsensus.text</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.RoverSlot"><code class="docutils literal notranslate"><span class="pre">RoverSlot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.rover.rover"><code class="docutils literal notranslate"><span class="pre">rover()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.qe.rover</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/qe/rover.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.qe.rover">
+<span id="ek-qe-rover"></span><h1>ek.qe.rover<a class="headerlink" href="#module-ek.qe.rover" title="Link to this heading"></a></h1>
+<p>ROVER: multi-engine consensus + per-position agreement (the online flagship).</p>
+<p>NIST’s <strong>Recognizer Output Voting Error Reduction</strong> (Fiscus, 1997) combines the
+outputs of several recognizers/extractors when <em>no reference is available</em>. It runs
+in two stages: an <strong>alignment</strong> stage that merges the hypotheses into a single word
+transition network (WTN) via iterative dynamic-programming alignments, and a
+<strong>voting</strong> stage that picks, per branch point, the best-scoring word – by vote
+frequency alone, or blended with confidence. There is no maintained, permissively
+licensed Python ROVER to depend on, so <code class="docutils literal notranslate"><span class="pre">ek</span></code> builds it on the edit-distance
+primitives it already ships (pure-Python here for null-safety and zero new deps).</p>
+<p>Two outputs come out of one pass:</p>
+<ul class="simple">
+<li><p>a <strong>consensus</strong> transcription (often lower error than any single engine), and</p></li>
+<li><p>a <strong>per-position agreement</strong> score in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> – the fraction of engines that
+voted for the winning token at each slot. Positions where engines <em>disagree</em> are
+exactly the positions to flag, so this doubles as a <strong>reference-free confidence
+signal</strong> (an <a class="reference internal" href="#ek.qe.rover.AgreementSignal" title="ek.qe.rover.AgreementSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a> for <a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a>).</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">ek</span></code> depends only on the <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code> <em>shape</em> (<code class="docutils literal notranslate"><span class="pre">.text</span></code> / <code class="docutils literal notranslate"><span class="pre">.blocks</span></code> /
+<code class="docutils literal notranslate"><span class="pre">.mean_confidence</span></code>), so ROVER fuses <strong>any</strong> <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable – or
+plain strings, token lists, or <code class="docutils literal notranslate"><span class="pre">(token,</span> <span class="pre">confidence)</span></code> lists. The alignment is
+<code class="docutils literal notranslate"><span class="pre">O(N</span> <span class="pre">*</span> <span class="pre">l</span> <span class="pre">*</span> <span class="pre">L</span> <span class="pre">*</span> <span class="pre">L')</span></code> in the engine count and sequence lengths, hence designed for a
+handful of engines (its historical regime). Alignment is incremental and therefore
+<em>order-dependent</em> – a documented property of ROVER, not a bug.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code> (and <code class="docutils literal notranslate"><span class="pre">ek_04</span></code> for cross-source corroboration).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">rover</span><span class="p">([</span><span class="s2">&quot;the cat sat&quot;</span><span class="p">,</span> <span class="s2">&quot;the cat sit&quot;</span><span class="p">,</span> <span class="s2">&quot;the bat sat&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">text</span>
+<span class="go">&#39;the cat sat&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">agreement</span><span class="p">]</span>            <span class="c1"># per consensus token</span>
+<span class="go">[1.0, 0.667, 0.667]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">mean_agreement</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.778</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.rover.AgreementSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">AgreementSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/rover.html#AgreementSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.rover.AgreementSignal" title="Link to this definition"></a></dt>
+<dd><p>ROVER multi-engine agreement as a reference-free <a class="reference internal" href="../base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p>
+<p>Cost tier 3 (<code class="docutils literal notranslate"><span class="pre">N</span></code> engine runs): try the deterministic verifier layer and any
+free intrinsic confidence first. Called on a collection of hypotheses, it runs
+<a class="reference internal" href="#ek.qe.rover.rover" title="ek.qe.rover.rover"><code class="xref py py-func docutils literal notranslate"><span class="pre">rover()</span></code></a> and returns the mean per-position agreement as the raw signal –
+<em>uncalibrated</em>, like every signal, so it must pass through a
+<a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> before any gate reads it.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">AgreementSignal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">sig</span><span class="p">([</span><span class="s2">&quot;the cat sat&quot;</span><span class="p">,</span> <span class="s2">&quot;the cat sit&quot;</span><span class="p">,</span> <span class="s2">&quot;the bat sat&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.778</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.rover.DEFAULT_CONF_WEIGHT">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_CONF_WEIGHT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.5</span></span><a class="headerlink" href="#ek.qe.rover.DEFAULT_CONF_WEIGHT" title="Link to this definition"></a></dt>
+<dd><p>Default blend of average confidence vs vote frequency in the slot score
+(Fiscus’s <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code>); <code class="docutils literal notranslate"><span class="pre">0</span></code> is frequency-only, <code class="docutils literal notranslate"><span class="pre">1</span></code> is confidence-only.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.rover.DEFAULT_MAX_TOKENS">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_MAX_TOKENS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5000</span></span><a class="headerlink" href="#ek.qe.rover.DEFAULT_MAX_TOKENS" title="Link to this definition"></a></dt>
+<dd><p>Default per-hypothesis token cap for the O(N*l*L*L’) aligner (DoS guard).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.rover.DEFAULT_NULL_CONF">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_NULL_CONF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.7</span></span><a class="headerlink" href="#ek.qe.rover.DEFAULT_NULL_CONF" title="Link to this definition"></a></dt>
+<dd><p>Default confidence credited to a NULL vote (an engine that emitted no token at a
+slot) – the lever for how readily a deletion wins.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.rover.DEFAULT_TOKEN_CONF">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_TOKEN_CONF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#ek.qe.rover.DEFAULT_TOKEN_CONF" title="Link to this definition"></a></dt>
+<dd><p>Confidence assigned to a present token whose source reports no usable confidence
+(e.g. a VLM/markdown OcrResult with <code class="docutils literal notranslate"><span class="pre">confidence</span> <span class="pre">is</span> <span class="pre">None</span></code>).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.rover.RoverConsensus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">RoverConsensus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.qe.rover.RoverSlot" title="ek.qe.rover.RoverSlot"><span class="pre">RoverSlot</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agreement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_engines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/rover.html#RoverConsensus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.rover.RoverConsensus" title="Link to this definition"></a></dt>
+<dd><p>The result of a ROVER pass over N hypotheses.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.rover.RoverConsensus.mean_agreement">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mean_agreement</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.qe.rover.RoverConsensus.mean_agreement" title="Link to this definition"></a></dt>
+<dd><p>Mean per-position agreement over consensus tokens (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if degenerate).</p>
+<p>A reference-free confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed
+at every emitted position; lower means at least one engine dissented.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.rover.RoverConsensus.text">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">text</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#ek.qe.rover.RoverConsensus.text" title="Link to this definition"></a></dt>
+<dd><p>The consensus transcription (space-joined winning tokens).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.rover.RoverSlot">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">RoverSlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple[str</span> <span class="pre">|</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">float]]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vote_share</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/rover.html#RoverSlot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.rover.RoverSlot" title="Link to this definition"></a></dt>
+<dd><p>One branch point of the transition network: each engine’s token (or NULL).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.rover.rover">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.rover.</span></span><span class="sig-name descname"><span class="pre">rover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypotheses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.rover.RoverConsensus" title="ek.qe.rover.RoverConsensus"><span class="pre">RoverConsensus</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/rover.html#rover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.rover.rover" title="Link to this definition"></a></dt>
+<dd><p>Align N hypotheses, vote per slot, and emit consensus + per-position agreement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypotheses</strong> – The recognizer/extractor outputs to fuse. Each may be a string,
+an <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code>-shaped object (<code class="docutils literal notranslate"><span class="pre">.text</span></code>/<code class="docutils literal notranslate"><span class="pre">.mean_confidence</span></code>), a list of
+token strings, or a list of <code class="docutils literal notranslate"><span class="pre">(token,</span> <span class="pre">confidence)</span></code> pairs.</p></li>
+<li><p><strong>use_confidence</strong> – Blend confidence into the vote (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or vote purely by
+frequency (<code class="docutils literal notranslate"><span class="pre">False</span></code>, which forces <code class="docutils literal notranslate"><span class="pre">conf_weight</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p></li>
+<li><p><strong>conf_weight</strong> – Weight on average confidence vs vote frequency in the slot score
+(Fiscus’s <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code>); <code class="docutils literal notranslate"><span class="pre">0</span></code> is frequency-only, <code class="docutils literal notranslate"><span class="pre">1</span></code> is
+confidence-only. Ignored when <code class="docutils literal notranslate"><span class="pre">use_confidence</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>null_conf</strong> – Confidence credited to a NULL vote (an engine that produced no
+token at a slot) – the lever for how readily a deletion wins.</p></li>
+<li><p><strong>tokenize</strong> – Optional <code class="docutils literal notranslate"><span class="pre">hypothesis</span> <span class="pre">-&gt;</span> <span class="pre">[(token,</span> <span class="pre">confidence),</span> <span class="pre">...]</span></code> override; by
+default <code class="xref py py-func docutils literal notranslate"><span class="pre">_as_units()</span></code> handles strings/OcrResults/token lists.</p></li>
+<li><p><strong>max_tokens</strong> – Reject any hypothesis longer than this (the aligner is
+<code class="docutils literal notranslate"><span class="pre">O(N*l*L*L')</span></code>; an unbounded input is a quadratic time/memory DoS).
+<code class="docutils literal notranslate"><span class="pre">None</span></code> disables the guard.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#ek.qe.rover.RoverConsensus" title="ek.qe.rover.RoverConsensus"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a> with the consensus <code class="docutils literal notranslate"><span class="pre">tokens</span></code>/<code class="docutils literal notranslate"><span class="pre">text</span></code>, the per-slot
+breakdown, and the per-consensus-token <code class="docutils literal notranslate"><span class="pre">agreement</span></code> usable as a raw signal.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="decide.html" class="btn btn-neutral float-left" title="ek.qe.decide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="signals.html" class="btn btn-neutral float-right" title="ek.qe.signals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

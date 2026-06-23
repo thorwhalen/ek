@@ -60,6 +60,12 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/registry.html">ek.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/stores.html">ek.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/tools.html">ek.tools</a></li>
@@ -98,6 +104,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
@@ -144,6 +151,22 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.LogprobSignal.aggregator">aggregator() (ek.LogprobSignal method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.LogprobSignal.aggregator">(ek.qe.LogprobSignal method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.LogprobSignal.aggregator">(ek.qe.signals.LogprobSignal method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.AgreementSignal">AgreementSignal (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.AgreementSignal">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.AgreementSignal">(class in ek.qe.rover)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.AnnotatedExtraction">AnnotatedExtraction (class in ek)</a>
 
       <ul>
@@ -184,14 +207,24 @@
 </li>
       <li><a href="module_docs/ek/tools.html#ek.tools.check">check() (in module ek.tools)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.check_requirements">check_requirements() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/registry.html#ek.registry.check_requirements">(in module ek.registry)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.checksum_validator">checksum_validator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.checksum_validator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.checksum_validator">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.CHECKSUMS">CHECKSUMS (in module ek.qe.verifiers)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.cohen_kappa">cohen_kappa() (in module ek)</a>
 
       <ul>
@@ -202,13 +235,31 @@
 </li>
       <li><a href="module_docs/ek/base.html#ek.base.ConfidenceSource">ConfidenceSource (in module ek.base)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.ConformalGate">ConformalGate (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.ConformalGate">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.ConformalGate">(class in ek.qe.decide)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar.cost">cost() (ek.base.GraphGrammar method)</a>
 
       <ul>
         <li><a href="module_docs/ek.html#ek.GraphGrammar.cost">(ek.GraphGrammar method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.CostSensitiveGate">CostSensitiveGate (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.CostSensitiveGate">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.CostSensitiveGate">(class in ek.qe.decide)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/base.html#ek.base.CostWeight">CostWeight (in module ek.base)</a>
+</li>
+      <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.crepes_mondrian_gate">crepes_mondrian_gate() (in module ek.qe.decide)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -230,21 +281,39 @@
         <li><a href="module_docs/ek/base.html#ek.base.DecisionPolicy">(class in ek.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.DEFAULT_ALPHA">DEFAULT_ALPHA (in module ek.qe.decide)</a>
+</li>
       <li><a href="module_docs/ek.html#ek.default_canonicalizer">default_canonicalizer() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.default_canonicalizer">(in module ek.canonicalize)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_CONF_WEIGHT">DEFAULT_CONF_WEIGHT (in module ek.qe.rover)</a>
+</li>
       <li><a href="module_docs/ek.html#ek.default_cost_weight">default_cost_weight() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.default_cost_weight">(in module ek.base)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.DEFAULT_LENGTH_ALPHA">DEFAULT_LENGTH_ALPHA (in module ek.qe.signals)</a>
+</li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_MAX_TOKENS">DEFAULT_MAX_TOKENS (in module ek.qe.rover)</a>
+</li>
+      <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.DEFAULT_N_BINS">DEFAULT_N_BINS (in module ek.qe.calibrate)</a>
+</li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_NULL_CONF">DEFAULT_NULL_CONF (in module ek.qe.rover)</a>
+</li>
       <li><a href="module_docs/ek/ocr/profiles.html#ek.ocr.profiles.DEFAULT_PROFILE">DEFAULT_PROFILE (in module ek.ocr.profiles)</a>
+</li>
+      <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.DEFAULT_RISK_TARGET">DEFAULT_RISK_TARGET (in module ek.qe.decide)</a>
+</li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_TOKEN_CONF">DEFAULT_TOKEN_CONF (in module ek.qe.rover)</a>
+</li>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.DEFAULT_TOTALS_TOL">DEFAULT_TOTALS_TOL (in module ek.qe.verifiers)</a>
 </li>
       <li><a href="module_docs/ek/__main__.html#ek.__main__.dispatch_with_namespaces">dispatch_with_namespaces() (in module ek.__main__)</a>
 </li>
@@ -336,8 +405,6 @@
         <li><a href="module_docs/ek/metrics/strings.html#module-ek.metrics.strings">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.ocr
 
@@ -367,6 +434,50 @@
 </li>
       </ul></li>
       <li>
+    ek.qe
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#module-ek.qe">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    ek.qe.calibrate
+
+      <ul>
+        <li><a href="module_docs/ek/qe/calibrate.html#module-ek.qe.calibrate">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.qe.decide
+
+      <ul>
+        <li><a href="module_docs/ek/qe/decide.html#module-ek.qe.decide">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.qe.rover
+
+      <ul>
+        <li><a href="module_docs/ek/qe/rover.html#module-ek.qe.rover">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.qe.signals
+
+      <ul>
+        <li><a href="module_docs/ek/qe/signals.html#module-ek.qe.signals">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.qe.verifiers
+
+      <ul>
+        <li><a href="module_docs/ek/qe/verifiers.html#module-ek.qe.verifiers">module</a>
+</li>
+      </ul></li>
+      <li>
     ek.registry
 
       <ul>
@@ -391,6 +502,14 @@
 </li>
       <li><a href="module_docs/ek/tools.html#ek.tools.engines">engines() (in module ek.tools)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.enum_validator">enum_validator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.enum_validator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.enum_validator">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.estimate_quality">estimate_quality() (in module ek)</a>
 
       <ul>
@@ -415,12 +534,28 @@
         <li><a href="module_docs/ek/harness.html#ek.harness.evaluate_store">(in module ek.harness)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.expected_calibration_error">expected_calibration_error() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.expected_calibration_error">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.expected_calibration_error">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.GroupCalibrator.factory">factory (ek.GroupCalibrator attribute)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.GroupCalibrator.factory">(ek.qe.calibrate.GroupCalibrator attribute)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.GroupCalibrator.factory">(ek.qe.GroupCalibrator attribute)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar.field_cost">field_cost() (ek.base.GraphGrammar method)</a>
 
       <ul>
@@ -441,8 +576,6 @@
         <li><a href="module_docs/ek/metrics/fields.html#ek.metrics.fields.FieldMetric">(class in ek.metrics.fields)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.FieldSpec">FieldSpec (class in ek)</a>
 
       <ul>
@@ -453,6 +586,54 @@
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.Finding">(class in ek.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.VerifierSignal.findings">findings() (ek.qe.verifiers.VerifierSignal method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.VerifierSignal.findings">(ek.qe.VerifierSignal method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.VerifierSignal.findings">(ek.VerifierSignal method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.ConformalGate.fit">fit() (ek.ConformalGate method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek.html#ek.GroupCalibrator.fit">(ek.GroupCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.IsotonicCalibrator.fit">(ek.IsotonicCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.PlattCalibrator.fit">(ek.PlattCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.GroupCalibrator.fit">(ek.qe.calibrate.GroupCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.IsotonicCalibrator.fit">(ek.qe.calibrate.IsotonicCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.PlattCalibrator.fit">(ek.qe.calibrate.PlattCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.TemperatureCalibrator.fit">(ek.qe.calibrate.TemperatureCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.ConformalGate.fit">(ek.qe.ConformalGate method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.ConformalGate.fit">(ek.qe.decide.ConformalGate method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.RiskControlGate.fit">(ek.qe.decide.RiskControlGate method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.GroupCalibrator.fit">(ek.qe.GroupCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.IsotonicCalibrator.fit">(ek.qe.IsotonicCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.PlattCalibrator.fit">(ek.qe.PlattCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.RiskControlGate.fit">(ek.qe.RiskControlGate method)</a>
+</li>
+        <li><a href="module_docs/ek/qe.html#ek.qe.TemperatureCalibrator.fit">(ek.qe.TemperatureCalibrator method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.RiskControlGate.fit">(ek.RiskControlGate method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.TemperatureCalibrator.fit">(ek.TemperatureCalibrator method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -467,18 +648,84 @@
         <li><a href="module_docs/ek/harness.html#ek.harness.GateResult">(class in ek.harness)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/qe.html#ek.qe.geo_mean">geo_mean() (in module ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.geo_mean">(in module ek.qe.signals)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.get">get() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/registry.html#ek.registry.get">(in module ek.registry)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.GraphGrammar">GraphGrammar (class in ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar">(class in ek.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.GroupCalibrator">GroupCalibrator (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.GroupCalibrator">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.GroupCalibrator">(class in ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.GroupConformalGate">GroupConformalGate (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.GroupConformalGate">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.GroupConformalGate">(class in ek.qe.decide)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.iban_check">iban_check() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.iban_check">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.iban_check">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.IntrinsicConfidenceSignal">IntrinsicConfidenceSignal (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.IntrinsicConfidenceSignal">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.IntrinsicConfidenceSignal">(class in ek.qe.signals)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn10_check">isbn10_check() (in module ek.qe.verifiers)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn13_check">isbn13_check() (in module ek.qe.verifiers)</a>
+</li>
+      <li><a href="module_docs/ek.html#ek.isbn_check">isbn_check() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.isbn_check">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn_check">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.IsotonicCalibrator">IsotonicCalibrator (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.IsotonicCalibrator">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.IsotonicCalibrator">(class in ek.qe.calibrate)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -515,16 +762,46 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/qe.html#ek.qe.length_normalized">length_normalized() (in module ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.length_normalized">(in module ek.qe.signals)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.load_baseline">load_baseline() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/harness.html#ek.harness.load_baseline">(in module ek.harness)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.load_calibrator">load_calibrator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.load_calibrator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.load_calibrator">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.LogprobSignal">LogprobSignal (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.LogprobSignal">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.LogprobSignal">(class in ek.qe.signals)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.lower">lower() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.luhn_check">luhn_check() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.luhn_check">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.luhn_check">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -543,10 +820,30 @@
       </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.mark_class_count">mark_class_count() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.RoverConsensus.mean_agreement">mean_agreement (ek.qe.rover.RoverConsensus property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.RoverConsensus.mean_agreement">(ek.qe.RoverConsensus property)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.RoverConsensus.mean_agreement">(ek.RoverConsensus property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe.html#ek.qe.mean_prob">mean_prob() (in module ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.mean_prob">(in module ek.qe.signals)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.Metric">Metric (class in ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.Metric">(class in ek.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe.html#ek.qe.min_prob">min_prob() (in module ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.min_prob">(in module ek.qe.signals)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek/registry.html#ek.registry.MissingExtraError">MissingExtraError</a>
@@ -583,6 +880,18 @@
 </li>
         <li><a href="module_docs/ek/ocr/profiles.html#module-ek.ocr.profiles">ek.ocr.profiles</a>
 </li>
+        <li><a href="module_docs/ek/qe.html#module-ek.qe">ek.qe</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#module-ek.qe.calibrate">ek.qe.calibrate</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#module-ek.qe.decide">ek.qe.decide</a>
+</li>
+        <li><a href="module_docs/ek/qe/rover.html#module-ek.qe.rover">ek.qe.rover</a>
+</li>
+        <li><a href="module_docs/ek/qe/signals.html#module-ek.qe.signals">ek.qe.signals</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#module-ek.qe.verifiers">ek.qe.verifiers</a>
+</li>
         <li><a href="module_docs/ek/registry.html#module-ek.registry">ek.registry</a>
 </li>
         <li><a href="module_docs/ek/stores.html#module-ek.stores">ek.stores</a>
@@ -602,6 +911,8 @@
         <li><a href="module_docs/ek/registry.html#ek.registry.names">(in module ek.registry)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.netcal_ece">netcal_ece() (in module ek.qe.calibrate)</a>
+</li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.nfc">nfc() (in module ek.canonicalize)</a>
 </li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.nfkc">nfkc() (in module ek.canonicalize)</a>
@@ -650,6 +961,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.ConformalGate.p_value">p_value() (ek.ConformalGate method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.ConformalGate.p_value">(ek.qe.ConformalGate method)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.ConformalGate.p_value">(ek.qe.decide.ConformalGate method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.percent_agreement">percent_agreement() (in module ek)</a>
 
       <ul>
@@ -664,6 +983,14 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.PlattCalibrator">PlattCalibrator (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.PlattCalibrator">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.PlattCalibrator">(class in ek.qe.calibrate)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/ocr.html#ek.ocr.profile">profile() (in module ek.ocr)</a>
 
       <ul>
@@ -694,10 +1021,26 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.range_validator">range_validator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.range_validator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.range_validator">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/ocr.html#ek.ocr.read_text">read_text() (in module ek.ocr)</a>
 
       <ul>
         <li><a href="module_docs/ek/ocr/bridge.html#ek.ocr.bridge.read_text">(in module ek.ocr.bridge)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.regex_validator">regex_validator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.regex_validator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.regex_validator">(in module ek.qe.verifiers)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.register">register() (in module ek)</a>
@@ -712,8 +1055,14 @@
         <li><a href="module_docs/ek/harness.html#ek.harness.regression_gate">(in module ek.harness)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.reliability_curve">reliability_curve() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.reliability_curve">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.reliability_curve">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.Report">Report (class in ek)</a>
 
       <ul>
@@ -726,6 +1075,8 @@
         <li><a href="module_docs/ek/registry.html#ek.registry.requires_extra">(in module ek.registry)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.resolve">resolve() (in module ek)</a>
 
       <ul>
@@ -734,6 +1085,46 @@
       </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.resolve_canonicalizer">resolve_canonicalizer() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.risk_coverage_curve">risk_coverage_curve() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.risk_coverage_curve">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.risk_coverage_curve">(in module ek.qe.decide)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.RiskControlGate">RiskControlGate (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.RiskControlGate">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.RiskControlGate">(class in ek.qe.decide)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.rover">rover() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.rover">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.rover">(in module ek.qe.rover)</a>
+</li>
+        <li><a href="module_docs/ek/tools.html#ek.tools.rover">(in module ek.tools)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.RoverConsensus">RoverConsensus (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.RoverConsensus">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.RoverConsensus">(class in ek.qe.rover)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe.html#ek.qe.RoverSlot">RoverSlot (class in ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.RoverSlot">(class in ek.qe.rover)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -744,6 +1135,22 @@
 
       <ul>
         <li><a href="module_docs/ek/harness.html#ek.harness.save_baseline">(in module ek.harness)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.save_calibrator">save_calibrator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.save_calibrator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.save_calibrator">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.schema_validator">schema_validator() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.schema_validator">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.schema_validator">(in module ek.qe.verifiers)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.Score">Score (class in ek)</a>
@@ -772,6 +1179,20 @@
         <li><a href="module_docs/ek/base.html#ek.base.Signal">(class in ek.base)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/qe.html#ek.qe.sklearn_calibrator">sklearn_calibrator() (in module ek.qe)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.sklearn_calibrator">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.split_conformal_quantile">split_conformal_quantile() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.split_conformal_quantile">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.split_conformal_quantile">(in module ek.qe.decide)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.Canonicalizer.steps">steps (ek.canonicalize.Canonicalizer property)</a>
 
       <ul>
@@ -796,6 +1217,30 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.CostSensitiveGate.tau">tau (ek.CostSensitiveGate property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.CostSensitiveGate.tau">(ek.qe.CostSensitiveGate property)</a>
+</li>
+        <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.CostSensitiveGate.tau">(ek.qe.decide.CostSensitiveGate property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.TemperatureCalibrator">TemperatureCalibrator (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.TemperatureCalibrator">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.TemperatureCalibrator">(class in ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.RoverConsensus.text">text (ek.qe.rover.RoverConsensus property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.RoverConsensus.text">(ek.qe.RoverConsensus property)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.RoverConsensus.text">(ek.RoverConsensus property)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/metrics/graphs.html#ek.metrics.graphs.TypedGraph.to_networkx">to_networkx() (ek.metrics.graphs.TypedGraph method)</a>
 
       <ul>
@@ -804,6 +1249,16 @@
         <li><a href="module_docs/ek.html#ek.TypedGraph.to_networkx">(ek.TypedGraph method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.totals_consistent">totals_consistent() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.totals_consistent">(in module ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.totals_consistent">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.TypedEdge">TypedEdge (class in ek)</a>
 
       <ul>
@@ -820,8 +1275,6 @@
         <li><a href="module_docs/ek/metrics/graphs.html#ek.metrics.graphs.TypedGraph">(class in ek.metrics.graphs)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.TypedGraphMetric">TypedGraphMetric (class in ek)</a>
 
       <ul>
@@ -854,6 +1307,14 @@
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.Validator">(class in ek.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.VerifierSignal">VerifierSignal (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/qe.html#ek.qe.VerifierSignal">(class in ek.qe)</a>
+</li>
+        <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.VerifierSignal">(class in ek.qe.verifiers)</a>
 </li>
       </ul></li>
   </ul></td>

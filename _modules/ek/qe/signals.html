@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.signals &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.qe.signals</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.qe.signals</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Intrinsic confidence signals: token logprobs and per-unit posteriors (cost tier 2).</span>
+
+<span class="sd">When the extractor already emits something usable -- token log-probabilities</span>
+<span class="sd">(generative locals like TrOCR/pix2tex, GPT-4o, Mistral OCR) or per-unit posteriors</span>
+<span class="sd">(Google Cloud Vision, Azure, Tesseract) -- the cheapest reliable signal is *free*:</span>
+<span class="sd">it was computed during inference. This module turns those raw numbers into a single</span>
+<span class="sd">field-level score (``misc/docs/ek_03`` §1a). Two modelling facts drive the design:</span>
+
+<span class="sd">1. **Raw summed logprob is length-biased** -- longer fields accumulate more negative</span>
+<span class="sd">   terms and look worse. The fix is length normalisation; the aggregation is a</span>
+<span class="sd">   *modelling choice to validate on held-out data*, so it stays **pluggable** (no</span>
+<span class="sd">   hardcoded pooling). Use ``min`` to catch the single weakest token (a transposed</span>
+<span class="sd">   digit in an amount); use the geometric mean for overall field plausibility (the</span>
+<span class="sd">   family Mistral OCR reports as ``average_page_confidence_score``).</span>
+<span class="sd">2. **It is uncalibrated** -- and for RLHF&#39;d LLMs *systematically overconfident*.</span>
+<span class="sd">   Every signal here is a raw score; a :class:`~ek.base.Calibrator` must run before</span>
+<span class="sd">   any gate reads it.</span>
+
+<span class="sd">Aggregators are registered under the ``aggregators`` namespace so a caller (or a</span>
+<span class="sd">third party) can swap pooling by name.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; import math</span>
+<span class="sd">    &gt;&gt;&gt; logps = [math.log(0.9), math.log(0.8), math.log(0.95)]</span>
+<span class="sd">    &gt;&gt;&gt; round(geo_mean(logps), 4)            # exp(mean log p)</span>
+<span class="sd">    0.8811</span>
+<span class="sd">    &gt;&gt;&gt; round(min_prob(logps), 4)            # weakest token</span>
+<span class="sd">    0.8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span>
+
+<span class="c1">#: Length-penalty exponent for :func:`length_normalized` (Wu et al. 2016 found</span>
+<span class="c1">#: ``alpha`` in ``[0.6, 0.7]`` best); a keyword default, never a magic constant.</span>
+<span class="n">DEFAULT_LENGTH_ALPHA</span> <span class="o">=</span> <span class="mf">0.6</span>
+
+<span class="n">_SENTINEL</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Logprob aggregators: Sequence[log p] -&gt; field probability score in [0, 1]</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_finite_logps</span><span class="p">(</span><span class="n">logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drop non-finite log-probabilities (a NaN/inf would poison every aggregate)</span>
+<span class="sd">    and clamp positives to ``0`` -- a valid ``log p`` is ``&lt;= 0`` (``p &lt;= 1``).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">lp</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">lp</span> <span class="ow">in</span> <span class="n">logps</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">lp</span><span class="p">))]</span>
+
+
+<div class="viewcode-block" id="geo_mean">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.geo_mean">[docs]</a>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;aggregators&quot;</span><span class="p">,</span> <span class="s2">&quot;geo_mean&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">geo_mean</span><span class="p">(</span><span class="n">logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Geometric mean of token probabilities, ``exp(mean log p)`` (perplexity-inverse).&quot;&quot;&quot;</span>
+    <span class="n">logps</span> <span class="o">=</span> <span class="n">_finite_logps</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logps</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">logps</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="length_normalized">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.length_normalized">[docs]</a>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;aggregators&quot;</span><span class="p">,</span> <span class="s2">&quot;length_normalized&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">length_normalized</span><span class="p">(</span><span class="n">logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_LENGTH_ALPHA</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Length-normalised score ``exp(Σ log p / T**alpha)`` (tunable length penalty).&quot;&quot;&quot;</span>
+    <span class="n">logps</span> <span class="o">=</span> <span class="n">_finite_logps</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">**</span> <span class="n">alpha</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="min_prob">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.min_prob">[docs]</a>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;aggregators&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">min_prob</span><span class="p">(</span><span class="n">logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Weakest-token probability ``exp(min log p)`` -- catches one bad character.&quot;&quot;&quot;</span>
+    <span class="n">logps</span> <span class="o">=</span> <span class="n">_finite_logps</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logps</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">logps</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="mean_prob">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.mean_prob">[docs]</a>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;aggregators&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_prob</span><span class="p">(</span><span class="n">logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Arithmetic mean of token probabilities ``mean(exp(log p))``.&quot;&quot;&quot;</span>
+    <span class="n">logps</span> <span class="o">=</span> <span class="n">_finite_logps</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logps</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">lp</span><span class="p">)</span> <span class="k">for</span> <span class="n">lp</span> <span class="ow">in</span> <span class="n">logps</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">logps</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LogprobSignal">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.LogprobSignal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LogprobSignal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate token log-probabilities into one field score (a :class:`~ek.base.Signal`).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        aggregator: A logprob aggregator (name registered under ``aggregators`` or a</span>
+<span class="sd">            callable). Defaults to :func:`geo_mean`.</span>
+<span class="sd">        alpha: Length penalty passed to :func:`length_normalized` only.</span>
+<span class="sd">        cost_tier: ``2`` -- free intrinsic signal (already computed at inference).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">aggregator</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">geo_mean</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_LENGTH_ALPHA</span>
+    <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_logps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">agg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggregator</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span>
+
+            <span class="n">agg</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">&quot;aggregators&quot;</span><span class="p">,</span> <span class="n">agg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">agg</span> <span class="ow">is</span> <span class="n">length_normalized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">agg</span><span class="p">(</span><span class="n">token_logps</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">agg</span><span class="p">(</span><span class="n">token_logps</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Per-unit posterior aggregation: Sequence[prob] -&gt; field probability score</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_confidences_of</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract per-unit confidences from an OcrResult-shaped object or a sequence.</span>
+
+<span class="sd">    Prefers per-block confidences (``.blocks[i].confidence``); falls back to a</span>
+<span class="sd">    single ``.mean_confidence``; otherwise treats ``obj`` as a sequence of numbers.</span>
+<span class="sd">    Null-safe: ``None`` and non-finite confidences are dropped (the VLM/markdown</span>
+<span class="sd">    case); the rest are clamped into the documented ``[0, 1]`` range.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;blocks&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">blocks</span><span class="p">:</span>
+        <span class="n">confs</span> <span class="o">=</span> <span class="n">_clean_confs</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">confs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">confs</span>
+    <span class="n">mean_conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;mean_confidence&quot;</span><span class="p">,</span> <span class="n">_SENTINEL</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mean_conf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_SENTINEL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_clean_confs</span><span class="p">([</span><span class="n">mean_conf</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">_clean_confs</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_clean_confs</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce to floats in ``[0, 1]``, dropping ``None`` and non-finite entries.&quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span> <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<div class="viewcode-block" id="IntrinsicConfidenceSignal">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/signals.html#ek.IntrinsicConfidenceSignal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IntrinsicConfidenceSignal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate an extractor&#39;s per-unit confidences into a field score.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pool: ``&quot;min&quot;`` (weakest unit), ``&quot;mean&quot;``, or ``&quot;geo_mean&quot;`` over the</span>
+<span class="sd">            per-unit confidences (already probabilities in ``[0, 1]``).</span>
+<span class="sd">        cost_tier: ``2`` -- free (the posteriors are emitted at inference).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; IntrinsicConfidenceSignal(pool=&quot;min&quot;)([0.99, 0.4, 0.95])</span>
+<span class="sd">        0.4</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pool</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span>
+    <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">confs</span> <span class="o">=</span> <span class="n">_confidences_of</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">confs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">confs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">==</span> <span class="s2">&quot;geo_mean&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mf">1e-12</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">confs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">confs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">confs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">confs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

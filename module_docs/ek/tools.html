@@ -62,12 +62,19 @@
 <li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qe/verifiers.html">ek.qe.verifiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ek.tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.cer"><code class="docutils literal notranslate"><span class="pre">cer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.check"><code class="docutils literal notranslate"><span class="pre">check()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.engines"><code class="docutils literal notranslate"><span class="pre">engines()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.tools.rover"><code class="docutils literal notranslate"><span class="pre">rover()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.version"><code class="docutils literal notranslate"><span class="pre">version()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.wer"><code class="docutils literal notranslate"><span class="pre">wer()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.tools.where"><code class="docutils literal notranslate"><span class="pre">where()</span></code></a></li>
@@ -127,6 +134,16 @@ what <a class="reference internal" href="__main__.html#module-ek.__main__" title
 <dt class="sig sig-object py" id="ek.tools.engines">
 <span class="sig-prename descclassname"><span class="pre">ek.tools.</span></span><span class="sig-name descname"><span class="pre">engines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/ek/tools.html#engines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.tools.engines" title="Link to this definition"></a></dt>
 <dd><p>List installed OCR backends (requires the <code class="docutils literal notranslate"><span class="pre">ek[ocr]</span></code> extra).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.tools.rover">
+<span class="sig-prename descclassname"><span class="pre">ek.tools.</span></span><span class="sig-name descname"><span class="pre">rover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hypotheses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/ek/tools.html#rover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.tools.rover" title="Link to this definition"></a></dt>
+<dd><p>ROVER-fuse 2+ transcriptions into a consensus + mean agreement (reference-free).</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">rover</span> <span class="s2">&quot;the cat sat&quot;</span> <span class="s2">&quot;the cat sit&quot;</span> <span class="s2">&quot;the bat sat&quot;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">

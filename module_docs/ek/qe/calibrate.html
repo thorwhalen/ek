@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.calibrate &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.qe.decide" href="decide.html" />
+    <link rel="prev" title="ek.qe" href="../qe.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.qe.calibrate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.DEFAULT_N_BINS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_N_BINS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.factory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator"><code class="docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">IsotonicCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator"><code class="docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">PlattCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.expected_calibration_error"><code class="docutils literal notranslate"><span class="pre">expected_calibration_error()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.load_calibrator"><code class="docutils literal notranslate"><span class="pre">load_calibrator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.netcal_ece"><code class="docutils literal notranslate"><span class="pre">netcal_ece()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.reliability_curve"><code class="docutils literal notranslate"><span class="pre">reliability_curve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.save_calibrator"><code class="docutils literal notranslate"><span class="pre">save_calibrator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.sklearn_calibrator"><code class="docutils literal notranslate"><span class="pre">sklearn_calibrator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.qe.calibrate</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/qe/calibrate.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.qe.calibrate">
+<span id="ek-qe-calibrate"></span><h1>ek.qe.calibrate<a class="headerlink" href="#module-ek.qe.calibrate" title="Link to this heading"></a></h1>
+<p>Calibration: make a raw score <em>mean</em> a probability (the non-optional stage).</p>
+<p>A confidence of 0.9 should mean “correct 90% of the time.” Modern models violate
+this badly – they are systematically <strong>overconfident</strong> (Guo et al. 2017), and RLHF
+makes LLMs worse. So <strong>calibration is non-optional: never gate a raw posterior or a
+raw logprob</strong> (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code> §2, Hard Rule 1). A <a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a>
+is fit on a labelled holdout of <code class="docutils literal notranslate"><span class="pre">(raw_score,</span> <span class="pre">field_correct?)</span></code> pairs and maps any
+later raw score to a calibrated probability.</p>
+<p>Three methods, by what input you have:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a> – logistic fit on any scalar score (no logits needed):
+<strong>the default</strong> for aggregated OCR confidence or aggregated logprobs.</p></li>
+<li><p><a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator" title="ek.qe.calibrate.IsotonicCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a> – non-parametric monotonic fit; more flexible, needs
+more data, can overfit small sets.</p></li>
+<li><p><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator" title="ek.qe.calibrate.TemperatureCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a> – a single scalar <code class="docutils literal notranslate"><span class="pre">T</span></code> on <strong>logits</strong>; use only
+when you have logits (it does not change the argmax).</p></li>
+</ul>
+<p>All three are pure-Python (stdlib only) so the calibration stage works with zero
+extra dependencies; <a class="reference internal" href="#ek.qe.calibrate.sklearn_calibrator" title="ek.qe.calibrate.sklearn_calibrator"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn_calibrator()</span></code></a> / <code class="xref py py-func docutils literal notranslate"><span class="pre">netcal_calibrator()</span></code> offer the
+library-backed equivalents behind the <code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code> extra. Measure calibration
+with <a class="reference internal" href="#ek.qe.calibrate.expected_calibration_error" title="ek.qe.calibrate.expected_calibration_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">expected_calibration_error()</span></code></a> (+ a reliability curve). For per-field-type
+validity, wrap per group with <a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator" title="ek.qe.calibrate.GroupCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a> (Mondrian / class-conditional)
+– distribution-free <em>conditional</em> coverage is otherwise impossible (Hard Rule 2).</p>
+<p>Calibrate at the <strong>granularity of the decision</strong> (gate on fields -&gt; calibrate a
+“field-correct?” target), and persist the fit (<a class="reference internal" href="#ek.qe.calibrate.save_calibrator" title="ek.qe.calibrate.save_calibrator"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_calibrator()</span></code></a>); calibration
+is dataset-specific and decays, so re-fit on drift.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># An overconfident raw signal, calibrated against ground truth.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raw</span> <span class="o">=</span>     <span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.93</span><span class="p">,</span> <span class="mf">0.92</span><span class="p">,</span> <span class="mf">0.90</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.52</span><span class="p">,</span> <span class="mf">0.51</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">correct</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span> <span class="o">=</span> <span class="n">PlattCalibrator</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">correct</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.95</span>            <span class="c1"># overconfidence pulled down</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">cal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.calibrate.DEFAULT_N_BINS">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_N_BINS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></span><a class="headerlink" href="#ek.qe.calibrate.DEFAULT_N_BINS" title="Link to this definition"></a></dt>
+<dd><p>Default number of bins for <a class="reference internal" href="#ek.qe.calibrate.expected_calibration_error" title="ek.qe.calibrate.expected_calibration_error"><code class="xref py py-func docutils literal notranslate"><span class="pre">expected_calibration_error()</span></code></a> / reliability curves.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.calibrate.GroupCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">GroupCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable[[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'group'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#GroupCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator" title="Link to this definition"></a></dt>
+<dd><p>Per-group (Mondrian) calibration: one calibrator per <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>.</p>
+<p>Distribution-free <em>conditional</em> (per-field-type) coverage is impossible
+in general (Barber et al. 2019); calibrating separately per group restores it
+approximately. <code class="docutils literal notranslate"><span class="pre">fit</span></code> takes a parallel <code class="docutils literal notranslate"><span class="pre">groups</span></code> sequence; <code class="docutils literal notranslate"><span class="pre">__call__</span></code> routes
+by group key, falling back to a pooled calibrator for unseen groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>factory</strong> – Zero-arg callable producing a fresh per-group calibrator (default
+<a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a>).</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.calibrate.GroupCalibrator.factory">
+<span class="sig-name descname"><span class="pre">factory</span></span><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator.factory" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.calibrate.GroupCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator" title="ek.qe.calibrate.GroupCalibrator"><span class="pre">GroupCalibrator</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#GroupCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit one calibrator per distinct group key, plus a pooled fallback.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.calibrate.IsotonicCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">IsotonicCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'isotonic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#IsotonicCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.IsotonicCalibrator" title="Link to this definition"></a></dt>
+<dd><p>Isotonic (monotonic non-decreasing) calibration via pool-adjacent-violators.</p>
+<p>More flexible than Platt; needs more calibration data and can overfit small
+sets. Predicts by linear interpolation between fitted points, clipped at the
+ends.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.calibrate.IsotonicCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator" title="ek.qe.calibrate.IsotonicCalibrator"><span class="pre">IsotonicCalibrator</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#IsotonicCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.IsotonicCalibrator.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit the monotonic step function to <code class="docutils literal notranslate"><span class="pre">(score,</span> <span class="pre">correct)</span></code> pairs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.calibrate.PlattCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">PlattCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'platt'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#PlattCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.PlattCalibrator" title="Link to this definition"></a></dt>
+<dd><p>Platt scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(a</span> <span class="pre">*</span> <span class="pre">score</span> <span class="pre">+</span> <span class="pre">b)</span></code>, fit by Newton/IRLS on labels.</p>
+<p>The default calibrator: works on any scalar (aggregated confidence/logprob), no
+logits required. Uses Platt’s target smoothing so it does not overfit small
+calibration sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_iter</strong> – Newton iterations (converges in a handful for a 2-parameter model).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.calibrate.PlattCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><span class="pre">PlattCalibrator</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#PlattCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.PlattCalibrator.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span></code> to maximise the likelihood of <code class="docutils literal notranslate"><span class="pre">correct</span></code> given <code class="docutils literal notranslate"><span class="pre">scores</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.calibrate.TemperatureCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'temperature'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator" title="Link to this definition"></a></dt>
+<dd><p>Temperature scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(logit</span> <span class="pre">/</span> <span class="pre">T)</span></code> with one <code class="docutils literal notranslate"><span class="pre">T</span></code> fit on a holdout.</p>
+<p>Use <strong>only when you have logits</strong>: <code class="docutils literal notranslate"><span class="pre">__call__</span></code> expects a <em>logit</em>, not a
+probability. <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> softens overconfidence; the argmax is unchanged.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.calibrate.TemperatureCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator" title="ek.qe.calibrate.TemperatureCalibrator"><span class="pre">TemperatureCalibrator</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#TemperatureCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">T</span></code> by minimising NLL with a bounded 1-D search.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.expected_calibration_error">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">expected_calibration_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#expected_calibration_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.expected_calibration_error" title="Link to this definition"></a></dt>
+<dd><p>Expected Calibration Error: weighted mean gap between confidence and accuracy.</p>
+<p>Bins predictions by confidence into <code class="docutils literal notranslate"><span class="pre">n_bins</span></code> equal-width bins and averages
+<code class="docutils literal notranslate"><span class="pre">|mean_confidence</span> <span class="pre">-</span> <span class="pre">accuracy|</span></code> weighted by bin population. <code class="docutils literal notranslate"><span class="pre">0</span></code> is perfect.
+Non-finite probs are skipped; out-of-range probs are clamped into <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.load_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">load_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#load_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.load_calibrator" title="Link to this definition"></a></dt>
+<dd><p>Reconstruct a persisted calibrator by name (dispatched on its <code class="docutils literal notranslate"><span class="pre">kind</span></code>).</p>
+<p>Validates the stored record so a malformed or unknown <code class="docutils literal notranslate"><span class="pre">kind</span></code> fails with an
+actionable error rather than a raw <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> or a load-then-crash-later.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.netcal_ece">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">netcal_ece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#netcal_ece"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.netcal_ece" title="Link to this definition"></a></dt>
+<dd><p>ECE via <code class="docutils literal notranslate"><span class="pre">netcal</span></code> (behind <code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code>); D-ECE for localized outputs lives there too.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.reliability_curve">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">reliability_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#reliability_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.reliability_curve" title="Link to this definition"></a></dt>
+<dd><p>Per-bin <code class="docutils literal notranslate"><span class="pre">{confidence,</span> <span class="pre">accuracy,</span> <span class="pre">count}</span></code> for a reliability diagram.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.save_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">save_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#save_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.save_calibrator" title="Link to this definition"></a></dt>
+<dd><p>Persist a fitted calibrator’s parameters to the <code class="docutils literal notranslate"><span class="pre">calibrators</span></code> store.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.calibrate.sklearn_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">sklearn_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'sigmoid'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#sklearn_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.sklearn_calibrator" title="Link to this definition"></a></dt>
+<dd><p>A calibrator backed by scikit-learn (<code class="docutils literal notranslate"><span class="pre">method='sigmoid'</span></code> Platt or <code class="docutils literal notranslate"><span class="pre">'isotonic'</span></code>).</p>
+<p>Behind <code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code>. Returns an object satisfying the
+<a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> protocol that wraps sklearn’s calibration. The
+pure-Python <a class="reference internal" href="#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a>/<a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator" title="ek.qe.calibrate.IsotonicCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a> are the
+dependency-free defaults; use this for parity with an sklearn-centric stack.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../qe.html" class="btn btn-neutral float-left" title="ek.qe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="decide.html" class="btn btn-neutral float-right" title="ek.qe.decide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

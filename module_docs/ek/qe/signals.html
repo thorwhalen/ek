@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.signals &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.qe.verifiers" href="verifiers.html" />
+    <link rel="prev" title="ek.qe.rover" href="rover.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.qe.signals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.DEFAULT_LENGTH_ALPHA"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LENGTH_ALPHA</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.IntrinsicConfidenceSignal"><code class="docutils literal notranslate"><span class="pre">IntrinsicConfidenceSignal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.LogprobSignal"><code class="docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.signals.LogprobSignal.aggregator"><code class="docutils literal notranslate"><span class="pre">LogprobSignal.aggregator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.geo_mean"><code class="docutils literal notranslate"><span class="pre">geo_mean()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.length_normalized"><code class="docutils literal notranslate"><span class="pre">length_normalized()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.mean_prob"><code class="docutils literal notranslate"><span class="pre">mean_prob()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.min_prob"><code class="docutils literal notranslate"><span class="pre">min_prob()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.qe.signals</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/qe/signals.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.qe.signals">
+<span id="ek-qe-signals"></span><h1>ek.qe.signals<a class="headerlink" href="#module-ek.qe.signals" title="Link to this heading"></a></h1>
+<p>Intrinsic confidence signals: token logprobs and per-unit posteriors (cost tier 2).</p>
+<p>When the extractor already emits something usable – token log-probabilities
+(generative locals like TrOCR/pix2tex, GPT-4o, Mistral OCR) or per-unit posteriors
+(Google Cloud Vision, Azure, Tesseract) – the cheapest reliable signal is <em>free</em>:
+it was computed during inference. This module turns those raw numbers into a single
+field-level score (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code> §1a). Two modelling facts drive the design:</p>
+<ol class="arabic simple">
+<li><p><strong>Raw summed logprob is length-biased</strong> – longer fields accumulate more negative
+terms and look worse. The fix is length normalisation; the aggregation is a
+<em>modelling choice to validate on held-out data</em>, so it stays <strong>pluggable</strong> (no
+hardcoded pooling). Use <code class="docutils literal notranslate"><span class="pre">min</span></code> to catch the single weakest token (a transposed
+digit in an amount); use the geometric mean for overall field plausibility (the
+family Mistral OCR reports as <code class="docutils literal notranslate"><span class="pre">average_page_confidence_score</span></code>).</p></li>
+<li><p><strong>It is uncalibrated</strong> – and for RLHF’d LLMs <em>systematically overconfident</em>.
+Every signal here is a raw score; a <a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> must run before
+any gate reads it.</p></li>
+</ol>
+<p>Aggregators are registered under the <code class="docutils literal notranslate"><span class="pre">aggregators</span></code> namespace so a caller (or a
+third party) can swap pooling by name.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logps</span> <span class="o">=</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.9</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">geo_mean</span><span class="p">(</span><span class="n">logps</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>            <span class="c1"># exp(mean log p)</span>
+<span class="go">0.8811</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">min_prob</span><span class="p">(</span><span class="n">logps</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>            <span class="c1"># weakest token</span>
+<span class="go">0.8</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.signals.DEFAULT_LENGTH_ALPHA">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_LENGTH_ALPHA</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.6</span></span><a class="headerlink" href="#ek.qe.signals.DEFAULT_LENGTH_ALPHA" title="Link to this definition"></a></dt>
+<dd><p>Length-penalty exponent for <a class="reference internal" href="#ek.qe.signals.length_normalized" title="ek.qe.signals.length_normalized"><code class="xref py py-func docutils literal notranslate"><span class="pre">length_normalized()</span></code></a> (Wu et al. 2016 found
+<code class="docutils literal notranslate"><span class="pre">alpha</span></code> in <code class="docutils literal notranslate"><span class="pre">[0.6,</span> <span class="pre">0.7]</span></code> best); a keyword default, never a magic constant.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.signals.IntrinsicConfidenceSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">IntrinsicConfidenceSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#IntrinsicConfidenceSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.IntrinsicConfidenceSignal" title="Link to this definition"></a></dt>
+<dd><p>Aggregate an extractor’s per-unit confidences into a field score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pool</strong> – <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code> (weakest unit), <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;geo_mean&quot;</span></code> over the
+per-unit confidences (already probabilities in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>).</p></li>
+<li><p><strong>cost_tier</strong> – <code class="docutils literal notranslate"><span class="pre">2</span></code> – free (the posteriors are emitted at inference).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IntrinsicConfidenceSignal</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">)([</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
+<span class="go">0.4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.signals.LogprobSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">LogprobSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">geo_mean&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#LogprobSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.LogprobSignal" title="Link to this definition"></a></dt>
+<dd><p>Aggregate token log-probabilities into one field score (a <a class="reference internal" href="../base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aggregator</strong> – A logprob aggregator (name registered under <code class="docutils literal notranslate"><span class="pre">aggregators</span></code> or a
+callable). Defaults to <a class="reference internal" href="#ek.qe.signals.geo_mean" title="ek.qe.signals.geo_mean"><code class="xref py py-func docutils literal notranslate"><span class="pre">geo_mean()</span></code></a>.</p></li>
+<li><p><strong>alpha</strong> – Length penalty passed to <a class="reference internal" href="#ek.qe.signals.length_normalized" title="ek.qe.signals.length_normalized"><code class="xref py py-func docutils literal notranslate"><span class="pre">length_normalized()</span></code></a> only.</p></li>
+<li><p><strong>cost_tier</strong> – <code class="docutils literal notranslate"><span class="pre">2</span></code> – free intrinsic signal (already computed at inference).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.signals.LogprobSignal.aggregator">
+<span class="sig-name descname"><span class="pre">aggregator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#ek.qe.signals.LogprobSignal.aggregator" title="Link to this definition"></a></dt>
+<dd><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.signals.geo_mean">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">geo_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#geo_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.geo_mean" title="Link to this definition"></a></dt>
+<dd><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.signals.length_normalized">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">length_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#length_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.length_normalized" title="Link to this definition"></a></dt>
+<dd><p>Length-normalised score <code class="docutils literal notranslate"><span class="pre">exp(Σ</span> <span class="pre">log</span> <span class="pre">p</span> <span class="pre">/</span> <span class="pre">T**alpha)</span></code> (tunable length penalty).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.signals.mean_prob">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">mean_prob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#mean_prob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.mean_prob" title="Link to this definition"></a></dt>
+<dd><p>Arithmetic mean of token probabilities <code class="docutils literal notranslate"><span class="pre">mean(exp(log</span> <span class="pre">p))</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.signals.min_prob">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">min_prob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/signals.html#min_prob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.signals.min_prob" title="Link to this definition"></a></dt>
+<dd><p>Weakest-token probability <code class="docutils literal notranslate"><span class="pre">exp(min</span> <span class="pre">log</span> <span class="pre">p)</span></code> – catches one bad character.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rover.html" class="btn btn-neutral float-left" title="ek.qe.rover" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="verifiers.html" class="btn btn-neutral float-right" title="ek.qe.verifiers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

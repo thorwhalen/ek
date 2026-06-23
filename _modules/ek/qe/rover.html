@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.rover &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.qe.rover</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.qe.rover</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;ROVER: multi-engine consensus + per-position agreement (the online flagship).</span>
+
+<span class="sd">NIST&#39;s **Recognizer Output Voting Error Reduction** (Fiscus, 1997) combines the</span>
+<span class="sd">outputs of several recognizers/extractors when *no reference is available*. It runs</span>
+<span class="sd">in two stages: an **alignment** stage that merges the hypotheses into a single word</span>
+<span class="sd">transition network (WTN) via iterative dynamic-programming alignments, and a</span>
+<span class="sd">**voting** stage that picks, per branch point, the best-scoring word -- by vote</span>
+<span class="sd">frequency alone, or blended with confidence. There is no maintained, permissively</span>
+<span class="sd">licensed Python ROVER to depend on, so ``ek`` builds it on the edit-distance</span>
+<span class="sd">primitives it already ships (pure-Python here for null-safety and zero new deps).</span>
+
+<span class="sd">Two outputs come out of one pass:</span>
+
+<span class="sd">- a **consensus** transcription (often lower error than any single engine), and</span>
+<span class="sd">- a **per-position agreement** score in ``[0, 1]`` -- the fraction of engines that</span>
+<span class="sd">  voted for the winning token at each slot. Positions where engines *disagree* are</span>
+<span class="sd">  exactly the positions to flag, so this doubles as a **reference-free confidence</span>
+<span class="sd">  signal** (an :class:`AgreementSignal` for :func:`ek.estimate_quality`).</span>
+
+<span class="sd">``ek`` depends only on the ``OcrResult`` *shape* (``.text`` / ``.blocks`` /</span>
+<span class="sd">``.mean_confidence``), so ROVER fuses **any** ``image -&gt; OcrResult`` callable -- or</span>
+<span class="sd">plain strings, token lists, or ``(token, confidence)`` lists. The alignment is</span>
+<span class="sd">``O(N * l * L * L&#39;)`` in the engine count and sequence lengths, hence designed for a</span>
+<span class="sd">handful of engines (its historical regime). Alignment is incremental and therefore</span>
+<span class="sd">*order-dependent* -- a documented property of ROVER, not a bug.</span>
+
+<span class="sd">See ``misc/docs/ek_03`` (and ``ek_04`` for cross-source corroboration).</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; c = rover([&quot;the cat sat&quot;, &quot;the cat sit&quot;, &quot;the bat sat&quot;])</span>
+<span class="sd">    &gt;&gt;&gt; c.text</span>
+<span class="sd">    &#39;the cat sat&#39;</span>
+<span class="sd">    &gt;&gt;&gt; [round(a, 3) for a in c.agreement]            # per consensus token</span>
+<span class="sd">    [1.0, 0.667, 0.667]</span>
+<span class="sd">    &gt;&gt;&gt; round(c.mean_agreement, 3)</span>
+<span class="sd">    0.778</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="c1"># A slot entry is (token, confidence); a NULL (engine produced nothing here) is</span>
+<span class="c1"># represented by a ``None`` token.</span>
+<span class="n">_Entry</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span>
+<span class="n">_NULL</span><span class="p">:</span> <span class="n">_Entry</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="n">_SENTINEL</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+<span class="c1">#: Confidence assigned to a present token whose source reports no usable confidence</span>
+<span class="c1">#: (e.g. a VLM/markdown OcrResult with ``confidence is None``).</span>
+<span class="n">DEFAULT_TOKEN_CONF</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="c1">#: Default blend of average confidence vs vote frequency in the slot score</span>
+<span class="c1">#: (Fiscus&#39;s ``1 - alpha``); ``0`` is frequency-only, ``1`` is confidence-only.</span>
+<span class="n">DEFAULT_CONF_WEIGHT</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1">#: Default confidence credited to a NULL vote (an engine that emitted no token at a</span>
+<span class="c1">#: slot) -- the lever for how readily a deletion wins.</span>
+<span class="n">DEFAULT_NULL_CONF</span> <span class="o">=</span> <span class="mf">0.7</span>
+
+<span class="c1">#: Default per-hypothesis token cap for the O(N*l*L*L&#39;) aligner (DoS guard).</span>
+<span class="n">DEFAULT_MAX_TOKENS</span> <span class="o">=</span> <span class="mi">5000</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_units</span><span class="p">(</span><span class="n">hyp</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default_conf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_TOKEN_CONF</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce one hypothesis to a list of ``(token, confidence)`` units.</span>
+
+<span class="sd">    Accepts a plain string, an ``OcrResult``-shaped object (uses ``.text`` with a</span>
+<span class="sd">    broadcast ``.mean_confidence``), a list of token strings, or a list of</span>
+<span class="sd">    ``(token, confidence)`` pairs. Null-safe: a ``None`` text/confidence degrades to</span>
+<span class="sd">    an empty unit list / the ``default_conf`` rather than crashing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">hyp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hyp</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">tok</span><span class="p">,</span> <span class="n">default_conf</span><span class="p">)</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">hyp</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+    <span class="c1"># OcrResult-shaped: prefer per-block units when blocks are word-level (each</span>
+    <span class="c1"># block&#39;s text is a single whitespace-free token), so each token carries its own</span>
+    <span class="c1"># confidence; else fall back to splitting .text with a broadcast confidence.</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hyp</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">_SENTINEL</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_SENTINEL</span><span class="p">:</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">_word_level_block_units</span><span class="p">(</span><span class="n">hyp</span><span class="p">,</span> <span class="n">default_conf</span><span class="o">=</span><span class="n">default_conf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">units</span>
+        <span class="n">conf</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hyp</span><span class="p">,</span> <span class="s2">&quot;mean_confidence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">broadcast</span> <span class="o">=</span> <span class="n">default_conf</span> <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">w</span><span class="p">,</span> <span class="n">broadcast</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+    <span class="c1"># A bare sequence of tokens or (token, conf) pairs.</span>
+    <span class="n">units</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">hyp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">tok</span><span class="p">,</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">item</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">tok</span><span class="p">),</span> <span class="n">default_conf</span> <span class="k">if</span> <span class="n">conf</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">conf</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">units</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="n">default_conf</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">units</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_word_level_block_units</span><span class="p">(</span><span class="n">hyp</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default_conf</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-block ``(token, confidence)`` units, but only if blocks are word-level.</span>
+
+<span class="sd">    Returns ``None`` (caller falls back to ``.text``) unless every block carries a</span>
+<span class="sd">    single whitespace-free token -- the case where per-block confidence is a genuine</span>
+<span class="sd">    per-word signal rather than a line/paragraph score diluted across many words.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blocks</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">hyp</span><span class="p">,</span> <span class="s2">&quot;blocks&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">blocks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">units</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+        <span class="n">bt</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bt</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">ch</span><span class="o">.</span><span class="n">isspace</span><span class="p">()</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">bt</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># a line/paragraph block: fall back to .text splitting</span>
+        <span class="n">bc</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">units</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bt</span><span class="p">,</span> <span class="n">default_conf</span> <span class="k">if</span> <span class="n">bc</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">bc</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">units</span> <span class="ow">or</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_align</span><span class="p">(</span><span class="n">spine</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">hyp</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Needleman-Wunsch alignment of a network ``spine`` to a hypothesis token list.</span>
+
+<span class="sd">    Returns operations in left-to-right order, each ``(op, s_idx, h_idx)`` where</span>
+<span class="sd">    ``op`` is ``&quot;match&quot;`` (tokens equal or substituted onto the same slot),</span>
+<span class="sd">    ``&quot;del&quot;`` (a spine slot the hypothesis skips -&gt; NULL), or ``&quot;ins&quot;`` (a</span>
+<span class="sd">    hypothesis token with no spine slot -&gt; a new slot). Pure-Python so the engine</span>
+<span class="sd">    runs in a bare environment and over arbitrary (non-string) tokens.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spine</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">hyp</span><span class="p">)</span>
+    <span class="c1"># dp[i][j] = min edit cost aligning spine[:i] with hyp[:j].</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">sub</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">spine</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">hyp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ops</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
+            <span class="mi">0</span> <span class="k">if</span> <span class="n">spine</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">hyp</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="p">):</span>
+            <span class="n">ops</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;match&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ops</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;del&quot;</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># spine slot, hypothesis has no token</span>
+            <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ops</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;ins&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># hypothesis token, no spine slot</span>
+            <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">ops</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ops</span>
+
+
+<div class="viewcode-block" id="RoverSlot">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/rover.html#ek.RoverSlot">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RoverSlot</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One branch point of the transition network: each engine&#39;s token (or NULL).&quot;&quot;&quot;</span>
+
+    <span class="n">entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># one per engine, in order</span>
+    <span class="n">winner</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">vote_share</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># fraction of all engines voting for the winner ([0, 1])</span></div>
+
+
+
+<div class="viewcode-block" id="RoverConsensus">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/rover.html#ek.RoverConsensus">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RoverConsensus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of a ROVER pass over N hypotheses.&quot;&quot;&quot;</span>
+
+    <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># winning non-NULL tokens, in order</span>
+    <span class="n">slots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RoverSlot</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">agreement</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># vote share per consensus token</span>
+    <span class="n">n_engines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The consensus transcription (space-joined winning tokens).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mean_agreement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mean per-position agreement over consensus tokens (``1.0`` if degenerate).</span>
+
+<span class="sd">        A reference-free confidence in ``[0, 1]``: ``1.0`` means every engine agreed</span>
+<span class="sd">        at every emitted position; lower means at least one engine dissented.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agreement</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agreement</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">agreement</span> <span class="k">else</span> <span class="mf">1.0</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_vote</span><span class="p">(</span>
+    <span class="n">entries</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">_Entry</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">n_engines</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">conf_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">null_conf</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score the candidates in one slot; return ``(winner, score, vote_share)``.</span>
+
+<span class="sd">    ``score(w) = (1 - conf_weight) * (votes_w / N) + conf_weight * avg_conf_w`` --</span>
+<span class="sd">    Fiscus&#39;s frequency/confidence blend. NULL is a candidate (engines that produced</span>
+<span class="sd">    nothing here vote for it, at ``null_conf``). Ties prefer a real token over NULL,</span>
+<span class="sd">    then higher vote count, then first appearance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">votes</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">conf_sum</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">order</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">conf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
+        <span class="n">votes</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="o">=</span> <span class="n">votes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">conf_sum</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="o">=</span> <span class="n">conf_sum</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">null_conf</span> <span class="k">if</span> <span class="n">tok</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">conf</span><span class="p">)</span>
+        <span class="n">order</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+
+    <span class="c1"># NULL is a legitimate winner, so the &quot;unset&quot; marker must be distinct from None.</span>
+    <span class="n">best_tok</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">_SENTINEL</span>
+    <span class="n">best_key</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">best_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">tok</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">votes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">avg_conf</span> <span class="o">=</span> <span class="n">conf_sum</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="o">/</span> <span class="n">v</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">conf_weight</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">n_engines</span><span class="p">)</span> <span class="o">+</span> <span class="n">conf_weight</span> <span class="o">*</span> <span class="n">avg_conf</span>
+        <span class="c1"># sort key: maximise score, prefer real over NULL, then votes, then earliest.</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="o">-</span><span class="n">order</span><span class="p">[</span><span class="n">tok</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">best_tok</span> <span class="ow">is</span> <span class="n">_SENTINEL</span> <span class="ow">or</span> <span class="n">key</span> <span class="o">&gt;</span> <span class="n">best_key</span><span class="p">:</span>
+            <span class="n">best_tok</span><span class="p">,</span> <span class="n">best_key</span><span class="p">,</span> <span class="n">best_score</span> <span class="o">=</span> <span class="n">tok</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">score</span>
+
+    <span class="n">winner_votes</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[</span><span class="n">best_tok</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">best_tok</span><span class="p">,</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">winner_votes</span> <span class="o">/</span> <span class="n">n_engines</span>
+
+
+<div class="viewcode-block" id="rover">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/rover.html#ek.rover">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rover</span><span class="p">(</span>
+    <span class="n">hypotheses</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">use_confidence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">conf_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_CONF_WEIGHT</span><span class="p">,</span>
+    <span class="n">null_conf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_NULL_CONF</span><span class="p">,</span>
+    <span class="n">tokenize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_MAX_TOKENS</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RoverConsensus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Align N hypotheses, vote per slot, and emit consensus + per-position agreement.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        hypotheses: The recognizer/extractor outputs to fuse. Each may be a string,</span>
+<span class="sd">            an ``OcrResult``-shaped object (``.text``/``.mean_confidence``), a list of</span>
+<span class="sd">            token strings, or a list of ``(token, confidence)`` pairs.</span>
+<span class="sd">        use_confidence: Blend confidence into the vote (``True``) or vote purely by</span>
+<span class="sd">            frequency (``False``, which forces ``conf_weight`` to ``0``).</span>
+<span class="sd">        conf_weight: Weight on average confidence vs vote frequency in the slot score</span>
+<span class="sd">            (Fiscus&#39;s ``1 - alpha``); ``0`` is frequency-only, ``1`` is</span>
+<span class="sd">            confidence-only. Ignored when ``use_confidence`` is ``False``.</span>
+<span class="sd">        null_conf: Confidence credited to a NULL vote (an engine that produced no</span>
+<span class="sd">            token at a slot) -- the lever for how readily a deletion wins.</span>
+<span class="sd">        tokenize: Optional ``hypothesis -&gt; [(token, confidence), ...]`` override; by</span>
+<span class="sd">            default :func:`_as_units` handles strings/OcrResults/token lists.</span>
+<span class="sd">        max_tokens: Reject any hypothesis longer than this (the aligner is</span>
+<span class="sd">            ``O(N*l*L*L&#39;)``; an unbounded input is a quadratic time/memory DoS).</span>
+<span class="sd">            ``None`` disables the guard.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`RoverConsensus` with the consensus ``tokens``/``text``, the per-slot</span>
+<span class="sd">        breakdown, and the per-consensus-token ``agreement`` usable as a raw signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">to_units</span> <span class="o">=</span> <span class="n">tokenize</span> <span class="ow">or</span> <span class="n">_as_units</span>
+    <span class="n">hyps</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_units</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hypotheses</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hyps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">RoverConsensus</span><span class="p">(</span><span class="n">n_engines</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">max_tokens</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">longest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hyps</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">longest</span> <span class="o">&gt;</span> <span class="n">max_tokens</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;ROVER hypothesis has </span><span class="si">{</span><span class="n">longest</span><span class="si">}</span><span class="s2"> tokens (&gt; max_tokens=</span><span class="si">{</span><span class="n">max_tokens</span><span class="si">}</span><span class="s2">); &quot;</span>
+                <span class="s2">&quot;the O(N*l*L*L&#39;) aligner is designed for a handful of short-to-medium &quot;</span>
+                <span class="s2">&quot;sequences. Pass max_tokens=&lt;larger&gt; (or None) to override deliberately.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">effective_conf_weight</span> <span class="o">=</span> <span class="n">conf_weight</span> <span class="k">if</span> <span class="n">use_confidence</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Incrementally merge each hypothesis into the network of slots. A slot is a list</span>
+    <span class="c1"># of (token, conf) entries, one per engine processed so far (NULL where absent).</span>
+    <span class="n">slots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">unit</span><span class="p">]</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">hyps</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">hyps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">spine</span> <span class="o">=</span> <span class="p">[</span><span class="n">_slot_majority</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span> <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">]</span>
+        <span class="n">ops</span> <span class="o">=</span> <span class="n">_align</span><span class="p">(</span><span class="n">spine</span><span class="p">,</span> <span class="p">[</span><span class="n">tok</span> <span class="k">for</span> <span class="n">tok</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">units</span><span class="p">])</span>
+        <span class="n">merged</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">s_idx</span><span class="p">,</span> <span class="n">h_idx</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;match&quot;</span><span class="p">:</span>
+                <span class="n">slot</span> <span class="o">=</span> <span class="n">slots</span><span class="p">[</span><span class="n">s_idx</span><span class="p">]</span>
+                <span class="n">slot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">units</span><span class="p">[</span><span class="n">h_idx</span><span class="p">])</span>
+                <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;del&quot;</span><span class="p">:</span>
+                <span class="n">slot</span> <span class="o">=</span> <span class="n">slots</span><span class="p">[</span><span class="n">s_idx</span><span class="p">]</span>
+                <span class="n">slot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_NULL</span><span class="p">)</span>
+                <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># insertion: a brand-new slot, NULL for every prior engine</span>
+                <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_NULL</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="p">[</span><span class="n">units</span><span class="p">[</span><span class="n">h_idx</span><span class="p">]])</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="n">merged</span>
+
+    <span class="n">rover_slots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">RoverSlot</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">agreement</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+        <span class="n">winner</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">share</span> <span class="o">=</span> <span class="n">_vote</span><span class="p">(</span>
+            <span class="n">slot</span><span class="p">,</span> <span class="n">n_engines</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">conf_weight</span><span class="o">=</span><span class="n">effective_conf_weight</span><span class="p">,</span> <span class="n">null_conf</span><span class="o">=</span><span class="n">null_conf</span>
+        <span class="p">)</span>
+        <span class="n">rover_slots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RoverSlot</span><span class="p">(</span><span class="n">entries</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">slot</span><span class="p">),</span> <span class="n">winner</span><span class="o">=</span><span class="n">winner</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">score</span><span class="p">,</span> <span class="n">vote_share</span><span class="o">=</span><span class="n">share</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">winner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">winner</span><span class="p">)</span>
+            <span class="n">agreement</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">share</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">RoverConsensus</span><span class="p">(</span><span class="n">tokens</span><span class="o">=</span><span class="n">tokens</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="n">rover_slots</span><span class="p">,</span> <span class="n">agreement</span><span class="o">=</span><span class="n">agreement</span><span class="p">,</span> <span class="n">n_engines</span><span class="o">=</span><span class="n">n</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_slot_majority</span><span class="p">(</span><span class="n">slot</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">_Entry</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The most common non-NULL token in a slot (alignment spine representative).&quot;&quot;&quot;</span>
+    <span class="n">counts</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">order</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tok</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">tok</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">order</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">counts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">tok</span><span class="p">:</span> <span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">tok</span><span class="p">],</span> <span class="o">-</span><span class="n">order</span><span class="p">[</span><span class="n">tok</span><span class="p">]))</span>
+
+
+<div class="viewcode-block" id="AgreementSignal">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/rover.html#ek.AgreementSignal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgreementSignal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ROVER multi-engine agreement as a reference-free :class:`~ek.base.Signal`.</span>
+
+<span class="sd">    Cost tier 3 (``N`` engine runs): try the deterministic verifier layer and any</span>
+<span class="sd">    free intrinsic confidence first. Called on a collection of hypotheses, it runs</span>
+<span class="sd">    :func:`rover` and returns the mean per-position agreement as the raw signal --</span>
+<span class="sd">    *uncalibrated*, like every signal, so it must pass through a</span>
+<span class="sd">    :class:`~ek.base.Calibrator` before any gate reads it.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; sig = AgreementSignal()</span>
+<span class="sd">        &gt;&gt;&gt; round(sig([&quot;the cat sat&quot;, &quot;the cat sit&quot;, &quot;the bat sat&quot;]), 3)</span>
+<span class="sd">        0.778</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">use_confidence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">conf_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_CONF_WEIGHT</span>
+    <span class="n">null_conf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_NULL_CONF</span>
+    <span class="n">tokenize</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">_Entry</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_MAX_TOKENS</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypotheses</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rover</span><span class="p">(</span>
+            <span class="n">hypotheses</span><span class="p">,</span>
+            <span class="n">use_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">use_confidence</span><span class="p">,</span>
+            <span class="n">conf_weight</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">conf_weight</span><span class="p">,</span>
+            <span class="n">null_conf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">null_conf</span><span class="p">,</span>
+            <span class="n">tokenize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenize</span><span class="p">,</span>
+            <span class="n">max_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_tokens</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">mean_agreement</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.decide &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.qe.decide</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.qe.decide</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Selective prediction: turn a calibrated probability into accept / flag / block.</span>
+
+<span class="sd">Calibration makes a score *mean* something; a **decision policy** turns it into an</span>
+<span class="sd">action with a guarantee (``misc/docs/ek_03`` §3-4). This is the formal home of</span>
+<span class="sd">&quot;accept / flag / block&quot; -- a selective predictor that abstains (routes to a human)</span>
+<span class="sd">rather than emit a low-confidence answer. Every policy here reads **only calibrated</span>
+<span class="sd">probabilities** (Hard Rule 1): a raw score must already have passed through a</span>
+<span class="sd">:class:`~ek.base.Calibrator`.</span>
+
+<span class="sd">Three policies, by what you want to guarantee:</span>
+
+<span class="sd">- :class:`CostSensitiveGate` -- **the default**. The accept threshold falls out of the</span>
+<span class="sd">  cost ratio ``rho = c_FN / c_FP`` on the calibrated probability; no labelled set</span>
+<span class="sd">  needed once you know your costs.</span>
+<span class="sd">- :class:`ConformalGate` -- split (inductive) conformal: a finite-sample,</span>
+<span class="sd">  distribution-free **marginal** guarantee that at most ``alpha`` of truly-correct</span>
+<span class="sd">  items are flagged. Per-field-type validity needs the Mondrian</span>
+<span class="sd">  (:class:`GroupConformalGate`) variant -- conditional coverage is otherwise</span>
+<span class="sd">  impossible (Barber et al. 2019).</span>
+<span class="sd">- :class:`RiskControlGate` -- conformal risk control: bound a monotone loss (the rate</span>
+<span class="sd">  of accepted-yet-wrong items) at a target level.</span>
+
+<span class="sd">:func:`risk_coverage_curve` exposes the trade-off so stakeholders pick the operating</span>
+<span class="sd">point explicitly. The pure-Python gates need no extra dependencies; the</span>
+<span class="sd">``ek[calibration]`` extra (MAPIE/crepes) offers library-backed conformal for an</span>
+<span class="sd">sklearn-centric stack. Exchangeability is the load-bearing assumption -- track</span>
+<span class="sd">realised coverage and re-fit on drift.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.base import Decision</span>
+<span class="sd">    &gt;&gt;&gt; gate = CostSensitiveGate(rho=9.0)          # a false-negative costs 9x a review</span>
+<span class="sd">    &gt;&gt;&gt; gate(0.95) is Decision.ACCEPT              # tau = 1 - 1/9 ~ 0.889</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; gate(0.5) is Decision.FLAG</span>
+<span class="sd">    True</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span><span class="p">,</span> <span class="n">requires_extra</span>
+
+<span class="c1">#: Default target miscoverage for conformal gates (flag at most ~alpha of correct items).</span>
+<span class="n">DEFAULT_ALPHA</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1">#: Default risk bound for :class:`RiskControlGate` (accepted-error rate ceiling).</span>
+<span class="n">DEFAULT_RISK_TARGET</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_clip01</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="n">x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_finite</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce to float and fail fast on a non-finite (NaN/inf) gate input.&quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> must be finite, got </span><span class="si">{</span><span class="n">p</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Cost-sensitive gate (the default; threshold from the cost ratio)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="CostSensitiveGate">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.CostSensitiveGate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CostSensitiveGate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept/flag/block from the cost ratio ``rho = c_FN / c_FP`` on calibrated ``p``.</span>
+
+<span class="sd">    Accept when the expected cost of accepting (an undetected error) is below the</span>
+<span class="sd">    cost of routing to a human: ``(1 - p) * c_FN &lt;= c_FP``, i.e. ``p &gt;= 1 - 1/rho``.</span>
+<span class="sd">    A larger ``rho`` (misses much costlier than reviews) raises the bar to</span>
+<span class="sd">    auto-accept. ``block_threshold`` adds an optional hard-fail band at the bottom.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rho: Cost ratio ``c_FN / c_FP`` (&gt;= 0). The single lever; no magic numbers.</span>
+<span class="sd">        block_threshold: Calibrated probability at or below which to ``block`` rather</span>
+<span class="sd">            than ``flag`` (default ``0`` -&gt; never block on probability alone; a</span>
+<span class="sd">            failed verifier is what forces a block, upstream).</span>
+<span class="sd">        accept_threshold: Override the derived accept threshold explicitly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">block_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">accept_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tau</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The accept threshold on calibrated probability (derived from ``rho``).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">_finite</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
+        <span class="c1"># block_threshold == 0 (the default) disables the block band entirely; a</span>
+        <span class="c1"># block is otherwise reserved for an explicit hard-fail floor.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_threshold</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="ow">and</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_threshold</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Decision</span><span class="o">.</span><span class="n">BLOCK</span>
+        <span class="k">return</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="k">else</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Split conformal gate (marginal, distribution-free)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="split_conformal_quantile">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.split_conformal_quantile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_conformal_quantile</span><span class="p">(</span><span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The split-conformal threshold: the ``ceil((n+1)(1-alpha)) / n`` empirical quantile.</span>
+
+<span class="sd">    ``scores`` are nonconformity scores on an exchangeable calibration set. Returns</span>
+<span class="sd">    ``+inf`` when ``n`` is too small to guarantee ``1 - alpha`` (so nothing is</span>
+<span class="sd">    flagged -- the honest behaviour at that sample size), and ``-inf`` at the</span>
+<span class="sd">    ``alpha -&gt; 1`` limit (flag everything).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alpha must be in [0, 1], got </span><span class="si">{</span><span class="n">alpha</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># alpha -&gt; 1: the quantile collapses below every score</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ConformalGate">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConformalGate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split-conformal accept/flag with a finite-sample **marginal** guarantee.</span>
+
+<span class="sd">    Fit on ``(calibrated_prob, correct)``: the nonconformity scores of the *correct*</span>
+<span class="sd">    calibration items set a threshold ``q`` such that, among truly-correct test items</span>
+<span class="sd">    exchangeable with them, at most ``alpha`` are flagged. The guarantee is</span>
+<span class="sd">    *marginal*, not per-field-type -- use :class:`GroupConformalGate` for that.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        alpha: Target false-flag rate on correct items (e.g. ``0.1``).</span>
+<span class="sd">        nonconformity: Maps calibrated confidence -&gt; nonconformity (default</span>
+<span class="sd">            ``1 - confidence``: low confidence is nonconforming).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_ALPHA</span>
+    <span class="n">nonconformity</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span>
+    <span class="n">q</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">_cal</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ConformalGate.fit">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConformalGate&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit ``q`` from the nonconformity scores of the *correct* calibration items.</span>
+
+<span class="sd">        Non-finite confidences are dropped (a single ``NaN`` would otherwise sort to</span>
+<span class="sd">        the end and corrupt the quantile, silently breaking the coverage guarantee).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cal</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">correct</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">and</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">split_conformal_quantile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ConformalGate.p_value">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate.p_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">p_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Per-instance conformal p-value (small = atypical of correct items).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cal</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">confidence</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">si</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cal</span> <span class="k">if</span> <span class="n">si</span> <span class="o">&gt;=</span> <span class="n">s</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cal</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">(</span><span class="n">_finite</span><span class="p">(</span><span class="n">confidence</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+            <span class="k">else</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GroupConformalGate">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.GroupConformalGate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GroupConformalGate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mondrian (class-conditional) conformal: one :class:`ConformalGate` per group.</span>
+
+<span class="sd">    Restores approximate per-field-type validity by calibrating separately per group</span>
+<span class="sd">    key (e.g. ``NodeType``/``FieldSpec``), with a pooled fallback for unseen groups.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_ALPHA</span>
+    <span class="n">nonconformity</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span>
+    <span class="n">by_group</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">pooled</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConformalGate</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GroupConformalGate&quot;</span><span class="p">:</span>
+        <span class="n">buckets</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">correct</span><span class="p">,</span> <span class="n">groups</span><span class="p">):</span>
+            <span class="n">buckets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">([],</span> <span class="p">[]))</span>
+            <span class="n">buckets</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">buckets</span><span class="p">[</span><span class="n">g</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">by_group</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">g</span><span class="p">:</span> <span class="n">ConformalGate</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">nonconformity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">cs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">cs</span><span class="p">)</span> <span class="ow">in</span> <span class="n">buckets</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pooled</span> <span class="o">=</span> <span class="n">ConformalGate</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">nonconformity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">probs</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">correct</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
+        <span class="n">gate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">by_group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooled</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gate</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span> <span class="k">if</span> <span class="n">gate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Conformal risk control (bound a monotone loss)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="RiskControlGate">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.RiskControlGate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RiskControlGate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal Risk Control: accept ``p &gt;= lambda`` bounding the accepted-error rate.</span>
+
+<span class="sd">    Picks the *smallest* threshold ``lambda`` (the most coverage) whose finite-sample</span>
+<span class="sd">    risk bound is at or below ``target``. The controlled quantity is</span>
+<span class="sd">    ``E[ loss(item) * 1(accepted) ]`` -- with the default 0/1 loss, the population</span>
+<span class="sd">    rate of accepted-yet-wrong items.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        target: Upper bound on the accepted-error rate (e.g. ``0.05``).</span>
+<span class="sd">        loss: ``correct -&gt; loss`` in ``[0, loss_bound]``; default ``0`` if correct</span>
+<span class="sd">            else ``1``. Any monotone loss bounded by ``loss_bound`` works.</span>
+<span class="sd">        loss_bound: The loss&#39;s upper bound ``B`` -- the CRC finite-sample slack is</span>
+<span class="sd">            ``+B/(n+1)``. Must match ``loss``&#39;s range or the guarantee is invalid;</span>
+<span class="sd">            keep the default ``1.0`` for the 0/1 loss.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">target</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_RISK_TARGET</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bool</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">correct</span><span class="p">:</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">correct</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">loss_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">lam</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<div class="viewcode-block" id="RiskControlGate.fit">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.RiskControlGate.fit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RiskControlGate&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the smallest accept threshold whose risk bound is &lt;= ``target``.&quot;&quot;&quot;</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">),</span> <span class="n">correct</span><span class="p">))</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">})</span>
+        <span class="n">chosen</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">1e-9</span>  <span class="c1"># accept nothing if no threshold satisfies the bound</span>
+        <span class="k">for</span> <span class="n">lam</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+            <span class="n">risk</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="n">lam</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+            <span class="n">bound</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">risk</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_bound</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># CRC slack +B/(n+1)</span>
+            <span class="k">if</span> <span class="n">bound</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span>
+                <span class="n">chosen</span> <span class="o">=</span> <span class="n">lam</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">chosen</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span> <span class="k">if</span> <span class="n">_finite</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="k">else</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Risk-coverage curve (publish so stakeholders pick the operating point)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="risk_coverage_curve">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.risk_coverage_curve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">risk_coverage_curve</span><span class="p">(</span>
+    <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">thresholds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The risk-coverage trade-off: ``{threshold, coverage, selective_risk}`` per point.</span>
+
+<span class="sd">    Coverage is the fraction auto-accepted at each threshold; selective risk is the</span>
+<span class="sd">    error rate *among the accepted*. Lower-left is better; pick the operating point</span>
+<span class="sd">    against a target risk or coverage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">),</span> <span class="n">correct</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">taus</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">thresholds</span><span class="p">))</span> <span class="k">if</span> <span class="n">thresholds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">})</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">:</span>
+        <span class="n">accepted</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="n">tau</span><span class="p">]</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accepted</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+        <span class="n">risk</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">accepted</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">accepted</span><span class="p">))</span> <span class="k">if</span> <span class="n">accepted</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="s2">&quot;coverage&quot;</span><span class="p">:</span> <span class="n">cov</span><span class="p">,</span> <span class="s2">&quot;selective_risk&quot;</span><span class="p">:</span> <span class="n">risk</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Optional library-backed conformal (ek[calibration]) -- opt-in, Mondrian via crepes</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="crepes_mondrian_gate">
+<a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.crepes_mondrian_gate">[docs]</a>
+<span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;calibration&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;crepes&quot;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">crepes_mondrian_gate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Mondrian (class-conditional) conformal gate backed by ``crepes`` (``ek[calibration]``).</span>
+
+<span class="sd">    The pure-Python :class:`GroupConformalGate` is the dependency-free default; use</span>
+<span class="sd">    this for parity with a crepes/sklearn conformal stack (full CDFs, normalised</span>
+<span class="sd">    variants). Raises an actionable install hint if ``crepes`` is absent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">crepes</span>  <span class="c1"># noqa: F401  (presence checked by @requires_extra)</span>
+
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+        <span class="s2">&quot;crepes-backed Mondrian conformal is a thin wrapper to add when a crepes &quot;</span>
+        <span class="s2">&quot;stack is in use; the pure-Python GroupConformalGate is the default.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># Register the built-in policies so they resolve by name (open-closed).</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;cost_sensitive&quot;</span><span class="p">,</span> <span class="n">CostSensitiveGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;conformal&quot;</span><span class="p">,</span> <span class="n">ConformalGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;risk_control&quot;</span><span class="p">,</span> <span class="n">RiskControlGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;group_conformal&quot;</span><span class="p">,</span> <span class="n">GroupConformalGate</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

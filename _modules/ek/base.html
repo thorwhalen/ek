@@ -60,6 +60,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/registry.html">ek.registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/stores.html">ek.stores</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/tools.html">ek.tools</a></li>
@@ -439,13 +445,21 @@
 <a class="viewcode-back" href="../../module_docs/ek/base.html#ek.QualityReport">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">QualityReport</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of a reference-free quality estimate for one extraction.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of a reference-free quality estimate for one extraction.</span>
+
+<span class="sd">    For a single value the scalar fields carry the verdict. For a whole</span>
+<span class="sd">    :class:`AnnotatedExtraction`, ``per_field`` maps each :class:`NodePath` to its</span>
+<span class="sd">    updated :class:`FieldEstimate` (confidence/findings/decision filled in), and the</span>
+<span class="sd">    scalar fields summarize: ``calibrated_confidence`` is the weakest field, and</span>
+<span class="sd">    ``decision`` the most severe (``block`` &gt; ``flag`` &gt; ``accept``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">calibrated_confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decision</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">findings</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-    <span class="n">provenance</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+    <span class="n">provenance</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">per_field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 

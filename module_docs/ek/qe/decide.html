@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.qe.decide &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.qe.rover" href="rover.html" />
+    <link rel="prev" title="ek.qe.calibrate" href="calibrate.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.qe.decide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.ConformalGate"><code class="docutils literal notranslate"><span class="pre">ConformalGate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.decide.ConformalGate.fit"><code class="docutils literal notranslate"><span class="pre">ConformalGate.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.decide.ConformalGate.p_value"><code class="docutils literal notranslate"><span class="pre">ConformalGate.p_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.CostSensitiveGate"><code class="docutils literal notranslate"><span class="pre">CostSensitiveGate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.decide.CostSensitiveGate.tau"><code class="docutils literal notranslate"><span class="pre">CostSensitiveGate.tau</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.DEFAULT_ALPHA"><code class="docutils literal notranslate"><span class="pre">DEFAULT_ALPHA</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.DEFAULT_RISK_TARGET"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RISK_TARGET</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.GroupConformalGate"><code class="docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.RiskControlGate"><code class="docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.decide.RiskControlGate.fit"><code class="docutils literal notranslate"><span class="pre">RiskControlGate.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.crepes_mondrian_gate"><code class="docutils literal notranslate"><span class="pre">crepes_mondrian_gate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.risk_coverage_curve"><code class="docutils literal notranslate"><span class="pre">risk_coverage_curve()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.decide.split_conformal_quantile"><code class="docutils literal notranslate"><span class="pre">split_conformal_quantile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.qe.decide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/qe/decide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.qe.decide">
+<span id="ek-qe-decide"></span><h1>ek.qe.decide<a class="headerlink" href="#module-ek.qe.decide" title="Link to this heading"></a></h1>
+<p>Selective prediction: turn a calibrated probability into accept / flag / block.</p>
+<p>Calibration makes a score <em>mean</em> something; a <strong>decision policy</strong> turns it into an
+action with a guarantee (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code> §3-4). This is the formal home of
+“accept / flag / block” – a selective predictor that abstains (routes to a human)
+rather than emit a low-confidence answer. Every policy here reads <strong>only calibrated
+probabilities</strong> (Hard Rule 1): a raw score must already have passed through a
+<a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a>.</p>
+<p>Three policies, by what you want to guarantee:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.qe.decide.CostSensitiveGate" title="ek.qe.decide.CostSensitiveGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">CostSensitiveGate</span></code></a> – <strong>the default</strong>. The accept threshold falls out of the
+cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on the calibrated probability; no labelled set
+needed once you know your costs.</p></li>
+<li><p><a class="reference internal" href="#ek.qe.decide.ConformalGate" title="ek.qe.decide.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a> – split (inductive) conformal: a finite-sample,
+distribution-free <strong>marginal</strong> guarantee that at most <code class="docutils literal notranslate"><span class="pre">alpha</span></code> of truly-correct
+items are flagged. Per-field-type validity needs the Mondrian
+(<a class="reference internal" href="#ek.qe.decide.GroupConformalGate" title="ek.qe.decide.GroupConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a>) variant – conditional coverage is otherwise
+impossible (Barber et al. 2019).</p></li>
+<li><p><a class="reference internal" href="#ek.qe.decide.RiskControlGate" title="ek.qe.decide.RiskControlGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a> – conformal risk control: bound a monotone loss (the rate
+of accepted-yet-wrong items) at a target level.</p></li>
+</ul>
+<p><a class="reference internal" href="#ek.qe.decide.risk_coverage_curve" title="ek.qe.decide.risk_coverage_curve"><code class="xref py py-func docutils literal notranslate"><span class="pre">risk_coverage_curve()</span></code></a> exposes the trade-off so stakeholders pick the operating
+point explicitly. The pure-Python gates need no extra dependencies; the
+<code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code> extra (MAPIE/crepes) offers library-backed conformal for an
+sklearn-centric stack. Exchangeability is the load-bearing assumption – track
+realised coverage and re-fit on drift.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decision</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span> <span class="o">=</span> <span class="n">CostSensitiveGate</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">9.0</span><span class="p">)</span>          <span class="c1"># a false-negative costs 9x a review</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span>              <span class="c1"># tau = 1 - 1/9 ~ 0.889</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.decide.ConformalGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">ConformalGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">alpha:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">nonconformity:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">float]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">ConformalGate.&lt;lambda&gt;&gt;,</span> <span class="pre">q:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">inf,</span> <span class="pre">_cal:</span> <span class="pre">~typing.List[float]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#ConformalGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.ConformalGate" title="Link to this definition"></a></dt>
+<dd><p>Split-conformal accept/flag with a finite-sample <strong>marginal</strong> guarantee.</p>
+<p>Fit on <code class="docutils literal notranslate"><span class="pre">(calibrated_prob,</span> <span class="pre">correct)</span></code>: the nonconformity scores of the <em>correct</em>
+calibration items set a threshold <code class="docutils literal notranslate"><span class="pre">q</span></code> such that, among truly-correct test items
+exchangeable with them, at most <code class="docutils literal notranslate"><span class="pre">alpha</span></code> are flagged. The guarantee is
+<em>marginal</em>, not per-field-type – use <a class="reference internal" href="#ek.qe.decide.GroupConformalGate" title="ek.qe.decide.GroupConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a> for that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> – Target false-flag rate on correct items (e.g. <code class="docutils literal notranslate"><span class="pre">0.1</span></code>).</p></li>
+<li><p><strong>nonconformity</strong> – Maps calibrated confidence -&gt; nonconformity (default
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">confidence</span></code>: low confidence is nonconforming).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.decide.ConformalGate.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.decide.ConformalGate" title="ek.qe.decide.ConformalGate"><span class="pre">ConformalGate</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#ConformalGate.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.ConformalGate.fit" title="Link to this definition"></a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">q</span></code> from the nonconformity scores of the <em>correct</em> calibration items.</p>
+<p>Non-finite confidences are dropped (a single <code class="docutils literal notranslate"><span class="pre">NaN</span></code> would otherwise sort to
+the end and corrupt the quantile, silently breaking the coverage guarantee).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.decide.ConformalGate.p_value">
+<span class="sig-name descname"><span class="pre">p_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#ConformalGate.p_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.ConformalGate.p_value" title="Link to this definition"></a></dt>
+<dd><p>Per-instance conformal p-value (small = atypical of correct items).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.decide.CostSensitiveGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">CostSensitiveGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#CostSensitiveGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.CostSensitiveGate" title="Link to this definition"></a></dt>
+<dd><p>Accept/flag/block from the cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on calibrated <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p>Accept when the expected cost of accepting (an undetected error) is below the
+cost of routing to a human: <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">c_FP</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">1/rho</span></code>.
+A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much costlier than reviews) raises the bar to
+auto-accept. <code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> – Cost ratio <code class="docutils literal notranslate"><span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> (&gt;= 0). The single lever; no magic numbers.</p></li>
+<li><p><strong>block_threshold</strong> – Calibrated probability at or below which to <code class="docutils literal notranslate"><span class="pre">block</span></code> rather
+than <code class="docutils literal notranslate"><span class="pre">flag</span></code> (default <code class="docutils literal notranslate"><span class="pre">0</span></code> -&gt; never block on probability alone; a
+failed verifier is what forces a block, upstream).</p></li>
+<li><p><strong>accept_threshold</strong> – Override the derived accept threshold explicitly.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.decide.CostSensitiveGate.tau">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">tau</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.qe.decide.CostSensitiveGate.tau" title="Link to this definition"></a></dt>
+<dd><p>The accept threshold on calibrated probability (derived from <code class="docutils literal notranslate"><span class="pre">rho</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.decide.DEFAULT_ALPHA">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_ALPHA</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.1</span></span><a class="headerlink" href="#ek.qe.decide.DEFAULT_ALPHA" title="Link to this definition"></a></dt>
+<dd><p>Default target miscoverage for conformal gates (flag at most ~alpha of correct items).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.decide.DEFAULT_RISK_TARGET">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_RISK_TARGET</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></span><a class="headerlink" href="#ek.qe.decide.DEFAULT_RISK_TARGET" title="Link to this definition"></a></dt>
+<dd><p>Default risk bound for <a class="reference internal" href="#ek.qe.decide.RiskControlGate" title="ek.qe.decide.RiskControlGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a> (accepted-error rate ceiling).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.decide.GroupConformalGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">GroupConformalGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">alpha:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.1,</span> <span class="pre">nonconformity:</span> <span class="pre">~typing.Callable[[float],</span> <span class="pre">float]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">GroupConformalGate.&lt;lambda&gt;&gt;,</span> <span class="pre">by_group:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;,</span> <span class="pre">pooled:</span> <span class="pre">~ek.qe.decide.ConformalGate</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#GroupConformalGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.GroupConformalGate" title="Link to this definition"></a></dt>
+<dd><p>Mondrian (class-conditional) conformal: one <a class="reference internal" href="#ek.qe.decide.ConformalGate" title="ek.qe.decide.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a> per group.</p>
+<p>Restores approximate per-field-type validity by calibrating separately per group
+key (e.g. <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>), with a pooled fallback for unseen groups.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.decide.RiskControlGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">RiskControlGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">target:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.05,</span> <span class="pre">loss:</span> <span class="pre">~typing.Callable[[bool],</span> <span class="pre">float]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">RiskControlGate.&lt;lambda&gt;&gt;,</span> <span class="pre">loss_bound:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0,</span> <span class="pre">lam:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#RiskControlGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.RiskControlGate" title="Link to this definition"></a></dt>
+<dd><p>Conformal Risk Control: accept <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">lambda</span></code> bounding the accepted-error rate.</p>
+<p>Picks the <em>smallest</em> threshold <code class="docutils literal notranslate"><span class="pre">lambda</span></code> (the most coverage) whose finite-sample
+risk bound is at or below <code class="docutils literal notranslate"><span class="pre">target</span></code>. The controlled quantity is
+<code class="docutils literal notranslate"><span class="pre">E[</span> <span class="pre">loss(item)</span> <span class="pre">*</span> <span class="pre">1(accepted)</span> <span class="pre">]</span></code> – with the default 0/1 loss, the population
+rate of accepted-yet-wrong items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Upper bound on the accepted-error rate (e.g. <code class="docutils literal notranslate"><span class="pre">0.05</span></code>).</p></li>
+<li><p><strong>loss</strong> – <code class="docutils literal notranslate"><span class="pre">correct</span> <span class="pre">-&gt;</span> <span class="pre">loss</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">loss_bound]</span></code>; default <code class="docutils literal notranslate"><span class="pre">0</span></code> if correct
+else <code class="docutils literal notranslate"><span class="pre">1</span></code>. Any monotone loss bounded by <code class="docutils literal notranslate"><span class="pre">loss_bound</span></code> works.</p></li>
+<li><p><strong>loss_bound</strong> – The loss’s upper bound <code class="docutils literal notranslate"><span class="pre">B</span></code> – the CRC finite-sample slack is
+<code class="docutils literal notranslate"><span class="pre">+B/(n+1)</span></code>. Must match <code class="docutils literal notranslate"><span class="pre">loss</span></code>’s range or the guarantee is invalid;
+keep the default <code class="docutils literal notranslate"><span class="pre">1.0</span></code> for the 0/1 loss.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.decide.RiskControlGate.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.decide.RiskControlGate" title="ek.qe.decide.RiskControlGate"><span class="pre">RiskControlGate</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#RiskControlGate.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.RiskControlGate.fit" title="Link to this definition"></a></dt>
+<dd><p>Find the smallest accept threshold whose risk bound is &lt;= <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.decide.crepes_mondrian_gate">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">crepes_mondrian_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#crepes_mondrian_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.crepes_mondrian_gate" title="Link to this definition"></a></dt>
+<dd><p>A Mondrian (class-conditional) conformal gate backed by <code class="docutils literal notranslate"><span class="pre">crepes</span></code> (<code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code>).</p>
+<p>The pure-Python <a class="reference internal" href="#ek.qe.decide.GroupConformalGate" title="ek.qe.decide.GroupConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a> is the dependency-free default; use
+this for parity with a crepes/sklearn conformal stack (full CDFs, normalised
+variants). Raises an actionable install hint if <code class="docutils literal notranslate"><span class="pre">crepes</span></code> is absent.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.decide.risk_coverage_curve">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">risk_coverage_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#risk_coverage_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.risk_coverage_curve" title="Link to this definition"></a></dt>
+<dd><p>The risk-coverage trade-off: <code class="docutils literal notranslate"><span class="pre">{threshold,</span> <span class="pre">coverage,</span> <span class="pre">selective_risk}</span></code> per point.</p>
+<p>Coverage is the fraction auto-accepted at each threshold; selective risk is the
+error rate <em>among the accepted</em>. Lower-left is better; pick the operating point
+against a target risk or coverage.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.decide.split_conformal_quantile">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">split_conformal_quantile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#split_conformal_quantile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.split_conformal_quantile" title="Link to this definition"></a></dt>
+<dd><p>The split-conformal threshold: the <code class="docutils literal notranslate"><span class="pre">ceil((n+1)(1-alpha))</span> <span class="pre">/</span> <span class="pre">n</span></code> empirical quantile.</p>
+<p><code class="docutils literal notranslate"><span class="pre">scores</span></code> are nonconformity scores on an exchangeable calibration set. Returns
+<code class="docutils literal notranslate"><span class="pre">+inf</span></code> when <code class="docutils literal notranslate"><span class="pre">n</span></code> is too small to guarantee <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code> (so nothing is
+flagged – the honest behaviour at that sample size), and <code class="docutils literal notranslate"><span class="pre">-inf</span></code> at the
+<code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">-&gt;</span> <span class="pre">1</span></code> limit (flag everything).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="calibrate.html" class="btn btn-neutral float-left" title="ek.qe.calibrate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rover.html" class="btn btn-neutral float-right" title="ek.qe.rover" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

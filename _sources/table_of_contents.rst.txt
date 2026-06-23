@@ -16,6 +16,12 @@
    module_docs/ek/ocr/benchmark
    module_docs/ek/ocr/bridge
    module_docs/ek/ocr/profiles
+   module_docs/ek/qe
+   module_docs/ek/qe/calibrate
+   module_docs/ek/qe/decide
+   module_docs/ek/qe/rover
+   module_docs/ek/qe/signals
+   module_docs/ek/qe/verifiers
    module_docs/ek/registry
    module_docs/ek/stores
    module_docs/ek/tools
