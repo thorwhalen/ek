@@ -21,7 +21,7 @@ authors = [{ name = "Thor Whalen" }]
 # opt-in extra (see [project.optional-dependencies]); nothing copyleft/non-commercial
 # is ever a default. See skills/ek-dev-licensing for the policy and landmines.
 dependencies = [
-    "dol",        # local-file key-value stores (MutableMapping facades)
+    "dol>=0.3.45",  # local-file key-value stores; >=0.3.45 fixes Jsons on Windows (filter_regex)
     "config2py",  # ~/.local/share/ek/ XDG data-folder resolution
     "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
     "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
@@ -140,7 +140,7 @@ enabled = false
 [tool.wads.ci.testing]
 enabled = true
 python_versions = ["3.10", "3.12"]
-pytest_args = ["-v", "--tb=long", "-l", "-s"]
+pytest_args = ["-v", "--tb=short"]
 coverage_enabled = true
 coverage_threshold = 0
 coverage_report_format = ["term", "xml"]
