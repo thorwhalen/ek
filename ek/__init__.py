@@ -32,10 +32,12 @@ stores under ``~/.local/share/ek/`` -- see :mod:`ek.stores`.
 
 from __future__ import annotations
 
-# Importing these registers built-in strategies (normalizers, metrics) by name.
+# Importing these registers built-in strategies (normalizers, metrics, signals,
+# calibrators, policies) by name.
 from . import canonicalize as canonicalize
 from . import metrics as metrics
 from . import ocr as ocr
+from . import qe as qe
 from .base import (
     AnnotatedExtraction,
     Calibrator,
@@ -82,6 +84,37 @@ from .metrics import (
     TypedGraph,
     TypedGraphMetric,
     TypedNode,
+)
+from .qe import (
+    AgreementSignal,
+    ConformalGate,
+    CostSensitiveGate,
+    GroupCalibrator,
+    GroupConformalGate,
+    IntrinsicConfidenceSignal,
+    IsotonicCalibrator,
+    LogprobSignal,
+    PlattCalibrator,
+    RiskControlGate,
+    RoverConsensus,
+    TemperatureCalibrator,
+    VerifierSignal,
+    checksum_validator,
+    enum_validator,
+    expected_calibration_error,
+    iban_check,
+    isbn_check,
+    load_calibrator,
+    luhn_check,
+    range_validator,
+    regex_validator,
+    reliability_curve,
+    risk_coverage_curve,
+    rover,
+    save_calibrator,
+    schema_validator,
+    split_conformal_quantile,
+    totals_consistent,
 )
 from .registry import (
     check_requirements,
@@ -146,6 +179,36 @@ __all__ = [
     "TypedGraph",
     "TypedNode",
     "TypedEdge",
+    # reference-free QE (signals -> calibrate -> validate -> decide)
+    "rover",
+    "RoverConsensus",
+    "AgreementSignal",
+    "VerifierSignal",
+    "LogprobSignal",
+    "IntrinsicConfidenceSignal",
+    "PlattCalibrator",
+    "IsotonicCalibrator",
+    "TemperatureCalibrator",
+    "GroupCalibrator",
+    "expected_calibration_error",
+    "reliability_curve",
+    "save_calibrator",
+    "load_calibrator",
+    "CostSensitiveGate",
+    "ConformalGate",
+    "GroupConformalGate",
+    "RiskControlGate",
+    "risk_coverage_curve",
+    "split_conformal_quantile",
+    "checksum_validator",
+    "regex_validator",
+    "range_validator",
+    "enum_validator",
+    "schema_validator",
+    "totals_consistent",
+    "luhn_check",
+    "iban_check",
+    "isbn_check",
     # registry
     "register",
     "get",
@@ -163,6 +226,7 @@ __all__ = [
     "ocr",
     "metrics",
     "canonicalize",
+    "qe",
     "__version__",
 ]
 

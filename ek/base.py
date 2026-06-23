@@ -291,13 +291,21 @@ class Report:
 
 @dataclass
 class QualityReport:
-    """The result of a reference-free quality estimate for one extraction."""
+    """The result of a reference-free quality estimate for one extraction.
+
+    For a single value the scalar fields carry the verdict. For a whole
+    :class:`AnnotatedExtraction`, ``per_field`` maps each :class:`NodePath` to its
+    updated :class:`FieldEstimate` (confidence/findings/decision filled in), and the
+    scalar fields summarize: ``calibrated_confidence`` is the weakest field, and
+    ``decision`` the most severe (``block`` > ``flag`` > ``accept``).
+    """
 
     calibrated_confidence: Optional[float] = None
     decision: Optional[Decision] = None
     findings: tuple = ()
     raw_signals: dict = field(default_factory=dict)
     provenance: dict = field(default_factory=dict)
+    per_field: Optional[Mapping] = None
 
 
 # ---------------------------------------------------------------------------

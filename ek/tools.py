@@ -30,6 +30,24 @@ def wer(prediction: str, gold: str, *, normalize: Optional[str] = None) -> float
     return score(prediction, gold, metric="wer", normalize=normalize).value
 
 
+def rover(*hypotheses: str, confidence: bool = True) -> dict:
+    """ROVER-fuse 2+ transcriptions into a consensus + mean agreement (reference-free).
+
+    Example::
+
+        python -m ek rover "the cat sat" "the cat sit" "the bat sat"
+    """
+    from .qe.rover import rover as _rover
+
+    cons = _rover(list(hypotheses), use_confidence=confidence)
+    return {
+        "consensus": cons.text,
+        "mean_agreement": round(cons.mean_agreement, 4),
+        "agreement": [round(a, 4) for a in cons.agreement],
+        "n_engines": cons.n_engines,
+    }
+
+
 def where() -> str:
     """Print the local data folder where ``ek`` persists gold/results/runs."""
     return str(app_folder())
@@ -58,4 +76,4 @@ def version() -> str:
 
 
 #: SSOT of the functions exposed by the ``ek`` CLI.
-_dispatch_funcs = [cer, wer, where, check, engines, version]
+_dispatch_funcs = [cer, wer, rover, where, check, engines, version]
