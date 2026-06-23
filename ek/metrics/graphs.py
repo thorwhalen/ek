@@ -134,7 +134,11 @@ class TypedGraphMetric:
         self.timeout = timeout
 
     def __call__(
-        self, pred: TypedGraph, gold: TypedGraph, *, grammar: Optional[GraphGrammar] = None
+        self,
+        pred: TypedGraph,
+        gold: TypedGraph,
+        *,
+        grammar: Optional[GraphGrammar] = None,
     ) -> Score:
         try:
             import networkx as nx
@@ -163,8 +167,10 @@ class TypedGraphMetric:
             )
 
         def edge_subst(a: Mapping, b: Mapping) -> float:
-            return 0.0 if a.get("type") == b.get("type") else max(
-                edge_cost(a.get("type", "")), edge_cost(b.get("type", ""))
+            return (
+                0.0
+                if a.get("type") == b.get("type")
+                else max(edge_cost(a.get("type", "")), edge_cost(b.get("type", "")))
             )
 
         gp, gg = pred.to_networkx(), gold.to_networkx()
@@ -177,9 +183,16 @@ class TypedGraphMetric:
         )
 
         if denom == 0:  # both graphs empty -> identical
-            return Score(value=0.0, metric="graph",
-                         detail={"raw_distance": 0.0, "denom": 0.0, "similarity": 1.0,
-                                 "higher_is_better": False})
+            return Score(
+                value=0.0,
+                metric="graph",
+                detail={
+                    "raw_distance": 0.0,
+                    "denom": 0.0,
+                    "similarity": 1.0,
+                    "higher_is_better": False,
+                },
+            )
 
         raw = nx.graph_edit_distance(
             gp,

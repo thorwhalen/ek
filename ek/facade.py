@@ -200,7 +200,9 @@ def _decide(policy, confidence: Optional[float], group: Any):
     return policy(confidence)
 
 
-def _run_signals(signals: Iterable, target: Any, raw_signals: dict, failures: list) -> None:
+def _run_signals(
+    signals: Iterable, target: Any, raw_signals: dict, failures: list
+) -> None:
     """Call each injected signal on ``target``; merge output, *recording* any failure.
 
     A failing signal must not abort the pipeline (the others still run), but it is
@@ -217,10 +219,14 @@ def _run_signals(signals: Iterable, target: Any, raw_signals: dict, failures: li
                 raw_signals[name] = float(out)
         except Exception as exc:  # keep the pipeline alive, but leave a trace
             failures.append({"signal": name, "error": repr(exc)})
-            warnings.warn(f"estimate_quality: signal {name!r} failed: {exc!r}", stacklevel=2)
+            warnings.warn(
+                f"estimate_quality: signal {name!r} failed: {exc!r}", stacklevel=2
+            )
 
 
-def _run_validators(validators: Iterable, value: Any, spec: Any, findings: list, failures: list) -> None:
+def _run_validators(
+    validators: Iterable, value: Any, spec: Any, findings: list, failures: list
+) -> None:
     """Run each validator on ``value``, recording (not swallowing) any that errors.
 
     A throwing validator (e.g. a bad regex) is isolated like a failing signal -- the
@@ -233,7 +239,9 @@ def _run_validators(validators: Iterable, value: Any, spec: Any, findings: list,
             findings.extend(v(value, spec=spec))
         except Exception as exc:
             failures.append({"validator": name, "error": repr(exc)})
-            warnings.warn(f"estimate_quality: validator {name!r} failed: {exc!r}", stacklevel=2)
+            warnings.warn(
+                f"estimate_quality: validator {name!r} failed: {exc!r}", stacklevel=2
+            )
 
 
 def _base_confidence(estimate: Any, raw_signals: dict) -> Optional[float]:
@@ -323,7 +331,9 @@ def estimate_quality(
     # A bare callable in `sources` is almost certainly a Signal passed to the wrong
     # slot; a legitimate hypothesis is a str or OcrResult-shaped object (which may
     # itself be callable), so exempt those.
-    if any(callable(s) and not (isinstance(s, str) or hasattr(s, "text")) for s in sources):
+    if any(
+        callable(s) and not (isinstance(s, str) or hasattr(s, "text")) for s in sources
+    ):
         raise TypeError(
             "estimate_quality: `sources` are alternative hypotheses "
             "(strings/OcrResult-shaped objects) to fuse with ROVER, not signal "
@@ -405,7 +415,9 @@ def _estimate_annotated(
             raw_signals.setdefault("agreement", extraction_agreement)
 
         findings = list(fe.findings or ())
-        _run_validators(_field_validators(validators, path), fe.value, spec, findings, failures)
+        _run_validators(
+            _field_validators(validators, path), fe.value, spec, findings, failures
+        )
 
         base = _base_confidence(fe, raw_signals)
         group = path.node_type
@@ -413,7 +425,9 @@ def _estimate_annotated(
         any_calibrated = any_calibrated or did_calibrate
         decision = _decide(policy, calibrated, group)
         # A hard verifier failure forces at least a flag even if confidence is high.
-        if decision is Decision.ACCEPT and any(f.severity is Severity.FLAG for f in findings):
+        if decision is Decision.ACCEPT and any(
+            f.severity is Severity.FLAG for f in findings
+        ):
             decision = Decision.FLAG
 
         # Build a fresh FieldEstimate rather than mutate the input, so re-running
@@ -429,7 +443,9 @@ def _estimate_annotated(
         all_findings.extend(findings)
         if calibrated is not None:
             confidences.append(calibrated)
-        if decision is not None and (worst is None or _DECISION_RANK[decision] > _DECISION_RANK[worst]):
+        if decision is not None and (
+            worst is None or _DECISION_RANK[decision] > _DECISION_RANK[worst]
+        ):
             worst = decision
 
     provenance = {"n_fields": len(per_field), "calibrated": any_calibrated}
@@ -439,7 +455,9 @@ def _estimate_annotated(
         calibrated_confidence=min(confidences) if confidences else None,
         decision=worst,
         findings=tuple(all_findings),
-        raw_signals={"agreement": extraction_agreement} if extraction_agreement is not None else {},
+        raw_signals={"agreement": extraction_agreement}
+        if extraction_agreement is not None
+        else {},
         provenance=provenance,
         per_field=per_field,
     )

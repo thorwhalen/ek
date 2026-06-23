@@ -141,7 +141,9 @@ def evaluate_ocr(
     return report
 
 
-def _persist(report, per_item, *, run_id: Optional[str], rootdir: Optional[str]) -> None:
+def _persist(
+    report, per_item, *, run_id: Optional[str], rootdir: Optional[str]
+) -> None:
     if run_id is None:
         from datetime import datetime, timezone
 

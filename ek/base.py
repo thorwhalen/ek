@@ -317,35 +317,34 @@ class QualityReport:
 class Metric(Protocol):
     """Compares one prediction to one gold reference, returning a :class:`Score`."""
 
-    def __call__(self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None) -> Score:
-        ...
+    def __call__(
+        self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None
+    ) -> Score: ...
 
 
 @runtime_checkable
 class Validator(Protocol):
     """Reference-free check on a value, yielding zero or more :class:`Finding` s."""
 
-    def __call__(self, value: Any, *, spec: Optional[FieldSpec] = None) -> Iterable[Finding]:
-        ...
+    def __call__(
+        self, value: Any, *, spec: Optional[FieldSpec] = None
+    ) -> Iterable[Finding]: ...
 
 
 @runtime_checkable
 class Calibrator(Protocol):
     """Maps a raw scalar signal to a probability after being ``fit`` on labels."""
 
-    def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "Calibrator":
-        ...
+    def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "Calibrator": ...
 
-    def __call__(self, raw_score: float) -> float:
-        ...
+    def __call__(self, raw_score: float) -> float: ...
 
 
 @runtime_checkable
 class DecisionPolicy(Protocol):
     """Turns a (calibrated) confidence into an accept/flag/block :class:`Decision`."""
 
-    def __call__(self, confidence: float) -> Decision:
-        ...
+    def __call__(self, confidence: float) -> Decision: ...
 
 
 @runtime_checkable
@@ -358,8 +357,7 @@ class Signal(Protocol):
 
     cost_tier: int
 
-    def __call__(self, extractor_output: Any) -> float:
-        ...
+    def __call__(self, extractor_output: Any) -> float: ...
 
 
 # ---------------------------------------------------------------------------

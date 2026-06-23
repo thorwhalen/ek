@@ -63,7 +63,9 @@ def _sigmoid(z: float) -> float:
 
 def _clip01(p: float) -> float:
     if math.isnan(p):
-        raise ValueError("calibrated probability is NaN (was the raw score non-finite?)")
+        raise ValueError(
+            "calibrated probability is NaN (was the raw score non-finite?)"
+        )
     return 0.0 if p < 0.0 else 1.0 if p > 1.0 else p
 
 
@@ -103,7 +105,9 @@ class PlattCalibrator:
     max_iter: int = 100
     kind: str = "platt"
 
-    def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "PlattCalibrator":
+    def fit(
+        self, scores: Sequence[float], correct: Sequence[bool]
+    ) -> "PlattCalibrator":
         """Fit ``a, b`` to maximise the likelihood of ``correct`` given ``scores``."""
         pairs = _finite_pairs(scores, correct)
         xs = [x for x, _ in pairs]
@@ -169,7 +173,9 @@ class IsotonicCalibrator:
     y: List[float] = field(default_factory=list)  # calibrated probability at each
     kind: str = "isotonic"
 
-    def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "IsotonicCalibrator":
+    def fit(
+        self, scores: Sequence[float], correct: Sequence[bool]
+    ) -> "IsotonicCalibrator":
         """Fit the monotonic step function to ``(score, correct)`` pairs."""
         # Aggregate ALL observations at each distinct x into one (sum, weight) block
         # FIRST -- isotonic enforces monotonicity only across distinct x. Pooling
@@ -193,7 +199,10 @@ class IsotonicCalibrator:
         for xv in sorted(agg):
             s_sum, w = agg[xv]
             blocks.append([s_sum, w, [xv]])
-            while len(blocks) > 1 and blocks[-2][0] / blocks[-2][1] >= blocks[-1][0] / blocks[-1][1]:
+            while (
+                len(blocks) > 1
+                and blocks[-2][0] / blocks[-2][1] >= blocks[-1][0] / blocks[-1][1]
+            ):
                 s2, w2, xs2 = blocks.pop()
                 blocks[-1][0] += s2
                 blocks[-1][1] += w2
@@ -243,7 +252,9 @@ class TemperatureCalibrator:
     T: float = 1.0
     kind: str = "temperature"
 
-    def fit(self, logits: Sequence[float], correct: Sequence[bool]) -> "TemperatureCalibrator":
+    def fit(
+        self, logits: Sequence[float], correct: Sequence[bool]
+    ) -> "TemperatureCalibrator":
         """Fit ``T`` by minimising NLL with a bounded 1-D search."""
         pairs = _finite_pairs(logits, correct)
         zs = [z for z, _ in pairs]
@@ -313,7 +324,9 @@ class GroupCalibrator:
             buckets.setdefault(g, ([], []))
             buckets[g][0].append(s)
             buckets[g][1].append(c)
-        self.by_group = {g: self.factory().fit(ss, cc) for g, (ss, cc) in buckets.items()}
+        self.by_group = {
+            g: self.factory().fit(ss, cc) for g, (ss, cc) in buckets.items()
+        }
         self.pooled = self.factory().fit(list(scores), list(correct))
         return self
 
@@ -379,7 +392,13 @@ def reliability_curve(
     out = []
     for b, h in zip(bins, hits):
         if b:
-            out.append({"confidence": sum(b) / len(b), "accuracy": sum(h) / len(h), "count": len(b)})
+            out.append(
+                {
+                    "confidence": sum(b) / len(b),
+                    "accuracy": sum(h) / len(h),
+                    "count": len(b),
+                }
+            )
     return out
 
 
@@ -425,7 +444,9 @@ def sklearn_calibrator(method: str = "sigmoid"):
 
 
 @requires_extra("calibration", packages=["netcal"])
-def netcal_ece(probs: Sequence[float], correct: Sequence[bool], *, bins: int = DEFAULT_N_BINS) -> float:
+def netcal_ece(
+    probs: Sequence[float], correct: Sequence[bool], *, bins: int = DEFAULT_N_BINS
+) -> float:
     """ECE via ``netcal`` (behind ``ek[calibration]``); D-ECE for localized outputs lives there too."""
     from netcal.metrics import ECE
 
@@ -445,7 +466,9 @@ for _k, _cls in _CALIBRATORS.items():
     register("calibrators", _k, _cls)
 
 
-def save_calibrator(calibrator: Any, name: str, *, rootdir: Optional[str] = None) -> dict:
+def save_calibrator(
+    calibrator: Any, name: str, *, rootdir: Optional[str] = None
+) -> dict:
     """Persist a fitted calibrator's parameters to the ``calibrators`` store."""
     record = calibrator.to_dict()
     json_store("calibrators", rootdir=rootdir)[name] = record
@@ -460,7 +483,9 @@ def load_calibrator(name: str, *, rootdir: Optional[str] = None) -> Any:
     """
     record = json_store("calibrators", rootdir=rootdir)[name]
     if not isinstance(record, dict) or "kind" not in record:
-        raise ValueError(f"calibrator record {name!r} is malformed (no 'kind'): {record!r}")
+        raise ValueError(
+            f"calibrator record {name!r} is malformed (no 'kind'): {record!r}"
+        )
     kind = record["kind"]
     if kind not in _CALIBRATORS:
         raise ValueError(
@@ -469,4 +494,6 @@ def load_calibrator(name: str, *, rootdir: Optional[str] = None) -> Any:
     try:
         return _CALIBRATORS[kind].from_dict(record)
     except (KeyError, TypeError, ValueError) as exc:
-        raise ValueError(f"calibrator record {name!r} is missing/invalid fields: {exc}") from exc
+        raise ValueError(
+            f"calibrator record {name!r} is missing/invalid fields: {exc}"
+        ) from exc

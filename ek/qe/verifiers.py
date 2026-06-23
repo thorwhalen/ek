@@ -182,12 +182,20 @@ def range_validator(
         try:
             x = float(value)
         except (TypeError, ValueError):
-            yield Finding(field=name, layer=layer, severity=Severity.FLAG,
-                          message=f"{value!r} is not numeric")
+            yield Finding(
+                field=name,
+                layer=layer,
+                severity=Severity.FLAG,
+                message=f"{value!r} is not numeric",
+            )
             return
         if not (lo <= x <= hi):
-            yield Finding(field=name, layer=layer, severity=Severity.FLAG,
-                          message=f"{x} outside [{lo}, {hi}]")
+            yield Finding(
+                field=name,
+                layer=layer,
+                severity=Severity.FLAG,
+                message=f"{x} outside [{lo}, {hi}]",
+            )
 
     return validate
 
@@ -207,13 +215,19 @@ def enum_validator(
         except TypeError:  # an unhashable/uncomparable value is simply not a member
             inside = False
         if not inside:
-            yield Finding(field=name, layer=layer, severity=Severity.FLAG,
-                          message=f"{value!r} not in {sorted(map(str, allowed))}")
+            yield Finding(
+                field=name,
+                layer=layer,
+                severity=Severity.FLAG,
+                message=f"{value!r} not in {sorted(map(str, allowed))}",
+            )
 
     return validate
 
 
-def schema_validator(value: Any, *, spec: Optional[FieldSpec] = None) -> Iterable[Finding]:
+def schema_validator(
+    value: Any, *, spec: Optional[FieldSpec] = None
+) -> Iterable[Finding]:
     """A spec-driven :class:`~ek.base.Validator`: type and ``domain`` checks from a FieldSpec.
 
     Reads the :class:`~ek.base.FieldSpec` ``type`` and ``domain`` -- a ``(lo, hi)``
@@ -227,15 +241,25 @@ def schema_validator(value: Any, *, spec: Optional[FieldSpec] = None) -> Iterabl
         try:
             float(value)
         except (TypeError, ValueError):
-            yield Finding(field=name, layer="type", severity=Severity.FLAG,
-                          message=f"{value!r} is not a number")
+            yield Finding(
+                field=name,
+                layer="type",
+                severity=Severity.FLAG,
+                message=f"{value!r} is not a number",
+            )
             return
     domain = spec.domain
     if not domain:
         return
     # A (lo, hi) numeric range vs an enum/regex domain.
-    if spec.type == "number" and len(domain) == 2 and all(_is_number(d) for d in domain):
-        yield from range_validator(domain[0], domain[1], field_name=name)(value, spec=spec)
+    if (
+        spec.type == "number"
+        and len(domain) == 2
+        and all(_is_number(d) for d in domain)
+    ):
+        yield from range_validator(domain[0], domain[1], field_name=name)(
+            value, spec=spec
+        )
     elif len(domain) == 1 and isinstance(domain[0], str):
         yield from regex_validator(domain[0], field_name=name)(value, spec=spec)
     else:
@@ -318,7 +342,9 @@ class VerifierSignal:
     validators: List[Callable[..., Iterable[Finding]]] = field(default_factory=list)
     cost_tier: int = 1
 
-    def findings(self, value: Any, *, spec: Optional[FieldSpec] = None) -> List[Finding]:
+    def findings(
+        self, value: Any, *, spec: Optional[FieldSpec] = None
+    ) -> List[Finding]:
         """All findings the validators produce for ``value`` (empty == all clear)."""
         out: List[Finding] = []
         for v in self.validators:

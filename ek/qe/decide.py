@@ -204,12 +204,14 @@ class GroupConformalGate:
             buckets[g][0].append(p)
             buckets[g][1].append(c)
         self.by_group = {
-            g: ConformalGate(alpha=self.alpha, nonconformity=self.nonconformity).fit(ps, cs)
+            g: ConformalGate(alpha=self.alpha, nonconformity=self.nonconformity).fit(
+                ps, cs
+            )
             for g, (ps, cs) in buckets.items()
         }
-        self.pooled = ConformalGate(alpha=self.alpha, nonconformity=self.nonconformity).fit(
-            list(probs), list(correct)
-        )
+        self.pooled = ConformalGate(
+            alpha=self.alpha, nonconformity=self.nonconformity
+        ).fit(list(probs), list(correct))
         return self
 
     def __call__(self, confidence: float, *, group: Any = None) -> Decision:
@@ -288,7 +290,11 @@ def risk_coverage_curve(
     n = len(pairs)
     if n == 0:
         return []
-    taus = sorted(set(thresholds)) if thresholds is not None else sorted({p for p, _ in pairs})
+    taus = (
+        sorted(set(thresholds))
+        if thresholds is not None
+        else sorted({p for p, _ in pairs})
+    )
     out = []
     for tau in taus:
         accepted = [c for p, c in pairs if p >= tau]

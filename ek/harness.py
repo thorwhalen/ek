@@ -80,9 +80,15 @@ def evaluate_store(
         reference = rec[reference_key]
         slice_label = rec.get(slice_key)
         cases.append((prediction, reference, slice_label))
-        per_item[key] = {"prediction": prediction, "reference": reference, "slice": slice_label}
+        per_item[key] = {
+            "prediction": prediction,
+            "reference": reference,
+            "slice": slice_label,
+        }
 
-    report = evaluate(cases, metric=metric, grammar=grammar, normalize=normalize, weights=weights)
+    report = evaluate(
+        cases, metric=metric, grammar=grammar, normalize=normalize, weights=weights
+    )
     for key, sc in zip(per_item, report.scores):
         per_item[key]["score"] = sc.value
     report.detail["per_item"] = per_item
@@ -98,7 +104,10 @@ def evaluate_store(
             "n": report.n,
             "per_slice": report.per_slice,
         }
-        json_store("results", rootdir=rootdir)[run_id] = {**summary, "per_item": per_item}
+        json_store("results", rootdir=rootdir)[run_id] = {
+            **summary,
+            "per_item": per_item,
+        }
         json_store("runs", rootdir=rootdir)[run_id] = summary
     return report
 
@@ -142,10 +151,14 @@ class GateResult:
         return self.passed
 
 
-def _is_regression(current: float, baseline: float, *, higher_is_better: bool, tol: float) -> bool:
+def _is_regression(
+    current: float, baseline: float, *, higher_is_better: bool, tol: float
+) -> bool:
     if current is None or baseline is None:
         return False
-    return (baseline - current) > tol if higher_is_better else (current - baseline) > tol
+    return (
+        (baseline - current) > tol if higher_is_better else (current - baseline) > tol
+    )
 
 
 def regression_gate(
@@ -170,23 +183,40 @@ def regression_gate(
     Returns:
         A :class:`GateResult` (falsy if any regression was found).
     """
-    base = load_baseline(baseline, rootdir=rootdir) if isinstance(baseline, str) else baseline
+    base = (
+        load_baseline(baseline, rootdir=rootdir)
+        if isinstance(baseline, str)
+        else baseline
+    )
     metric = report.metric
     hib = _higher_is_better(metric) if higher_is_better is None else higher_is_better
     if base is None:
         # No baseline yet: nothing to regress against -> pass (first run).
-        return GateResult(passed=True, metric=metric, higher_is_better=hib,
-                          tolerance=tolerance, aggregate_current=report.aggregate)
+        return GateResult(
+            passed=True,
+            metric=metric,
+            higher_is_better=hib,
+            tolerance=tolerance,
+            aggregate_current=report.aggregate,
+        )
 
     regressions: dict = {}
-    if _is_regression(report.aggregate, base.get("aggregate"), higher_is_better=hib, tol=tolerance):
-        regressions["__aggregate__"] = {"current": report.aggregate, "baseline": base.get("aggregate")}
+    if _is_regression(
+        report.aggregate, base.get("aggregate"), higher_is_better=hib, tol=tolerance
+    ):
+        regressions["__aggregate__"] = {
+            "current": report.aggregate,
+            "baseline": base.get("aggregate"),
+        }
     base_slices = base.get("per_slice", {})
     for slice_label, cur in report.per_slice.items():
         if slice_label in base_slices and _is_regression(
             cur, base_slices[slice_label], higher_is_better=hib, tol=tolerance
         ):
-            regressions[slice_label] = {"current": cur, "baseline": base_slices[slice_label]}
+            regressions[slice_label] = {
+                "current": cur,
+                "baseline": base_slices[slice_label],
+            }
 
     return GateResult(
         passed=not regressions,
@@ -227,14 +257,18 @@ def cohen_kappa(rater_a: Sequence, rater_b: Sequence) -> float:
         return 1.0
     labels = set(rater_a) | set(rater_b)
     p_observed = sum(1 for x, y in zip(rater_a, rater_b) if x == y) / n
-    p_expected = sum((rater_a.count(label) / n) * (rater_b.count(label) / n) for label in labels)
+    p_expected = sum(
+        (rater_a.count(label) / n) * (rater_b.count(label) / n) for label in labels
+    )
     if p_expected == 1.0:
         return 1.0
     return (p_observed - p_expected) / (1.0 - p_expected)
 
 
 @requires_extra("harness", packages=["krippendorff"])
-def krippendorff_alpha(reliability_data: Sequence[Sequence], *, level: str = "nominal") -> float:
+def krippendorff_alpha(
+    reliability_data: Sequence[Sequence], *, level: str = "nominal"
+) -> float:
     """Krippendorff's alpha via the ``krippendorff`` package (``ek[harness]`` extra).
 
     The most general IAA coefficient -- any number of raters, any measurement level,
@@ -244,5 +278,7 @@ def krippendorff_alpha(reliability_data: Sequence[Sequence], *, level: str = "no
     import krippendorff
 
     return float(
-        krippendorff.alpha(reliability_data=reliability_data, level_of_measurement=level)
+        krippendorff.alpha(
+            reliability_data=reliability_data, level_of_measurement=level
+        )
     )

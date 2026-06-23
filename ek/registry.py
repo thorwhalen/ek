@@ -104,7 +104,9 @@ def _discover(namespace: str) -> None:
         group = f"ek.{namespace}"
         # Python >=3.10 always exposes EntryPoints.select(); the .get fallback is
         # only defensive for unusual backports.
-        selected = eps.select(group=group) if hasattr(eps, "select") else eps.get(group, [])
+        selected = (
+            eps.select(group=group) if hasattr(eps, "select") else eps.get(group, [])
+        )
         for ep in selected:
             try:
                 register(namespace, ep.name, ep.load())
@@ -123,9 +125,7 @@ class MissingExtraError(ImportError):
     """Raised when an optional feature is used without its extra installed."""
 
 
-def requires_extra(
-    extra: str, *, packages: Optional[Iterable[str]] = None
-) -> Callable:
+def requires_extra(extra: str, *, packages: Optional[Iterable[str]] = None) -> Callable:
     """Decorator: fail with an actionable install hint if an extra is missing.
 
     The wrapped callable runs only once every package in ``packages`` imports; the
@@ -190,7 +190,9 @@ _EXTRA_PROBES: dict[str, list[str]] = {
 }
 
 
-def check_requirements(*, engine: Optional[str] = None, extra: Optional[str] = None) -> dict:
+def check_requirements(
+    *, engine: Optional[str] = None, extra: Optional[str] = None
+) -> dict:
     """Report what an OCR engine or feature extra needs, without raising.
 
     For an OCR ``engine`` and an installed ``ocracy``, defers to ``ocracy``'s own

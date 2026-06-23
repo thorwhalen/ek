@@ -103,7 +103,9 @@ class Canonicalizer:
     ):
         self._refs = list(steps)
         self._funcs = [s if callable(s) else get("normalizers", s) for s in steps]
-        self._names = [getattr(s, "__name__", str(s)) if callable(s) else s for s in steps]
+        self._names = [
+            getattr(s, "__name__", str(s)) if callable(s) else s for s in steps
+        ]
         self._version = version or "+".join(self._names)
         self.audit_marks = audit_marks
 
@@ -138,7 +140,7 @@ def default_canonicalizer() -> Canonicalizer:
 
 
 def resolve_canonicalizer(
-    normalize: Union[None, str, Callable[[str], str], Iterable, Canonicalizer]
+    normalize: Union[None, str, Callable[[str], str], Iterable, Canonicalizer],
 ) -> Union[Canonicalizer, Callable[[str], str], None]:
     """Coerce a ``normalize`` argument to a callable canonicalizer (or ``None``).
 

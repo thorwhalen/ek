@@ -28,7 +28,9 @@ Example:
 from __future__ import annotations
 
 
-def _p(confidence_grain: str, has_real_provenance: bool, calibrated: bool, tables: bool) -> dict:
+def _p(
+    confidence_grain: str, has_real_provenance: bool, calibrated: bool, tables: bool
+) -> dict:
     return {
         "confidence_grain": confidence_grain,
         "has_real_provenance": has_real_provenance,

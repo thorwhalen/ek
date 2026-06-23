@@ -91,7 +91,11 @@ def _as_units(hyp: Any, *, default_conf: float = DEFAULT_TOKEN_CONF) -> List[_En
     # A bare sequence of tokens or (token, conf) pairs.
     units: List[_Entry] = []
     for item in hyp:
-        if isinstance(item, (tuple, list)) and len(item) == 2 and not isinstance(item, str):
+        if (
+            isinstance(item, (tuple, list))
+            and len(item) == 2
+            and not isinstance(item, str)
+        ):
             tok, conf = item
             units.append((str(tok), default_conf if conf is None else float(conf)))
         else:
@@ -119,7 +123,9 @@ def _word_level_block_units(hyp: Any, *, default_conf: float) -> Optional[List[_
     return units or None
 
 
-def _align(spine: Sequence[Optional[str]], hyp: Sequence[str]) -> List[Tuple[str, int, int]]:
+def _align(
+    spine: Sequence[Optional[str]], hyp: Sequence[str]
+) -> List[Tuple[str, int, int]]:
     """Needleman-Wunsch alignment of a network ``spine`` to a hypothesis token list.
 
     Returns operations in left-to-right order, each ``(op, s_idx, h_idx)`` where
@@ -143,8 +149,10 @@ def _align(spine: Sequence[Optional[str]], hyp: Sequence[str]) -> List[Tuple[str
     ops: List[Tuple[str, int, int]] = []
     i, j = s, t
     while i > 0 or j > 0:
-        if i > 0 and j > 0 and dp[i][j] == dp[i - 1][j - 1] + (
-            0 if spine[i - 1] == hyp[j - 1] else 1
+        if (
+            i > 0
+            and j > 0
+            and dp[i][j] == dp[i - 1][j - 1] + (0 if spine[i - 1] == hyp[j - 1] else 1)
         ):
             ops.append(("match", i - 1, j - 1))
             i, j = i - 1, j - 1
@@ -174,7 +182,9 @@ class RoverConsensus:
 
     tokens: List[str] = field(default_factory=list)  # winning non-NULL tokens, in order
     slots: List[RoverSlot] = field(default_factory=list)
-    agreement: List[float] = field(default_factory=list)  # vote share per consensus token
+    agreement: List[float] = field(
+        default_factory=list
+    )  # vote share per consensus token
     n_engines: int = 0
 
     @property
@@ -307,12 +317,16 @@ def rover(
         winner, score, share = _vote(
             slot, n_engines=n, conf_weight=effective_conf_weight, null_conf=null_conf
         )
-        rover_slots.append(RoverSlot(entries=list(slot), winner=winner, score=score, vote_share=share))
+        rover_slots.append(
+            RoverSlot(entries=list(slot), winner=winner, score=score, vote_share=share)
+        )
         if winner is not None:
             tokens.append(winner)
             agreement.append(share)
 
-    return RoverConsensus(tokens=tokens, slots=rover_slots, agreement=agreement, n_engines=n)
+    return RoverConsensus(
+        tokens=tokens, slots=rover_slots, agreement=agreement, n_engines=n
+    )
 
 
 def _slot_majority(slot: Sequence[_Entry]) -> Optional[str]:

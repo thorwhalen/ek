@@ -23,7 +23,9 @@ _MISSING = object()
 
 
 def _f1(precision: float, recall: float) -> float:
-    return (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    return (
+        (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    )
 
 
 class FieldMetric:
@@ -47,8 +49,10 @@ class FieldMetric:
         self, pred: Mapping, gold: Mapping, *, grammar: Optional[GraphGrammar] = None
     ) -> Score:
         if not isinstance(pred, Mapping) or not isinstance(gold, Mapping):
-            raise TypeError("FieldMetric compares Mapping records; got "
-                            f"{type(pred).__name__} vs {type(gold).__name__}")
+            raise TypeError(
+                "FieldMetric compares Mapping records; got "
+                f"{type(pred).__name__} vs {type(gold).__name__}"
+            )
         tp = fp = fn = 0
         for key in set(gold) | set(pred):
             g = gold.get(key, _MISSING)

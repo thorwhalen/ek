@@ -120,7 +120,9 @@ class StringMetric:
     def name(self) -> str:
         return self.mode
 
-    def __call__(self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None) -> Score:
+    def __call__(
+        self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None
+    ) -> Score:
         ref, hyp = _as_text(gold), _as_text(pred)
         if self.canonicalizer is not None:
             ref, hyp = self.canonicalizer(ref), self.canonicalizer(hyp)
@@ -129,7 +131,12 @@ class StringMetric:
         return Score(
             value=value,
             metric=self.mode,
-            detail={"edits": edits, "ref_len": ref_len, "higher_is_better": False, **extra},
+            detail={
+                "edits": edits,
+                "ref_len": ref_len,
+                "higher_is_better": False,
+                **extra,
+            },
         )
 
     def aggregate(self, scores: Sequence[Score]) -> float:

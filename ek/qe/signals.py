@@ -65,13 +65,15 @@ def geo_mean(logps: Sequence[float]) -> float:
 
 
 @register("aggregators", "length_normalized")
-def length_normalized(logps: Sequence[float], *, alpha: float = DEFAULT_LENGTH_ALPHA) -> float:
+def length_normalized(
+    logps: Sequence[float], *, alpha: float = DEFAULT_LENGTH_ALPHA
+) -> float:
     """Length-normalised score ``exp(Σ log p / T**alpha)`` (tunable length penalty)."""
     logps = _finite_logps(logps)
     t = len(logps)
     if t == 0:
         return 1.0
-    return math.exp(sum(logps) / (t ** alpha))
+    return math.exp(sum(logps) / (t**alpha))
 
 
 @register("aggregators", "min")
