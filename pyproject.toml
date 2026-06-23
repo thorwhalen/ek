@@ -140,7 +140,7 @@ enabled = false
 [tool.wads.ci.testing]
 enabled = true
 python_versions = ["3.10", "3.12"]
-pytest_args = ["-v", "--tb=short"]
+pytest_args = ["-v", "--tb=long", "-l", "-s"]
 coverage_enabled = true
 coverage_threshold = 0
 coverage_report_format = ["term", "xml"]
