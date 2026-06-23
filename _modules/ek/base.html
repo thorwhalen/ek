@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.base &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Foundational data structures and strategy protocols for ``ek``.</span>
+
+<span class="sd">This module is the single source of truth (SSOT) for ``ek``&#39;s *two-layer* data</span>
+<span class="sd">model and for the small set of ``typing.Protocol`` strategy interfaces that every</span>
+<span class="sd">swappable behaviour in the framework implements. It contains **data structures</span>
+<span class="sd">and contracts only** -- no business logic, no heavy imports. Importing it is</span>
+<span class="sd">cheap and pulls in nothing beyond the standard library.</span>
+
+<span class="sd">The two layers</span>
+<span class="sd">--------------</span>
+<span class="sd">Evaluating an information-extraction (IE) output splits into two halves -- scoring</span>
+<span class="sd">against a gold reference (*offline*) and estimating quality with no reference</span>
+<span class="sd">(*online*) -- and both operate on the **same** object:</span>
+
+<span class="sd">- **Layer A -- the schema** (:class:`GraphGrammar` and friends): a *frozen*</span>
+<span class="sd">  description of the typed graph you extract, carrying both the **types** and the</span>
+<span class="sd">  **importance/cost weights** per field/node/edge. It is the SSOT consulted by</span>
+<span class="sd">  cost-sensitive metrics, by validators, and (eventually) by constrained decoders.</span>
+<span class="sd">- **Layer B -- the extraction metadata** (:class:`AnnotatedExtraction` and</span>
+<span class="sd">  friends): per-extraction runtime metadata -- provenance, raw signals,</span>
+<span class="sd">  (calibrated) confidence, validator findings, and the accept/flag/block decision</span>
+<span class="sd">  -- keyed by a :class:`NodePath` into the Layer-A schema, riding *alongside* the</span>
+<span class="sd">  grammar without ever mutating it.</span>
+
+<span class="sd">The strategy protocols</span>
+<span class="sd">----------------------</span>
+<span class="sd">:class:`Metric`, :class:`Validator`, :class:`Calibrator`, :class:`DecisionPolicy`</span>
+<span class="sd">and :class:`Signal` are structural (duck-typed) contracts. Concrete</span>
+<span class="sd">implementations are resolved from :mod:`ek.registry` by name and injected as</span>
+<span class="sd">keyword-only arguments with smart defaults, so the simple path Just Works while</span>
+<span class="sd">every layer stays replaceable (open-closed).</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; g = GraphGrammar(</span>
+<span class="sd">    ...     node_types={&quot;donation&quot;: NodeType(</span>
+<span class="sd">    ...         &quot;donation&quot;,</span>
+<span class="sd">    ...         fields={</span>
+<span class="sd">    ...             &quot;amount&quot;: FieldSpec(&quot;amount&quot;, &quot;number&quot;, importance=10.0),</span>
+<span class="sd">    ...             &quot;city&quot;: FieldSpec(&quot;city&quot;, &quot;string&quot;, importance=1.0),</span>
+<span class="sd">    ...         },</span>
+<span class="sd">    ...     )},</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; g.field_cost(&quot;donation&quot;, &quot;amount&quot;)</span>
+<span class="sd">    10.0</span>
+<span class="sd">    &gt;&gt;&gt; g.field_cost(&quot;donation&quot;, &quot;city&quot;)</span>
+<span class="sd">    1.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Small value enums (str-subclassed so they serialize transparently to JSON)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Decision">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Decision">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Decision</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Terminal action a selective-prediction gate emits for an extracted value.&quot;&quot;&quot;</span>
+
+    <span class="n">ACCEPT</span> <span class="o">=</span> <span class="s2">&quot;accept&quot;</span>
+    <span class="n">FLAG</span> <span class="o">=</span> <span class="s2">&quot;flag&quot;</span>
+    <span class="n">BLOCK</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Severity">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Severity">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Severity</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a :class:`Finding` merely flags or can also correct a value.&quot;&quot;&quot;</span>
+
+    <span class="n">CORRECT</span> <span class="o">=</span> <span class="s2">&quot;correct&quot;</span>
+    <span class="n">FLAG</span> <span class="o">=</span> <span class="s2">&quot;flag&quot;</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Layer A -- the typed-graph schema (frozen SSOT, carries cost weights)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="FieldSpec">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.FieldSpec">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FieldSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A leaf attribute of a node: its type, validation domain and cost weight.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: Attribute name.</span>
+<span class="sd">        type: A free-form type tag (e.g. ``&quot;string&quot;``, ``&quot;number&quot;``, ``&quot;date&quot;``);</span>
+<span class="sd">            ``ek`` does not impose a type system -- the tag drives metric/validator</span>
+<span class="sd">            dispatch and is yours to define.</span>
+<span class="sd">        importance: Per-field cost weight; the lever that makes &quot;two extra digits</span>
+<span class="sd">            on a donation amount&quot; outweigh &quot;a misspelled city&quot;. Defaults to ``1.0``.</span>
+<span class="sd">        domain: Optional allowed values: an enum tuple, a ``(lo, hi)`` range, or a</span>
+<span class="sd">            regex string -- consumed by validators, never by metrics.</span>
+<span class="sd">        normalizer: Optional key naming a canonicalizer (resolved from the registry)</span>
+<span class="sd">            to apply to this field before comparison.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+    <span class="n">importance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">normalizer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="NodeType">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.NodeType">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NodeType</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A node kind in the typed graph (e.g. an &quot;invoice&quot; or a &quot;line item&quot;).&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FieldSpec</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">importance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+
+
+<div class="viewcode-block" id="EdgeType">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.EdgeType">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EdgeType</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A directed relation kind between two :class:`NodeType` names.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">src</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">importance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+
+
+<div class="viewcode-block" id="TypeRef">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.TypeRef">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TypeRef</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference into the schema, so an injected cost function can read weights.</span>
+
+<span class="sd">    ``kind`` is one of ``&quot;node&quot;``, ``&quot;edge&quot;`` or ``&quot;field&quot;``; for a field, ``name``</span>
+<span class="sd">    is the node-type name and ``field`` the field name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="GraphGrammar">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.GraphGrammar">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GraphGrammar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The frozen schema SSOT: typed nodes/edges plus their importance weights.</span>
+
+<span class="sd">    Methods return the cost weight for a referenced type, defaulting to ``1.0`` for</span>
+<span class="sd">    anything not declared, so a partial grammar is always usable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">node_types</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">edge_types</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">EdgeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GraphGrammar.node_cost">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.GraphGrammar.node_cost">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">node_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Importance weight of a node type (``1.0`` if undeclared).&quot;&quot;&quot;</span>
+        <span class="n">nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nt</span><span class="o">.</span><span class="n">importance</span> <span class="k">if</span> <span class="n">nt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span></div>
+
+
+<div class="viewcode-block" id="GraphGrammar.edge_cost">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.GraphGrammar.edge_cost">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">edge_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Importance weight of an edge type (``1.0`` if undeclared).&quot;&quot;&quot;</span>
+        <span class="n">et</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">et</span><span class="o">.</span><span class="n">importance</span> <span class="k">if</span> <span class="n">et</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span></div>
+
+
+<div class="viewcode-block" id="GraphGrammar.field_cost">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.GraphGrammar.field_cost">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">field_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Importance weight of a field on a node type (``1.0`` if undeclared).&quot;&quot;&quot;</span>
+        <span class="n">nt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_types</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fs</span><span class="o">.</span><span class="n">importance</span> <span class="k">if</span> <span class="n">fs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span></div>
+
+
+<div class="viewcode-block" id="GraphGrammar.cost">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.GraphGrammar.cost">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">TypeRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Importance weight for any :class:`TypeRef` (the default ``CostWeight``).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;node&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;edge&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;field&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ref</span><span class="o">.</span><span class="n">field</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">1.0</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Layer B -- per-extraction verification metadata (rides alongside Layer A)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="NodePath">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.NodePath">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NodePath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Addresses a node (or one of its fields) in an extracted graph; keys Layer B.&quot;&quot;&quot;</span>
+
+    <span class="n">node_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">field</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Finding">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Finding">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Finding</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One validator observation about a value: a flag, optionally a correction.</span>
+
+<span class="sd">    A ``suggestion`` is present iff the producing layer can *correct* (only the</span>
+<span class="sd">    deterministic canonicalizer and the gated LLM corrector freely do so). The</span>
+<span class="sd">    original value is always retained elsewhere; a Finding never mutates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">severity</span><span class="p">:</span> <span class="n">Severity</span> <span class="o">=</span> <span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">suggestion</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Provenance">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Provenance">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Provenance</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Where an extracted value came from, for audit and click-to-source review.</span>
+
+<span class="sd">    ``bbox`` is intentionally typed ``Any`` so ``ek`` core need not import any OCR</span>
+<span class="sd">    package; the OCR instance stores normalized ``[0, 1]`` top-left-origin geometry.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">engine</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">source_span</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bbox</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">raw_transcripts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="FieldEstimate">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.FieldEstimate">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FieldEstimate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One extracted value plus all of its reference-free verification metadata.&quot;&quot;&quot;</span>
+
+    <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">findings</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">provenance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Provenance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decision</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="AnnotatedExtraction">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.AnnotatedExtraction">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnnotatedExtraction</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Layer B: the verification metadata, referencing a frozen Layer-A grammar.</span>
+
+<span class="sd">    The grammar is held *by reference* and never mutated; ``estimates`` maps a</span>
+<span class="sd">    :class:`NodePath` to the :class:`FieldEstimate` for that node/field.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">grammar</span><span class="p">:</span> <span class="n">GraphGrammar</span>
+    <span class="n">estimates</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">NodePath</span><span class="p">,</span> <span class="n">FieldEstimate</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Result objects returned by the two facades</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Score">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Score">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Score</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of comparing one prediction against one reference.</span>
+
+<span class="sd">    ``value`` is the headline number (higher is better unless a metric documents</span>
+<span class="sd">    otherwise). The optional decomposition fields let structured metrics carry</span>
+<span class="sd">    precision/recall/F1, an alignment, and raw counts (e.g. edit operations) so</span>
+<span class="sd">    that corpus aggregation can be done *correctly* (e.g. global WER accumulation)</span>
+<span class="sd">    rather than by averaging per-item scores. ``float(score)`` returns ``value``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">recall</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">f1</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Report">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Report">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aggregate of many :class:`Score` s over a corpus, with optional per-slice cuts.</span>
+
+<span class="sd">    ``aggregate`` is the corpus-level headline (computed by the metric&#39;s own</span>
+<span class="sd">    aggregator -- e.g. globally accumulated WER -- not a naive mean of per-item</span>
+<span class="sd">    values). ``per_slice`` maps a slice label to its own aggregate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">aggregate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">scores</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">per_slice</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aggregate</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggregate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="QualityReport">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.QualityReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QualityReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The result of a reference-free quality estimate for one extraction.&quot;&quot;&quot;</span>
+
+    <span class="n">calibrated_confidence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">decision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decision</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">findings</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">provenance</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Strategy protocols (structural contracts; concrete impls live in submodules)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Metric">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Metric">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Metric</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares one prediction to one gold reference, returning a :class:`Score`.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Validator">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Validator">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Validator</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference-free check on a value, yielding zero or more :class:`Finding` s.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]:</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Calibrator">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Calibrator">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Calibrator</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maps a raw scalar signal to a probability after being ``fit`` on labels.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Calibrator&quot;</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="DecisionPolicy">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.DecisionPolicy">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DecisionPolicy</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turns a (calibrated) confidence into an accept/flag/block :class:`Decision`.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
+        <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Signal">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.Signal">[docs]</a>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Signal</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference-free quality signal: extractor output -&gt; raw scalar score.</span>
+
+<span class="sd">    The ``cost_tier`` attribute (lower is cheaper) lets an escalation policy run</span>
+<span class="sd">    cheap signals first and pay for expensive ones only on residual uncertainty.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extractor_output</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="o">...</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Callable type aliases (functions-as-strategies)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: Canonicalize a string before comparison (lowercase, fold, normalize, ...).</span>
+<span class="n">Normalizer</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+
+<span class="c1">#: Read named raw signals off a :class:`FieldEstimate` (e.g. for calibration).</span>
+<span class="n">ConfidenceSource</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">FieldEstimate</span><span class="p">],</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
+
+<span class="c1">#: Cost of an edit on a typed element; defaults to reading ``*.importance``.</span>
+<span class="n">CostWeight</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span>
+
+<span class="c1">#: Anything that turns an image (path/bytes/array) into an ``OcrResult``-shaped</span>
+<span class="c1">#: object (with ``.text`` and ``.blocks``). Typed loosely so ``ek`` core never</span>
+<span class="c1">#: imports an OCR package.</span>
+<span class="n">OcrBackend</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="default_cost_weight">
+<a class="viewcode-back" href="../../module_docs/ek/base.html#ek.default_cost_weight">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_cost_weight</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">TypeRef</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default :data:`CostWeight`: read the importance weight off the schema.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">grammar</span><span class="o">.</span><span class="n">cost</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

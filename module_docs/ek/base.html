@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.base &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.canonicalize" href="canonicalize.html" />
+    <link rel="prev" title="ek.__main__" href="__main__.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-two-layers">The two layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-strategy-protocols">The strategy protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.AnnotatedExtraction"><code class="docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Calibrator"><code class="docutils literal notranslate"><span class="pre">Calibrator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.ConfidenceSource"><code class="docutils literal notranslate"><span class="pre">ConfidenceSource</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.CostWeight"><code class="docutils literal notranslate"><span class="pre">CostWeight</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Decision"><code class="docutils literal notranslate"><span class="pre">Decision</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.DecisionPolicy"><code class="docutils literal notranslate"><span class="pre">DecisionPolicy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.EdgeType"><code class="docutils literal notranslate"><span class="pre">EdgeType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.FieldEstimate"><code class="docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.FieldSpec"><code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Finding"><code class="docutils literal notranslate"><span class="pre">Finding</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.GraphGrammar"><code class="docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.base.GraphGrammar.cost"><code class="docutils literal notranslate"><span class="pre">GraphGrammar.cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.base.GraphGrammar.edge_cost"><code class="docutils literal notranslate"><span class="pre">GraphGrammar.edge_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.base.GraphGrammar.field_cost"><code class="docutils literal notranslate"><span class="pre">GraphGrammar.field_cost()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.base.GraphGrammar.node_cost"><code class="docutils literal notranslate"><span class="pre">GraphGrammar.node_cost()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Metric"><code class="docutils literal notranslate"><span class="pre">Metric</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.NodePath"><code class="docutils literal notranslate"><span class="pre">NodePath</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.NodeType"><code class="docutils literal notranslate"><span class="pre">NodeType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Normalizer"><code class="docutils literal notranslate"><span class="pre">Normalizer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.OcrBackend"><code class="docutils literal notranslate"><span class="pre">OcrBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.QualityReport"><code class="docutils literal notranslate"><span class="pre">QualityReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Score"><code class="docutils literal notranslate"><span class="pre">Score</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Severity"><code class="docutils literal notranslate"><span class="pre">Severity</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Signal"><code class="docutils literal notranslate"><span class="pre">Signal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.TypeRef"><code class="docutils literal notranslate"><span class="pre">TypeRef</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.Validator"><code class="docutils literal notranslate"><span class="pre">Validator</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.base.default_cost_weight"><code class="docutils literal notranslate"><span class="pre">default_cost_weight()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.base</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/base.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.base">
+<span id="ek-base"></span><h1>ek.base<a class="headerlink" href="#module-ek.base" title="Link to this heading"></a></h1>
+<p>Foundational data structures and strategy protocols for <code class="docutils literal notranslate"><span class="pre">ek</span></code>.</p>
+<p>This module is the single source of truth (SSOT) for <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s <em>two-layer</em> data
+model and for the small set of <code class="docutils literal notranslate"><span class="pre">typing.Protocol</span></code> strategy interfaces that every
+swappable behaviour in the framework implements. It contains <strong>data structures
+and contracts only</strong> – no business logic, no heavy imports. Importing it is
+cheap and pulls in nothing beyond the standard library.</p>
+<section id="the-two-layers">
+<h2>The two layers<a class="headerlink" href="#the-two-layers" title="Link to this heading"></a></h2>
+<p>Evaluating an information-extraction (IE) output splits into two halves – scoring
+against a gold reference (<em>offline</em>) and estimating quality with no reference
+(<em>online</em>) – and both operate on the <strong>same</strong> object:</p>
+<ul class="simple">
+<li><p><strong>Layer A – the schema</strong> (<a class="reference internal" href="#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a> and friends): a <em>frozen</em>
+description of the typed graph you extract, carrying both the <strong>types</strong> and the
+<strong>importance/cost weights</strong> per field/node/edge. It is the SSOT consulted by
+cost-sensitive metrics, by validators, and (eventually) by constrained decoders.</p></li>
+<li><p><strong>Layer B – the extraction metadata</strong> (<a class="reference internal" href="#ek.base.AnnotatedExtraction" title="ek.base.AnnotatedExtraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code></a> and
+friends): per-extraction runtime metadata – provenance, raw signals,
+(calibrated) confidence, validator findings, and the accept/flag/block decision
+– keyed by a <a class="reference internal" href="#ek.base.NodePath" title="ek.base.NodePath"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodePath</span></code></a> into the Layer-A schema, riding <em>alongside</em> the
+grammar without ever mutating it.</p></li>
+</ul>
+</section>
+<section id="the-strategy-protocols">
+<h2>The strategy protocols<a class="headerlink" href="#the-strategy-protocols" title="Link to this heading"></a></h2>
+<p><a class="reference internal" href="#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>, <a class="reference internal" href="#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a>, <a class="reference internal" href="#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a>, <a class="reference internal" href="#ek.base.DecisionPolicy" title="ek.base.DecisionPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DecisionPolicy</span></code></a>
+and <a class="reference internal" href="#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a> are structural (duck-typed) contracts. Concrete
+implementations are resolved from <a class="reference internal" href="registry.html#module-ek.registry" title="ek.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.registry</span></code></a> by name and injected as
+keyword-only arguments with smart defaults, so the simple path Just Works while
+every layer stays replaceable (open-closed).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">GraphGrammar</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">node_types</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;donation&quot;</span><span class="p">:</span> <span class="n">NodeType</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;donation&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="mf">10.0</span><span class="p">),</span>
+<span class="gp">... </span>            <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="p">},</span>
+<span class="gp">... </span>    <span class="p">)},</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;donation&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">)</span>
+<span class="go">10.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;donation&quot;</span><span class="p">,</span> <span class="s2">&quot;city&quot;</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.AnnotatedExtraction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">AnnotatedExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NodePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.FieldEstimate]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#AnnotatedExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.AnnotatedExtraction" title="Link to this definition"></a></dt>
+<dd><p>Layer B: the verification metadata, referencing a frozen Layer-A grammar.</p>
+<p>The grammar is held <em>by reference</em> and never mutated; <code class="docutils literal notranslate"><span class="pre">estimates</span></code> maps a
+<a class="reference internal" href="#ek.base.NodePath" title="ek.base.NodePath"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodePath</span></code></a> to the <a class="reference internal" href="#ek.base.FieldEstimate" title="ek.base.FieldEstimate"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a> for that node/field.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Calibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Calibrator" title="Link to this definition"></a></dt>
+<dd><p>Maps a raw scalar signal to a probability after being <code class="docutils literal notranslate"><span class="pre">fit</span></code> on labels.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.base.ConfidenceSource">
+<span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">ConfidenceSource</span></span><a class="headerlink" href="#ek.base.ConfidenceSource" title="Link to this definition"></a></dt>
+<dd><p>Read named raw signals off a <a class="reference internal" href="#ek.base.FieldEstimate" title="ek.base.FieldEstimate"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a> (e.g. for calibration).</p>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<a class="reference internal" href="#ek.base.FieldEstimate" title="ek.base.FieldEstimate"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.base.CostWeight">
+<span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">CostWeight</span></span><a class="headerlink" href="#ek.base.CostWeight" title="Link to this definition"></a></dt>
+<dd><p>Cost of an edit on a typed element; defaults to reading <code class="docutils literal notranslate"><span class="pre">*.importance</span></code>.</p>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<a class="reference internal" href="#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a>, <a class="reference internal" href="#ek.base.TypeRef" title="ek.base.TypeRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeRef</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Decision">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Decision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Decision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Decision" title="Link to this definition"></a></dt>
+<dd><p>Terminal action a selective-prediction gate emits for an extracted value.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.DecisionPolicy">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">DecisionPolicy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#DecisionPolicy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.DecisionPolicy" title="Link to this definition"></a></dt>
+<dd><p>Turns a (calibrated) confidence into an accept/flag/block <a class="reference internal" href="#ek.base.Decision" title="ek.base.Decision"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decision</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.EdgeType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">EdgeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#EdgeType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.EdgeType" title="Link to this definition"></a></dt>
+<dd><p>A directed relation kind between two <a class="reference internal" href="#ek.base.NodeType" title="ek.base.NodeType"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeType</span></code></a> names.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.FieldEstimate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">FieldEstimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_signals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.Provenance" title="ek.base.Provenance"><span class="pre">Provenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.Decision" title="ek.base.Decision"><span class="pre">Decision</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#FieldEstimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.FieldEstimate" title="Link to this definition"></a></dt>
+<dd><p>One extracted value plus all of its reference-free verification metadata.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.FieldSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">FieldSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'string'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#FieldSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.FieldSpec" title="Link to this definition"></a></dt>
+<dd><p>A leaf attribute of a node: its type, validation domain and cost weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Attribute name.</p></li>
+<li><p><strong>type</strong> – A free-form type tag (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;string&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;number&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;date&quot;</span></code>);
+<code class="docutils literal notranslate"><span class="pre">ek</span></code> does not impose a type system – the tag drives metric/validator
+dispatch and is yours to define.</p></li>
+<li><p><strong>importance</strong> – Per-field cost weight; the lever that makes “two extra digits
+on a donation amount” outweigh “a misspelled city”. Defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+<li><p><strong>domain</strong> – Optional allowed values: an enum tuple, a <code class="docutils literal notranslate"><span class="pre">(lo,</span> <span class="pre">hi)</span></code> range, or a
+regex string – consumed by validators, never by metrics.</p></li>
+<li><p><strong>normalizer</strong> – Optional key naming a canonicalizer (resolved from the registry)
+to apply to this field before comparison.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Finding">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Finding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">severity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.Severity" title="ek.base.Severity"><span class="pre">Severity</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Severity.FLAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Finding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Finding" title="Link to this definition"></a></dt>
+<dd><p>One validator observation about a value: a flag, optionally a correction.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">suggestion</span></code> is present iff the producing layer can <em>correct</em> (only the
+deterministic canonicalizer and the gated LLM corrector freely do so). The
+original value is always retained elsewhere; a Finding never mutates.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.GraphGrammar">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">GraphGrammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.NodeType]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_types</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.EdgeType]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#GraphGrammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.GraphGrammar" title="Link to this definition"></a></dt>
+<dd><p>The frozen schema SSOT: typed nodes/edges plus their importance weights.</p>
+<p>Methods return the cost weight for a referenced type, defaulting to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> for
+anything not declared, so a partial grammar is always usable.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.base.GraphGrammar.cost">
+<span class="sig-name descname"><span class="pre">cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.TypeRef" title="ek.base.TypeRef"><span class="pre">TypeRef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/base.html#GraphGrammar.cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.GraphGrammar.cost" title="Link to this definition"></a></dt>
+<dd><p>Importance weight for any <a class="reference internal" href="#ek.base.TypeRef" title="ek.base.TypeRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeRef</span></code></a> (the default <code class="docutils literal notranslate"><span class="pre">CostWeight</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.base.GraphGrammar.edge_cost">
+<span class="sig-name descname"><span class="pre">edge_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/base.html#GraphGrammar.edge_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.GraphGrammar.edge_cost" title="Link to this definition"></a></dt>
+<dd><p>Importance weight of an edge type (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if undeclared).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.base.GraphGrammar.field_cost">
+<span class="sig-name descname"><span class="pre">field_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/base.html#GraphGrammar.field_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.GraphGrammar.field_cost" title="Link to this definition"></a></dt>
+<dd><p>Importance weight of a field on a node type (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if undeclared).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.base.GraphGrammar.node_cost">
+<span class="sig-name descname"><span class="pre">node_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/base.html#GraphGrammar.node_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.GraphGrammar.node_cost" title="Link to this definition"></a></dt>
+<dd><p>Importance weight of a node type (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if undeclared).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Metric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Metric" title="Link to this definition"></a></dt>
+<dd><p>Compares one prediction to one gold reference, returning a <a class="reference internal" href="#ek.base.Score" title="ek.base.Score"><code class="xref py py-class docutils literal notranslate"><span class="pre">Score</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.NodePath">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">NodePath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#NodePath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.NodePath" title="Link to this definition"></a></dt>
+<dd><p>Addresses a node (or one of its fields) in an extracted graph; keys Layer B.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.NodeType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">NodeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.FieldSpec]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#NodeType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.NodeType" title="Link to this definition"></a></dt>
+<dd><p>A node kind in the typed graph (e.g. an “invoice” or a “line item”).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.base.Normalizer">
+<span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Normalizer</span></span><a class="headerlink" href="#ek.base.Normalizer" title="Link to this definition"></a></dt>
+<dd><p>Canonicalize a string before comparison (lowercase, fold, normalize, …).</p>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.base.OcrBackend">
+<span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">OcrBackend</span></span><a class="headerlink" href="#ek.base.OcrBackend" title="Link to this definition"></a></dt>
+<dd><p>Anything that turns an image (path/bytes/array) into an <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code>-shaped
+object (with <code class="docutils literal notranslate"><span class="pre">.text</span></code> and <code class="docutils literal notranslate"><span class="pre">.blocks</span></code>). Typed loosely so <code class="docutils literal notranslate"><span class="pre">ek</span></code> core never
+imports an OCR package.</p>
+<p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Callable</span></code>[[<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Provenance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Provenance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_span</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_transcripts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Provenance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Provenance" title="Link to this definition"></a></dt>
+<dd><p>Where an extracted value came from, for audit and click-to-source review.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bbox</span></code> is intentionally typed <code class="docutils literal notranslate"><span class="pre">Any</span></code> so <code class="docutils literal notranslate"><span class="pre">ek</span></code> core need not import any OCR
+package; the OCR instance stores normalized <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> top-left-origin geometry.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.QualityReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">QualityReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrated_confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.Decision" title="ek.base.Decision"><span class="pre">Decision</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_signals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#QualityReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.QualityReport" title="Link to this definition"></a></dt>
+<dd><p>The result of a reference-free quality estimate for one extraction.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Report">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Report" title="Link to this definition"></a></dt>
+<dd><p>Aggregate of many <a class="reference internal" href="#ek.base.Score" title="ek.base.Score"><code class="xref py py-class docutils literal notranslate"><span class="pre">Score</span></code></a> s over a corpus, with optional per-slice cuts.</p>
+<p><code class="docutils literal notranslate"><span class="pre">aggregate</span></code> is the corpus-level headline (computed by the metric’s own
+aggregator – e.g. globally accumulated WER – not a naive mean of per-item
+values). <code class="docutils literal notranslate"><span class="pre">per_slice</span></code> maps a slice label to its own aggregate.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Score">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recall</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Score" title="Link to this definition"></a></dt>
+<dd><p>The result of comparing one prediction against one reference.</p>
+<p><code class="docutils literal notranslate"><span class="pre">value</span></code> is the headline number (higher is better unless a metric documents
+otherwise). The optional decomposition fields let structured metrics carry
+precision/recall/F1, an alignment, and raw counts (e.g. edit operations) so
+that corpus aggregation can be done <em>correctly</em> (e.g. global WER accumulation)
+rather than by averaging per-item scores. <code class="docutils literal notranslate"><span class="pre">float(score)</span></code> returns <code class="docutils literal notranslate"><span class="pre">value</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Severity">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Severity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Severity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Severity" title="Link to this definition"></a></dt>
+<dd><p>Whether a <a class="reference internal" href="#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a> merely flags or can also correct a value.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Signal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Signal" title="Link to this definition"></a></dt>
+<dd><p>A reference-free quality signal: extractor output -&gt; raw scalar score.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cost_tier</span></code> attribute (lower is cheaper) lets an escalation policy run
+cheap signals first and pay for expensive ones only on residual uncertainty.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.TypeRef">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">TypeRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#TypeRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.TypeRef" title="Link to this definition"></a></dt>
+<dd><p>A reference into the schema, so an injected cost function can read weights.</p>
+<p><code class="docutils literal notranslate"><span class="pre">kind</span></code> is one of <code class="docutils literal notranslate"><span class="pre">&quot;node&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;edge&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;field&quot;</span></code>; for a field, <code class="docutils literal notranslate"><span class="pre">name</span></code>
+is the node-type name and <code class="docutils literal notranslate"><span class="pre">field</span></code> the field name.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.base.Validator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">Validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/base.html#Validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.Validator" title="Link to this definition"></a></dt>
+<dd><p>Reference-free check on a value, yielding zero or more <a class="reference internal" href="#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a> s.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.base.default_cost_weight">
+<span class="sig-prename descclassname"><span class="pre">ek.base.</span></span><span class="sig-name descname"><span class="pre">default_cost_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.base.TypeRef" title="ek.base.TypeRef"><span class="pre">TypeRef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/base.html#default_cost_weight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.base.default_cost_weight" title="Link to this definition"></a></dt>
+<dd><p>The default <a class="reference internal" href="#ek.base.CostWeight" title="ek.base.CostWeight"><code class="xref py py-data docutils literal notranslate"><span class="pre">CostWeight</span></code></a>: read the importance weight off the schema.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="__main__.html" class="btn btn-neutral float-left" title="ek.__main__" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="canonicalize.html" class="btn btn-neutral float-right" title="ek.canonicalize" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

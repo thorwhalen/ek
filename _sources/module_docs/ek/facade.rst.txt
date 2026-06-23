@@ -1,0 +1,4 @@
+ek.facade
+=========
+.. automodule:: ek.facade
+   :members:

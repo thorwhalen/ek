@@ -1,0 +1,181 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.ocr.profiles &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.registry" href="../registry.html" />
+    <link rel="prev" title="ek.ocr.bridge" href="bridge.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.ocr.profiles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.profiles.DEFAULT_PROFILE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROFILE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.profiles.ENGINE_PROFILES"><code class="docutils literal notranslate"><span class="pre">ENGINE_PROFILES</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.profiles.profile"><code class="docutils literal notranslate"><span class="pre">profile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.ocr.profiles</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/ocr/profiles.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.ocr.profiles">
+<span id="ek-ocr-profiles"></span><h1>ek.ocr.profiles<a class="headerlink" href="#module-ek.ocr.profiles" title="Link to this heading"></a></h1>
+<p>Per-engine OCR capability profiles (what QE signal each engine actually emits).</p>
+<p>Distilled from the 15-engine inventory in <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_01</span></code>. These describe what
+an engine <em>claims</em> to surface; <code class="docutils literal notranslate"><span class="pre">ek</span></code> exists in part to verify such claims
+empirically, so treat them as defaults/priors, not ground truth. The fields that
+matter for evaluation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">confidence_grain</span></code> – finest confidence granularity emitted: <code class="docutils literal notranslate"><span class="pre">&quot;symbol&quot;</span></code> &gt;
+<code class="docutils literal notranslate"><span class="pre">&quot;word&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;line&quot;</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>. Genuine per-symbol confidence exists only
+in Google Cloud Vision and Tesseract; many VLMs emit nothing usable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">has_real_provenance</span></code> – whether bounding boxes are real geometry (vs
+model-guessed pixels from Claude/OpenAI, or char-offset only from Mistral).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calibrated</span></code> – whether the confidence is calibrated (Mathpix is the lone
+calibrated emitter).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tables</span></code> – whether the engine emits scoreable table cell structure.</p></li>
+</ul>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span><span class="p">(</span><span class="s2">&quot;tesseract&quot;</span><span class="p">)[</span><span class="s2">&quot;confidence_grain&quot;</span><span class="p">]</span>
+<span class="go">&#39;symbol&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span><span class="p">(</span><span class="s2">&quot;claude-vision&quot;</span><span class="p">)[</span><span class="s2">&quot;has_real_provenance&quot;</span><span class="p">]</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span><span class="p">(</span><span class="s2">&quot;google_vision&quot;</span><span class="p">)[</span><span class="s2">&quot;confidence_grain&quot;</span><span class="p">]</span>   <span class="c1"># underscore form also accepted</span>
+<span class="go">&#39;symbol&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">profile</span><span class="p">(</span><span class="s2">&quot;totally-unknown-engine&quot;</span><span class="p">)[</span><span class="s2">&quot;confidence_grain&quot;</span><span class="p">]</span>
+<span class="go">&#39;unknown&#39;</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.ocr.profiles.DEFAULT_PROFILE">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.profiles.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_PROFILE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'unknown',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False}</span></span><a class="headerlink" href="#ek.ocr.profiles.DEFAULT_PROFILE" title="Link to this definition"></a></dt>
+<dd><p>Returned for any engine not in the table.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.ocr.profiles.ENGINE_PROFILES">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.profiles.</span></span><span class="sig-name descname"><span class="pre">ENGINE_PROFILES</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'aws-textract':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'word',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">True},</span> <span class="pre">'azure-document-intelligence':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'word',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">True},</span> <span class="pre">'claude-vision':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'doctr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'word',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'easyocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'line',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'google-vision':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'symbol',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'gpt-4o-vision':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'mathpix':</span> <span class="pre">{'calibrated':</span> <span class="pre">True,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'word',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'mistral-ocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'ocr-space':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'ocrmac':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'line',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'paddleocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'line',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">True},</span> <span class="pre">'pix2tex-latex-ocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'rapidocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'line',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'tesseract':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'symbol',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">True,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'trocr':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False},</span> <span class="pre">'trocr-handwritten':</span> <span class="pre">{'calibrated':</span> <span class="pre">False,</span> <span class="pre">'confidence_grain':</span> <span class="pre">'none',</span> <span class="pre">'has_real_provenance':</span> <span class="pre">False,</span> <span class="pre">'tables':</span> <span class="pre">False}}</span></span><a class="headerlink" href="#ek.ocr.profiles.ENGINE_PROFILES" title="Link to this definition"></a></dt>
+<dd><p>Engine id -&gt; capability profile. Keys are <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s canonical (hyphenated)
+backend ids; <a class="reference internal" href="#ek.ocr.profiles.profile" title="ek.ocr.profiles.profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">profile()</span></code></a> also accepts underscore variants.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.profiles.profile">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.profiles.</span></span><span class="sig-name descname"><span class="pre">profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/ek/ocr/profiles.html#profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.profiles.profile" title="Link to this definition"></a></dt>
+<dd><p>Capability profile for an engine id (a safe default if unknown).</p>
+<p>Accepts <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s canonical hyphenated ids and their underscore variants.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="bridge.html" class="btn btn-neutral float-left" title="ek.ocr.bridge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../registry.html" class="btn btn-neutral float-right" title="ek.registry" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

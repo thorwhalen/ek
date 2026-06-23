@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.harness &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.metrics" href="metrics.html" />
+    <link rel="prev" title="ek.facade" href="facade.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facade.html">ek.facade</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.harness</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.GateResult"><code class="docutils literal notranslate"><span class="pre">GateResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.cohen_kappa"><code class="docutils literal notranslate"><span class="pre">cohen_kappa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.evaluate_store"><code class="docutils literal notranslate"><span class="pre">evaluate_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.load_baseline"><code class="docutils literal notranslate"><span class="pre">load_baseline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.regression_gate"><code class="docutils literal notranslate"><span class="pre">regression_gate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.harness.save_baseline"><code class="docutils literal notranslate"><span class="pre">save_baseline()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.harness</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/harness.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.harness">
+<span id="ek-harness"></span><h1>ek.harness<a class="headerlink" href="#module-ek.harness" title="Link to this heading"></a></h1>
+<p>The offline evaluation harness: run a predictor over gold, gate regressions.</p>
+<p>Reference-based benchmarking (Need #1) is only useful if it is <em>repeatable</em> and
+<em>regression-safe</em>: a “better” system must not silently get worse on some slice. The
+harness adds that discipline on top of <a class="reference internal" href="../ek.html#ek.score" title="ek.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.score()</span></code></a>/<a class="reference internal" href="../ek.html#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.harness.evaluate_store" title="ek.harness.evaluate_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate_store()</span></code></a> – run any <code class="docutils literal notranslate"><span class="pre">input</span> <span class="pre">-&gt;</span> <span class="pre">prediction</span></code> predictor over a gold
+store (a dict or a <code class="docutils literal notranslate"><span class="pre">ek</span></code> gold store), scored per stratified slice, with results
+persisted. (The OCR benchmark in <a class="reference internal" href="ocr.html#module-ek.ocr" title="ek.ocr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.ocr</span></code></a> is the OCR-specific specialization
+of this.)</p></li>
+<li><p><a class="reference internal" href="#ek.harness.save_baseline" title="ek.harness.save_baseline"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_baseline()</span></code></a> / <a class="reference internal" href="#ek.harness.regression_gate" title="ek.harness.regression_gate"><code class="xref py py-func docutils literal notranslate"><span class="pre">regression_gate()</span></code></a> – freeze a baseline and fail when
+a later run regresses beyond a tolerance, <strong>per slice</strong>, not just on the aggregate.
+This is the golden-set CI gate.</p></li>
+<li><p><a class="reference internal" href="#ek.harness.cohen_kappa" title="ek.harness.cohen_kappa"><code class="xref py py-func docutils literal notranslate"><span class="pre">cohen_kappa()</span></code></a> / <a class="reference internal" href="#ek.harness.percent_agreement" title="ek.harness.percent_agreement"><code class="xref py py-func docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a> / <a class="reference internal" href="#ek.harness.krippendorff_alpha" title="ek.harness.krippendorff_alpha"><code class="xref py py-func docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a> –
+inter-annotator agreement (IAA), to know the ceiling of your gold standard before
+trusting any model score (<code class="docutils literal notranslate"><span class="pre">krippendorff</span></code> is optional, behind <code class="docutils literal notranslate"><span class="pre">ek[harness]</span></code>).</p></li>
+</ul>
+<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_02</span></code> for the harness design (canonicalizer versioning, slicing,
+IAA conventions, golden-set CI).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.harness.GateResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">GateResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">passed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_better</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regressions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/harness.html#GateResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.GateResult" title="Link to this definition"></a></dt>
+<dd><p>Outcome of a <a class="reference internal" href="#ek.harness.regression_gate" title="ek.harness.regression_gate"><code class="xref py py-func docutils literal notranslate"><span class="pre">regression_gate()</span></code></a> check.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.cohen_kappa">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">cohen_kappa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rater_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rater_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/harness.html#cohen_kappa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.cohen_kappa" title="Link to this definition"></a></dt>
+<dd><p>Cohen’s kappa for two raters on nominal labels (chance-corrected agreement).</p>
+<p>Use only for exactly two raters, nominal labels, complete data; prefer
+<a class="reference internal" href="#ek.harness.krippendorff_alpha" title="ek.harness.krippendorff_alpha"><code class="xref py py-func docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a> for the general case (missing data, any measurement
+level).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.evaluate_store">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">evaluate_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'input'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'reference'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'slice'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/harness.html#evaluate_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.evaluate_store" title="Link to this definition"></a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">predict</span></code> over a gold store and score it per slice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predict</strong> – <code class="docutils literal notranslate"><span class="pre">input</span> <span class="pre">-&gt;</span> <span class="pre">prediction</span></code> callable (the system under test).</p></li>
+<li><p><strong>gold</strong> – Mapping <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">-&gt;</span> <span class="pre">{input,</span> <span class="pre">reference,</span> <span class="pre">[slice],</span> <span class="pre">...}</span></code> (a dict or a
+<code class="docutils literal notranslate"><span class="pre">ek</span></code> gold store).</p></li>
+<li><p><strong>metric</strong> – Metric name/callable (defaults to type-dispatch on the first case).</p></li>
+<li><p><strong>grammar/normalize/weights</strong> – forwarded to scoring.</p></li>
+<li><p><strong>input_key/reference_key/slice_key</strong> – field names within each gold record.</p></li>
+<li><p><strong>persist/run_id/rootdir</strong> – persist the run to the <code class="docutils literal notranslate"><span class="pre">results</span></code>/<code class="docutils literal notranslate"><span class="pre">runs</span></code> stores.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="base.html#ek.base.Report" title="ek.base.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">Report</span></code></a>; <code class="docutils literal notranslate"><span class="pre">detail['per_item']</span></code> maps each key to its
+prediction, reference, slice, and score.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.krippendorff_alpha">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">krippendorff_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'nominal'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/harness.html#krippendorff_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.krippendorff_alpha" title="Link to this definition"></a></dt>
+<dd><p>Krippendorff’s alpha via the <code class="docutils literal notranslate"><span class="pre">krippendorff</span></code> package (<code class="docutils literal notranslate"><span class="pre">ek[harness]</span></code> extra).</p>
+<p>The most general IAA coefficient – any number of raters, any measurement level,
+handles missing data (use <code class="docutils literal notranslate"><span class="pre">None</span></code>/<code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> for unlabelled). <code class="docutils literal notranslate"><span class="pre">reliability_data</span></code>
+is one row per rater, one column per item.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.load_baseline">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">load_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/harness.html#load_baseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.load_baseline" title="Link to this definition"></a></dt>
+<dd><p>Load a named baseline (or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it does not exist).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.percent_agreement">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">percent_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rater_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rater_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../_modules/ek/harness.html#percent_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.percent_agreement" title="Link to this definition"></a></dt>
+<dd><p>Raw fraction of items two raters labelled identically.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.regression_gate">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">regression_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_better</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.harness.GateResult" title="ek.harness.GateResult"><span class="pre">GateResult</span></a></span></span><a class="reference internal" href="../../_modules/ek/harness.html#regression_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.regression_gate" title="Link to this definition"></a></dt>
+<dd><p>Fail if <code class="docutils literal notranslate"><span class="pre">report</span></code> regresses beyond <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> vs a baseline, per slice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report</strong> – The current <a class="reference internal" href="base.html#ek.base.Report" title="ek.base.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">Report</span></code></a>.</p></li>
+<li><p><strong>baseline</strong> – A baseline name (loaded from the <code class="docutils literal notranslate"><span class="pre">baselines</span></code> store) or a baseline
+dict from <a class="reference internal" href="#ek.harness.save_baseline" title="ek.harness.save_baseline"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_baseline()</span></code></a>.</p></li>
+<li><p><strong>tolerance</strong> – Allowed drift before a change counts as a regression.</p></li>
+<li><p><strong>higher_is_better</strong> – Override metric-direction inference (CER/WER/graph are
+lower-is-better; F1/similarity are higher-is-better).</p></li>
+<li><p><strong>rootdir</strong> – data root (when <code class="docutils literal notranslate"><span class="pre">baseline</span></code> is a name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#ek.harness.GateResult" title="ek.harness.GateResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">GateResult</span></code></a> (falsy if any regression was found).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.harness.save_baseline">
+<span class="sig-prename descclassname"><span class="pre">ek.harness.</span></span><span class="sig-name descname"><span class="pre">save_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/ek/harness.html#save_baseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.harness.save_baseline" title="Link to this definition"></a></dt>
+<dd><p>Freeze a report’s aggregate + per-slice scores as a named baseline.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="facade.html" class="btn btn-neutral float-left" title="ek.facade" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metrics.html" class="btn btn-neutral float-right" title="ek.metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.canonicalize &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.facade" href="facade.html" />
+    <link rel="prev" title="ek.base" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.canonicalize</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.Canonicalizer"><code class="docutils literal notranslate"><span class="pre">Canonicalizer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.canonicalize.Canonicalizer.steps"><code class="docutils literal notranslate"><span class="pre">Canonicalizer.steps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.canonicalize.Canonicalizer.version"><code class="docutils literal notranslate"><span class="pre">Canonicalizer.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.collapse_whitespace"><code class="docutils literal notranslate"><span class="pre">collapse_whitespace()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.default_canonicalizer"><code class="docutils literal notranslate"><span class="pre">default_canonicalizer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.lower"><code class="docutils literal notranslate"><span class="pre">lower()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.mark_class_count"><code class="docutils literal notranslate"><span class="pre">mark_class_count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.nfc"><code class="docutils literal notranslate"><span class="pre">nfc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.nfkc"><code class="docutils literal notranslate"><span class="pre">nfkc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.resolve_canonicalizer"><code class="docutils literal notranslate"><span class="pre">resolve_canonicalizer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.strip"><code class="docutils literal notranslate"><span class="pre">strip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.canonicalize.strip_punctuation"><code class="docutils literal notranslate"><span class="pre">strip_punctuation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.canonicalize</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/canonicalize.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.canonicalize">
+<span id="ek-canonicalize"></span><h1>ek.canonicalize<a class="headerlink" href="#module-ek.canonicalize" title="Link to this heading"></a></h1>
+<p>Versioned, composable canonicalization applied <em>before</em> scoring.</p>
+<p>Under-specified normalization is the single biggest source of bogus evaluation
+scores – it can swing results by tens of points, and a reused English normalizer
+catastrophically corrupts Indic/abugida scripts by stripping Unicode Mark-class
+characters. So canonicalization is a first-class, <em>versioned</em> component here, not
+a metric detail: a <a class="reference internal" href="#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Canonicalizer</span></code></a> is an ordered pipeline of small named
+steps with a stable <code class="docutils literal notranslate"><span class="pre">version</span></code> you can persist alongside a gold set.</p>
+<p>Steps are plain <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code> functions registered under the <code class="docutils literal notranslate"><span class="pre">&quot;normalizers&quot;</span></code>
+namespace, so a schema can name a per-field normalizer (via
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">normalizer</span></code>) and third parties can add their own.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span> <span class="o">=</span> <span class="n">Canonicalizer</span><span class="p">([</span><span class="s2">&quot;nfc&quot;</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span> <span class="s2">&quot;collapse_whitespace&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span><span class="p">(</span><span class="s2">&quot;  Héllo   WORLD &quot;</span><span class="p">)</span>
+<span class="go">&#39;héllo world&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span><span class="o">.</span><span class="n">version</span>  <span class="c1"># stable hash of the step names</span>
+<span class="go">&#39;nfc+lower+collapse_whitespace&#39;</span>
+</pre></div>
+</div>
+<p>Always audit before folding a non-Latin script – <a class="reference internal" href="#ek.canonicalize.mark_class_count" title="ek.canonicalize.mark_class_count"><code class="xref py py-func docutils literal notranslate"><span class="pre">mark_class_count()</span></code></a> reports
+how many combining marks a string carries, the signal that aggressive folding
+would destroy meaning:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mark_class_count</span><span class="p">(</span><span class="s2">&quot;e</span><span class="se">\u0301</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># &#39;e&#39; + combining acute</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.canonicalize.Canonicalizer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">Canonicalizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audit_marks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/canonicalize.html#Canonicalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.Canonicalizer" title="Link to this definition"></a></dt>
+<dd><p>An ordered, named, versioned pipeline of <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code> steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>steps</strong> – Step references – names registered under <code class="docutils literal notranslate"><span class="pre">&quot;normalizers&quot;</span></code> or
+plain callables. Applied left to right.</p></li>
+<li><p><strong>version</strong> – Override the auto-derived version string (the <code class="docutils literal notranslate"><span class="pre">+</span></code>-joined names).</p></li>
+<li><p><strong>audit_marks</strong> – If true, warn when a step would run on text carrying combining
+marks (the cross-script damage guard).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.canonicalize.Canonicalizer.steps">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">steps</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></span><a class="headerlink" href="#ek.canonicalize.Canonicalizer.steps" title="Link to this definition"></a></dt>
+<dd><p>The resolved step names, in order.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.canonicalize.Canonicalizer.version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#ek.canonicalize.Canonicalizer.version" title="Link to this definition"></a></dt>
+<dd><p>Stable identifier of this pipeline (persist it next to a gold set).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.collapse_whitespace">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">collapse_whitespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#collapse_whitespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.collapse_whitespace" title="Link to this definition"></a></dt>
+<dd><p>Collapse runs of whitespace to a single space and strip the ends.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.default_canonicalizer">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">default_canonicalizer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><span class="pre">Canonicalizer</span></a></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#default_canonicalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.default_canonicalizer" title="Link to this definition"></a></dt>
+<dd><p>A conservative default: NFC -&gt; casefold -&gt; collapse whitespace.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.lower">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">lower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#lower"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.lower" title="Link to this definition"></a></dt>
+<dd><p>Casefold to lowercase (full Unicode casefold).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.mark_class_count">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">mark_class_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#mark_class_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.mark_class_count" title="Link to this definition"></a></dt>
+<dd><p>Number of Unicode Mark-class (combining) characters in <code class="docutils literal notranslate"><span class="pre">s</span></code>.</p>
+<p>A non-zero count on a non-Latin script is a warning sign that case/diacritic
+folding will corrupt meaning (the Indic-script catastrophe). Use it to gate or
+audit a canonicalizer before trusting cross-script scores.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.nfc">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">nfc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#nfc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.nfc" title="Link to this definition"></a></dt>
+<dd><p>Unicode NFC normalization (compose); the safe default.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.nfkc">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">nfkc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#nfkc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.nfkc" title="Link to this definition"></a></dt>
+<dd><p>Unicode NFKC normalization (compatibility compose); lossy – use with care.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.resolve_canonicalizer">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">resolve_canonicalizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><span class="pre">Canonicalizer</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><span class="pre">Canonicalizer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#resolve_canonicalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.resolve_canonicalizer" title="Link to this definition"></a></dt>
+<dd><p>Coerce a <code class="docutils literal notranslate"><span class="pre">normalize</span></code> argument to a callable canonicalizer (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+<p>Accepts <code class="docutils literal notranslate"><span class="pre">None</span></code>, a registered normalizer name, a callable, a sequence of
+steps, or an existing <a class="reference internal" href="#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Canonicalizer</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.strip">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">strip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#strip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.strip" title="Link to this definition"></a></dt>
+<dd><p>Strip leading/trailing whitespace.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.canonicalize.strip_punctuation">
+<span class="sig-prename descclassname"><span class="pre">ek.canonicalize.</span></span><span class="sig-name descname"><span class="pre">strip_punctuation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/canonicalize.html#strip_punctuation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.canonicalize.strip_punctuation" title="Link to this definition"></a></dt>
+<dd><p>Remove Unicode punctuation characters (category starting with <code class="docutils literal notranslate"><span class="pre">P</span></code>).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="ek.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="facade.html" class="btn btn-neutral float-right" title="ek.facade" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

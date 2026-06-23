@@ -1,0 +1,176 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.metrics.strings &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.ocr" href="../ocr.html" />
+    <link rel="prev" title="ek.metrics.graphs" href="graphs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.metrics.strings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.strings.StringMetric"><code class="docutils literal notranslate"><span class="pre">StringMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.strings.StringMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">StringMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.metrics.strings</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/metrics/strings.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.metrics.strings">
+<span id="ek-metrics-strings"></span><h1>ek.metrics.strings<a class="headerlink" href="#module-ek.metrics.strings" title="Link to this heading"></a></h1>
+<p>String metrics: Character/Word Error Rate (CER/WER).</p>
+<p>CER and WER are graded edit-distance metrics – the right baseline for OCR/ASR and
+free-text fields, far less brittle than exact match. Two correctness rules from the
+research drive the design:</p>
+<ol class="arabic simple">
+<li><p><strong>Accumulate globally.</strong> A corpus error rate is <code class="docutils literal notranslate"><span class="pre">sum(edits)</span> <span class="pre">/</span> <span class="pre">sum(reference</span>
+<span class="pre">length)</span></code> over the whole corpus – never the mean of per-item rates (variable
+lengths make that mathematically wrong). So each <a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><code class="xref py py-class docutils literal notranslate"><span class="pre">Score</span></code></a> carries
+raw <code class="docutils literal notranslate"><span class="pre">edits</span></code> and <code class="docutils literal notranslate"><span class="pre">ref_len</span></code> in its <code class="docutils literal notranslate"><span class="pre">detail</span></code>, and <a class="reference internal" href="#ek.metrics.strings.StringMetric.aggregate" title="ek.metrics.strings.StringMetric.aggregate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">StringMetric.aggregate()</span></code></a>
+sums them. <a class="reference internal" href="../facade.html#ek.facade.evaluate" title="ek.facade.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate()</span></code></a> uses this.</p></li>
+<li><p><strong>CER/WER are error rates, not bounded similarities.</strong> A hypothesis longer than
+the reference pushes the rate above 1.0 – itself a useful hallucination signal.
+<code class="docutils literal notranslate"><span class="pre">Score.value</span></code> is the error rate (lower is better; <code class="docutils literal notranslate"><span class="pre">detail[&quot;higher_is_better&quot;]</span>
+<span class="pre">is</span> <span class="pre">False</span></code>).</p></li>
+</ol>
+<p>The canonical backend is <code class="docutils literal notranslate"><span class="pre">jiwer</span></code> (Apache-2.0, <code class="docutils literal notranslate"><span class="pre">rapidfuzz</span></code> C++ core), which also
+yields the substitution/deletion/insertion/hit breakdown. <code class="docutils literal notranslate"><span class="pre">ek</span></code> prefers it,
+falls back to <code class="docutils literal notranslate"><span class="pre">rapidfuzz</span></code> directly, then to a pure-Python edit distance, so the
+metric works even in a bare environment.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.strings.StringMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.strings.</span></span><span class="sig-name descname"><span class="pre">StringMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cer'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonicalizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/strings.html#StringMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.strings.StringMetric" title="Link to this definition"></a></dt>
+<dd><p>CER (<code class="docutils literal notranslate"><span class="pre">mode='cer'</span></code>) or WER (<code class="docutils literal notranslate"><span class="pre">mode='wer'</span></code>) as a <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – <code class="docutils literal notranslate"><span class="pre">&quot;cer&quot;</span></code> (character) or <code class="docutils literal notranslate"><span class="pre">&quot;wer&quot;</span></code> (word) error rate.</p></li>
+<li><p><strong>canonicalizer</strong> – Optional <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code> applied to both sides before scoring
+(see <a class="reference internal" href="../canonicalize.html#module-ek.canonicalize" title="ek.canonicalize"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.canonicalize</span></code></a>). Usually supplied by the facade instead.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.strings.StringMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/metrics/strings.html#StringMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.strings.StringMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus error rate = total edits / total reference length (the correct way).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="graphs.html" class="btn btn-neutral float-left" title="ek.metrics.graphs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ocr.html" class="btn btn-neutral float-right" title="ek.ocr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

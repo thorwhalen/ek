@@ -1,0 +1,21 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   module_docs/ek
+   module_docs/ek/__main__
+   module_docs/ek/base
+   module_docs/ek/canonicalize
+   module_docs/ek/facade
+   module_docs/ek/harness
+   module_docs/ek/metrics
+   module_docs/ek/metrics/fields
+   module_docs/ek/metrics/graphs
+   module_docs/ek/metrics/strings
+   module_docs/ek/ocr
+   module_docs/ek/ocr/benchmark
+   module_docs/ek/ocr/bridge
+   module_docs/ek/ocr/profiles
+   module_docs/ek/registry
+   module_docs/ek/stores
+   module_docs/ek/tools

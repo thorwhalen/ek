@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.registry &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.registry</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.registry</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Strategy registry, optional-dependency guarding, and requirement checks.</span>
+
+<span class="sd">``ek`` is open-closed: every swappable behaviour (a :class:`~ek.base.Metric`, a</span>
+<span class="sd">:class:`~ek.base.Signal`, a calibrator, an OCR backend, ...) is registered under a</span>
+<span class="sd">*namespace* and resolved by name. Built-in strategies register themselves at</span>
+<span class="sd">import time; third parties add their own either by calling :func:`register` or by</span>
+<span class="sd">declaring an entry point in the ``ek.&lt;namespace&gt;`` group -- no edit to ``ek`` needed.</span>
+
+<span class="sd">Two more concerns live here so they stay out of the core logic:</span>
+
+<span class="sd">- :func:`requires_extra` -- a decorator that turns a missing optional dependency</span>
+<span class="sd">  into an *actionable* error (``pip install ek[ocr]``) instead of an opaque</span>
+<span class="sd">  ``ImportError`` raised deep inside a call.</span>
+<span class="sd">- :func:`check_requirements` -- a helper that reports, without raising, what an</span>
+<span class="sd">  engine/feature needs (Python packages, system binaries, credentials), and</span>
+<span class="sd">  defers to ``ocracy``&#39;s own doctor for OCR engines when it is installed.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; @register(&quot;metrics&quot;, &quot;shout&quot;)</span>
+<span class="sd">    ... def shout(pred, gold, *, grammar=None):</span>
+<span class="sd">    ...     return pred == gold</span>
+<span class="sd">    &gt;&gt;&gt; get(&quot;metrics&quot;, &quot;shout&quot;)(&quot;a&quot;, &quot;a&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; &quot;shout&quot; in names(&quot;metrics&quot;)</span>
+<span class="sd">    True</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1"># namespace -&gt; {name: object}. Populated by register() and entry-point discovery.</span>
+<span class="n">_REGISTRY</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">_DISCOVERED</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="register">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.register">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register ``obj`` under ``namespace``/``name`` (usable as a decorator).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        namespace: A strategy family, e.g. ``&quot;metrics&quot;``, ``&quot;signals&quot;``,</span>
+<span class="sd">            ``&quot;calibrators&quot;``, ``&quot;policies&quot;``, ``&quot;normalizers&quot;``, ``&quot;ocr&quot;``.</span>
+<span class="sd">        name: The lookup key within the namespace.</span>
+<span class="sd">        obj: The object to register; omit to use as a decorator.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``obj`` (so it can be used as a decorator).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">_REGISTRY</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_do</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">bucket</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="k">return</span> <span class="n">target</span>
+
+    <span class="k">return</span> <span class="n">_do</span> <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_do</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.get">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a registered strategy by name (discovering entry points first).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeyError: with the list of available names, if ``name`` is unknown.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_discover</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bucket</span><span class="p">:</span>
+        <span class="n">available</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No </span><span class="si">{</span><span class="n">namespace</span><span class="si">!r}</span><span class="s2"> strategy named </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">. Available: </span><span class="si">{</span><span class="n">available</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">bucket</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="names">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">names</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All registered names in a namespace (after entry-point discovery).&quot;&quot;&quot;</span>
+    <span class="n">_discover</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_REGISTRY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="p">{}))</span></div>
+
+
+
+<div class="viewcode-block" id="resolve">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.resolve">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a strategy reference to a callable.</span>
+
+<span class="sd">    ``ref`` may be a registered name (``str``), an already-resolved object, or</span>
+<span class="sd">    ``None`` (in which case ``default``, itself a name or object, is used).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">default</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ref</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_discover</span><span class="p">(</span><span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lazily import third-party strategies declared in the ``ek.&lt;ns&gt;`` group.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="n">_DISCOVERED</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">_DISCOVERED</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">entry_points</span>
+
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">entry_points</span><span class="p">()</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ek.</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="c1"># Python &gt;=3.10 always exposes EntryPoints.select(); the .get fallback is</span>
+        <span class="c1"># only defensive for unusual backports.</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="n">eps</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">eps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">register</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">ep</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ep</span><span class="o">.</span><span class="n">load</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># a broken third-party plugin must not break ek</span>
+                <span class="k">continue</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Optional-dependency guarding</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="MissingExtraError">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.MissingExtraError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MissingExtraError</span><span class="p">(</span><span class="ne">ImportError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when an optional feature is used without its extra installed.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="requires_extra">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.requires_extra">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">requires_extra</span><span class="p">(</span>
+    <span class="n">extra</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">packages</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator: fail with an actionable install hint if an extra is missing.</span>
+
+<span class="sd">    The wrapped callable runs only once every package in ``packages`` imports; the</span>
+<span class="sd">    common case (everything installed) adds a single cheap import check.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        extra: The extra name, used in the hint ``pip install ek[&lt;extra&gt;]``.</span>
+<span class="sd">        packages: Import names to probe (defaults to ``[extra]``).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; @requires_extra(&quot;ocr&quot;, packages=[&quot;definitely_not_installed_pkg&quot;])</span>
+<span class="sd">        ... def run():</span>
+<span class="sd">        ...     return &quot;ran&quot;</span>
+<span class="sd">        &gt;&gt;&gt; try:</span>
+<span class="sd">        ...     run()</span>
+<span class="sd">        ... except MissingExtraError as e:</span>
+<span class="sd">        ...     print(&quot;ek[ocr]&quot; in str(e))</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">probe</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span> <span class="k">if</span> <span class="n">packages</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span><span class="n">extra</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probe</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">_can_import</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">MissingExtraError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> needs optional dependencies &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2"> -- install them with:  pip install ek[</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">deco</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_can_import</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Requirement checks (report, don&#39;t raise)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1"># Extra name -&gt; representative import name(s) to probe (the extra name is rarely</span>
+<span class="c1"># the import name; e.g. ek[ocr] installs `ocracy`).</span>
+<span class="n">_EXTRA_PROBES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ocr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ocracy&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;networkx&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;calibration&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;netcal&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pydantic&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;constrained&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;outlines&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;agreement&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;uqlm&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;harness&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;krippendorff&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;hitl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;label_studio_sdk&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;monitoring&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;nannyml&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="check_requirements">
+<a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.check_requirements">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Report what an OCR engine or feature extra needs, without raising.</span>
+
+<span class="sd">    For an OCR ``engine`` and an installed ``ocracy``, defers to ``ocracy``&#39;s own</span>
+<span class="sd">    doctor (which knows each backend&#39;s pip package, system binaries and</span>
+<span class="sd">    credentials). Otherwise returns a generic hint.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A dict with at least ``{&quot;ok&quot;: bool, &quot;hint&quot;: str}``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">ocracy</span>  <span class="c1"># type: ignore</span>
+
+            <span class="n">ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">ocracy</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">engine</span><span class="p">))</span>
+            <span class="n">doctor</span> <span class="o">=</span> <span class="n">ocracy</span><span class="o">.</span><span class="n">doctor</span><span class="p">()</span>
+            <span class="n">hint</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="n">doctor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;missing&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span> <span class="s2">&quot;engine&quot;</span><span class="p">:</span> <span class="n">engine</span><span class="p">,</span> <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="n">hint</span><span class="p">,</span> <span class="s2">&quot;via&quot;</span><span class="p">:</span> <span class="s2">&quot;ocracy&quot;</span><span class="p">}</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">&quot;engine&quot;</span><span class="p">:</span> <span class="n">engine</span><span class="p">,</span>
+                <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;Install the OCR fleet:  pip install ek[ocr]&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;via&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+    <span class="k">if</span> <span class="n">extra</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">probe</span> <span class="o">=</span> <span class="n">_EXTRA_PROBES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="p">[</span><span class="n">extra</span><span class="p">])</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">_can_import</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probe</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span>
+            <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="n">extra</span><span class="p">,</span>
+            <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;pip install ek[</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

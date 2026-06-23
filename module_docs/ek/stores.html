@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.stores &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.tools" href="tools.html" />
+    <link rel="prev" title="ek.registry" href="registry.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.stores</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.KINDS"><code class="docutils literal notranslate"><span class="pre">KINDS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.Mall"><code class="docutils literal notranslate"><span class="pre">Mall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.app_folder"><code class="docutils literal notranslate"><span class="pre">app_folder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.cache_this"><code class="docutils literal notranslate"><span class="pre">cache_this()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.data_dir"><code class="docutils literal notranslate"><span class="pre">data_dir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.mall"><code class="docutils literal notranslate"><span class="pre">mall()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.stores.persistent_cache"><code class="docutils literal notranslate"><span class="pre">persistent_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.stores</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/stores.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.stores">
+<span id="ek-stores"></span><h1>ek.stores<a class="headerlink" href="#module-ek.stores" title="Link to this heading"></a></h1>
+<p>Local-file persistence for <code class="docutils literal notranslate"><span class="pre">ek</span></code>, as plain <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> stores.</p>
+<p>Everything <code class="docutils literal notranslate"><span class="pre">ek</span></code> persists – gold corpora, evaluation results, fitted
+calibrators, human corrections, run logs – lives under the per-user data
+directory <code class="docutils literal notranslate"><span class="pre">~/.local/share/ek/</span></code> (resolved cross-platform by
+<code class="xref py py-class docutils literal notranslate"><span class="pre">config2py.AppData</span></code>), one subfolder per <em>kind</em>. Each store is a JSON
+key-value store from <code class="xref py py-mod docutils literal notranslate"><span class="pre">dol</span></code>: <code class="docutils literal notranslate"><span class="pre">store[key]</span> <span class="pre">=</span> <span class="pre">value</span></code> writes
+<code class="docutils literal notranslate"><span class="pre">&lt;kind&gt;/&lt;key&gt;.json</span></code>, <code class="docutils literal notranslate"><span class="pre">store[key]</span></code> reads it back, iteration lists keys – so
+callers get a dict-like facade rather than a bespoke god-class.</p>
+<dl>
+<dt>Progressive disclosure:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="p">;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;gold&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;doc-001&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reference_text&quot;</span><span class="p">:</span> <span class="s2">&quot;hello world&quot;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;doc-001&quot;</span><span class="p">][</span><span class="s2">&quot;reference_text&quot;</span><span class="p">]</span>
+<span class="go">&#39;hello world&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go">[&#39;doc-001&#39;]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>A <a class="reference internal" href="#ek.stores.mall" title="ek.stores.mall"><code class="xref py py-func docutils literal notranslate"><span class="pre">mall()</span></code></a> groups every kind into one stores-of-stores mapping, with optional
+<code class="docutils literal notranslate"><span class="pre">mall[&quot;gold&quot;,</span> <span class="pre">&quot;doc-001&quot;]</span></code> tuple-key access.</p>
+<p>Tests and ephemeral use can redirect the root via the <code class="docutils literal notranslate"><span class="pre">rootdir</span></code> argument or the
+<code class="docutils literal notranslate"><span class="pre">EK_DATA_HOME</span></code> environment variable, so nothing touches the real user folder.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.stores.KINDS">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">KINDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('gold',</span> <span class="pre">'results',</span> <span class="pre">'calibrators',</span> <span class="pre">'corrections',</span> <span class="pre">'runs',</span> <span class="pre">'baselines')</span></span><a class="headerlink" href="#ek.stores.KINDS" title="Link to this definition"></a></dt>
+<dd><p>The kinds of artifact <code class="docutils literal notranslate"><span class="pre">ek</span></code> persists; each becomes a subfolder + a store.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.stores.Mall">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">Mall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('gold',</span> <span class="pre">'results',</span> <span class="pre">'calibrators',</span> <span class="pre">'corrections',</span> <span class="pre">'runs',</span> <span class="pre">'baselines')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/stores.html#Mall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.Mall" title="Link to this definition"></a></dt>
+<dd><p>A read-only mapping of <code class="docutils literal notranslate"><span class="pre">kind</span> <span class="pre">-&gt;</span> <span class="pre">json_store(kind)</span></code> (a dol “mall”).</p>
+<p>Supports both <code class="docutils literal notranslate"><span class="pre">mall[&quot;gold&quot;]</span></code> (the store) and <code class="docutils literal notranslate"><span class="pre">mall[&quot;gold&quot;,</span> <span class="pre">key]</span></code> (the
+value), the latter being sugar for <code class="docutils literal notranslate"><span class="pre">mall[&quot;gold&quot;][key]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.app_folder">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">app_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/ek/stores.html#app_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.app_folder" title="Link to this definition"></a></dt>
+<dd><p>The root <code class="docutils literal notranslate"><span class="pre">ek</span></code> data folder (e.g. <code class="docutils literal notranslate"><span class="pre">~/.local/share/ek</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.cache_this">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">cache_this</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">VT</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">KT</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">VT</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">KT</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">KT</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">MutableMapping</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_property</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serialize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deserialize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dol/caching.html#cache_this"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.cache_this" title="Link to this definition"></a></dt>
+<dd><p>Re-export for the idiomatic class-property persisted cache, e.g.
+<code class="docutils literal notranslate"><span class="pre">&#64;cache_this(cache=lambda</span> <span class="pre">self:</span> <span class="pre">json_store(&quot;runs&quot;),</span> <span class="pre">key=...)</span></code> on a method.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.data_dir">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/ek/stores.html#data_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.data_dir" title="Link to this definition"></a></dt>
+<dd><p>Filesystem directory backing <code class="docutils literal notranslate"><span class="pre">kind</span></code> (under the data root or <code class="docutils literal notranslate"><span class="pre">rootdir</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.json_store">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">json_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span></span></span><a class="reference internal" href="../../_modules/ek/stores.html#json_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.json_store" title="Link to this definition"></a></dt>
+<dd><p>A JSON <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> for one <code class="docutils literal notranslate"><span class="pre">kind</span></code> of artifact.</p>
+<p>Keys are plain names (no extension); values are JSON-serializable objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.mall">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">mall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.stores.Mall" title="ek.stores.Mall"><span class="pre">Mall</span></a></span></span><a class="reference internal" href="../../_modules/ek/stores.html#mall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.mall" title="Link to this definition"></a></dt>
+<dd><p>The full stores-of-stores mall (one JSON store per <a class="reference internal" href="#ek.stores.KINDS" title="ek.stores.KINDS"><code class="xref py py-data docutils literal notranslate"><span class="pre">KINDS</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.stores.persistent_cache">
+<span class="sig-prename descclassname"><span class="pre">ek.stores.</span></span><span class="sig-name descname"><span class="pre">persistent_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'runs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/stores.html#persistent_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.stores.persistent_cache" title="Link to this definition"></a></dt>
+<dd><p>Memoize a plain function’s result in a <code class="docutils literal notranslate"><span class="pre">kind</span></code> JSON store, across sessions.</p>
+<p>Use as <code class="docutils literal notranslate"><span class="pre">&#64;persistent_cache(kind=&quot;runs&quot;,</span> <span class="pre">key=...)</span></code>. Returned values must be
+JSON-serializable. <code class="docutils literal notranslate"><span class="pre">key</span></code> may be a constant or a callable receiving the call
+arguments; it defaults to the function’s qualified name (so provide a <code class="docutils literal notranslate"><span class="pre">key</span></code>
+for functions that take arguments). For caching a <em>class property/method</em>,
+prefer <a class="reference internal" href="#ek.stores.cache_this" title="ek.stores.cache_this"><code class="xref py py-data docutils literal notranslate"><span class="pre">cache_this</span></code></a> (dol’s descriptor) instead.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="p">;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@persistent_cache</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;runs&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">calls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compute</span><span class="p">(),</span> <span class="n">compute</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">calls</span><span class="p">)</span>
+<span class="go">({&#39;answer&#39;: 42}, {&#39;answer&#39;: 42}, 1)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="registry.html" class="btn btn-neutral float-left" title="ek.registry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tools.html" class="btn btn-neutral float-right" title="ek.tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

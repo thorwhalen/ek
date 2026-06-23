@@ -1,0 +1,4 @@
+ek.registry
+===========
+.. automodule:: ek.registry
+   :members:

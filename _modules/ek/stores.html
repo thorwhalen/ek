@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.stores &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.stores</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.stores</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Local-file persistence for ``ek``, as plain ``MutableMapping`` stores.</span>
+
+<span class="sd">Everything ``ek`` persists -- gold corpora, evaluation results, fitted</span>
+<span class="sd">calibrators, human corrections, run logs -- lives under the per-user data</span>
+<span class="sd">directory ``~/.local/share/ek/`` (resolved cross-platform by</span>
+<span class="sd">:class:`config2py.AppData`), one subfolder per *kind*. Each store is a JSON</span>
+<span class="sd">key-value store from :mod:`dol`: ``store[key] = value`` writes</span>
+<span class="sd">``&lt;kind&gt;/&lt;key&gt;.json``, ``store[key]`` reads it back, iteration lists keys -- so</span>
+<span class="sd">callers get a dict-like facade rather than a bespoke god-class.</span>
+
+<span class="sd">Progressive disclosure:</span>
+<span class="sd">    &gt;&gt;&gt; import tempfile; root = tempfile.mkdtemp()</span>
+<span class="sd">    &gt;&gt;&gt; s = json_store(&quot;gold&quot;, rootdir=root)</span>
+<span class="sd">    &gt;&gt;&gt; s[&quot;doc-001&quot;] = {&quot;reference_text&quot;: &quot;hello world&quot;}</span>
+<span class="sd">    &gt;&gt;&gt; s[&quot;doc-001&quot;][&quot;reference_text&quot;]</span>
+<span class="sd">    &#39;hello world&#39;</span>
+<span class="sd">    &gt;&gt;&gt; list(s)</span>
+<span class="sd">    [&#39;doc-001&#39;]</span>
+
+<span class="sd">A :func:`mall` groups every kind into one stores-of-stores mapping, with optional</span>
+<span class="sd">``mall[&quot;gold&quot;, &quot;doc-001&quot;]`` tuple-key access.</span>
+
+<span class="sd">Tests and ephemeral use can redirect the root via the ``rootdir`` argument or the</span>
+<span class="sd">``EK_DATA_HOME`` environment variable, so nothing touches the real user folder.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">MutableMapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">config2py</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppData</span>
+
+<span class="c1">#: Re-export for the idiomatic class-property persisted cache, e.g.</span>
+<span class="c1">#: ``@cache_this(cache=lambda self: json_store(&quot;runs&quot;), key=...)`` on a method.</span>
+<span class="n">cache_this</span> <span class="o">=</span> <span class="n">dol</span><span class="o">.</span><span class="n">cache_this</span>
+
+<span class="c1">#: The kinds of artifact ``ek`` persists; each becomes a subfolder + a store.</span>
+<span class="n">KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;gold&quot;</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;calibrators&quot;</span><span class="p">,</span> <span class="s2">&quot;corrections&quot;</span><span class="p">,</span> <span class="s2">&quot;runs&quot;</span><span class="p">,</span> <span class="s2">&quot;baselines&quot;</span><span class="p">)</span>
+
+<span class="n">_APP</span> <span class="o">=</span> <span class="n">AppData</span><span class="p">(</span><span class="s2">&quot;ek&quot;</span><span class="p">)</span>
+
+<span class="c1"># A JSON file store that creates missing parent directories on write.</span>
+<span class="n">_JsonStore</span> <span class="o">=</span> <span class="n">dol</span><span class="o">.</span><span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">dol</span><span class="o">.</span><span class="n">Jsons</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="app_folder">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.app_folder">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">app_folder</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The root ``ek`` data folder (e.g. ``~/.local/share/ek``).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">_APP</span><span class="o">.</span><span class="n">app_folder</span><span class="p">())</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_root</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">rootdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EK_DATA_HOME&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">env</span><span class="p">)</span> <span class="k">if</span> <span class="n">env</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="data_dir">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.data_dir">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">data_dir</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filesystem directory backing ``kind`` (under the data root or ``rootdir``).&quot;&quot;&quot;</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">_resolve_root</span><span class="p">(</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">_APP</span><span class="o">.</span><span class="n">get_artifact_dir</span><span class="p">(</span><span class="n">kind</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">root</span> <span class="o">/</span> <span class="n">kind</span></div>
+
+
+
+<div class="viewcode-block" id="json_store">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.json_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">json_store</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A JSON ``MutableMapping`` for one ``kind`` of artifact.</span>
+
+<span class="sd">    Keys are plain names (no extension); values are JSON-serializable objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_JsonStore</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_dir</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)))</span></div>
+
+
+
+<div class="viewcode-block" id="Mall">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.Mall">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Mall</span><span class="p">(</span><span class="n">Mapping</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A read-only mapping of ``kind -&gt; json_store(kind)`` (a dol &quot;mall&quot;).</span>
+
+<span class="sd">    Supports both ``mall[&quot;gold&quot;]`` (the store) and ``mall[&quot;gold&quot;, key]`` (the</span>
+<span class="sd">    value), the latter being sugar for ``mall[&quot;gold&quot;][key]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kinds</span><span class="o">=</span><span class="n">KINDS</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kinds</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">kinds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rootdir</span> <span class="o">=</span> <span class="n">rootdir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">collection</span><span class="p">,</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">collection</span><span class="p">][</span><span class="n">inner</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kinds</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown store kind </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2">; known: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_kinds</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rootdir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kinds</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kinds</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="mall">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.mall">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mall</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mall</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The full stores-of-stores mall (one JSON store per :data:`KINDS`).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Mall</span><span class="p">(</span><span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="persistent_cache">
+<a class="viewcode-back" href="../../module_docs/ek/stores.html#ek.persistent_cache">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">persistent_cache</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;runs&quot;</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memoize a plain function&#39;s result in a ``kind`` JSON store, across sessions.</span>
+
+<span class="sd">    Use as ``@persistent_cache(kind=&quot;runs&quot;, key=...)``. Returned values must be</span>
+<span class="sd">    JSON-serializable. ``key`` may be a constant or a callable receiving the call</span>
+<span class="sd">    arguments; it defaults to the function&#39;s qualified name (so provide a ``key``</span>
+<span class="sd">    for functions that take arguments). For caching a *class property/method*,</span>
+<span class="sd">    prefer :data:`cache_this` (dol&#39;s descriptor) instead.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import tempfile; root = tempfile.mkdtemp()</span>
+<span class="sd">        &gt;&gt;&gt; calls = []</span>
+<span class="sd">        &gt;&gt;&gt; @persistent_cache(kind=&quot;runs&quot;, key=&quot;answer&quot;, rootdir=root)</span>
+<span class="sd">        ... def compute():</span>
+<span class="sd">        ...     calls.append(1)</span>
+<span class="sd">        ...     return {&quot;answer&quot;: 42}</span>
+<span class="sd">        &gt;&gt;&gt; compute(), compute(), len(calls)</span>
+<span class="sd">        ({&#39;answer&#39;: 42}, {&#39;answer&#39;: 42}, 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                <span class="n">cache_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cache_key</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cache_key</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__qualname__</span>
+            <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">in</span> <span class="n">store</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">store</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">store</span><span class="p">[</span><span class="n">cache_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">wrapper</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">store</span>  <span class="c1"># exposed for inspection/invalidation</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">deco</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">deco</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

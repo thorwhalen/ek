@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.ocr &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.ocr.benchmark" href="ocr/benchmark.html" />
+    <link rel="prev" title="ek.metrics.strings" href="metrics/strings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.ocr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.add_gold_item"><code class="docutils literal notranslate"><span class="pre">add_gold_item()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.evaluate_ocr"><code class="docutils literal notranslate"><span class="pre">evaluate_ocr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.ocracy_backend"><code class="docutils literal notranslate"><span class="pre">ocracy_backend()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.profile"><code class="docutils literal notranslate"><span class="pre">profile()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.read_text"><code class="docutils literal notranslate"><span class="pre">read_text()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.ocr</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/ocr.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.ocr">
+<span id="ek-ocr"></span><h1>ek.ocr<a class="headerlink" href="#module-ek.ocr" title="Link to this heading"></a></h1>
+<p>OCR evaluation – <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s first concrete instance, built on <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>.</p>
+<p>OCR is the noisiest special case of information extraction. This subpackage adds
+the OCR-specific pieces on top of <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s source-agnostic core:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.ocr.ocracy_backend" title="ek.ocr.ocracy_backend"><code class="xref py py-func docutils literal notranslate"><span class="pre">ocracy_backend()</span></code></a> / <a class="reference internal" href="#ek.ocr.read_text" title="ek.ocr.read_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">read_text()</span></code></a> – a thin bridge that turns
+<code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s 16-engine fleet into an <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable. The
+dependency arrow is strict: <code class="docutils literal notranslate"><span class="pre">ek</span> <span class="pre">-&gt;</span> <span class="pre">ocracy</span></code> (via the <code class="docutils literal notranslate"><span class="pre">ek[ocr]</span></code> extra), never
+the reverse. <code class="docutils literal notranslate"><span class="pre">ek</span></code> core depends only on the <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code> <em>shape</em> (<code class="docutils literal notranslate"><span class="pre">.text</span></code> /
+<code class="docutils literal notranslate"><span class="pre">.blocks</span></code> / <code class="docutils literal notranslate"><span class="pre">.mean_confidence</span></code>), so the benchmark below evaluates <em>any</em>
+<code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable – <code class="docutils literal notranslate"><span class="pre">ocracy</span></code> or your own.</p></li>
+<li><p><a class="reference internal" href="#ek.ocr.profile" title="ek.ocr.profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">profile()</span></code></a> – per-engine capability profiles (who emits real vs
+model-guessed geometry, who is calibrated, who yields table structure), distilled
+from <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_01</span></code>. <code class="docutils literal notranslate"><span class="pre">ek</span></code> treats these as claims to verify empirically.</p></li>
+<li><p><a class="reference internal" href="#ek.ocr.evaluate_ocr" title="ek.ocr.evaluate_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate_ocr()</span></code></a> / <a class="reference internal" href="#ek.ocr.add_gold_item" title="ek.ocr.add_gold_item"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_gold_item()</span></code></a> – run a fleet over a gold corpus,
+score with CER/WER (globally accumulated), slice the report, and persist gold +
+results to the <code class="docutils literal notranslate"><span class="pre">dol</span></code> stores under <code class="docutils literal notranslate"><span class="pre">~/.local/share/ek/</span></code>.</p></li>
+</ul>
+<p>Heavy engine SDKs and credentials are never required to import this module; they
+are checked at call time via <a class="reference internal" href="registry.html#ek.registry.check_requirements" title="ek.registry.check_requirements"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.registry.check_requirements()</span></code></a>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.add_gold_item">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">add_gold_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">extra</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/benchmark.html#add_gold_item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.add_gold_item" title="Link to this definition"></a></dt>
+<dd><p>Add one gold example to the <code class="docutils literal notranslate"><span class="pre">gold</span></code> store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – Unique id for the document.</p></li>
+<li><p><strong>image</strong> – An image reference the engine can read (path, URL, …). Stored as a
+reference, not bytes – gold stores hold references + the expected text.</p></li>
+<li><p><strong>reference_text</strong> – The ground-truth transcription.</p></li>
+<li><p><strong>slice</strong> – Optional stratification label (doc type, language, scan quality, …).</p></li>
+<li><p><strong>rootdir</strong> – Override the data root (tests/ephemeral use).</p></li>
+<li><p><strong>**extra</strong> – Any additional metadata to store on the record.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.evaluate_ocr">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">evaluate_ocr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'image'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'reference_text'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'slice'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/ocr/benchmark.html#evaluate_ocr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.evaluate_ocr" title="Link to this definition"></a></dt>
+<dd><p>Benchmark an OCR engine against a gold corpus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>engine</strong> – An <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable, or an <code class="docutils literal notranslate"><span class="pre">ocracy</span></code> backend id.</p></li>
+<li><p><strong>gold</strong> – A mapping <code class="docutils literal notranslate"><span class="pre">key</span> <span class="pre">-&gt;</span> <span class="pre">{image,</span> <span class="pre">reference_text,</span> <span class="pre">[slice],</span> <span class="pre">...}</span></code> – a plain
+dict or a <code class="docutils literal notranslate"><span class="pre">ek</span></code> gold store.</p></li>
+<li><p><strong>metric</strong> – <code class="docutils literal notranslate"><span class="pre">&quot;cer&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;wer&quot;</span></code> (or any registered string metric).</p></li>
+<li><p><strong>normalize</strong> – Optional canonicalizer applied to both sides before scoring.</p></li>
+<li><p><strong>grammar</strong> – Optional Layer-A grammar (forwarded to the metric).</p></li>
+<li><p><strong>image_key</strong> – Field names within each gold record.</p></li>
+<li><p><strong>reference_key</strong> – Field names within each gold record.</p></li>
+<li><p><strong>slice_key</strong> – Field names within each gold record.</p></li>
+<li><p><strong>persist</strong> – If true, write per-item results and the run aggregate to the
+<code class="docutils literal notranslate"><span class="pre">results</span></code> / <code class="docutils literal notranslate"><span class="pre">runs</span></code> stores.</p></li>
+<li><p><strong>run_id</strong> – Identifier for this run (auto-generated from the clock if omitted).</p></li>
+<li><p><strong>rootdir</strong> – Override the data root (tests/ephemeral use).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="base.html#ek.base.Report" title="ek.base.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">Report</span></code></a> whose <code class="docutils literal notranslate"><span class="pre">detail['per_item']</span></code> maps each gold key to
+its prediction, reference, slice, score, and engine confidence/backend.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.ocracy_backend">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">ocracy_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">default_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ek/ocr/bridge.html#ocracy_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.ocracy_backend" title="Link to this definition"></a></dt>
+<dd><p>Return an <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable bound to one <code class="docutils literal notranslate"><span class="pre">ocracy</span></code> backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backend</strong> – An <code class="docutils literal notranslate"><span class="pre">ocracy</span></code> backend id (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;tesseract&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;google_vision&quot;</span></code>);
+<code class="docutils literal notranslate"><span class="pre">None</span></code> uses <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s first installed backend.</p></li>
+<li><p><strong>**default_kwargs</strong> – Options forwarded to <code class="docutils literal notranslate"><span class="pre">ocracy.ocr</span></code> on every call
+(e.g. <code class="docutils literal notranslate"><span class="pre">languages=[&quot;en&quot;]</span></code>); per-call kwargs override these.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A callable suitable for <a class="reference internal" href="#ek.ocr.evaluate_ocr" title="ek.ocr.evaluate_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.ocr.evaluate_ocr()</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.profile">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/profiles.html#profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.profile" title="Link to this definition"></a></dt>
+<dd><p>Capability profile for an engine id (a safe default if unknown).</p>
+<p>Accepts <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s canonical hyphenated ids and their underscore variants.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.read_text">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/bridge.html#read_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.read_text" title="Link to this definition"></a></dt>
+<dd><p>Convenience: OCR an image and return just the recognized text string.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metrics/strings.html" class="btn btn-neutral float-left" title="ek.metrics.strings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ocr/benchmark.html" class="btn btn-neutral float-right" title="ek.ocr.benchmark" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

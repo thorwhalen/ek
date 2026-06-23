@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.facade &mdash; ek 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ek.harness" href="harness.html" />
+    <link rel="prev" title="ek.canonicalize" href="canonicalize.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.facade</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.facade.estimate_quality"><code class="docutils literal notranslate"><span class="pre">estimate_quality()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.facade.evaluate"><code class="docutils literal notranslate"><span class="pre">evaluate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.facade.score"><code class="docutils literal notranslate"><span class="pre">score()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.facade</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/ek/facade.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.facade">
+<span id="ek-facade"></span><h1>ek.facade<a class="headerlink" href="#module-ek.facade" title="Link to this heading"></a></h1>
+<p>The two top-level facades: <a class="reference internal" href="#ek.facade.score" title="ek.facade.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">score()</span></code></a> (offline) and <a class="reference internal" href="#ek.facade.estimate_quality" title="ek.facade.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">estimate_quality()</span></code></a> (online).</p>
+<p>Both operate on the same Layer-A object and follow progressive disclosure – the
+simple call Just Works, every strategy is replaceable by keyword:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.facade.score" title="ek.facade.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">score()</span></code></a> – reference-based: compare one prediction to one gold reference,
+the metric chosen by output type (string -&gt; CER, record -&gt; field-F1) unless you
+name or pass one.</p></li>
+<li><p><a class="reference internal" href="#ek.facade.evaluate" title="ek.facade.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate()</span></code></a> – reference-based at corpus scale: aggregate many comparisons
+<em>correctly</em> (global error-rate accumulation, micro-F1), with optional per-slice
+cuts. This is what the OCR benchmark and the regression harness build on.</p></li>
+<li><p><a class="reference internal" href="#ek.facade.estimate_quality" title="ek.facade.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">estimate_quality()</span></code></a> – reference-free: gather signals -&gt; calibrate -&gt;
+validate -&gt; decide, returning a <a class="reference internal" href="base.html#ek.base.QualityReport" title="ek.base.QualityReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">QualityReport</span></code></a>. The heavy signal
+families (ROVER, conformal gates) are injected; this facade composes whatever you
+give it and ships sensible no-op defaults.</p></li>
+</ul>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">score</span><span class="p">(</span><span class="s2">&quot;hello wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">metric</span>
+<span class="go">&#39;cer&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">score</span><span class="p">(</span><span class="s2">&quot;hello wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;wer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">([(</span><span class="s2">&quot;ct&quot;</span><span class="p">,</span> <span class="s2">&quot;cat&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;dg&quot;</span><span class="p">,</span> <span class="s2">&quot;dog&quot;</span><span class="p">)],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cer&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">(2, 0.333)</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.facade.estimate_quality">
+<span class="sig-prename descclassname"><span class="pre">ek.facade.</span></span><span class="sig-name descname"><span class="pre">estimate_quality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extraction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibrator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validators</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#ek.base.QualityReport" title="ek.base.QualityReport"><span class="pre">QualityReport</span></a></span></span><a class="reference internal" href="../../_modules/ek/facade.html#estimate_quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.facade.estimate_quality" title="Link to this definition"></a></dt>
+<dd><p>Estimate the quality of one extraction with no gold reference.</p>
+<p>Composes the signal -&gt; calibrate -&gt; validate -&gt; decide pipeline from whatever
+strategies you inject (defaults are no-ops, so the call always returns a
+report). The rich signal families (ROVER agreement, conformal gates) plug in
+here as <code class="docutils literal notranslate"><span class="pre">sources</span></code>/<code class="docutils literal notranslate"><span class="pre">calibrator</span></code>/<code class="docutils literal notranslate"><span class="pre">policy</span></code> – see <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extraction</strong> – A <a class="reference internal" href="base.html#ek.base.FieldEstimate" title="ek.base.FieldEstimate"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a> or a raw value.</p></li>
+<li><p><strong>sources</strong> – Callables <code class="docutils literal notranslate"><span class="pre">extraction</span> <span class="pre">-&gt;</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">Mapping[str,</span> <span class="pre">float]</span></code> producing
+raw quality signals.</p></li>
+<li><p><strong>calibrator</strong> – Optional <a class="reference internal" href="base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> mapping a raw score to a
+probability.</p></li>
+<li><p><strong>validators</strong> – Optional <a class="reference internal" href="base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> callables yielding findings.</p></li>
+<li><p><strong>policy</strong> – Optional <a class="reference internal" href="base.html#ek.base.DecisionPolicy" title="ek.base.DecisionPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DecisionPolicy</span></code></a> producing accept/flag/block.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.facade.evaluate">
+<span class="sig-prename descclassname"><span class="pre">ek.facade.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#ek.base.Metric" title="ek.base.Metric"><span class="pre">Metric</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#ek.base.Report" title="ek.base.Report"><span class="pre">Report</span></a></span></span><a class="reference internal" href="../../_modules/ek/facade.html#evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.facade.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Aggregate many comparisons into a <a class="reference internal" href="base.html#ek.base.Report" title="ek.base.Report"><code class="xref py py-class docutils literal notranslate"><span class="pre">Report</span></code></a> (corpus level).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cases</strong> – Iterable of <code class="docutils literal notranslate"><span class="pre">(pred,</span> <span class="pre">gold)</span></code> or <code class="docutils literal notranslate"><span class="pre">(pred,</span> <span class="pre">gold,</span> <span class="pre">slice_label)</span></code> tuples.</p></li>
+<li><p><strong>metric</strong> – As in <a class="reference internal" href="#ek.facade.score" title="ek.facade.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">score()</span></code></a> (resolved once from the first case’s types).</p></li>
+<li><p><strong>grammar</strong> – Optional Layer-A grammar passed to every comparison.</p></li>
+<li><p><strong>normalize</strong> – Optional canonicalizer applied before every comparison.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Report whose <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> is computed by the metric’s own aggregator
+(e.g. globally accumulated CER/WER, micro-F1) – never a naive mean.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.facade.score">
+<span class="sig-prename descclassname"><span class="pre">ek.facade.</span></span><span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="base.html#ek.base.Metric" title="ek.base.Metric"><span class="pre">Metric</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a></span></span><a class="reference internal" href="../../_modules/ek/facade.html#score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.facade.score" title="Link to this definition"></a></dt>
+<dd><p>Score one prediction against one gold reference (reference-based).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pred</strong> – The predicted output (string, record dict, or anything with <code class="docutils literal notranslate"><span class="pre">.text</span></code>).</p></li>
+<li><p><strong>gold</strong> – The gold reference, same shape as <code class="docutils literal notranslate"><span class="pre">pred</span></code>.</p></li>
+<li><p><strong>grammar</strong> – Optional Layer-A <a class="reference internal" href="base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a> (carries cost weights).</p></li>
+<li><p><strong>metric</strong> – A registered metric name (<code class="docutils literal notranslate"><span class="pre">&quot;cer&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;wer&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;fields&quot;</span></code>, …), a
+callable <a class="reference internal" href="base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to dispatch by type.</p></li>
+<li><p><strong>normalize</strong> – Optional canonicalizer (name, callable, step list, or
+<a class="reference internal" href="canonicalize.html#ek.canonicalize.Canonicalizer" title="ek.canonicalize.Canonicalizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Canonicalizer</span></code></a>) applied before comparison.</p></li>
+<li><p><strong>weights</strong> – A <a class="reference internal" href="base.html#ek.base.CostWeight" title="ek.base.CostWeight"><code class="xref py py-data docutils literal notranslate"><span class="pre">CostWeight</span></code></a> for cost-weighted metrics (the
+typed-graph distance); overrides the schema’s importance weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="base.html#ek.base.Score" title="ek.base.Score"><code class="xref py py-class docutils literal notranslate"><span class="pre">Score</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="canonicalize.html" class="btn btn-neutral float-left" title="ek.canonicalize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="harness.html" class="btn btn-neutral float-right" title="ek.harness" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
