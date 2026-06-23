@@ -13,7 +13,7 @@ harness adds that discipline on top of :func:`ek.score`/:func:`ek.evaluate`:
   This is the golden-set CI gate.
 - :func:`cohen_kappa` / :func:`percent_agreement` / :func:`krippendorff_alpha` --
   inter-annotator agreement (IAA), to know the ceiling of your gold standard before
-  trusting any model score (``krippendorff`` is optional, behind ``ek[harness]``).
+  trusting any model score (all pure-Python, no optional dependency).
 
 See ``misc/docs/ek_02`` for the harness design (canonicalizer versioning, slicing,
 IAA conventions, golden-set CI).
@@ -21,12 +21,12 @@ IAA conventions, golden-set CI).
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional, Sequence
 
 from .facade import evaluate
-from .registry import requires_extra
 from .stores import json_store
 
 # Metrics whose Score.value is an ERROR/distance (lower is better).
@@ -265,20 +265,102 @@ def cohen_kappa(rater_a: Sequence, rater_b: Sequence) -> float:
     return (p_observed - p_expected) / (1.0 - p_expected)
 
 
-@requires_extra("harness", packages=["krippendorff"])
+def _is_missing(x: Any) -> bool:
+    """Whether a cell is unlabelled (``None`` or a float ``NaN``)."""
+    return x is None or (isinstance(x, float) and math.isnan(x))
+
+
+def _difference_metric(
+    level: str, values: Sequence, n_v: Mapping
+) -> Callable[[Any, Any], float]:
+    """The squared difference function ``delta^2(c, k)`` for a measurement level.
+
+    ``nominal`` (categorical), ``interval`` (numeric distance), ``ratio`` (relative
+    distance with a true zero), and ``ordinal`` (rank distance via the cumulative
+    marginal counts ``n_v``, Krippendorff's ordinal metric).
+    """
+    if level == "nominal":
+        return lambda c, k: 1.0
+    if level == "interval":
+        return lambda c, k: (float(c) - float(k)) ** 2
+    if level == "ratio":
+
+        def ratio(c, k):
+            s = float(c) + float(k)
+            return 0.0 if s == 0 else ((float(c) - float(k)) / s) ** 2
+
+        return ratio
+    if level == "ordinal":
+        ordered = sorted(values)
+
+        def ordinal(c, k):
+            lo, hi = (c, k) if c <= k else (k, c)
+            between = sum(n_v[g] for g in ordered if lo <= g <= hi)
+            return (between - (n_v[c] + n_v[k]) / 2.0) ** 2
+
+        return ordinal
+    raise ValueError(f"unknown level {level!r}; use nominal/ordinal/interval/ratio")
+
+
 def krippendorff_alpha(
     reliability_data: Sequence[Sequence], *, level: str = "nominal"
 ) -> float:
-    """Krippendorff's alpha via the ``krippendorff`` package (``ek[harness]`` extra).
+    """Krippendorff's alpha -- the general inter-annotator agreement coefficient.
 
-    The most general IAA coefficient -- any number of raters, any measurement level,
-    handles missing data (use ``None``/``numpy.nan`` for unlabelled). ``reliability_data``
-    is one row per rater, one column per item.
+    Pure-Python (no dependency, permissive core): any number of raters, any
+    measurement ``level`` (``"nominal"``, ``"ordinal"``, ``"interval"``, ``"ratio"``),
+    and missing data (use ``None`` or ``float('nan')`` for an unlabelled cell).
+    ``reliability_data`` is one row per rater, one column per item. Alpha is ``1.0``
+    for perfect agreement, ``0.0`` at chance, and goes negative for systematic
+    disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
+    observed vs expected disagreement under the level-specific difference metric.
+
+    Example:
+        >>> data = [[1, 1, 1, 1], [1, 1, 1, 1]]   # two raters, perfect agreement
+        >>> krippendorff_alpha(data)
+        1.0
     """
-    import krippendorff
+    raters = [list(row) for row in reliability_data]
+    n_units = max((len(r) for r in raters), default=0)
 
-    return float(
-        krippendorff.alpha(
-            reliability_data=reliability_data, level_of_measurement=level
-        )
-    )
+    # Per-unit value lists; only units rated by >= 2 raters are "pairable".
+    units = []
+    for u in range(n_units):
+        vals = [r[u] for r in raters if u < len(r) and not _is_missing(r[u])]
+        if len(vals) >= 2:
+            units.append(vals)
+    if not units:
+        return 1.0
+
+    # Coincidence matrix: o[(c, k)] over ordered value pairs within each unit,
+    # each contribution weighted by 1 / (m_u - 1) for a unit with m_u ratings.
+    coincidence: dict = {}
+    for vals in units:
+        m = len(vals)
+        counts: dict = {}
+        for v in vals:
+            counts[v] = counts.get(v, 0) + 1
+        for c, cc in counts.items():
+            for k, kc in counts.items():
+                pairs = cc * (cc - 1) if c == k else cc * kc
+                if pairs:
+                    coincidence[(c, k)] = coincidence.get((c, k), 0.0) + pairs / (m - 1)
+
+    values = list({v for vals in units for v in vals})
+    n_v = {v: sum(coincidence.get((v, w), 0.0) for w in values) for v in values}
+    n = sum(n_v.values())
+    if n == 0:
+        return 1.0
+
+    delta2 = _difference_metric(level, values, n_v)
+    observed = expected = 0.0
+    for c in values:
+        for k in values:
+            if c == k:
+                continue
+            d2 = delta2(c, k)
+            observed += coincidence.get((c, k), 0.0) * d2
+            expected += n_v[c] * n_v[k] * d2
+    if expected == 0:
+        return 1.0  # no expected disagreement -> perfect agreement by convention
+    return 1.0 - (n - 1) * observed / expected

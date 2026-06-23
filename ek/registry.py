@@ -184,7 +184,6 @@ _EXTRA_PROBES: dict[str, list[str]] = {
     "validation": ["pydantic"],
     "constrained": ["outlines"],
     "agreement": ["uqlm"],
-    "harness": ["krippendorff"],
     "hitl": ["label_studio_sdk"],
     "monitoring": ["nannyml"],
 }

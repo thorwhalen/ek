@@ -16,7 +16,6 @@ _HEAVY = [
     "crepes",
     "ocracy",
     "networkx",
-    "krippendorff",
     "pydantic",
     "numpy",
     "scipy",
