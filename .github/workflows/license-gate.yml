@@ -1,0 +1,27 @@
+name: license-gate
+
+# Fail the build if any copyleft / non-commercial license enters ek's installed
+# dependency closure. License terms in this ecosystem often live only in repo
+# files (invisible to PyPI metadata), so we scan the *resolved* install.
+on:
+  push:
+  pull_request:
+
+jobs:
+  license-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ek (core + permissive extras) and the scanner
+        run: |
+          python -m pip install --upgrade pip
+          # Install the permissive capability tiers; quarantined libs are excluded
+          # by construction (they are not in any extra).
+          pip install ".[all]" pip-licenses
+      - name: Scan installed dependency closure
+        run: |
+          pip-licenses --format=csv --with-system > licenses.csv
+          python .github/scripts/check_licenses.py licenses.csv

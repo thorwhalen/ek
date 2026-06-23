@@ -1,0 +1,169 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ek"
+version = "0.1.0"
+description = "ek (Evaluation Kit) -- a framework for building Knowledge Evaluation systems (evaluating information-extraction outputs; OCR as the noisiest special case)"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = [
+    "evaluation",
+    "information-extraction",
+    "ocr",
+    "quality-estimation",
+    "calibration",
+    "benchmarking",
+]
+authors = [{ name = "Thor Whalen" }]
+# Core stays lean and permissively licensed. Everything heavier or copyleft is an
+# opt-in extra (see [project.optional-dependencies]); nothing copyleft/non-commercial
+# is ever a default. See skills/ek-dev-licensing for the policy and landmines.
+dependencies = [
+    "dol",        # local-file key-value stores (MutableMapping facades)
+    "config2py",  # ~/.local/share/ek/ XDG data-folder resolution
+    "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
+    "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
+    "argh",       # CLI dispatch from function signatures
+    "argcomplete",  # shell tab-completion for the CLI
+]
+
+[project.license]
+text = "mit"
+
+[project.urls]
+Homepage = "https://github.com/thorwhalen/ek"
+Repository = "https://github.com/thorwhalen/ek"
+Documentation = "https://thorwhalen.github.io/ek"
+
+[project.scripts]
+ek = "ek.__main__:main"
+
+[project.optional-dependencies]
+# --- evaluation capability tiers (all permissively licensed) ---
+# Richer reference-based metrics: span-F1, table (TEDS/GriTS), typed-graph edit.
+metrics = ["networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss"]
+# Calibration + conformal selective prediction.
+calibration = ["netcal", "scikit-learn", "mapie", "crepes"]
+# Post-extraction validation & correction (schema/lexicon/anomaly).
+validation = ["pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy"]
+# Constrained / structured generation for generative extractors.
+constrained = ["outlines", "xgrammar", "instructor"]
+# Reference-free agreement signals (LLM/VLM self-consistency).
+agreement = ["uqlm"]
+# OCR fleet (the first concrete instance). Install specific engines via ocracy's
+# own per-backend extras, e.g. ocracy[tesseract], ocracy[google-vision].
+ocr = ["ocracy"]
+# Inter-annotator agreement for the gold-standard harness.
+harness = ["krippendorff"]
+# Human-in-the-loop review surface + label-free monitoring.
+hitl = ["label-studio-sdk"]
+monitoring = ["nannyml", "evidently"]
+# Convenience aggregate of the permissive capability tiers.
+all = [
+    "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss",
+    "netcal", "scikit-learn", "mapie", "crepes",
+    "pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy",
+    "ocracy", "uqlm", "krippendorff",
+]
+# --- tooling ---
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
+docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
+
+# NOTE: copyleft / non-commercial libraries are NEVER listed above. They are
+# quarantined and must be installed explicitly by the user who accepts their terms:
+#   TorchCP (LGPL-3.0, graph/LLM conformal)  -- import-only, never vendor
+#   surya-ocr (non-commercial RAIL-M weights) -- highest accuracy, internal research only
+#   Levenshtein / python-Levenshtein (GPL)    -- replaced by rapidfuzz
+#   Potato (GPL-3.0), Prodigy (proprietary)   -- HITL; HTTP-only / design reference
+# The CI license gate (.github/workflows/license-gate.yml) fails the build if any
+# of these resolve into the core..hitl dependency closure.
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+exclude = [
+    "**/*.ipynb",
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+    "tests",
+    "examples",
+    "scrap",
+]
+
+[tool.ruff.lint]
+select = ["D100"]
+ignore = ["D203", "E501", "B905"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["D"]
+"**/examples/*" = ["D"]
+"**/scrap/*" = ["D"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
+
+[tool.wads.ci]
+project_name = ""
+
+[tool.wads.ci.commands]
+pre_test = []
+test = []
+post_test = []
+lint = []
+format = []
+
+[tool.wads.ci.env]
+required_envvars = []
+test_envvars = []
+extra_envvars = []
+
+[tool.wads.ci.env.defaults]
+
+[tool.wads.ci.quality.ruff]
+enabled = true
+
+[tool.wads.ci.quality.black]
+enabled = false
+
+[tool.wads.ci.quality.mypy]
+enabled = false
+
+[tool.wads.ci.testing]
+enabled = true
+python_versions = ["3.10", "3.12"]
+pytest_args = ["-v", "--tb=short"]
+coverage_enabled = true
+coverage_threshold = 0
+coverage_report_format = ["term", "xml"]
+exclude_paths = ["examples", "scrap"]
+test_on_windows = true
+
+[tool.wads.ci.metrics]
+enabled = true
+config_path = ".github/umpyre-config.yml"
+storage_branch = "code-metrics"
+python_version = "3.10"
+force_run = false
+
+[tool.wads.ci.build]
+sdist = true
+wheel = true
+
+[tool.wads.ci.publish]
+enabled = true
+skip_ci_marker = "[skip ci]"
+publish_marker = "[publish]"
+
+[tool.wads.ci.docs]
+enabled = true
+builder = "epythet"
+ignore_paths = ["tests/", "scrap/", "examples/"]
