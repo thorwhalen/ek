@@ -20,8 +20,14 @@ schema (the two-layer data model in `ek/base.py`):
 score(pred, gold, *, grammar=None, metric=None, normalize=None, weights=None) -> Score   # one comparison
 evaluate(cases, *, metric=None, grammar=None, normalize=None) -> Report                   # corpus (global accumulation, per-slice)
 # Reference-free (online)
-estimate_quality(extraction, *, sources=(), calibrator=None, validators=(), policy=None) -> QualityReport
+estimate_quality(extraction, *, sources=(), signals=(), calibrator=None, validators=(), policy=None, agreement=True, assume_calibrated=False) -> QualityReport
 ```
+
+`sources` are *additional hypotheses* of the same content (strings / `OcrResult`-shaped
+objects) that ROVER fuses into an agreement signal; `signals` are explicit `Signal`
+callables. `extraction` may be a value, a `FieldEstimate`, or a whole
+`AnnotatedExtraction` (scored per field). Calibration is non-optional before gating
+(Hard Rule 1): a `policy` with no `calibrator` warns unless `assume_calibrated=True`.
 
 - **Layer A — `GraphGrammar`** (frozen schema SSOT): `FieldSpec / NodeType /
   EdgeType` carry *types* **and** *importance/cost weights*. The lever for
@@ -53,14 +59,19 @@ callable.
 | `ek/registry.py` | strategy registry, `@requires_extra`, `check_requirements` |
 | `ek/stores.py` | `dol` + `AppData` persistence (JSON `MutableMapping` stores, mall) |
 | `ek/canonicalize.py` | versioned, composable canonicalizers (normalize before scoring) |
-| `ek/metrics/` | reference-based metrics (`StringMetric` CER/WER, `FieldMetric`) |
+| `ek/metrics/` | reference-based metrics (`StringMetric` CER/WER, `FieldMetric`, typed-graph) |
+| `ek/qe/` | reference-free QE: `rover.py` (ROVER agreement), `verifiers.py`, `signals.py`, `calibrate.py`, `decide.py` |
 | `ek/facade.py` | `score`, `evaluate`, `estimate_quality` |
+| `ek/harness.py` | offline harness: `evaluate_store`, regression gate, baselines, IAA |
 | `ek/ocr/` | the OCR instance: ocracy bridge, capability profiles, benchmark |
 | `ek/tools.py`, `ek/__main__.py` | CLI (`argh`, `_dispatch_funcs` SSOT) |
 
-Not yet built (roadmap): `ek/qe/` (signals incl. `rover.py`, calibrate, decide),
-`ek/validate.py`, `ek/harness.py`, `ek/review.py`, `ek/monitor.py`. The flagship
-must-builds are the **cost-weighted typed-graph distance** and the **ROVER** engine.
+Both flagship must-builds are now built: the **cost-weighted typed-graph distance**
+(`ek/metrics/graphs.py`) and the **ROVER** engine (`ek/qe/rover.py`). The reference-free
+QE pipeline (signal → calibrate → validate → decide) ships pure-Python by default, with
+library backends (netcal/sklearn/MAPIE/crepes, uqlm) opt-in behind extras. Not yet built
+(roadmap): `ek/validate.py` (the six-layer flag-vs-correct pipeline, #7), `ek/review.py`,
+`ek/monitor.py`.
 
 ---
 

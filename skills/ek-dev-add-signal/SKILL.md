@@ -14,6 +14,28 @@ no-gold) quality-estimation pipeline behind the `estimate_quality()` facade.
 If you are adding an **offline, reference-based metric** (you have gold), you want
 the `score()` side instead — wrong skill, stop here.
 
+## Already built — extend these (the package is `ek/qe/`)
+
+The pipeline now exists end-to-end (PR #9). Add new components alongside the
+built-ins rather than re-deriving them:
+
+| Stage | Module | Built-ins to extend |
+|---|---|---|
+| Signal — verifier (tier 1) | `ek/qe/verifiers.py` | `VerifierSignal`; `luhn_check`/`iban_check`/`isbn_check`, `schema_validator`, `regex/range/enum_validator`, `totals_consistent` (pure-Python; reused by `ek/validate.py` #7) |
+| Signal — intrinsic (tier 2) | `ek/qe/signals.py` | `LogprobSignal` + aggregators (`geo_mean`/`length_normalized`/`min_prob`/`mean_prob`), `IntrinsicConfidenceSignal` |
+| Signal — agreement (tier 3) | `ek/qe/rover.py` | `rover()`, `AgreementSignal` (the ROVER flagship) |
+| Calibrate | `ek/qe/calibrate.py` | `PlattCalibrator` (default), `IsotonicCalibrator`, `TemperatureCalibrator`, `GroupCalibrator` (Mondrian); `expected_calibration_error`; `sklearn_calibrator`/`netcal_ece` opt-in |
+| Decide | `ek/qe/decide.py` | `CostSensitiveGate` (default), `ConformalGate` + `GroupConformalGate` (Mondrian), `RiskControlGate`; `risk_coverage_curve` |
+
+All built-ins are **pure-Python and dependency-free**; library backends
+(netcal/sklearn/MAPIE/crepes via `ek[calibration]`, uqlm via `ek[agreement]`) are
+opt-in behind `@requires_extra`. The `estimate_quality()` facade (`ek/facade.py`)
+already dispatches a value / `FieldEstimate` / whole `AnnotatedExtraction`,
+enforces calibrate-before-gate, auto-runs ROVER from `sources`, and is idempotent
+(it builds fresh `FieldEstimate`s — do not mutate the input in any new component).
+Built-ins register by name under `signals`/`aggregators`/`checks`/`calibrators`/
+`policies`.
+
 Authoritative background: `misc/docs/ek_03 -- Reference-Free Quality Estimation,
 Confidence, Calibration & Selective Prediction.md` (this is THE report for this
 skill) and `misc/docs/ek_04 -- Post-Extraction Validation & Correction (incl.
