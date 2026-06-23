@@ -40,6 +40,15 @@ _NON_COMMERCIAL = (
 # Keep this list short and justified; it is the audited override.
 _ALLOWLIST: set[str] = set()
 
+# Name *prefixes* cleared as an audited override. The NVIDIA CUDA runtime wheels
+# (nvidia-cublas, nvidia-cudnn, nvidia-cuda-*, ...) are pulled transitively by the
+# permissive `torch` (BSD) when an extra needs it (e.g. uqlm in [agreement]). They
+# carry an NVIDIA "proprietary" license field, but they are NVIDIA's redistributable
+# GPU *runtime* -- hardware-driver libraries the end user installs for acceleration,
+# not a copyleft/non-commercial library ek ships. A CPU-only install omits them
+# entirely. They are not a redistribution-license risk, so they are cleared here.
+_ALLOWLIST_PREFIXES: tuple[str, ...] = ("nvidia-", "nvidia_")
+
 
 def _is_violation(license_text: str) -> str:
     up = license_text.upper()
@@ -56,7 +65,7 @@ def main(path: str) -> int:
         for row in csv.DictReader(f):
             name = (row.get("Name") or "").strip()
             license_text = (row.get("License") or "").strip()
-            if name in _ALLOWLIST:
+            if name in _ALLOWLIST or name.lower().startswith(_ALLOWLIST_PREFIXES):
                 continue
             reason = _is_violation(license_text)
             if reason:

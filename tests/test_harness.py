@@ -1,13 +1,54 @@
 import math
 
+import pytest
+
 from ek.harness import (
     cohen_kappa,
     evaluate_store,
+    krippendorff_alpha,
     load_baseline,
     percent_agreement,
     regression_gate,
     save_baseline,
 )
+
+# Canonical Krippendorff example (Krippendorff 2011); values verified against the
+# reference `krippendorff` package to < 1e-9 for every measurement level.
+_CANONICAL = [
+    [1, 2, 3, 3, 2, 1, 4, 1, 2, None, None, None],
+    [1, 2, 3, 3, 2, 2, 4, 1, 2, 5, None, 3],
+    [None, 3, 3, 3, 2, 3, 4, 2, 2, 5, 1, None],
+    [1, 2, 3, 3, 2, 4, 4, 1, 2, 5, 1, None],
+]
+
+
+def test_krippendorff_alpha_canonical_values_all_levels():
+    expected = {
+        "nominal": 0.743421,
+        "ordinal": 0.815388,
+        "interval": 0.849107,
+        "ratio": 0.797403,
+    }
+    for level, want in expected.items():
+        assert math.isclose(krippendorff_alpha(_CANONICAL, level=level), want, abs_tol=1e-6)
+
+
+def test_krippendorff_alpha_perfect_and_total_disagreement():
+    assert krippendorff_alpha([[1, 2, 3, 1], [1, 2, 3, 1]]) == 1.0  # perfect
+    # two raters flip every label between two categories -> systematic disagreement
+    assert krippendorff_alpha([[1, 1, 1, 1], [2, 2, 2, 2]]) < 0
+
+
+def test_krippendorff_alpha_handles_missing_and_nan():
+    # None and NaN are both "unlabelled"; units with < 2 ratings are ignored.
+    data = [[1, 2, None, 4], [1, 2, 3, float("nan")]]
+    # only units 0 and 1 are pairable, both in perfect agreement
+    assert krippendorff_alpha(data) == 1.0
+
+
+def test_krippendorff_alpha_unknown_level_raises():
+    with pytest.raises(ValueError, match="level"):
+        krippendorff_alpha(_CANONICAL, level="bogus")
 
 
 def _gold():
