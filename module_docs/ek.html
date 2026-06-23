@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek &mdash; ek 0.1.0 documentation</title>
+  <title>ek &mdash; ek 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -1359,10 +1359,20 @@ Non-finite probs are skipped; out-of-range probs are clamped into <code class="d
 <dl class="py function">
 <dt class="sig sig-object py" id="ek.krippendorff_alpha">
 <span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">krippendorff_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reliability_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'nominal'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/harness.html#krippendorff_alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.krippendorff_alpha" title="Link to this definition"></a></dt>
-<dd><p>Krippendorff’s alpha via the <code class="docutils literal notranslate"><span class="pre">krippendorff</span></code> package (<code class="docutils literal notranslate"><span class="pre">ek[harness]</span></code> extra).</p>
-<p>The most general IAA coefficient – any number of raters, any measurement level,
-handles missing data (use <code class="docutils literal notranslate"><span class="pre">None</span></code>/<code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> for unlabelled). <code class="docutils literal notranslate"><span class="pre">reliability_data</span></code>
-is one row per rater, one column per item.</p>
+<dd><p>Krippendorff’s alpha – the general inter-annotator agreement coefficient.</p>
+<p>Pure-Python (no dependency, permissive core): any number of raters, any
+measurement <code class="docutils literal notranslate"><span class="pre">level</span></code> (<code class="docutils literal notranslate"><span class="pre">&quot;nominal&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ordinal&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;interval&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ratio&quot;</span></code>),
+and missing data (use <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">float('nan')</span></code> for an unlabelled cell).
+<code class="docutils literal notranslate"><span class="pre">reliability_data</span></code> is one row per rater, one column per item. Alpha is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>
+for perfect agreement, <code class="docutils literal notranslate"><span class="pre">0.0</span></code> at chance, and goes negative for systematic
+disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
+observed vs expected disagreement under the level-specific difference metric.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>   <span class="c1"># two raters, perfect agreement</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">krippendorff_alpha</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">

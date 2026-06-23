@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.registry &mdash; ek 0.1.0 documentation</title>
+  <title>ek.registry &mdash; ek 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -214,7 +214,9 @@
         <span class="n">group</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ek.</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="c1"># Python &gt;=3.10 always exposes EntryPoints.select(); the .get fallback is</span>
         <span class="c1"># only defensive for unusual backports.</span>
-        <span class="n">selected</span> <span class="o">=</span> <span class="n">eps</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">eps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">eps</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="s2">&quot;select&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">eps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span>
         <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">selected</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">register</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">ep</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">ep</span><span class="o">.</span><span class="n">load</span><span class="p">())</span>
@@ -238,9 +240,7 @@
 
 <div class="viewcode-block" id="requires_extra">
 <a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.requires_extra">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">requires_extra</span><span class="p">(</span>
-    <span class="n">extra</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">packages</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">requires_extra</span><span class="p">(</span><span class="n">extra</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">packages</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator: fail with an actionable install hint if an extra is missing.</span>
 
 <span class="sd">    The wrapped callable runs only once every package in ``packages`` imports; the</span>
@@ -300,7 +300,6 @@
     <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pydantic&quot;</span><span class="p">],</span>
     <span class="s2">&quot;constrained&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;outlines&quot;</span><span class="p">],</span>
     <span class="s2">&quot;agreement&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;uqlm&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;harness&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;krippendorff&quot;</span><span class="p">],</span>
     <span class="s2">&quot;hitl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;label_studio_sdk&quot;</span><span class="p">],</span>
     <span class="s2">&quot;monitoring&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;nannyml&quot;</span><span class="p">],</span>
 <span class="p">}</span>
@@ -308,7 +307,9 @@
 
 <div class="viewcode-block" id="check_requirements">
 <a class="viewcode-back" href="../../module_docs/ek/registry.html#ek.check_requirements">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Report what an OCR engine or feature extra needs, without raising.</span>
 
 <span class="sd">    For an OCR ``engine`` and an installed ``ocracy``, defers to ``ocracy``&#39;s own</span>

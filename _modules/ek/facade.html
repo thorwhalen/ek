@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.facade &mdash; ek 0.1.0 documentation</title>
+  <title>ek.facade &mdash; ek 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -304,7 +304,9 @@
     <span class="k">return</span> <span class="n">policy</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_run_signals</span><span class="p">(</span><span class="n">signals</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">failures</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_signals</span><span class="p">(</span>
+    <span class="n">signals</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">failures</span><span class="p">:</span> <span class="nb">list</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Call each injected signal on ``target``; merge output, *recording* any failure.</span>
 
 <span class="sd">    A failing signal must not abort the pipeline (the others still run), but it is</span>
@@ -321,10 +323,14 @@
                 <span class="n">raw_signals</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># keep the pipeline alive, but leave a trace</span>
             <span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;signal&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)})</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;estimate_quality: signal </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;estimate_quality: signal </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_run_validators</span><span class="p">(</span><span class="n">validators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">findings</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">failures</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_validators</span><span class="p">(</span>
+    <span class="n">validators</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">findings</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">failures</span><span class="p">:</span> <span class="nb">list</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run each validator on ``value``, recording (not swallowing) any that errors.</span>
 
 <span class="sd">    A throwing validator (e.g. a bad regex) is isolated like a failing signal -- the</span>
@@ -337,7 +343,9 @@
             <span class="n">findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="n">failures</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;validator&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">(</span><span class="n">exc</span><span class="p">)})</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;estimate_quality: validator </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;estimate_quality: validator </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">exc</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_base_confidence</span><span class="p">(</span><span class="n">estimate</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">raw_signals</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
@@ -429,7 +437,9 @@
     <span class="c1"># A bare callable in `sources` is almost certainly a Signal passed to the wrong</span>
     <span class="c1"># slot; a legitimate hypothesis is a str or OcrResult-shaped object (which may</span>
     <span class="c1"># itself be callable), so exempt those.</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">callable</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+        <span class="nb">callable</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sources</span>
+    <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="s2">&quot;estimate_quality: `sources` are alternative hypotheses &quot;</span>
             <span class="s2">&quot;(strings/OcrResult-shaped objects) to fuse with ROVER, not signal &quot;</span>
@@ -512,7 +522,9 @@
             <span class="n">raw_signals</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;agreement&quot;</span><span class="p">,</span> <span class="n">extraction_agreement</span><span class="p">)</span>
 
         <span class="n">findings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fe</span><span class="o">.</span><span class="n">findings</span> <span class="ow">or</span> <span class="p">())</span>
-        <span class="n">_run_validators</span><span class="p">(</span><span class="n">_field_validators</span><span class="p">(</span><span class="n">validators</span><span class="p">,</span> <span class="n">path</span><span class="p">),</span> <span class="n">fe</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">findings</span><span class="p">,</span> <span class="n">failures</span><span class="p">)</span>
+        <span class="n">_run_validators</span><span class="p">(</span>
+            <span class="n">_field_validators</span><span class="p">(</span><span class="n">validators</span><span class="p">,</span> <span class="n">path</span><span class="p">),</span> <span class="n">fe</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">findings</span><span class="p">,</span> <span class="n">failures</span>
+        <span class="p">)</span>
 
         <span class="n">base</span> <span class="o">=</span> <span class="n">_base_confidence</span><span class="p">(</span><span class="n">fe</span><span class="p">,</span> <span class="n">raw_signals</span><span class="p">)</span>
         <span class="n">group</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">node_type</span>
@@ -520,7 +532,9 @@
         <span class="n">any_calibrated</span> <span class="o">=</span> <span class="n">any_calibrated</span> <span class="ow">or</span> <span class="n">did_calibrate</span>
         <span class="n">decision</span> <span class="o">=</span> <span class="n">_decide</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">calibrated</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
         <span class="c1"># A hard verifier failure forces at least a flag even if confidence is high.</span>
-        <span class="k">if</span> <span class="n">decision</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">findings</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">decision</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">findings</span>
+        <span class="p">):</span>
             <span class="n">decision</span> <span class="o">=</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span>
 
         <span class="c1"># Build a fresh FieldEstimate rather than mutate the input, so re-running</span>
@@ -536,7 +550,9 @@
         <span class="n">all_findings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">findings</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">calibrated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calibrated</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">decision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">worst</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_DECISION_RANK</span><span class="p">[</span><span class="n">decision</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">_DECISION_RANK</span><span class="p">[</span><span class="n">worst</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">decision</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">worst</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">_DECISION_RANK</span><span class="p">[</span><span class="n">decision</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">_DECISION_RANK</span><span class="p">[</span><span class="n">worst</span><span class="p">]</span>
+        <span class="p">):</span>
             <span class="n">worst</span> <span class="o">=</span> <span class="n">decision</span>
 
     <span class="n">provenance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;n_fields&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">per_field</span><span class="p">),</span> <span class="s2">&quot;calibrated&quot;</span><span class="p">:</span> <span class="n">any_calibrated</span><span class="p">}</span>
@@ -546,7 +562,9 @@
         <span class="n">calibrated_confidence</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">confidences</span><span class="p">)</span> <span class="k">if</span> <span class="n">confidences</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">decision</span><span class="o">=</span><span class="n">worst</span><span class="p">,</span>
         <span class="n">findings</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">all_findings</span><span class="p">),</span>
-        <span class="n">raw_signals</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;agreement&quot;</span><span class="p">:</span> <span class="n">extraction_agreement</span><span class="p">}</span> <span class="k">if</span> <span class="n">extraction_agreement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{},</span>
+        <span class="n">raw_signals</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;agreement&quot;</span><span class="p">:</span> <span class="n">extraction_agreement</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">extraction_agreement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="p">{},</span>
         <span class="n">provenance</span><span class="o">=</span><span class="n">provenance</span><span class="p">,</span>
         <span class="n">per_field</span><span class="o">=</span><span class="n">per_field</span><span class="p">,</span>
     <span class="p">)</span>
