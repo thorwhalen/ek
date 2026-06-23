@@ -49,9 +49,16 @@ _SENTINEL = object()
 # ---------------------------------------------------------------------------
 
 
+def _finite_logps(logps: Sequence[float]) -> list:
+    """Drop non-finite log-probabilities (a NaN/inf would poison every aggregate)
+    and clamp positives to ``0`` -- a valid ``log p`` is ``<= 0`` (``p <= 1``)."""
+    return [min(float(lp), 0.0) for lp in logps if math.isfinite(float(lp))]
+
+
 @register("aggregators", "geo_mean")
 def geo_mean(logps: Sequence[float]) -> float:
     """Geometric mean of token probabilities, ``exp(mean log p)`` (perplexity-inverse)."""
+    logps = _finite_logps(logps)
     if not logps:
         return 1.0
     return math.exp(sum(logps) / len(logps))
@@ -60,6 +67,7 @@ def geo_mean(logps: Sequence[float]) -> float:
 @register("aggregators", "length_normalized")
 def length_normalized(logps: Sequence[float], *, alpha: float = DEFAULT_LENGTH_ALPHA) -> float:
     """Length-normalised score ``exp(Σ log p / T**alpha)`` (tunable length penalty)."""
+    logps = _finite_logps(logps)
     t = len(logps)
     if t == 0:
         return 1.0
@@ -69,6 +77,7 @@ def length_normalized(logps: Sequence[float], *, alpha: float = DEFAULT_LENGTH_A
 @register("aggregators", "min")
 def min_prob(logps: Sequence[float]) -> float:
     """Weakest-token probability ``exp(min log p)`` -- catches one bad character."""
+    logps = _finite_logps(logps)
     if not logps:
         return 1.0
     return math.exp(min(logps))
@@ -77,6 +86,7 @@ def min_prob(logps: Sequence[float]) -> float:
 @register("aggregators", "mean")
 def mean_prob(logps: Sequence[float]) -> float:
     """Arithmetic mean of token probabilities ``mean(exp(log p))``."""
+    logps = _finite_logps(logps)
     if not logps:
         return 1.0
     return sum(math.exp(lp) for lp in logps) / len(logps)
@@ -118,18 +128,30 @@ def _confidences_of(obj: Any) -> list:
 
     Prefers per-block confidences (``.blocks[i].confidence``); falls back to a
     single ``.mean_confidence``; otherwise treats ``obj`` as a sequence of numbers.
-    Null-safe: ``None`` confidences are dropped (the VLM/markdown case).
+    Null-safe: ``None`` and non-finite confidences are dropped (the VLM/markdown
+    case); the rest are clamped into the documented ``[0, 1]`` range.
     """
     blocks = getattr(obj, "blocks", None)
     if blocks:
-        confs = [getattr(b, "confidence", None) for b in blocks]
-        confs = [float(c) for c in confs if c is not None]
+        confs = _clean_confs(getattr(b, "confidence", None) for b in blocks)
         if confs:
             return confs
     mean_conf = getattr(obj, "mean_confidence", _SENTINEL)
     if mean_conf is not _SENTINEL:
-        return [] if mean_conf is None else [float(mean_conf)]
-    return [float(c) for c in obj if c is not None]
+        return _clean_confs([mean_conf])
+    return _clean_confs(obj)
+
+
+def _clean_confs(values: Any) -> list:
+    """Coerce to floats in ``[0, 1]``, dropping ``None`` and non-finite entries."""
+    out = []
+    for c in values:
+        if c is None:
+            continue
+        c = float(c)
+        if math.isfinite(c):
+            out.append(0.0 if c < 0.0 else 1.0 if c > 1.0 else c)
+    return out
 
 
 @dataclass

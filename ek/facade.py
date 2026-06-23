@@ -220,6 +220,22 @@ def _run_signals(signals: Iterable, target: Any, raw_signals: dict, failures: li
             warnings.warn(f"estimate_quality: signal {name!r} failed: {exc!r}", stacklevel=2)
 
 
+def _run_validators(validators: Iterable, value: Any, spec: Any, findings: list, failures: list) -> None:
+    """Run each validator on ``value``, recording (not swallowing) any that errors.
+
+    A throwing validator (e.g. a bad regex) is isolated like a failing signal -- the
+    others still run, and the failure is surfaced in provenance + a warning -- so one
+    misbehaving check cannot take down the whole estimate.
+    """
+    for i, v in enumerate(validators):
+        name = getattr(v, "__name__", f"validator_{i}")
+        try:
+            findings.extend(v(value, spec=spec))
+        except Exception as exc:
+            failures.append({"validator": name, "error": repr(exc)})
+            warnings.warn(f"estimate_quality: validator {name!r} failed: {exc!r}", stacklevel=2)
+
+
 def _base_confidence(estimate: Any, raw_signals: dict) -> Optional[float]:
     """A field's pre-calibration confidence: its own, else the mean of raw signals."""
     base = getattr(estimate, "confidence", None)
@@ -304,7 +320,10 @@ def estimate_quality(
 
     sources = list(sources)
     signals = list(signals)
-    if any(callable(s) for s in sources):
+    # A bare callable in `sources` is almost certainly a Signal passed to the wrong
+    # slot; a legitimate hypothesis is a str or OcrResult-shaped object (which may
+    # itself be callable), so exempt those.
+    if any(callable(s) and not (isinstance(s, str) or hasattr(s, "text")) for s in sources):
         raise TypeError(
             "estimate_quality: `sources` are alternative hypotheses "
             "(strings/OcrResult-shaped objects) to fuse with ROVER, not signal "
@@ -331,8 +350,7 @@ def estimate_quality(
         raw_signals["agreement"] = _agreement_score([value, *sources])
 
     findings = list(getattr(extraction, "findings", ()) or ())
-    for v in _flat_validators(validators):
-        findings.extend(v(value, spec=None))
+    _run_validators(_flat_validators(validators), value, None, findings, failures)
 
     base = _base_confidence(extraction, raw_signals)
     calibrated, did_calibrate = _calibrate(calibrator, base, None)
@@ -340,7 +358,7 @@ def estimate_quality(
 
     provenance = {"n_signals": len(raw_signals), "calibrated": did_calibrate}
     if failures:
-        provenance["signal_failures"] = failures
+        provenance["failures"] = failures
     return QualityReport(
         calibrated_confidence=calibrated,
         decision=decision,
@@ -370,6 +388,7 @@ def _estimate_annotated(
     all_findings: list = []
     confidences: list = []
     failures: list = []
+    any_calibrated = False
     worst: Optional[Decision] = None
 
     # At the extraction level there is no single primary text, so the provided
@@ -386,12 +405,12 @@ def _estimate_annotated(
             raw_signals.setdefault("agreement", extraction_agreement)
 
         findings = list(fe.findings or ())
-        for v in _field_validators(validators, path):
-            findings.extend(v(fe.value, spec=spec))
+        _run_validators(_field_validators(validators, path), fe.value, spec, findings, failures)
 
         base = _base_confidence(fe, raw_signals)
         group = path.node_type
-        calibrated, _ = _calibrate(calibrator, base, group)
+        calibrated, did_calibrate = _calibrate(calibrator, base, group)
+        any_calibrated = any_calibrated or did_calibrate
         decision = _decide(policy, calibrated, group)
         # A hard verifier failure forces at least a flag even if confidence is high.
         if decision is Decision.ACCEPT and any(f.severity is Severity.FLAG for f in findings):
@@ -413,9 +432,9 @@ def _estimate_annotated(
         if decision is not None and (worst is None or _DECISION_RANK[decision] > _DECISION_RANK[worst]):
             worst = decision
 
-    provenance = {"n_fields": len(per_field), "calibrated": calibrator is not None}
+    provenance = {"n_fields": len(per_field), "calibrated": any_calibrated}
     if failures:
-        provenance["signal_failures"] = failures
+        provenance["failures"] = failures
     return QualityReport(
         calibrated_confidence=min(confidences) if confidences else None,
         decision=worst,

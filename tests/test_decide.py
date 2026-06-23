@@ -1,6 +1,9 @@
 """Tests for the selective-prediction decision stage (#5)."""
 
+import math
 import random
+
+import pytest
 
 from ek.base import Decision
 from ek.qe.decide import (
@@ -129,3 +132,44 @@ def test_policies_resolve_from_registry():
     assert get("policies", "conformal") is ConformalGate
     assert get("policies", "risk_control") is RiskControlGate
     assert get("policies", "group_conformal") is GroupConformalGate
+
+
+def test_split_conformal_quantile_validates_alpha():
+    scores = [0.1, 0.2, 0.3, 0.4, 0.5]
+    for bad in (-0.1, 1.2, 2.0):
+        with pytest.raises(ValueError, match="alpha"):
+            split_conformal_quantile(scores, bad)
+    # alpha -> 1 collapses below every score (flag everything)
+    assert split_conformal_quantile(scores, 1.0) == -math.inf
+
+
+def test_conformal_gate_ignores_nan_in_calibration():
+    # A NaN confidence among correct items must not corrupt the threshold.
+    clean = ConformalGate(alpha=0.1).fit([0.6, 0.7, 0.8, 0.9], [True, True, True, True])
+    with_nan = ConformalGate(alpha=0.1).fit(
+        [0.6, 0.7, float("nan"), 0.8, 0.9], [True, True, True, True, True]
+    )
+    assert with_nan.q == clean.q
+    assert with_nan(0.95) is Decision.ACCEPT
+
+
+def test_gates_reject_non_finite_confidence():
+    for gate in (
+        CostSensitiveGate(rho=9.0),
+        ConformalGate().fit([0.8, 0.9], [True, True]),
+        RiskControlGate().fit([0.8, 0.9], [True, True]),
+    ):
+        with pytest.raises(ValueError, match="finite"):
+            gate(float("nan"))
+
+
+def test_risk_control_loss_bound_makes_gate_more_conservative():
+    # A loss with range > 1 needs loss_bound to keep the CRC slack correct; a larger
+    # bound -> a larger slack -> a stricter (higher) accept threshold on the same data.
+    rng = random.Random(5)
+    correct = [rng.random() < 0.7 for _ in range(500)]
+    probs = [min(1.0, max(0.0, rng.gauss(0.78 if c else 0.45, 0.13))) for c in correct]
+    loss = lambda c: 0.0 if c else 5.0  # noqa: E731
+    g1 = RiskControlGate(target=0.05, loss=loss, loss_bound=1.0).fit(probs, correct)
+    g5 = RiskControlGate(target=0.05, loss=loss, loss_bound=5.0).fit(probs, correct)
+    assert g5.lam >= g1.lam

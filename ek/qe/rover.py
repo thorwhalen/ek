@@ -60,6 +60,9 @@ DEFAULT_CONF_WEIGHT = 0.5
 #: slot) -- the lever for how readily a deletion wins.
 DEFAULT_NULL_CONF = 0.7
 
+#: Default per-hypothesis token cap for the O(N*l*L*L') aligner (DoS guard).
+DEFAULT_MAX_TOKENS = 5000
+
 
 def _as_units(hyp: Any, *, default_conf: float = DEFAULT_TOKEN_CONF) -> List[_Entry]:
     """Coerce one hypothesis to a list of ``(token, confidence)`` units.
@@ -234,6 +237,7 @@ def rover(
     conf_weight: float = DEFAULT_CONF_WEIGHT,
     null_conf: float = DEFAULT_NULL_CONF,
     tokenize: Optional[Callable[[Any], List[_Entry]]] = None,
+    max_tokens: Optional[int] = DEFAULT_MAX_TOKENS,
 ) -> RoverConsensus:
     """Align N hypotheses, vote per slot, and emit consensus + per-position agreement.
 
@@ -250,6 +254,9 @@ def rover(
             token at a slot) -- the lever for how readily a deletion wins.
         tokenize: Optional ``hypothesis -> [(token, confidence), ...]`` override; by
             default :func:`_as_units` handles strings/OcrResults/token lists.
+        max_tokens: Reject any hypothesis longer than this (the aligner is
+            ``O(N*l*L*L')``; an unbounded input is a quadratic time/memory DoS).
+            ``None`` disables the guard.
 
     Returns:
         A :class:`RoverConsensus` with the consensus ``tokens``/``text``, the per-slot
@@ -260,6 +267,15 @@ def rover(
     n = len(hyps)
     if n == 0:
         return RoverConsensus(n_engines=0)
+
+    if max_tokens is not None:
+        longest = max(len(h) for h in hyps)
+        if longest > max_tokens:
+            raise ValueError(
+                f"ROVER hypothesis has {longest} tokens (> max_tokens={max_tokens}); "
+                "the O(N*l*L*L') aligner is designed for a handful of short-to-medium "
+                "sequences. Pass max_tokens=<larger> (or None) to override deliberately."
+            )
 
     effective_conf_weight = conf_weight if use_confidence else 0.0
 
@@ -334,6 +350,7 @@ class AgreementSignal:
     conf_weight: float = DEFAULT_CONF_WEIGHT
     null_conf: float = DEFAULT_NULL_CONF
     tokenize: Optional[Callable[[Any], List[_Entry]]] = None
+    max_tokens: Optional[int] = DEFAULT_MAX_TOKENS
 
     def __call__(self, hypotheses: Iterable[Any]) -> float:
         return rover(
@@ -342,4 +359,5 @@ class AgreementSignal:
             conf_weight=self.conf_weight,
             null_conf=self.null_conf,
             tokenize=self.tokenize,
+            max_tokens=self.max_tokens,
         ).mean_agreement

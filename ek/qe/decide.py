@@ -56,6 +56,14 @@ def _clip01(x: float) -> float:
     return 0.0 if x < 0.0 else 1.0 if x > 1.0 else x
 
 
+def _finite(p: float, *, what: str = "confidence") -> float:
+    """Coerce to float and fail fast on a non-finite (NaN/inf) gate input."""
+    p = float(p)
+    if not math.isfinite(p):
+        raise ValueError(f"{what} must be finite, got {p!r}")
+    return p
+
+
 # ---------------------------------------------------------------------------
 # Cost-sensitive gate (the default; threshold from the cost ratio)
 # ---------------------------------------------------------------------------
@@ -90,7 +98,7 @@ class CostSensitiveGate:
         return _clip01(1.0 - 1.0 / self.rho) if self.rho > 0 else 0.0
 
     def __call__(self, confidence: float) -> Decision:
-        p = float(confidence)
+        p = _finite(confidence)
         # block_threshold == 0 (the default) disables the block band entirely; a
         # block is otherwise reserved for an explicit hard-fail floor.
         if self.block_threshold > 0.0 and p <= self.block_threshold:
@@ -108,8 +116,11 @@ def split_conformal_quantile(scores: Sequence[float], alpha: float) -> float:
 
     ``scores`` are nonconformity scores on an exchangeable calibration set. Returns
     ``+inf`` when ``n`` is too small to guarantee ``1 - alpha`` (so nothing is
-    flagged -- the honest behaviour at that sample size).
+    flagged -- the honest behaviour at that sample size), and ``-inf`` at the
+    ``alpha -> 1`` limit (flag everything).
     """
+    if not 0.0 <= alpha <= 1.0:
+        raise ValueError(f"alpha must be in [0, 1], got {alpha!r}")
     s = sorted(scores)
     n = len(s)
     if n == 0:
@@ -117,6 +128,8 @@ def split_conformal_quantile(scores: Sequence[float], alpha: float) -> float:
     k = math.ceil((n + 1) * (1.0 - alpha))
     if k > n:
         return math.inf
+    if k <= 0:  # alpha -> 1: the quantile collapses below every score
+        return -math.inf
     return s[k - 1]
 
 
@@ -141,8 +154,16 @@ class ConformalGate:
     _cal: List[float] = field(default_factory=list)
 
     def fit(self, probs: Sequence[float], correct: Sequence[bool]) -> "ConformalGate":
-        """Fit ``q`` from the nonconformity scores of the *correct* calibration items."""
-        self._cal = sorted(self.nonconformity(float(p)) for p, c in zip(probs, correct) if c)
+        """Fit ``q`` from the nonconformity scores of the *correct* calibration items.
+
+        Non-finite confidences are dropped (a single ``NaN`` would otherwise sort to
+        the end and corrupt the quantile, silently breaking the coverage guarantee).
+        """
+        self._cal = sorted(
+            self.nonconformity(float(p))
+            for p, c in zip(probs, correct)
+            if c and math.isfinite(float(p))
+        )
         self.q = split_conformal_quantile(self._cal, self.alpha)
         return self
 
@@ -156,7 +177,7 @@ class ConformalGate:
     def __call__(self, confidence: float) -> Decision:
         return (
             Decision.ACCEPT
-            if self.nonconformity(float(confidence)) <= self.q
+            if self.nonconformity(_finite(confidence)) <= self.q
             else Decision.FLAG
         )
 
@@ -208,15 +229,20 @@ class RiskControlGate:
     Picks the *smallest* threshold ``lambda`` (the most coverage) whose finite-sample
     risk bound is at or below ``target``. The controlled quantity is
     ``E[ loss(item) * 1(accepted) ]`` -- with the default 0/1 loss, the population
-    rate of accepted-yet-wrong items. ``loss`` may be any monotone loss.
+    rate of accepted-yet-wrong items.
 
     Args:
         target: Upper bound on the accepted-error rate (e.g. ``0.05``).
-        loss: ``correct -> loss``; default ``0`` if correct else ``1``.
+        loss: ``correct -> loss`` in ``[0, loss_bound]``; default ``0`` if correct
+            else ``1``. Any monotone loss bounded by ``loss_bound`` works.
+        loss_bound: The loss's upper bound ``B`` -- the CRC finite-sample slack is
+            ``+B/(n+1)``. Must match ``loss``'s range or the guarantee is invalid;
+            keep the default ``1.0`` for the 0/1 loss.
     """
 
     target: float = DEFAULT_RISK_TARGET
     loss: Callable[[bool], float] = lambda correct: 0.0 if correct else 1.0
+    loss_bound: float = 1.0
     lam: float = 1.0
 
     def fit(self, probs: Sequence[float], correct: Sequence[bool]) -> "RiskControlGate":
@@ -230,7 +256,7 @@ class RiskControlGate:
         chosen = 1.0 + 1e-9  # accept nothing if no threshold satisfies the bound
         for lam in candidates:
             risk = sum(self.loss(c) for p, c in pairs if p >= lam) / n
-            bound = (n * risk + 1.0) / (n + 1)  # finite-sample slack, loss bound B=1
+            bound = (n * risk + self.loss_bound) / (n + 1)  # CRC slack +B/(n+1)
             if bound <= self.target:
                 chosen = lam
                 break
@@ -238,7 +264,7 @@ class RiskControlGate:
         return self
 
     def __call__(self, confidence: float) -> Decision:
-        return Decision.ACCEPT if float(confidence) >= self.lam else Decision.FLAG
+        return Decision.ACCEPT if _finite(confidence) >= self.lam else Decision.FLAG
 
 
 # ---------------------------------------------------------------------------

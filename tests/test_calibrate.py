@@ -113,6 +113,54 @@ def test_persistence_round_trip_all_kinds(make, fit_x):
         assert abs(loaded(s) - cal(s)) < 1e-12
 
 
+def test_calibrators_drop_non_finite_rows_in_fit():
+    scores, correct = _overconfident_dataset()
+    # inject a NaN and an inf score; the fit must ignore them, not crash/diverge.
+    dirty_s = scores + [float("nan"), float("inf")]
+    dirty_c = correct + [True, False]
+    clean = PlattCalibrator().fit(scores, correct)
+    dirty = PlattCalibrator().fit(dirty_s, dirty_c)
+    assert abs(dirty(0.8) - clean(0.8)) < 1e-9
+    iso = IsotonicCalibrator().fit(dirty_s, dirty_c)
+    assert 0.0 <= iso(0.8) <= 1.0
+
+
+def test_calibrator_raises_on_nan_input():
+    cal = PlattCalibrator().fit(*_overconfident_dataset())
+    with pytest.raises(ValueError, match="NaN"):
+        cal(float("nan"))
+
+
+def test_ece_validates_n_bins_and_skips_non_finite():
+    with pytest.raises(ValueError, match="n_bins"):
+        expected_calibration_error([0.5, 0.5], [True, False], n_bins=0)
+    # a NaN prob is skipped, not binned
+    assert expected_calibration_error([0.5, 0.5, float("nan")], [True, False, True]) == 0.0
+
+
+def test_isotonic_matches_sklearn_off_breakpoints():
+    sk = pytest.importorskip("sklearn.isotonic")
+    xs = [1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0]
+    ys = [1, 0, 0, 1, 1, 0, 1, 1, 1]
+    model = sk.IsotonicRegression(out_of_bounds="clip").fit(xs, ys)
+    cal = IsotonicCalibrator().fit(xs, [bool(y) for y in ys])
+    for v in (1.0, 1.5, 2.0, 2.5, 3.0):  # includes off-breakpoint interpolation
+        assert abs(cal(v) - float(model.predict([v])[0])) < 1e-9
+
+
+def test_load_calibrator_validates_record():
+    from ek.stores import json_store
+
+    with tempfile.TemporaryDirectory() as root:
+        store = json_store("calibrators", rootdir=root)
+        store["no-kind"] = {"a": 1.0, "b": 0.0}
+        store["bad-kind"] = {"kind": "nope"}
+        with pytest.raises(ValueError, match="malformed"):
+            load_calibrator("no-kind", rootdir=root)
+        with pytest.raises(ValueError, match="unknown calibrator kind"):
+            load_calibrator("bad-kind", rootdir=root)
+
+
 def test_group_calibrator_routes_per_group_with_pooled_fallback():
     # Group 'a' overconfident, group 'b' underconfident; calibrate separately.
     scores = [0.9] * 20 + [0.2] * 20

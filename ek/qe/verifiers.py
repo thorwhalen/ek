@@ -30,6 +30,7 @@ Example:
 
 from __future__ import annotations
 
+import math
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -41,6 +42,10 @@ from ..registry import register
 #: Default absolute tolerance for the cross-field totals reconciliation check.
 DEFAULT_TOTALS_TOL = 0.01
 
+#: ASCII digits only -- ``str.isdigit()`` also accepts Unicode digits (superscripts,
+#: Devanagari, ...) that ``int()`` then rejects or that corrupt a checksum.
+_ASCII_DIGITS = "0123456789"
+
 # ---------------------------------------------------------------------------
 # Checksum primitives (pure-Python; reusable across modules -> no underscore)
 # ---------------------------------------------------------------------------
@@ -48,7 +53,7 @@ DEFAULT_TOTALS_TOL = 0.01
 
 def luhn_check(number: Any) -> bool:
     """Luhn (mod-10) checksum: credit cards, IMEIs, some national IDs."""
-    digits = [int(c) for c in str(number) if c.isdigit()]
+    digits = [int(c) for c in str(number) if c in _ASCII_DIGITS]
     if len(digits) < 2:
         return False
     total = 0
@@ -64,12 +69,15 @@ def luhn_check(number: Any) -> bool:
 def iban_check(iban: Any) -> bool:
     """IBAN validity via the ISO 13616 / ISO 7064 mod-97 rule (must equal 1)."""
     s = "".join(str(iban).split()).upper()
-    if len(s) < 5 or not s[:2].isalpha() or not s[2:4].isdigit():
+    # ASCII alphanumerics only (ord(c)-55 is meaningful only for ASCII A-Z).
+    if len(s) < 5 or not all(c.isascii() and c.isalnum() for c in s):
+        return False
+    if not ("A" <= s[0] <= "Z" and "A" <= s[1] <= "Z"):
+        return False
+    if s[2] not in _ASCII_DIGITS or s[3] not in _ASCII_DIGITS:
         return False
     rearranged = s[4:] + s[:4]
-    converted = "".join(str(ord(c) - 55) if c.isalpha() else c for c in rearranged)
-    if not converted.isdigit():
-        return False
+    converted = "".join(str(ord(c) - 55) if "A" <= c <= "Z" else c for c in rearranged)
     return int(converted) % 97 == 1
 
 
@@ -82,7 +90,7 @@ def isbn10_check(value: Any) -> bool:
     for i, c in enumerate(s):
         if c == "X" and i == 9:
             v = 10
-        elif c.isdigit():
+        elif c in _ASCII_DIGITS:
             v = int(c)
         else:
             return False
@@ -93,7 +101,7 @@ def isbn10_check(value: Any) -> bool:
 def isbn13_check(value: Any) -> bool:
     """ISBN-13 / EAN-13 checksum (alternating 1/3 weights, mod-10)."""
     s = re.sub(r"[\s-]", "", str(value))
-    if len(s) != 13 or not s.isdigit():
+    if len(s) != 13 or not all(c in _ASCII_DIGITS for c in s):
         return False
     total = sum((1 if i % 2 == 0 else 3) * int(c) for i, c in enumerate(s))
     return total % 10 == 0
@@ -188,11 +196,17 @@ def enum_validator(
     members: Sequence[Any], *, field_name: str = "", layer: str = "enum"
 ) -> Callable[..., Iterable[Finding]]:
     """A :class:`~ek.base.Validator` that flags a value not in an allowed set."""
-    allowed = set(members)
+    # A list (not a set) so unhashable members/values never raise; membership is
+    # by ``==`` and an enum is small, so the linear scan is fine.
+    allowed = list(members)
 
     def validate(value: Any, *, spec: Optional[FieldSpec] = None) -> Iterable[Finding]:
         name = field_name or (spec.name if spec is not None else "")
-        if value not in allowed:
+        try:
+            inside = value in allowed
+        except TypeError:  # an unhashable/uncomparable value is simply not a member
+            inside = False
+        if not inside:
             yield Finding(field=name, layer=layer, severity=Severity.FLAG,
                           message=f"{value!r} not in {sorted(map(str, allowed))}")
 
@@ -258,6 +272,14 @@ def totals_consistent(
         total = float(record[total_key])
         parts = [float(record[k]) for k in present]
     except (TypeError, ValueError):
+        return
+    if not all(math.isfinite(x) for x in (total, *parts)):
+        yield Finding(
+            field=total_key,
+            layer=layer,
+            severity=Severity.FLAG,
+            message=f"{total_key} or its line items are non-finite (NaN/inf)",
+        )
         return
     if abs(total - sum(parts)) > tol:
         yield Finding(

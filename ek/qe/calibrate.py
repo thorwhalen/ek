@@ -62,7 +62,23 @@ def _sigmoid(z: float) -> float:
 
 
 def _clip01(p: float) -> float:
+    if math.isnan(p):
+        raise ValueError("calibrated probability is NaN (was the raw score non-finite?)")
     return 0.0 if p < 0.0 else 1.0 if p > 1.0 else p
+
+
+def _finite_pairs(scores: Sequence[float], correct: Sequence[bool]) -> list:
+    """``(float(score), correct)`` pairs, dropping rows whose score is non-finite.
+
+    A single ``NaN``/``inf`` raw score would otherwise corrupt a fit silently (Platt
+    diverges, isotonic gets a junk knot); drop them rather than poison the model.
+    """
+    out = []
+    for s, c in zip(scores, correct):
+        s = float(s)
+        if math.isfinite(s):
+            out.append((s, c))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -89,13 +105,15 @@ class PlattCalibrator:
 
     def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "PlattCalibrator":
         """Fit ``a, b`` to maximise the likelihood of ``correct`` given ``scores``."""
-        xs = [float(s) for s in scores]
-        n_pos = sum(1 for c in correct if c)
-        n_neg = len(correct) - n_pos
+        pairs = _finite_pairs(scores, correct)
+        xs = [x for x, _ in pairs]
+        cs = [c for _, c in pairs]
+        n_pos = sum(1 for c in cs if c)
+        n_neg = len(cs) - n_pos
         # Platt target smoothing (avoids 0/1 targets driving |a| to infinity).
         hi = (n_pos + 1.0) / (n_pos + 2.0)
         lo = 1.0 / (n_neg + 2.0)
-        ts = [hi if c else lo for c in correct]
+        ts = [hi if c else lo for c in cs]
         a, b = 0.0, math.log((n_pos + 1.0) / (n_neg + 1.0)) if n_neg else 0.0
         for _ in range(self.max_iter):
             g0 = g1 = h00 = h01 = h11 = 0.0
@@ -160,24 +178,32 @@ class IsotonicCalibrator:
         agg: dict = {}
         for s, c in zip(scores, correct):
             xv = float(s)
+            if not math.isfinite(xv):  # a NaN/inf score would corrupt the knots
+                continue
             sw = agg.setdefault(xv, [0.0, 0.0])
             sw[0] += 1.0 if c else 0.0
             sw[1] += 1.0
         if not agg:
             self.x, self.y = [], []
             return self
-        # Pool-adjacent-violators over the distinct-x blocks [sum, weight, x].
-        blocks: List[List[float]] = []
+        # Pool-adjacent-violators over distinct-x blocks, each tracking its member
+        # x's so EVERY distinct x stays a knot -- this matches sklearn's linear
+        # interpolation between unique-x points (not just the block right-edges).
+        blocks: List[list] = []  # [sum, weight, [x, ...]]
         for xv in sorted(agg):
             s_sum, w = agg[xv]
-            blocks.append([s_sum, w, xv])
+            blocks.append([s_sum, w, [xv]])
             while len(blocks) > 1 and blocks[-2][0] / blocks[-2][1] >= blocks[-1][0] / blocks[-1][1]:
-                s2, w2, x2 = blocks.pop()
+                s2, w2, xs2 = blocks.pop()
                 blocks[-1][0] += s2
                 blocks[-1][1] += w2
-                blocks[-1][2] = x2
-        self.x = [blk[2] for blk in blocks]
-        self.y = [blk[0] / blk[1] for blk in blocks]
+                blocks[-1][2].extend(xs2)
+        self.x, self.y = [], []
+        for s_sum, w, xlist in blocks:
+            mean = s_sum / w
+            for xv in xlist:
+                self.x.append(xv)
+                self.y.append(mean)
         return self
 
     def __call__(self, raw_score: float) -> float:
@@ -219,8 +245,9 @@ class TemperatureCalibrator:
 
     def fit(self, logits: Sequence[float], correct: Sequence[bool]) -> "TemperatureCalibrator":
         """Fit ``T`` by minimising NLL with a bounded 1-D search."""
-        zs = [float(z) for z in logits]
-        ys = [1.0 if c else 0.0 for c in correct]
+        pairs = _finite_pairs(logits, correct)
+        zs = [z for z, _ in pairs]
+        ys = [1.0 if c else 0.0 for _, c in pairs]
 
         def nll(t: float) -> float:
             total = 0.0
@@ -300,6 +327,29 @@ class GroupCalibrator:
 # ---------------------------------------------------------------------------
 
 
+def _binned(probs: Sequence[float], correct: Sequence[bool], n_bins: int):
+    """Bin ``(prob, correct)`` into ``n_bins`` equal-width bins of ``[0, 1]``.
+
+    Validates ``n_bins >= 1``; skips non-finite probs and clamps the rest into
+    ``[0, 1]`` before binning. Returns ``(bins, hits, n)``.
+    """
+    if n_bins < 1:
+        raise ValueError(f"n_bins must be >= 1, got {n_bins}")
+    bins: List[List[float]] = [[] for _ in range(n_bins)]
+    hits: List[List[float]] = [[] for _ in range(n_bins)]
+    n = 0
+    for p, c in zip(probs, correct):
+        p = float(p)
+        if not math.isfinite(p):
+            continue
+        pc = 0.0 if p < 0.0 else 1.0 if p > 1.0 else p
+        idx = min(int(pc * n_bins), n_bins - 1)
+        bins[idx].append(pc)
+        hits[idx].append(1.0 if c else 0.0)
+        n += 1
+    return bins, hits, n
+
+
 def expected_calibration_error(
     probs: Sequence[float], correct: Sequence[bool], *, n_bins: int = DEFAULT_N_BINS
 ) -> float:
@@ -307,16 +357,11 @@ def expected_calibration_error(
 
     Bins predictions by confidence into ``n_bins`` equal-width bins and averages
     ``|mean_confidence - accuracy|`` weighted by bin population. ``0`` is perfect.
+    Non-finite probs are skipped; out-of-range probs are clamped into ``[0, 1]``.
     """
-    if not probs:
+    bins, hits, n = _binned(probs, correct, n_bins)
+    if n == 0:
         return 0.0
-    n = len(probs)
-    bins: List[List[float]] = [[] for _ in range(n_bins)]
-    hits: List[List[float]] = [[] for _ in range(n_bins)]
-    for p, c in zip(probs, correct):
-        idx = min(int(p * n_bins), n_bins - 1)
-        bins[idx].append(p)
-        hits[idx].append(1.0 if c else 0.0)
     ece = 0.0
     for b, h in zip(bins, hits):
         if b:
@@ -330,12 +375,7 @@ def reliability_curve(
     probs: Sequence[float], correct: Sequence[bool], *, n_bins: int = DEFAULT_N_BINS
 ) -> List[dict]:
     """Per-bin ``{confidence, accuracy, count}`` for a reliability diagram."""
-    bins: List[List[float]] = [[] for _ in range(n_bins)]
-    hits: List[List[float]] = [[] for _ in range(n_bins)]
-    for p, c in zip(probs, correct):
-        idx = min(int(p * n_bins), n_bins - 1)
-        bins[idx].append(p)
-        hits[idx].append(1.0 if c else 0.0)
+    bins, hits, _ = _binned(probs, correct, n_bins)
     out = []
     for b, h in zip(bins, hits):
         if b:
@@ -413,7 +453,20 @@ def save_calibrator(calibrator: Any, name: str, *, rootdir: Optional[str] = None
 
 
 def load_calibrator(name: str, *, rootdir: Optional[str] = None) -> Any:
-    """Reconstruct a persisted calibrator by name (dispatched on its ``kind``)."""
+    """Reconstruct a persisted calibrator by name (dispatched on its ``kind``).
+
+    Validates the stored record so a malformed or unknown ``kind`` fails with an
+    actionable error rather than a raw ``KeyError`` or a load-then-crash-later.
+    """
     record = json_store("calibrators", rootdir=rootdir)[name]
-    cls = _CALIBRATORS[record["kind"]]
-    return cls.from_dict(record)
+    if not isinstance(record, dict) or "kind" not in record:
+        raise ValueError(f"calibrator record {name!r} is malformed (no 'kind'): {record!r}")
+    kind = record["kind"]
+    if kind not in _CALIBRATORS:
+        raise ValueError(
+            f"unknown calibrator kind {kind!r} in {name!r}; known: {sorted(_CALIBRATORS)}"
+        )
+    try:
+        return _CALIBRATORS[kind].from_dict(record)
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError(f"calibrator record {name!r} is missing/invalid fields: {exc}") from exc

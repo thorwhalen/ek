@@ -205,7 +205,29 @@ def test_signal_failure_is_recorded_not_swallowed():
 
     with pytest.warns(UserWarning, match="kaboom"):
         report = estimate_quality("x", signals=[boom])
-    assert report.provenance["signal_failures"][0]["signal"] == "boom"
+    assert report.provenance["failures"][0]["signal"] == "boom"
+
+
+def test_failing_validator_is_recorded_not_swallowed():
+    def bad_validator(value, *, spec=None):
+        raise ValueError("regex blew up")
+        yield  # pragma: no cover (makes it a generator)
+
+    with pytest.warns(UserWarning, match="regex blew up"):
+        report = estimate_quality("x", validators=[bad_validator])
+    assert report.provenance["failures"][0]["validator"] == "bad_validator"
+
+
+def test_callable_ocrresult_source_is_not_rejected():
+    class CallableOcr:
+        text = "the cat sat"
+
+        def __call__(self):  # an OcrResult-shaped object that also happens to be callable
+            return self.text
+
+    obj = CallableOcr()
+    report = estimate_quality("the cat sat", sources=[obj, "the cat sat"])
+    assert "agreement" in report.raw_signals  # not rejected as a stray signal callable
 
 
 def test_calibrator_is_applied_in_facade():

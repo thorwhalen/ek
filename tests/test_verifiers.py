@@ -90,6 +90,36 @@ def test_cross_field_totals_consistency():
     assert list(totals_consistent({"total": 5}, total_key="total", item_keys=["a"])) == []
 
 
+def test_checksums_reject_unicode_digits_without_crashing():
+    # '²' passes str.isdigit() but int('²') raises; Arabic-Indic '٧' is a Unicode
+    # digit too. Restricting to ASCII means these are ignored, never a crash.
+    assert luhn_check("7992739871²") is False        # would have crashed before
+    assert luhn_check("²²") is False                  # no ASCII digits -> invalid
+    assert isbn13_check("978030640615٧") is False     # Arabic-Indic 7 not ASCII
+    assert iban_check("GB82 WEST 1234 5698 7654 3²") is False
+    # plain-ASCII validity still holds
+    assert luhn_check("79927398713") is True
+
+
+def test_totals_consistent_flags_non_finite_total():
+    findings = list(
+        totals_consistent({"total": float("inf"), "a": 1.0}, total_key="total", item_keys=["a"])
+    )
+    assert len(findings) == 1
+    assert "non-finite" in findings[0].message
+
+
+def test_enum_validator_handles_unhashable_value_and_members():
+    # An unhashable value (a list) must not crash set membership; it is simply
+    # flagged as not-in-set.
+    v = enum_validator(["a", "b"])
+    assert len(list(v(["x"]))) == 1
+    # unhashable members are fine too (list-based membership)
+    v2 = enum_validator([["a"], ["b"]])
+    assert list(v2(["a"])) == []
+    assert len(list(v2(["z"]))) == 1
+
+
 def test_verifier_signal_fraction_and_findings():
     v = VerifierSignal([checksum_validator("luhn"), regex_validator(r"\d+")])
     assert v("79927398713") == 1.0           # both checks pass

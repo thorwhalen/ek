@@ -140,3 +140,14 @@ def test_order_dependence_does_not_crash():
     # ROVER's incremental alignment is order-dependent (documented); assert only
     # that every ordering yields a valid consensus string without crashing.
     assert all(isinstance(t, str) for t in texts)
+
+
+def test_max_tokens_guards_the_quadratic_aligner():
+    import pytest
+
+    long_hyp = " ".join(["a"] * 50)
+    with pytest.raises(ValueError, match="max_tokens"):
+        rover([long_hyp, long_hyp], max_tokens=10)
+    # raising the cap (or disabling it) lets it through
+    assert rover([long_hyp, long_hyp], max_tokens=100).n_engines == 2
+    assert rover([long_hyp], max_tokens=None).n_engines == 1
