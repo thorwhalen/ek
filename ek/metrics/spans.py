@@ -184,7 +184,9 @@ class SpanF1Metric:
         # empty/empty is perfect; empty gold -> all preds spurious; empty pred -> all
         # gold missed.
         if not gold and not pred:
-            return self._nervaluate_score(cor=0, inc=0, par=0, mis=0, spu=0, possible=0, actual=0)
+            return self._nervaluate_score(
+                cor=0, inc=0, par=0, mis=0, spu=0, possible=0, actual=0
+            )
         if not gold:
             return self._nervaluate_score(
                 cor=0, inc=0, par=0, mis=0, spu=len(pred), possible=0, actual=len(pred)
@@ -205,17 +207,23 @@ class SpanF1Metric:
         # plain dict (older) of the COR/INC/PAR/MIS/SPU counts.
         get = (lambda k: r[k]) if isinstance(r, dict) else (lambda k: getattr(r, k))
         return self._nervaluate_score(
-            cor=get("correct"), inc=get("incorrect"), par=get("partial"),
-            mis=get("missed"), spu=get("spurious"),
-            possible=get("possible"), actual=get("actual"),
+            cor=get("correct"),
+            inc=get("incorrect"),
+            par=get("partial"),
+            mis=get("missed"),
+            spu=get("spurious"),
+            possible=get("possible"),
+            actual=get("actual"),
         )
 
-    def _nervaluate_score(
-        self, *, cor, inc, par, mis, spu, possible, actual
-    ) -> Score:
+    def _nervaluate_score(self, *, cor, inc, par, mis, spu, possible, actual) -> Score:
         # nervaluate counts: COR/INC/PAR/MIS/SPU, with PAR worth half credit.
-        precision = (cor + 0.5 * par) / actual if actual else (1.0 if possible == 0 else 0.0)
-        recall = (cor + 0.5 * par) / possible if possible else (1.0 if actual == 0 else 0.0)
+        precision = (
+            (cor + 0.5 * par) / actual if actual else (1.0 if possible == 0 else 0.0)
+        )
+        recall = (
+            (cor + 0.5 * par) / possible if possible else (1.0 if actual == 0 else 0.0)
+        )
         f1 = _f1(precision, recall)
         return Score(
             value=f1,

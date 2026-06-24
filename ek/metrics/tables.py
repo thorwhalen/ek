@@ -373,7 +373,9 @@ def _align_pairs(score_matrix: list) -> list:
     for i in range(1, n_a + 1):
         for j in range(1, n_b + 1):
             dp[i][j] = max(
-                dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1] + score_matrix[i - 1][j - 1]
+                dp[i - 1][j],
+                dp[i][j - 1],
+                dp[i - 1][j - 1] + score_matrix[i - 1][j - 1],
             )
     pairs = []
     i, j = n_a, n_b
@@ -409,18 +411,30 @@ def _grits_overlap(grid_p: list, grid_g: list, *, structure_only: bool) -> float
         return grid[r][c] if (r < len(grid) and c < len(grid[r])) else None
 
     def m(a, b) -> float:
-        return 0.0 if (a is None or b is None) else _cell_match(a, b, structure_only=structure_only)
+        return (
+            0.0
+            if (a is None or b is None)
+            else _cell_match(a, b, structure_only=structure_only)
+        )
 
     # row-similarity[i][j] = best cell alignment of pred row i vs gold row j (over cols)
     row_sim = [
-        [_align_value(pc, gc, lambda c1, c2, i=i, j=j: m(at(grid_p, i, c1), at(grid_g, j, c2)))
-         for j in range(gr)]
+        [
+            _align_value(
+                pc, gc, lambda c1, c2, i=i, j=j: m(at(grid_p, i, c1), at(grid_g, j, c2))
+            )
+            for j in range(gr)
+        ]
         for i in range(pr)
     ]
     # col-similarity[i][j] = best cell alignment of pred col i vs gold col j (over rows)
     col_sim = [
-        [_align_value(pr, gr, lambda r1, r2, i=i, j=j: m(at(grid_p, r1, i), at(grid_g, r2, j)))
-         for j in range(gc)]
+        [
+            _align_value(
+                pr, gr, lambda r1, r2, i=i, j=j: m(at(grid_p, r1, i), at(grid_g, r2, j))
+            )
+            for j in range(gc)
+        ]
         for i in range(pc)
     ]
     row_pairs = _align_pairs(row_sim) if row_sim else []
@@ -456,9 +470,7 @@ class GritsMetric:
     ) -> Score:
         grid_p = Table.coerce(pred).as_grid()
         grid_g = Table.coerce(gold).as_grid()
-        overlap = _grits_overlap(
-            grid_p, grid_g, structure_only=self.structure_only
-        )
+        overlap = _grits_overlap(grid_p, grid_g, structure_only=self.structure_only)
         n_pred = _occupied(grid_p)
         n_gold = _occupied(grid_g)
         precision = overlap / n_pred if n_pred else (1.0 if n_gold == 0 else 0.0)
