@@ -92,6 +92,12 @@ from .metrics import (
     TypedGraphMetric,
     TypedNode,
 )
+from .ocr import (
+    engine_yields_tables,
+    has_table_structure,
+    resolve_table_parser,
+    table_from_ocr,
+)
 from .qe import (
     AgreementSignal,
     ConformalGate,
@@ -193,6 +199,11 @@ __all__ = [
     "GritsMetric",
     "Table",
     "Cell",
+    # OCR table recovery (OcrResult -> Table for TEDS/GriTS; ek[ocr] not required)
+    "table_from_ocr",
+    "has_table_structure",
+    "resolve_table_parser",
+    "engine_yields_tables",
     # reference-free QE (signals -> calibrate -> validate -> decide)
     "rover",
     "RoverConsensus",
