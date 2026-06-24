@@ -185,7 +185,10 @@ def validation_pipeline(
             collected.extend(layer_findings)
             if apply_corrections:
                 for finding in layer_findings:
-                    if finding.severity is Severity.CORRECT and finding.suggestion is not None:
+                    if (
+                        finding.severity is Severity.CORRECT
+                        and finding.suggestion is not None
+                    ):
                         value = finding.suggestion
                         break  # at most one correction applied per layer
             if stop_when(collected):
