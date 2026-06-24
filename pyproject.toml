@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ek"
-version = "0.1.6"
+version = "0.1.7"
 description = "ek (Evaluation Kit) -- a framework for building Knowledge Evaluation systems (evaluating information-extraction outputs; OCR as the noisiest special case)"
 readme = "README.md"
 requires-python = ">=3.10"
