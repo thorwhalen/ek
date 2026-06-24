@@ -71,12 +71,29 @@ def test_teds_struct_catches_structural_difference():
     assert s.value < 1.0
 
 
-def test_teds_corpus_is_globally_pooled():
-    a = "<table><tr><td>a</td><td>b</td></tr></table>"
-    b = "<table><tr><td>a</td><td>c</td></tr></table>"
-    report = evaluate([(a, a), (a, b)], metric="teds")
-    # total edits = 0 + 1, total max_nodes = 4 + 4 = 8 -> 1 - 1/8
-    assert math.isclose(report.aggregate, 1 - 1 / 8, rel_tol=1e-9)
+def test_teds_grades_multichar_content():
+    # Regression: full-TEDS cell cost was binary (a full 1 for any content diff). It
+    # must be GRADED by normalized string-edit distance: a 1-char slip < a full diff.
+    one = "<table><tr><td>tahle</td></tr></table>"
+    near = score(one, "<table><tr><td>table</td></tr></table>", metric="teds").value
+    far = score(one, "<table><tr><td>zzzzz</td></tr></table>", metric="teds").value
+    assert near > far          # graded, not binary
+    assert 0.0 < far < near < 1.0
+
+
+def test_teds_corpus_is_mean_of_per_sample():
+    # Use tables of DIFFERENT node counts so the per-sample mean != the pooled
+    # edit-rate (otherwise the test cannot tell mean from pooled).
+    a2 = "<table><tr><td>a</td><td>b</td></tr></table>"       # 4 nodes; edit 1 -> 0.75
+    a3 = "<table><tr><td>a</td><td>b</td><td>c</td></tr></table>"  # 5 nodes
+    b3 = "<table><tr><td>a</td><td>b</td><td>x</td></tr></table>"  # edit 1 -> 1 - 1/5 = 0.8
+    report = evaluate([(a2, "<table><tr><td>a</td><td>z</td></tr></table>"), (a3, b3)], metric="teds")
+    per_item = [s.value for s in report.scores]
+    mean = sum(per_item) / len(per_item)
+    pooled = 1 - (sum(s.detail["edit_distance"] for s in report.scores)
+                  / sum(s.detail["max_nodes"] for s in report.scores))
+    assert math.isclose(report.aggregate, mean, rel_tol=1e-9)
+    assert not math.isclose(mean, pooled, rel_tol=1e-6)  # mean genuinely != pooled
 
 
 # --- GriTS ------------------------------------------------------------------------
@@ -114,14 +131,54 @@ def test_grits_precision_recall_differ_on_size_mismatch():
     assert math.isclose(s.recall, 0.5, abs_tol=1e-9)
 
 
-def test_grits_corpus_micro_aggregation():
-    a = "<table><tr><td>a</td><td>b</td></tr></table>"
-    b = "<table><tr><td>a</td><td>c</td></tr></table>"
-    report = evaluate([(a, a), (a, b)], metric="grits_top")
-    # both structurally identical -> overlap pooled = full; aggregate 1.0
-    assert math.isclose(report.aggregate, 1.0, abs_tol=1e-9)
+def test_grits_handles_inserted_row_and_column():
+    # Regression (CRITICAL): the old top-left-origin overlap collapsed on any shift.
+    # Canonical GriTS (factored 2D-MSS) deletes the inserted blank row/col and matches
+    # the 3x3 substructure: 2*9/(9+12) = 0.857.
+    gold = Table.from_grid([["a", "b", "c"], ["d", "e", "f"], ["g", "h", "i"]])
+    ins_row = Table.from_grid([["", "", ""], ["a", "b", "c"], ["d", "e", "f"], ["g", "h", "i"]])
+    ins_col = Table.from_grid([["", "a", "b", "c"], ["", "d", "e", "f"], ["", "g", "h", "i"]])
+    assert math.isclose(GritsMetric()(ins_row, gold).value, 2 * 9 / (9 + 12), rel_tol=1e-6)
+    assert math.isclose(GritsMetric()(ins_col, gold).value, 2 * 9 / (9 + 12), rel_tol=1e-6)
+
+
+def test_grits_handles_row_rotation():
+    gold = Table.from_grid([["a", "b", "c"], ["d", "e", "f"], ["g", "h", "i"]])
+    rotated = Table.from_grid([["d", "e", "f"], ["g", "h", "i"], ["a", "b", "c"]])
+    # best monotonic alignment matches 2 of 3 rows -> 2*6/(9+9) = 0.667
+    assert math.isclose(GritsMetric()(rotated, gold).value, 2 / 3, rel_tol=1e-6)
+
+
+def test_grits_corpus_micro_aggregation_is_not_mean():
+    # Different-shape tables so pooled overlap/counts diverge from the per-table mean.
+    a = Table.from_grid([["a", "b"], ["c", "d"]])
+    half = Table.from_grid([["a", "b"]])  # half the gold recovered
+    report = evaluate([(a, a), (half, a)], metric="grits_top")
+    per_item = [s.value for s in report.scores]
+    mean = sum(per_item) / len(per_item)
+    assert not math.isclose(report.aggregate, mean, rel_tol=1e-6)  # micro != mean
 
 
 def test_empty_tables_are_perfect():
     s = GritsMetric()(Table(), Table())
     assert s.value == 1.0
+
+
+# --- HTML parser robustness (regression for silent cell/row drops) ----------------
+
+
+def test_html_parser_tolerates_missing_close_tags():
+    # No </td> / </tr> closes -- a real-world messy table. Cells must not be dropped.
+    t = Table.from_html("<table><tr><td>a<td>b<tr><td>c<td>d</table>")
+    assert [[c.text for c in row] for row in t.rows] == [["a", "b"], ["c", "d"]]
+
+
+def test_html_parser_ignores_nested_table_structure():
+    # A nested table's rows/cells must not corrupt the outer row stream.
+    t = Table.from_html(
+        "<table><tr><td>outer<table><tr><td>inner</td></tr></table></td>"
+        "<td>z</td></tr></table>"
+    )
+    assert len(t.rows) == 1
+    assert len(t.rows[0]) == 2  # exactly the two OUTER cells
+    assert t.rows[0][1].text == "z"

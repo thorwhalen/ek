@@ -86,6 +86,15 @@ _SEQEVAL_SCHEMES = (MatchScheme.SEQEVAL_CONLL, MatchScheme.SEQEVAL_STRICT)
 # Tagging scheme name -> seqeval scheme class (resolved lazily inside the call).
 _TAGGING_SCHEMES = ("IOB2", "IOBES", "BILOU", "IOB1", "IOE1", "IOE2")
 
+# nervaluate's result keys differ from our enum values: its "type" scheme is keyed
+# "ent_type" (using "type" raises KeyError on every TYPE-scheme call).
+_NERV_KEY = {
+    MatchScheme.STRICT: "strict",
+    MatchScheme.EXACT: "exact",
+    MatchScheme.PARTIAL: "partial",
+    MatchScheme.TYPE: "ent_type",
+}
+
 
 class SpanF1Metric:
     """Entity/slot precision/recall/F1 under an **explicit** :class:`MatchScheme`.
@@ -130,15 +139,20 @@ class SpanF1Metric:
 
     @requires_extra("metrics", packages=["seqeval"])
     def _seqeval(self, pred: Sequence[str], gold: Sequence[str]) -> Score:
-        from seqeval.metrics.sequence_labeling import get_entities
-
-        # seqeval works on a list of sentences; we score one tag sequence per call.
-        gold_ents = set(get_entities(list(gold)))
-        pred_ents = set(get_entities(list(pred)))
+        # CONLL = lenient conlleval decoding; STRICT = scheme-validated entities
+        # (a malformed sequence for the chosen tagging scheme yields no entity), so
+        # the two genuinely differ -- which is the whole point of the strict mode.
         if self.scheme is MatchScheme.SEQEVAL_STRICT:
-            # Strict mode rejects malformed tag sequences for the chosen scheme; we
-            # still derive TP/FP/FN from the decoded entities (boundary + type).
-            pass
+            from seqeval import scheme as _seqeval_scheme
+
+            scheme_cls = getattr(_seqeval_scheme, self.tagging_scheme)
+            gold_ents = self._strict_entities(gold, scheme_cls)
+            pred_ents = self._strict_entities(pred, scheme_cls)
+        else:
+            from seqeval.metrics.sequence_labeling import get_entities
+
+            gold_ents = set(get_entities(list(gold)))
+            pred_ents = set(get_entities(list(pred)))
         tp = len(gold_ents & pred_ents)
         fp = len(pred_ents - gold_ents)
         fn = len(gold_ents - pred_ents)
@@ -146,17 +160,60 @@ class SpanF1Metric:
             tp=tp, fp=fp, fn=fn, detail={"backend": "seqeval"}
         )
 
+    @staticmethod
+    def _strict_entities(tags: Sequence[str], scheme_cls) -> set:
+        """Scheme-validated ``(tag, start, end)`` entities for one tag sequence.
+
+        A sequence that does not conform to the chosen tagging scheme (e.g. an ``E-``
+        prefix under IOB2) has **no** valid strict entities -- seqeval raises, so we
+        treat it as empty rather than crashing a corpus evaluation on one malformed
+        document (invalid predictions then earn nothing, as strict scoring intends).
+        """
+        from seqeval.scheme import Entities
+
+        try:
+            decoded = Entities([list(tags)], scheme_cls).entities[0]
+        except ValueError:
+            return set()
+        return {(e.tag, e.start, e.end) for e in decoded}
+
     @requires_extra("metrics", packages=["nervaluate"])
     def _nervaluate(self, pred: Sequence, gold: Sequence) -> Score:
+        gold, pred = list(gold), list(pred)
+        # nervaluate is ill-defined / raises on empty inputs, so handle them here:
+        # empty/empty is perfect; empty gold -> all preds spurious; empty pred -> all
+        # gold missed.
+        if not gold and not pred:
+            return self._nervaluate_score(cor=0, inc=0, par=0, mis=0, spu=0, possible=0, actual=0)
+        if not gold:
+            return self._nervaluate_score(
+                cor=0, inc=0, par=0, mis=0, spu=len(pred), possible=0, actual=len(pred)
+            )
+        if not pred:
+            return self._nervaluate_score(
+                cor=0, inc=0, par=0, mis=len(gold), spu=0, possible=len(gold), actual=0
+            )
+
         from nervaluate import Evaluator
 
-        tags = sorted({s["label"] for s in list(gold) + list(pred)})
-        result = Evaluator([list(gold)], [list(pred)], tags=tags).evaluate()
-        r = result["overall"][self.scheme.value]
+        tags = sorted({s["label"] for s in gold + pred})
+        ev = Evaluator([gold], [pred], tags=tags).evaluate()
+        result = ev[0] if isinstance(ev, tuple) else ev  # some versions return a tuple
+        overall = result.get("overall", result)
+        r = overall[_NERV_KEY[self.scheme]]
+        # version-robust: nervaluate returns an EvaluationResult object (newer) or a
+        # plain dict (older) of the COR/INC/PAR/MIS/SPU counts.
+        get = (lambda k: r[k]) if isinstance(r, dict) else (lambda k: getattr(r, k))
+        return self._nervaluate_score(
+            cor=get("correct"), inc=get("incorrect"), par=get("partial"),
+            mis=get("missed"), spu=get("spurious"),
+            possible=get("possible"), actual=get("actual"),
+        )
+
+    def _nervaluate_score(
+        self, *, cor, inc, par, mis, spu, possible, actual
+    ) -> Score:
         # nervaluate counts: COR/INC/PAR/MIS/SPU, with PAR worth half credit.
-        cor, inc, par = r.correct, r.incorrect, r.partial
-        mis, spu = r.missed, r.spurious
-        possible, actual = r.possible, r.actual
         precision = (cor + 0.5 * par) / actual if actual else (1.0 if possible == 0 else 0.0)
         recall = (cor + 0.5 * par) / possible if possible else (1.0 if actual == 0 else 0.0)
         f1 = _f1(precision, recall)
@@ -205,8 +262,16 @@ class SpanF1Metric:
 
         seqeval schemes carry TP/FP/FN; nervaluate schemes carry COR/INC/PAR/MIS/SPU
         (PAR worth half). Both micro-average by summing counts globally -- never a
-        mean of per-document F1s.
+        mean of per-document F1s. The two backends' counts are not commensurable, so
+        a corpus mixing them is rejected rather than silently dropping one.
         """
+        backends = {s.detail.get("backend") for s in scores if s.detail.get("backend")}
+        if len(backends) > 1:
+            raise ValueError(
+                f"Cannot micro-aggregate mixed span-F1 backends {sorted(backends)}; "
+                "their counts (TP/FP/FN vs COR/INC/PAR/MIS/SPU) are not commensurable. "
+                "Aggregate each backend/scheme separately."
+            )
         if any(s.detail.get("backend") == "nervaluate" for s in scores):
             cor = sum(s.detail.get("correct", 0) for s in scores)
             par = sum(s.detail.get("partial", 0) for s in scores)

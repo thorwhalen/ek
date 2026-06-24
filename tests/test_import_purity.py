@@ -33,7 +33,10 @@ _HEAVY = [
 
 def test_importing_ek_and_qe_stays_light():
     code = (
+        # Also import the metrics package and each metric module: their optional
+        # backends must be imported lazily (inside the metric), never at module load.
         "import sys, ek, ek.qe\n"
+        "import ek.metrics, ek.metrics.anls, ek.metrics.spans, ek.metrics.tables\n"
         f"heavy = {_HEAVY!r}\n"
         "bad = [m for m in heavy if m in sys.modules]\n"
         "assert not bad, 'heavy modules imported on `import ek`: ' + repr(bad)\n"

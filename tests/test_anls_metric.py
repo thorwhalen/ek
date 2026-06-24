@@ -60,3 +60,22 @@ def test_corpus_anls_is_mean_of_per_item():
 
 def test_aggregate_empty_is_nan():
     assert math.isnan(AnlsMetric().aggregate([]))
+
+
+def test_threshold_actually_changes_the_score():
+    # Regression: `threshold` used to be stored but never applied (a silent no-op).
+    # 'Helo Wrld' vs 'Hello World' has NLS ~0.818, between 0.5 and 0.9.
+    pred, gold = "Helo Wrld", "Hello World"
+    lo = AnlsMetric(threshold=0.5)(pred, gold).value
+    hi = AnlsMetric(threshold=0.9)(pred, gold).value
+    assert lo > 0.0           # 0.818 >= 0.5 -> kept
+    assert hi == 0.0          # 0.818 < 0.9 -> zeroed by the threshold
+    assert lo != hi           # the knob is functional
+
+
+def test_threshold_is_restored_after_the_call():
+    import anls_star.anls_star as _a
+
+    before = _a.ANLSTree.THRESHOLD
+    AnlsMetric(threshold=0.9)("Helo Wrld", "Hello World")
+    assert _a.ANLSTree.THRESHOLD == before  # process-global restored, no leakage

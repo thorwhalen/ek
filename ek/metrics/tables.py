@@ -132,8 +132,23 @@ class Table:
         return grid
 
 
+def _pos_int(value: Any) -> int:
+    """Parse a span attribute to an int ``>= 1`` (default 1 on missing/garbage)."""
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return 1
+    return n if n >= 1 else 1
+
+
 class _TableHTMLParser(HTMLParser):
-    """Minimal HTML-table parser: rows of :class:`Cell` s, span-aware (stdlib only)."""
+    """Span-aware HTML ``<table>`` parser (stdlib only), tolerant of real-world HTML.
+
+    Flushes the current cell on any new ``td``/``th`` start (implicit close) and on
+    ``</tr>``, appends a pending row on ``</table>`` (missing ``</tr>``), and only
+    treats the **outermost** table's structure -- a nested table's text flows into
+    the enclosing cell rather than corrupting the outer row/cell stream.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -142,11 +157,38 @@ class _TableHTMLParser(HTMLParser):
         self._cur_text: list[str] = []
         self._cur_attrs: dict = {}
         self._in_cell = False
+        self._table_depth = 0
+
+    def _flush_cell(self) -> None:
+        if self._in_cell:
+            cell = Cell(
+                text="".join(self._cur_text).strip(),
+                rowspan=_pos_int(self._cur_attrs.get("rowspan")),
+                colspan=_pos_int(self._cur_attrs.get("colspan")),
+            )
+            if self._cur_row is None:
+                self._cur_row = []
+            self._cur_row.append(cell)
+            self._in_cell = False
+            self._cur_text = []
+
+    def _flush_row(self) -> None:
+        self._flush_cell()
+        if self._cur_row:
+            self.rows.append(self._cur_row)
+        self._cur_row = None
 
     def handle_starttag(self, tag: str, attrs: list) -> None:
+        if tag == "table":
+            self._table_depth += 1
+            return
+        if self._table_depth != 1:
+            return  # nested-table structure is ignored; its text still flows into the cell
         if tag == "tr":
+            self._flush_row()
             self._cur_row = []
         elif tag in _DATA_CELLS:
+            self._flush_cell()  # implicit close of an unclosed previous cell
             self._in_cell = True
             self._cur_text = []
             self._cur_attrs = dict(attrs)
@@ -156,19 +198,17 @@ class _TableHTMLParser(HTMLParser):
             self._cur_text.append(data)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in _DATA_CELLS and self._in_cell:
-            cell = Cell(
-                text="".join(self._cur_text).strip(),
-                rowspan=int(self._cur_attrs.get("rowspan", 1) or 1),
-                colspan=int(self._cur_attrs.get("colspan", 1) or 1),
-            )
-            if self._cur_row is None:
-                self._cur_row = []
-            self._cur_row.append(cell)
-            self._in_cell = False
-        elif tag == "tr" and self._cur_row is not None:
-            self.rows.append(self._cur_row)
-            self._cur_row = None
+        if tag == "table":
+            if self._table_depth == 1:
+                self._flush_row()  # flush a row left open by a missing </tr>
+            self._table_depth = max(0, self._table_depth - 1)
+            return
+        if self._table_depth != 1:
+            return
+        if tag in _DATA_CELLS:
+            self._flush_cell()
+        elif tag == "tr":
+            self._flush_row()
 
 
 # ---------------------------------------------------------------------------
@@ -178,26 +218,31 @@ class _TableHTMLParser(HTMLParser):
 
 @dataclass
 class _TreeNode:
-    """A node in the table tree apted scores: a label plus ordered children."""
+    """A node in the table tree apted scores: a structural label, optional cell text,
+    and ordered children. Keeping ``text`` OFF the ``name`` lets the rename cost be
+    *graded* by content similarity (canonical TEDS) rather than a flat 0/1."""
 
     name: str
+    text: str = ""
     children: list = field(default_factory=list)
 
 
 def _table_tree(table: Table, *, structure_only: bool) -> _TreeNode:
-    """Map a :class:`Table` to the HTML-style tree TEDS edits.
+    """Map a :class:`Table` to the HTML-style tree TEDS edits (``table -> tr* -> td*``).
 
-    ``table -> tr* -> td*``; a cell's label encodes its span (always) and its text
-    (unless ``structure_only``), so a content edit costs one rename and a structural
-    edit (span/shape change) is a distinct rename.
+    The node ``name`` encodes only the *structure* (the tag and span ``td:RxC``); the
+    cell text rides on ``.text`` so a content difference is scored by the normalized
+    string-edit distance of the texts (graded, like canonical TEDS), while a span/
+    shape change is a full-cost structural rename. ``structure_only`` drops the text.
     """
     root = _TreeNode("table")
     for row in table.rows:
         tr = _TreeNode("tr")
         for cell in row:
             shape = f"td:{cell.rowspan}x{cell.colspan}"
-            label = shape if structure_only else f"{shape}:{cell.text}"
-            tr.children.append(_TreeNode(label))
+            tr.children.append(
+                _TreeNode(shape, text="" if structure_only else cell.text)
+            )
         root.children.append(tr)
     return root
 
@@ -227,8 +272,16 @@ class TedsMetric:
         from apted import APTED, Config
 
         class _Config(Config):
-            def rename(self, n1: _TreeNode, n2: _TreeNode) -> int:
-                return int(n1.name != n2.name)
+            def rename(self, n1: _TreeNode, n2: _TreeNode) -> float:
+                # A structural difference (tag/span) is a full-cost rename; same
+                # structure with different text costs the NORMALIZED string-edit
+                # distance of the cell text (canonical TEDS), so a one-char slip in a
+                # long cell costs a small fraction, not a full 1.
+                if n1.name != n2.name:
+                    return 1.0
+                if n1.text == n2.text:
+                    return 0.0
+                return 1.0 - _string_sim(n1.text, n2.text)
 
             def children(self, node: _TreeNode) -> list:
                 return node.children
@@ -250,15 +303,14 @@ class TedsMetric:
         )
 
     def aggregate(self, scores: Sequence[Score]) -> float:
-        """Corpus TEDS = ``1 - sum(edit_distance) / sum(max_nodes)`` (globally pooled).
-
-        Like CER (a normalized edit rate), TEDS pools the raw edit distances and the
-        per-table node counts across the corpus before dividing -- not a mean of
-        per-table similarities.
+        """Corpus TEDS = **mean** of per-table TEDS (the PubTabNet/OmniDocBench
+        convention). Each per-table TEDS is already node-count-normalized, so the
+        reported corpus statistic is the average, not a pooled edit-rate. The pooled
+        ``1 - sum(dist)/sum(nodes)`` is available from the per-item ``detail`` if a
+        size-weighted variant is wanted instead.
         """
-        total_dist = sum(s.detail.get("edit_distance", 0.0) for s in scores)
-        total_nodes = sum(s.detail.get("max_nodes", 0) for s in scores)
-        return (1.0 - total_dist / total_nodes) if total_nodes else float("nan")
+        vals = [s.value for s in scores]
+        return (sum(vals) / len(vals)) if vals else float("nan")
 
 
 # ---------------------------------------------------------------------------
@@ -296,26 +348,88 @@ def _string_sim(a: str, b: str) -> float:
     return 1.0 - dist / max(len(a), len(b))
 
 
-def _grits_overlap(
-    grid_p: list, grid_g: list, *, structure_only: bool
-) -> float:
-    """Summed similarity of the largest aligned common sub-grid (2D-MSS heuristic).
+def _align_value(n_a: int, n_b: int, score) -> float:
+    """Max total ``score(i, j)`` over a monotonic alignment of ``[0,n_a)`` to
+    ``[0,n_b)`` (whole-element insert/delete are free). The 1-D building block."""
+    if n_a == 0 or n_b == 0:
+        return 0.0
+    prev = [0.0] * (n_b + 1)
+    for i in range(1, n_a + 1):
+        cur = [0.0] * (n_b + 1)
+        for j in range(1, n_b + 1):
+            cur[j] = max(prev[j], cur[j - 1], prev[j - 1] + score(i - 1, j - 1))
+        prev = cur
+    return prev[n_b]
 
-    The exact 2D-MSS is NP-hard; following Smock et al., we use the polynomial
-    heuristic of aligning the two grids at their shared top-left origin and summing
-    per-position cell similarities over the overlapping region (rows/cols both
-    tables have). On equal-shape grids this is exact; on differing shapes it is the
-    standard upper/lower-bound-agreeing heuristic the paper reports.
+
+def _align_pairs(score_matrix: list) -> list:
+    """Matched ``(i, j)`` pairs of the optimal monotonic alignment of a precomputed
+    score matrix (rows = first sequence, cols = second), insert/delete free."""
+    n_a = len(score_matrix)
+    n_b = len(score_matrix[0]) if n_a else 0
+    if n_a == 0 or n_b == 0:
+        return []
+    dp = [[0.0] * (n_b + 1) for _ in range(n_a + 1)]
+    for i in range(1, n_a + 1):
+        for j in range(1, n_b + 1):
+            dp[i][j] = max(
+                dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1] + score_matrix[i - 1][j - 1]
+            )
+    pairs = []
+    i, j = n_a, n_b
+    while i > 0 and j > 0:
+        diag = dp[i - 1][j - 1] + score_matrix[i - 1][j - 1]
+        if dp[i][j] == diag and diag >= dp[i - 1][j] and diag >= dp[i][j - 1]:
+            pairs.append((i - 1, j - 1))
+            i, j = i - 1, j - 1
+        elif dp[i][j] == dp[i - 1][j]:
+            i -= 1
+        else:
+            j -= 1
+    pairs.reverse()
+    return pairs
+
+
+def _grits_overlap(grid_p: list, grid_g: list, *, structure_only: bool) -> float:
+    """Factored 2-D Most-Similar-Substructure (Smock et al., GriTS).
+
+    The exact 2D-MSS is NP-hard, so GriTS uses the **factored** polynomial
+    approximation: align the row-sequences and the column-sequences *independently*
+    (each a 1-D alignment that allows whole-row / whole-column insert and delete),
+    then sum the per-cell similarity over the Cartesian product of the matched row
+    pairs and matched column pairs. Unlike a fixed top-left-origin overlap, this
+    stays meaningful when a row or column is inserted, deleted, or shifted -- the case
+    the metric exists to score. Complexity is polynomial (~O(R^2 C^2)) in the grid
+    dimensions, fine for offline evaluation.
     """
-    rows = min(len(grid_p), len(grid_g))
+    pr, pc = len(grid_p), max((len(r) for r in grid_p), default=0)
+    gr, gc = len(grid_g), max((len(r) for r in grid_g), default=0)
+
+    def at(grid: list, r: int, c: int):
+        return grid[r][c] if (r < len(grid) and c < len(grid[r])) else None
+
+    def m(a, b) -> float:
+        return 0.0 if (a is None or b is None) else _cell_match(a, b, structure_only=structure_only)
+
+    # row-similarity[i][j] = best cell alignment of pred row i vs gold row j (over cols)
+    row_sim = [
+        [_align_value(pc, gc, lambda c1, c2, i=i, j=j: m(at(grid_p, i, c1), at(grid_g, j, c2)))
+         for j in range(gr)]
+        for i in range(pr)
+    ]
+    # col-similarity[i][j] = best cell alignment of pred col i vs gold col j (over rows)
+    col_sim = [
+        [_align_value(pr, gr, lambda r1, r2, i=i, j=j: m(at(grid_p, r1, i), at(grid_g, r2, j)))
+         for j in range(gc)]
+        for i in range(pc)
+    ]
+    row_pairs = _align_pairs(row_sim) if row_sim else []
+    col_pairs = _align_pairs(col_sim) if col_sim else []
+
     total = 0.0
-    for r in range(rows):
-        cols = min(len(grid_p[r]), len(grid_g[r]))
-        for c in range(cols):
-            cp, cg = grid_p[r][c], grid_g[r][c]
-            if cp is None or cg is None:
-                continue
-            total += _cell_match(cp, cg, structure_only=structure_only)
+    for ip, ig in row_pairs:
+        for jp, jg in col_pairs:
+            total += m(at(grid_p, ip, jp), at(grid_g, ig, jg))
     return total
 
 

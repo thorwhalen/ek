@@ -50,7 +50,12 @@ class AnlsMetric:
     Args:
         threshold: ANLS zeroes a per-leaf similarity below this value before
             averaging (the classic ANLS 0.5 cut tolerates minor OCR/spelling
-            noise). Passed through to ``anls_star``. Defaults to ``0.5``.
+            noise). ``anls_star`` exposes no parameter for this -- it reads a
+            class constant ``ANLSTree.THRESHOLD`` (default ``0.5``) -- so the metric
+            applies the threshold by setting that constant around the call and
+            restoring it. **Caveat:** this mutates a process-global, so it is not
+            thread-safe; concurrent ``AnlsMetric`` calls with different thresholds in
+            the same process can interfere. Defaults to ``0.5``.
     """
 
     name = "anls"
@@ -63,11 +68,21 @@ class AnlsMetric:
         self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None
     ) -> Score:
         from anls_star import anls_score
+        from anls_star import anls_star as _anls_star
 
-        # anls_star takes (ground_truth, prediction); ek's Metric is (pred, gold).
-        value = float(
-            anls_score(gold, pred, return_gt=False, return_key_scores=False)
-        )
+        # anls_star has no threshold argument; it reads ANLSTree.THRESHOLD. Apply our
+        # threshold by setting that class constant for the duration of the call, then
+        # restore it (so the documented knob actually does something).
+        _tree = _anls_star.ANLSTree
+        _saved = _tree.THRESHOLD
+        _tree.THRESHOLD = self.threshold
+        try:
+            # anls_star takes (ground_truth, prediction); ek's Metric is (pred, gold).
+            value = float(
+                anls_score(gold, pred, return_gt=False, return_key_scores=False)
+            )
+        finally:
+            _tree.THRESHOLD = _saved
         return Score(
             value=value,
             metric="anls",
