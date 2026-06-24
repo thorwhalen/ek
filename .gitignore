@@ -118,3 +118,6 @@ venv.bak/
 
 # PyCharm
 .idea
+
+# Background-agent isolation worktrees
+.claude/worktrees/
