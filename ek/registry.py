@@ -224,6 +224,8 @@ def check_requirements(
             "ok": ok,
             "extra": extra,
             "missing": missing,
-            "hint": "" if ok else f"pip install ek[{extra}]  (missing: {', '.join(missing)})",
+            "hint": ""
+            if ok
+            else f"pip install ek[{extra}]  (missing: {', '.join(missing)})",
         }
     return {"ok": True, "hint": ""}

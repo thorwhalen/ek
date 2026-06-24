@@ -181,9 +181,7 @@ class TypedGraphMetric:
             ) from exc
 
         active_grammar = grammar if grammar is not None else self.grammar
-        node_cost, edge_cost, field_cost = _cost_resolvers(
-            active_grammar, self.weights
-        )
+        node_cost, edge_cost, field_cost = _cost_resolvers(active_grammar, self.weights)
         # Per-field schema normalizers (precedence) over the facade canonicalizer.
         field_norms = _graph_field_norms(active_grammar)
 
