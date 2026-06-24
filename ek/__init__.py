@@ -131,6 +131,18 @@ from .registry import (
     requires_extra,
     resolve,
 )
+from .validate import (
+    Corrector,
+    ValidationResult,
+    benford_findings,
+    canonicalize_corrector,
+    cross_field_validator,
+    lexicon_corrector,
+    ordering_validator,
+    stop_on_correction,
+    stop_on_flag,
+    validation_pipeline,
+)
 from .stores import app_folder, cache_this, json_store, mall, persistent_cache
 
 __all__ = [
@@ -223,6 +235,17 @@ __all__ = [
     "luhn_check",
     "iban_check",
     "isbn_check",
+    # post-extraction validation & correction (FLAG vs CORRECT pipeline)
+    "validation_pipeline",
+    "ValidationResult",
+    "Corrector",
+    "canonicalize_corrector",
+    "lexicon_corrector",
+    "cross_field_validator",
+    "ordering_validator",
+    "benford_findings",
+    "stop_on_correction",
+    "stop_on_flag",
     # registry
     "register",
     "get",
