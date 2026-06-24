@@ -20,6 +20,14 @@ _HEAVY = [
     "numpy",
     "scipy",
     "uqlm",
+    # [metrics] backends: must be imported lazily inside the metric, never at
+    # module top-level (so `import ek` and importing ek.metrics stay light).
+    "anls_star",
+    "seqeval",
+    "nervaluate",
+    "sacrebleu",
+    "apted",
+    "zss",
 ]
 
 
