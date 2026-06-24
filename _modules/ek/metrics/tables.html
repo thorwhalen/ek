@@ -1,0 +1,665 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.metrics.tables &mdash; ek 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.metrics.tables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.metrics.tables</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Table-structure metrics: TEDS / TEDS-Struct and GriTS (structure-only toggle).</span>
+
+<span class="sd">Two complementary table-recognition metrics from ``misc/docs/ek_02`` §3.1:</span>
+
+<span class="sd">- **TEDS** (Tree-Edit-Distance-based Similarity; Zhong et al., PubTabNet, IBM,</span>
+<span class="sd">  `arXiv 1911.10683`_) renders a table as an HTML tree and scores</span>
+<span class="sd">  ``1 - EditDist(Ta, Tb) / max(|Ta|, |Tb|)``. It captures both *structure* and</span>
+<span class="sd">  *cell content*. **TEDS-Struct** (the ``structure_only=True`` toggle) ignores cell</span>
+<span class="sd">  text to isolate structure, since &quot;taking OCR errors into account may lead to an</span>
+<span class="sd">  unfair comparison due to the different OCR models used by various TSR methods&quot;.</span>
+<span class="sd">- **GriTS** (Grid Table Similarity; Smock et al., Microsoft, `arXiv 2203.12555`_)</span>
+<span class="sd">  scores the predicted table directly as a 2-D matrix and yields **precision/recall**</span>
+<span class="sd">  over the most-similar common sub-grid. Its **GriTS-Top** (topology, structure-only)</span>
+<span class="sd">  and **GriTS-Con** (content) variants share the ``structure_only`` toggle.</span>
+
+<span class="sd">Licensing note (``skills/ek-dev-licensing``): the obvious wrapper target,</span>
+<span class="sd">``table-recognition-metric``, pulls in the **GPL** ``Levenshtein`` package as a hard</span>
+<span class="sd">runtime dependency (``from Levenshtein import distance`` in its source) -- a</span>
+<span class="sd">scanner-invisible copyleft landmine that would fail the CI license gate. So TEDS is</span>
+<span class="sd">implemented **clean-room** here on the MIT ``apted`` engine (already in</span>
+<span class="sd">``[metrics]``), and GriTS is a dependency-free pure-Python implementation of the</span>
+<span class="sd">2D-MSS heuristic. Both follow the precedent of reimplementing Krippendorff&#39;s alpha in</span>
+<span class="sd">pure Python rather than quarantining a copyleft dependency.</span>
+
+<span class="sd">Input shapes</span>
+<span class="sd">------------</span>
+<span class="sd">``pred`` and ``gold`` are :class:`Table` objects, or anything the constructors</span>
+<span class="sd">accept: an HTML ``str`` (``&lt;table&gt;...&lt;/table&gt;``; via :meth:`Table.from_html`) or a</span>
+<span class="sd">2-D grid -- a list of rows of cell strings, where ``None`` marks a cell spanned over</span>
+<span class="sd">by a neighbour (via :meth:`Table.from_grid`). The facade and registry coerce HTML</span>
+<span class="sd">strings automatically.</span>
+
+<span class="sd">.. _arXiv 1911.10683: https://arxiv.org/abs/1911.10683</span>
+<span class="sd">.. _arXiv 2203.12555: https://arxiv.org/abs/2203.12555</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.metrics.tables import TedsMetric, GritsMetric, Table</span>
+<span class="sd">    &gt;&gt;&gt; a = &quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; b = &quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;c&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; round(TedsMetric()(a, b).value, 3)            # one cell-content edit</span>
+<span class="sd">    0.75</span>
+<span class="sd">    &gt;&gt;&gt; TedsMetric(structure_only=True)(a, b).value   # same structure -&gt; 1.0</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; GritsMetric(structure_only=True)(a, b).value  # identical grid topology</span>
+<span class="sd">    1.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">html.parser</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTMLParser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">Score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">requires_extra</span>
+
+<span class="n">_DATA_CELLS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">,</span> <span class="s2">&quot;th&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Cell">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Cell">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cell</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One logical table cell: its text plus its row/column span (&gt;=1 each).&quot;&quot;&quot;</span>
+
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">rowspan</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">colspan</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="Table">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Table">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Table</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A table as an ordered list of rows of :class:`Cell` s (the logical cells).</span>
+
+<span class="sd">    ``rows[i]`` is the i-th row&#39;s logical cells in reading order; spans are carried</span>
+<span class="sd">    on each :class:`Cell`. Use :meth:`from_html` / :meth:`from_grid` to build one,</span>
+<span class="sd">    and :meth:`as_grid` for the dense 2-D occupancy view GriTS scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rows</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="Table.coerce">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Table.coerce">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coerce</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Table&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Coerce a :class:`Table`, an HTML string, or a 2-D grid into a Table.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Table</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_html</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_grid</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Table.from_html">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Table.from_html">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_html</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Table&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse an HTML ``&lt;table&gt;`` (with ``colspan``/``rowspan``) into a Table.&quot;&quot;&quot;</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">_TableHTMLParser</span><span class="p">()</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">parser</span><span class="o">.</span><span class="n">rows</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Table.from_grid">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Table.from_grid">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_grid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">grid</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Table&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a Table from a 2-D grid of cell texts (``None`` = spanned-over).&quot;&quot;&quot;</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">Cell</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">row</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Table.as_grid">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.Table.as_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Expand spans into a dense 2-D grid; a spanned position repeats its cell.</span>
+
+<span class="sd">        Each physical grid position holds the (shared) :class:`Cell` covering it, so</span>
+<span class="sd">        two tables with the same topology have grids of the same shape -- the view</span>
+<span class="sd">        GriTS aligns position-by-position.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grid</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">):</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">:</span>
+                <span class="n">grid</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">r</span><span class="p">])</span> <span class="ow">and</span> <span class="n">grid</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">col</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">dr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">rowspan</span><span class="p">):</span>
+                    <span class="n">rr</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="n">dr</span>
+                    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rr</span><span class="p">:</span>
+                        <span class="n">grid</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                    <span class="k">for</span> <span class="n">dc</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">colspan</span><span class="p">):</span>
+                        <span class="n">cc</span> <span class="o">=</span> <span class="n">col</span> <span class="o">+</span> <span class="n">dc</span>
+                        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">rr</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">cc</span><span class="p">:</span>
+                            <span class="n">grid</span><span class="p">[</span><span class="n">rr</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+                        <span class="n">grid</span><span class="p">[</span><span class="n">rr</span><span class="p">][</span><span class="n">cc</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span>
+                <span class="n">col</span> <span class="o">+=</span> <span class="n">cell</span><span class="o">.</span><span class="n">colspan</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+            <span class="n">row</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">grid</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pos_int</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a span attribute to an int ``&gt;= 1`` (default 1 on missing/garbage).&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_TableHTMLParser</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Span-aware HTML ``&lt;table&gt;`` parser (stdlib only), tolerant of real-world HTML.</span>
+
+<span class="sd">    Flushes the current cell on any new ``td``/``th`` start (implicit close) and on</span>
+<span class="sd">    ``&lt;/tr&gt;``, appends a pending row on ``&lt;/table&gt;`` (missing ``&lt;/tr&gt;``), and only</span>
+<span class="sd">    treats the **outermost** table&#39;s structure -- a nested table&#39;s text flows into</span>
+<span class="sd">    the enclosing cell rather than corrupting the outer row/cell stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Cell</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_text</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_attrs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_in_cell</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_flush_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_cell</span><span class="p">:</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="n">Cell</span><span class="p">(</span>
+                <span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_text</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                <span class="n">rowspan</span><span class="o">=</span><span class="n">_pos_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rowspan&quot;</span><span class="p">)),</span>
+                <span class="n">colspan</span><span class="o">=</span><span class="n">_pos_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;colspan&quot;</span><span class="p">)),</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_in_cell</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_text</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_flush_row</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flush_cell</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_starttag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attrs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c1"># nested-table structure is ignored; its text still flows into the cell</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;tr&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_row</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_row</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">_DATA_CELLS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_cell</span><span class="p">()</span>  <span class="c1"># implicit close of an unclosed previous cell</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_in_cell</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_text</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_attrs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_cell</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_endtag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_flush_row</span><span class="p">()</span>  <span class="c1"># flush a row left open by a missing &lt;/tr&gt;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table_depth</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">_DATA_CELLS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_cell</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;tr&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_row</span><span class="p">()</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># TEDS -- tree-edit-distance similarity over the table tree (apted engine)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_TreeNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A node in the table tree apted scores: a structural label, optional cell text,</span>
+<span class="sd">    and ordered children. Keeping ``text`` OFF the ``name`` lets the rename cost be</span>
+<span class="sd">    *graded* by content similarity (canonical TEDS) rather than a flat 0/1.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">children</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_table_tree</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Table</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structure_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TreeNode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map a :class:`Table` to the HTML-style tree TEDS edits (``table -&gt; tr* -&gt; td*``).</span>
+
+<span class="sd">    The node ``name`` encodes only the *structure* (the tag and span ``td:RxC``); the</span>
+<span class="sd">    cell text rides on ``.text`` so a content difference is scored by the normalized</span>
+<span class="sd">    string-edit distance of the texts (graded, like canonical TEDS), while a span/</span>
+<span class="sd">    shape change is a full-cost structural rename. ``structure_only`` drops the text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">_TreeNode</span><span class="p">(</span><span class="s2">&quot;table&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
+        <span class="n">tr</span> <span class="o">=</span> <span class="n">_TreeNode</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;td:</span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">rowspan</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">colspan</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">tr</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">_TreeNode</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">structure_only</span> <span class="k">else</span> <span class="n">cell</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">root</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tree_size</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">_TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">_tree_size</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TedsMetric">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.TedsMetric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TedsMetric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TEDS / TEDS-Struct as a :class:`~ek.base.Metric` (clean-room on ``apted``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        structure_only: When ``True``, ignore cell text and score structure alone</span>
+<span class="sd">            (TEDS-Struct), isolating table-structure accuracy from OCR noise.</span>
+<span class="sd">            Defaults to ``False`` (full TEDS: structure + content).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;teds&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structure_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span> <span class="o">=</span> <span class="n">structure_only</span>
+
+    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;apted&quot;</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">apted</span><span class="w"> </span><span class="kn">import</span> <span class="n">APTED</span><span class="p">,</span> <span class="n">Config</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">_Config</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n1</span><span class="p">:</span> <span class="n">_TreeNode</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="n">_TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="c1"># A structural difference (tag/span) is a full-cost rename; same</span>
+                <span class="c1"># structure with different text costs the NORMALIZED string-edit</span>
+                <span class="c1"># distance of the cell text (canonical TEDS), so a one-char slip in a</span>
+                <span class="c1"># long cell costs a small fraction, not a full 1.</span>
+                <span class="k">if</span> <span class="n">n1</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">n2</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="mf">1.0</span>
+                <span class="k">if</span> <span class="n">n1</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">n2</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="mf">0.0</span>
+                <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">_string_sim</span><span class="p">(</span><span class="n">n1</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">n2</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">_TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">children</span>
+
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">_table_tree</span><span class="p">(</span><span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">pred</span><span class="p">),</span> <span class="n">structure_only</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span><span class="p">)</span>
+        <span class="n">tg</span> <span class="o">=</span> <span class="n">_table_tree</span><span class="p">(</span><span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">gold</span><span class="p">),</span> <span class="n">structure_only</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">APTED</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">tg</span><span class="p">,</span> <span class="n">_Config</span><span class="p">())</span><span class="o">.</span><span class="n">compute_edit_distance</span><span class="p">()</span>
+        <span class="n">denom</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">_tree_size</span><span class="p">(</span><span class="n">tp</span><span class="p">),</span> <span class="n">_tree_size</span><span class="p">(</span><span class="n">tg</span><span class="p">))</span>
+        <span class="n">similarity</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">dist</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span> <span class="k">if</span> <span class="n">denom</span> <span class="k">else</span> <span class="mf">1.0</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">similarity</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;teds_struct&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span> <span class="k">else</span> <span class="s2">&quot;teds&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;edit_distance&quot;</span><span class="p">:</span> <span class="n">dist</span><span class="p">,</span>
+                <span class="s2">&quot;max_nodes&quot;</span><span class="p">:</span> <span class="n">denom</span><span class="p">,</span>
+                <span class="s2">&quot;structure_only&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span><span class="p">,</span>
+                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="TedsMetric.aggregate">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.TedsMetric.aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corpus TEDS = **mean** of per-table TEDS (the PubTabNet/OmniDocBench</span>
+<span class="sd">        convention). Each per-table TEDS is already node-count-normalized, so the</span>
+<span class="sd">        reported corpus statistic is the average, not a pooled edit-rate. The pooled</span>
+<span class="sd">        ``1 - sum(dist)/sum(nodes)`` is available from the per-item ``detail`` if a</span>
+<span class="sd">        size-weighted variant is wanted instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))</span> <span class="k">if</span> <span class="n">vals</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># GriTS -- 2-D grid similarity with precision/recall (pure-Python, no deps)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cell_match</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Cell</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Cell</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structure_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-position similarity of two aligned cells: span match (and text, if scored).</span>
+
+<span class="sd">    GriTS-Top (``structure_only``) scores only span/topology agreement; GriTS-Con</span>
+<span class="sd">    averages topology with a normalized cell-text similarity, so partial content</span>
+<span class="sd">    matches earn partial credit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">span_ok</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">rowspan</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">rowspan</span> <span class="ow">and</span> <span class="n">a</span><span class="o">.</span><span class="n">colspan</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">colspan</span>
+    <span class="k">if</span> <span class="n">structure_only</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">span_ok</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">text_sim</span> <span class="o">=</span> <span class="n">_string_sim</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">span_ok</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">text_sim</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_string_sim</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalized edit similarity ``1 - lev/max(len)`` (pure-Python; no GPL dep).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="n">prev</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ca</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">cb</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">prev</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cur</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">prev</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">ca</span> <span class="o">!=</span> <span class="n">cb</span><span class="p">)))</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">cur</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">prev</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">dist</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_align_value</span><span class="p">(</span><span class="n">n_a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Max total ``score(i, j)`` over a monotonic alignment of ``[0,n_a)`` to</span>
+<span class="sd">    ``[0,n_b)`` (whole-element insert/delete are free). The 1-D building block.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n_a</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="n">prev</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">cur</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">prev</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">cur</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">prev</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">score</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">cur</span>
+    <span class="k">return</span> <span class="n">prev</span><span class="p">[</span><span class="n">n_b</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_align_pairs</span><span class="p">(</span><span class="n">score_matrix</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Matched ``(i, j)`` pairs of the optimal monotonic alignment of a precomputed</span>
+<span class="sd">    score matrix (rows = first sequence, cols = second), insert/delete free.&quot;&quot;&quot;</span>
+    <span class="n">n_a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">score_matrix</span><span class="p">)</span>
+    <span class="n">n_b</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">score_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">n_a</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">n_a</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">score_matrix</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n_a</span><span class="p">,</span> <span class="n">n_b</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">diag</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">score_matrix</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">diag</span> <span class="ow">and</span> <span class="n">diag</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">diag</span> <span class="o">&gt;=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">i</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">pairs</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pairs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_grits_overlap</span><span class="p">(</span><span class="n">grid_p</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">grid_g</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structure_only</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Factored 2-D Most-Similar-Substructure (Smock et al., GriTS).</span>
+
+<span class="sd">    The exact 2D-MSS is NP-hard, so GriTS uses the **factored** polynomial</span>
+<span class="sd">    approximation: align the row-sequences and the column-sequences *independently*</span>
+<span class="sd">    (each a 1-D alignment that allows whole-row / whole-column insert and delete),</span>
+<span class="sd">    then sum the per-cell similarity over the Cartesian product of the matched row</span>
+<span class="sd">    pairs and matched column pairs. Unlike a fixed top-left-origin overlap, this</span>
+<span class="sd">    stays meaningful when a row or column is inserted, deleted, or shifted -- the case</span>
+<span class="sd">    the metric exists to score. Complexity is polynomial (~O(R^2 C^2)) in the grid</span>
+<span class="sd">    dimensions, fine for offline evaluation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pr</span><span class="p">,</span> <span class="n">pc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_p</span><span class="p">),</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">grid_p</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">gr</span><span class="p">,</span> <span class="n">gc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_g</span><span class="p">),</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">grid_g</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">grid</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span> <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span> <span class="ow">and</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="n">r</span><span class="p">]))</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">m</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">_cell_match</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">structure_only</span><span class="o">=</span><span class="n">structure_only</span><span class="p">)</span>
+
+    <span class="c1"># row-similarity[i][j] = best cell alignment of pred row i vs gold row j (over cols)</span>
+    <span class="n">row_sim</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">_align_value</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="n">gc</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">:</span> <span class="n">m</span><span class="p">(</span><span class="n">at</span><span class="p">(</span><span class="n">grid_p</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">c1</span><span class="p">),</span> <span class="n">at</span><span class="p">(</span><span class="n">grid_g</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">c2</span><span class="p">)))</span>
+         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gr</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pr</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="c1"># col-similarity[i][j] = best cell alignment of pred col i vs gold col j (over rows)</span>
+    <span class="n">col_sim</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">_align_value</span><span class="p">(</span><span class="n">pr</span><span class="p">,</span> <span class="n">gr</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">:</span> <span class="n">m</span><span class="p">(</span><span class="n">at</span><span class="p">(</span><span class="n">grid_p</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">at</span><span class="p">(</span><span class="n">grid_g</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">j</span><span class="p">)))</span>
+         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gc</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">row_pairs</span> <span class="o">=</span> <span class="n">_align_pairs</span><span class="p">(</span><span class="n">row_sim</span><span class="p">)</span> <span class="k">if</span> <span class="n">row_sim</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="n">col_pairs</span> <span class="o">=</span> <span class="n">_align_pairs</span><span class="p">(</span><span class="n">col_sim</span><span class="p">)</span> <span class="k">if</span> <span class="n">col_sim</span> <span class="k">else</span> <span class="p">[]</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">ip</span><span class="p">,</span> <span class="n">ig</span> <span class="ow">in</span> <span class="n">row_pairs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">jp</span><span class="p">,</span> <span class="n">jg</span> <span class="ow">in</span> <span class="n">col_pairs</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="n">m</span><span class="p">(</span><span class="n">at</span><span class="p">(</span><span class="n">grid_p</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">jp</span><span class="p">),</span> <span class="n">at</span><span class="p">(</span><span class="n">grid_g</span><span class="p">,</span> <span class="n">ig</span><span class="p">,</span> <span class="n">jg</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_occupied</span><span class="p">(</span><span class="n">grid</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">grid</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span> <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GritsMetric">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.GritsMetric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GritsMetric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GriTS-Top / GriTS-Con as a :class:`~ek.base.Metric` (pure-Python, P/R aware).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        structure_only: When ``True``, score cell topology only (GriTS-Top); when</span>
+<span class="sd">            ``False`` (default), average topology with cell-content similarity</span>
+<span class="sd">            (GriTS-Con).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;grits&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">structure_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span> <span class="o">=</span> <span class="n">structure_only</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="n">grid_p</span> <span class="o">=</span> <span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="n">as_grid</span><span class="p">()</span>
+        <span class="n">grid_g</span> <span class="o">=</span> <span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span><span class="o">.</span><span class="n">as_grid</span><span class="p">()</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="n">_grits_overlap</span><span class="p">(</span>
+            <span class="n">grid_p</span><span class="p">,</span> <span class="n">grid_g</span><span class="p">,</span> <span class="n">structure_only</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span>
+        <span class="p">)</span>
+        <span class="n">n_pred</span> <span class="o">=</span> <span class="n">_occupied</span><span class="p">(</span><span class="n">grid_p</span><span class="p">)</span>
+        <span class="n">n_gold</span> <span class="o">=</span> <span class="n">_occupied</span><span class="p">(</span><span class="n">grid_g</span><span class="p">)</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">overlap</span> <span class="o">/</span> <span class="n">n_pred</span> <span class="k">if</span> <span class="n">n_pred</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">n_gold</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">overlap</span> <span class="o">/</span> <span class="n">n_gold</span> <span class="k">if</span> <span class="n">n_gold</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">n_pred</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+            <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+            <span class="n">recall</span><span class="o">=</span><span class="n">recall</span><span class="p">,</span>
+            <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;grits_top&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span> <span class="k">else</span> <span class="s2">&quot;grits_con&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;overlap&quot;</span><span class="p">:</span> <span class="n">overlap</span><span class="p">,</span>
+                <span class="s2">&quot;n_pred&quot;</span><span class="p">:</span> <span class="n">n_pred</span><span class="p">,</span>
+                <span class="s2">&quot;n_gold&quot;</span><span class="p">:</span> <span class="n">n_gold</span><span class="p">,</span>
+                <span class="s2">&quot;structure_only&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure_only</span><span class="p">,</span>
+                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="GritsMetric.aggregate">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/tables.html#ek.GritsMetric.aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corpus GriTS F1: pool overlap and per-table cell counts, then divide once.</span>
+
+<span class="sd">        GriTS precision = overlap / |pred cells| and recall = overlap / |gold cells|;</span>
+<span class="sd">        the corpus statistic micro-averages by summing the numerators and</span>
+<span class="sd">        denominators globally -- never a mean of per-table F1s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlap&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">n_pred</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_pred&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">n_gold</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_gold&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_pred</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n_gold</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">overlap</span> <span class="o">/</span> <span class="n">n_pred</span> <span class="k">if</span> <span class="n">n_pred</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">overlap</span> <span class="o">/</span> <span class="n">n_gold</span> <span class="k">if</span> <span class="n">n_gold</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span>
+            <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

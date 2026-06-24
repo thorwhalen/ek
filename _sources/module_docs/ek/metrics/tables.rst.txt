@@ -1,0 +1,4 @@
+ek.metrics.tables
+=================
+.. automodule:: ek.metrics.tables
+   :members:

@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.metrics.anls &mdash; ek 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.metrics.fields" href="fields.html" />
+    <link rel="prev" title="ek.metrics" href="../metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.metrics.anls</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.anls.AnlsMetric"><code class="docutils literal notranslate"><span class="pre">AnlsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.anls.AnlsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">AnlsMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.metrics.anls</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/metrics/anls.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.metrics.anls">
+<span id="ek-metrics-anls"></span><h1>ek.metrics.anls<a class="headerlink" href="#module-ek.metrics.anls" title="Link to this heading"></a></h1>
+<p>ANLS / ANLS* (nested-JSON) similarity, wrapping <code class="docutils literal notranslate"><span class="pre">anls_star</span></code>.</p>
+<p>ANLS (Average Normalized Levenshtein Similarity) is the DocVQA-family metric for a
+short answer against acceptable variants: a normalized edit similarity thresholded
+at ~0.5 so minor OCR/spelling differences do not zero a correct answer. <strong>ANLS*</strong>
+(Peer et al., 2024, <a class="reference external" href="https://arxiv.org/abs/2402.03848">arXiv 2402.03848</a>) generalizes it to <em>arbitrarily nested</em>
+JSON – strings, tuples (best match), lists (Hungarian matching, penalizing
+missing/hallucinated items), and dicts (key-value with penalties for missing or
+hallucinated keys) – by mapping both sides to a tree and comparing them. It is the
+closest thing to an off-the-shelf nested-JSON IE metric (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_02</span></code> §3.2).</p>
+<p>This wraps the <code class="docutils literal notranslate"><span class="pre">anls_star</span></code> package (Apache-2.0; its only dependency is <code class="docutils literal notranslate"><span class="pre">munkres</span></code>
+for the Hungarian matching, and it carries its own pure-Python Levenshtein – no GPL
+<code class="docutils literal notranslate"><span class="pre">Levenshtein</span></code> is pulled in). It ships behind the <code class="docutils literal notranslate"><span class="pre">[metrics]</span></code> extra and is
+imported lazily, so importing <code class="docutils literal notranslate"><span class="pre">ek</span></code> never requires it.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">anls_star</span></code> already returns a <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> higher-is-better similarity, the
+wrapper is thin: it flips <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s <code class="docutils literal notranslate"><span class="pre">(pred,</span> <span class="pre">gold)</span></code> argument order to the library’s
+<code class="docutils literal notranslate"><span class="pre">(gt,</span> <span class="pre">pred)</span></code> order, records the raw similarity in <code class="xref py py-attr docutils literal notranslate"><span class="pre">detail</span></code>,
+and – for a corpus – <a class="reference internal" href="#ek.metrics.anls.AnlsMetric.aggregate" title="ek.metrics.anls.AnlsMetric.aggregate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AnlsMetric.aggregate()</span></code></a> returns the <em>mean</em> ANLS (the “A”
+in ANLS: the score is already length-normalized per item, so the corpus statistic is
+the average of per-item similarities, unlike CER/WER which accumulate edit counts).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.metrics.anls</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnlsMetric</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">AnlsMetric</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="s2">&quot;Hello Wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1"># one-char OCR slip</span>
+<span class="go">0.909</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Acme&quot;</span><span class="p">,</span> <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">},</span>
+<span class="gp">... </span>  <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Acme&quot;</span><span class="p">,</span> <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;Paris&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">value</span>         <span class="c1"># nested, exact</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.anls.AnlsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.anls.</span></span><span class="sig-name descname"><span class="pre">AnlsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/anls.html#AnlsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.anls.AnlsMetric" title="Link to this definition"></a></dt>
+<dd><p>ANLS / ANLS* (nested-JSON) similarity as a <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>.</p>
+<p>Handles a bare string (classic ANLS) or an arbitrarily nested
+dict/list/tuple/<code class="docutils literal notranslate"><span class="pre">None</span></code> structure (ANLS*); the backend dispatches on type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>threshold</strong> – ANLS zeroes a per-leaf similarity below this value before
+averaging (the classic ANLS 0.5 cut tolerates minor OCR/spelling
+noise). <code class="docutils literal notranslate"><span class="pre">anls_star</span></code> exposes no parameter for this – it reads a
+class constant <code class="docutils literal notranslate"><span class="pre">ANLSTree.THRESHOLD</span></code> (default <code class="docutils literal notranslate"><span class="pre">0.5</span></code>) – so the metric
+applies the threshold by setting that constant around the call and
+restoring it. <strong>Caveat:</strong> this mutates a process-global, so it is not
+thread-safe; concurrent <code class="docutils literal notranslate"><span class="pre">AnlsMetric</span></code> calls with different thresholds in
+the same process can interfere. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.anls.AnlsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/metrics/anls.html#AnlsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.anls.AnlsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus ANLS = mean of per-item ANLS (each is already length-normalized).</p>
+<p>Unlike CER/WER (which accumulate global edit counts) or field-F1 (micro-TP/
+FP/FN), ANLS is defined as the <em>average</em> normalized similarity over the
+evaluation set – the “A” in ANLS – so the corpus statistic is the plain
+mean of the per-item scores.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../metrics.html" class="btn btn-neutral float-left" title="ek.metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fields.html" class="btn btn-neutral float-right" title="ek.metrics.fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

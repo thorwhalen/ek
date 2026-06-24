@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek &mdash; ek 0.1.2 documentation</title>
+  <title>ek &mdash; ek 0.1.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=92734c54"></script>
+      <script src="../_static/documentation_options.js?v=360bc84d"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -51,6 +51,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ek</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ek.AgreementSignal"><code class="docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.AnlsMetric"><code class="docutils literal notranslate"><span class="pre">AnlsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.AnlsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">AnlsMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.AnnotatedExtraction"><code class="docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.Calibrator"><code class="docutils literal notranslate"><span class="pre">Calibrator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.Canonicalizer"><code class="docutils literal notranslate"><span class="pre">Canonicalizer</span></code></a><ul>
@@ -58,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#ek.Canonicalizer.version"><code class="docutils literal notranslate"><span class="pre">Canonicalizer.version</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ConformalGate"><code class="docutils literal notranslate"><span class="pre">ConformalGate</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.ConformalGate.fit"><code class="docutils literal notranslate"><span class="pre">ConformalGate.fit()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ek.ConformalGate.p_value"><code class="docutils literal notranslate"><span class="pre">ConformalGate.p_value()</span></code></a></li>
@@ -85,6 +90,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#ek.GraphGrammar.node_cost"><code class="docutils literal notranslate"><span class="pre">GraphGrammar.node_cost()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.GritsMetric"><code class="docutils literal notranslate"><span class="pre">GritsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.GritsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">GritsMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.GroupCalibrator"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.GroupCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.factory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ek.GroupCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.fit()</span></code></a></li>
@@ -98,6 +107,15 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.LogprobSignal"><code class="docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.LogprobSignal.aggregator"><code class="docutils literal notranslate"><span class="pre">LogprobSignal.aggregator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.MatchScheme"><code class="docutils literal notranslate"><span class="pre">MatchScheme</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.EXACT"><code class="docutils literal notranslate"><span class="pre">MatchScheme.EXACT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.PARTIAL"><code class="docutils literal notranslate"><span class="pre">MatchScheme.PARTIAL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.SEQEVAL_CONLL"><code class="docutils literal notranslate"><span class="pre">MatchScheme.SEQEVAL_CONLL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.SEQEVAL_STRICT"><code class="docutils literal notranslate"><span class="pre">MatchScheme.SEQEVAL_STRICT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.STRICT"><code class="docutils literal notranslate"><span class="pre">MatchScheme.STRICT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.MatchScheme.TYPE"><code class="docutils literal notranslate"><span class="pre">MatchScheme.TYPE</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.Metric"><code class="docutils literal notranslate"><span class="pre">Metric</span></code></a></li>
@@ -122,8 +140,23 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.Score"><code class="docutils literal notranslate"><span class="pre">Score</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.Severity"><code class="docutils literal notranslate"><span class="pre">Severity</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.Signal"><code class="docutils literal notranslate"><span class="pre">Signal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.SpanF1Metric"><code class="docutils literal notranslate"><span class="pre">SpanF1Metric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.SpanF1Metric.aggregate"><code class="docutils literal notranslate"><span class="pre">SpanF1Metric.aggregate()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.StringMetric"><code class="docutils literal notranslate"><span class="pre">StringMetric</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.StringMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">StringMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Table.as_grid"><code class="docutils literal notranslate"><span class="pre">Table.as_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Table.coerce"><code class="docutils literal notranslate"><span class="pre">Table.coerce()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Table.from_grid"><code class="docutils literal notranslate"><span class="pre">Table.from_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Table.from_html"><code class="docutils literal notranslate"><span class="pre">Table.from_html()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.TedsMetric"><code class="docutils literal notranslate"><span class="pre">TedsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.TedsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">TedsMetric.aggregate()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul>
@@ -193,9 +226,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ek/facade.html">ek.facade</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/harness.html">ek.harness</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/metrics/anls.html">ek.metrics.anls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/metrics/fields.html">ek.metrics.fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/metrics/spans.html">ek.metrics.spans</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/metrics/tables.html">ek.metrics.tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/ocr.html">ek.ocr</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/ocr/bridge.html">ek.ocr.bridge</a></li>
@@ -285,6 +321,36 @@ free intrinsic confidence first. Called on a collection of hypotheses, it runs
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="ek.AnlsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">AnlsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/anls.html#AnlsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.AnlsMetric" title="Link to this definition"></a></dt>
+<dd><p>ANLS / ANLS* (nested-JSON) similarity as a <a class="reference internal" href="ek/base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>.</p>
+<p>Handles a bare string (classic ANLS) or an arbitrarily nested
+dict/list/tuple/<code class="docutils literal notranslate"><span class="pre">None</span></code> structure (ANLS*); the backend dispatches on type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>threshold</strong> – ANLS zeroes a per-leaf similarity below this value before
+averaging (the classic ANLS 0.5 cut tolerates minor OCR/spelling
+noise). <code class="docutils literal notranslate"><span class="pre">anls_star</span></code> exposes no parameter for this – it reads a
+class constant <code class="docutils literal notranslate"><span class="pre">ANLSTree.THRESHOLD</span></code> (default <code class="docutils literal notranslate"><span class="pre">0.5</span></code>) – so the metric
+applies the threshold by setting that constant around the call and
+restoring it. <strong>Caveat:</strong> this mutates a process-global, so it is not
+thread-safe; concurrent <code class="docutils literal notranslate"><span class="pre">AnlsMetric</span></code> calls with different thresholds in
+the same process can interfere. Defaults to <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.AnlsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/metrics/anls.html#AnlsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.AnlsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus ANLS = mean of per-item ANLS (each is already length-normalized).</p>
+<p>Unlike CER/WER (which accumulate global edit counts) or field-F1 (micro-TP/
+FP/FN), ANLS is defined as the <em>average</em> normalized similarity over the
+evaluation set – the “A” in ANLS – so the corpus statistic is the plain
+mean of the per-item scores.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="ek.AnnotatedExtraction">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">AnnotatedExtraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">NodePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.FieldEstimate]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/base.html#AnnotatedExtraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.AnnotatedExtraction" title="Link to this definition"></a></dt>
 <dd><p>Layer B: the verification metadata, referencing a frozen Layer-A grammar.</p>
@@ -325,6 +391,12 @@ marks (the cross-script damage guard).</p></li>
 <dd><p>Stable identifier of this pipeline (persist it next to a gold set).</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.Cell">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">Cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rowspan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colspan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Cell" title="Link to this definition"></a></dt>
+<dd><p>One logical table cell: its text plus its row/column span (&gt;=1 each).</p>
 </dd></dl>
 
 <dl class="py class">
@@ -499,6 +571,28 @@ anything not declared, so a partial grammar is always usable.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="ek.GritsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">GritsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/tables.html#GritsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.GritsMetric" title="Link to this definition"></a></dt>
+<dd><p>GriTS-Top / GriTS-Con as a <a class="reference internal" href="ek/base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (pure-Python, P/R aware).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>structure_only</strong> – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, score cell topology only (GriTS-Top); when
+<code class="docutils literal notranslate"><span class="pre">False</span></code> (default), average topology with cell-content similarity
+(GriTS-Con).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.GritsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#GritsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.GritsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus GriTS F1: pool overlap and per-table cell counts, then divide once.</p>
+<p>GriTS precision = overlap / <a href="#id5"><span class="problematic" id="id6">|pred cells|</span></a> and recall = overlap / <a href="#id7"><span class="problematic" id="id8">|gold cells|</span></a>;
+the corpus statistic micro-averages by summing the numerators and
+denominators globally – never a mean of per-table F1s.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="ek.GroupCalibrator">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">GroupCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable[[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'group'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.GroupCalibrator" title="Link to this definition"></a></dt>
 <dd><p>Per-group (Mondrian) calibration: one calibrator per <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>.</p>
@@ -587,6 +681,77 @@ callable). Defaults to <code class="xref py py-func docutils literal notranslate
 <dt class="sig sig-object py" id="ek.LogprobSignal.aggregator">
 <span class="sig-name descname"><span class="pre">aggregator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#ek.LogprobSignal.aggregator" title="Link to this definition"></a></dt>
 <dd><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.MatchScheme">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">MatchScheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/spans.html#MatchScheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.MatchScheme" title="Link to this definition"></a></dt>
+<dd><p>The (backend, scheme) contract a span/slot F1 is computed under.</p>
+<p>The two backends legitimately disagree (seqeval ignores other-type tags at the
+tag level; nervaluate includes them), so the scheme is always explicit. The
+<code class="docutils literal notranslate"><span class="pre">SEQEVAL_*</span></code> members consume BIO/IOBES <em>tag sequences</em>; the others consume
+SemEval-2013 <em>span lists</em> via nervaluate.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.EXACT">
+<span class="sig-name descname"><span class="pre">EXACT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'exact'</span></span><a class="headerlink" href="#ek.MatchScheme.EXACT" title="Link to this definition"></a></dt>
+<dd><p>exact span boundaries, type ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nervaluate exact</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.PARTIAL">
+<span class="sig-name descname"><span class="pre">PARTIAL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'partial'</span></span><a class="headerlink" href="#ek.MatchScheme.PARTIAL" title="Link to this definition"></a></dt>
+<dd><p>boundary <em>overlap</em> (half credit), type ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nervaluate partial</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.SEQEVAL_CONLL">
+<span class="sig-name descname"><span class="pre">SEQEVAL_CONLL</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'seqeval_conll'</span></span><a class="headerlink" href="#ek.MatchScheme.SEQEVAL_CONLL" title="Link to this definition"></a></dt>
+<dd><p>seqeval, CoNLL <code class="docutils literal notranslate"><span class="pre">conlleval</span></code>-compatible entity F1 (the default seqeval mode).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.SEQEVAL_STRICT">
+<span class="sig-name descname"><span class="pre">SEQEVAL_STRICT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'seqeval_strict'</span></span><a class="headerlink" href="#ek.MatchScheme.SEQEVAL_STRICT" title="Link to this definition"></a></dt>
+<dd><p>span boundaries AND type must match, keyed to a scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>seqeval strict mode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.STRICT">
+<span class="sig-name descname"><span class="pre">STRICT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'strict'</span></span><a class="headerlink" href="#ek.MatchScheme.STRICT" title="Link to this definition"></a></dt>
+<dd><p>exact span boundaries AND correct type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nervaluate SemEval-2013 strict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.MatchScheme.TYPE">
+<span class="sig-name descname"><span class="pre">TYPE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'type'</span></span><a class="headerlink" href="#ek.MatchScheme.TYPE" title="Link to this definition"></a></dt>
+<dd><p>correct type with at least some span overlap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>nervaluate type</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -731,6 +896,37 @@ cheap signals first and pay for expensive ones only on residual uncertainty.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="ek.SpanF1Metric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">SpanF1Metric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/metrics/spans.html#ek.metrics.spans.MatchScheme" title="ek.metrics.spans.MatchScheme"><span class="pre">MatchScheme</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tagging_scheme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'IOB2'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/spans.html#SpanF1Metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.SpanF1Metric" title="Link to this definition"></a></dt>
+<dd><p>Entity/slot precision/recall/F1 under an <strong>explicit</strong> <a class="reference internal" href="#ek.MatchScheme" title="ek.MatchScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchScheme</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scheme</strong> – REQUIRED. The (backend, scheme) contract – there is deliberately no
+default, because seqeval and nervaluate disagree and a bare F1 is
+ambiguous (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_02</span></code> §2.2). Pass a <a class="reference internal" href="#ek.MatchScheme" title="ek.MatchScheme"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchScheme</span></code></a>.</p></li>
+<li><p><strong>tagging_scheme</strong> – For <a class="reference internal" href="#ek.MatchScheme.SEQEVAL_STRICT" title="ek.MatchScheme.SEQEVAL_STRICT"><code class="xref py py-attr docutils literal notranslate"><span class="pre">MatchScheme.SEQEVAL_STRICT</span></code></a> only: the BIO/IOBES
+tagging scheme name (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;IOB2&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;IOBES&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;BILOU&quot;</span></code>) that
+strict-mode entity decoding is keyed to. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;IOB2&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – if <code class="docutils literal notranslate"><span class="pre">scheme</span></code> is omitted (the whole point of this metric).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.SpanF1Metric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/metrics/spans.html#SpanF1Metric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.SpanF1Metric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Micro-averaged F1 over the corpus (sum the raw counts, then divide once).</p>
+<p>seqeval schemes carry TP/FP/FN; nervaluate schemes carry COR/INC/PAR/MIS/SPU
+(PAR worth half). Both micro-average by summing counts globally – never a
+mean of per-document F1s. The two backends’ counts are not commensurable, so
+a corpus mixing them is rejected rather than silently dropping one.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="ek.StringMetric">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">StringMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cer'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonicalizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/strings.html#StringMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.StringMetric" title="Link to this definition"></a></dt>
 <dd><p>CER (<code class="docutils literal notranslate"><span class="pre">mode='cer'</span></code>) or WER (<code class="docutils literal notranslate"><span class="pre">mode='wer'</span></code>) as a <a class="reference internal" href="ek/base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>.</p>
@@ -747,6 +943,65 @@ cheap signals first and pay for expensive ones only on residual uncertainty.</p>
 <dt class="sig sig-object py" id="ek.StringMetric.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/metrics/strings.html#StringMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.StringMetric.aggregate" title="Link to this definition"></a></dt>
 <dd><p>Corpus error rate = total edits / total reference length (the correct way).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.Table">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">Table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/metrics/tables.html#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><span class="pre">Cell</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Table" title="Link to this definition"></a></dt>
+<dd><p>A table as an ordered list of rows of <a class="reference internal" href="#ek.Cell" title="ek.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> s (the logical cells).</p>
+<p><code class="docutils literal notranslate"><span class="pre">rows[i]</span></code> is the i-th row’s logical cells in reading order; spans are carried
+on each <a class="reference internal" href="#ek.Cell" title="ek.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a>. Use <a class="reference internal" href="#ek.Table.from_html" title="ek.Table.from_html"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_html()</span></code></a> / <a class="reference internal" href="#ek.Table.from_grid" title="ek.Table.from_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_grid()</span></code></a> to build one,
+and <a class="reference internal" href="#ek.Table.as_grid" title="ek.Table.as_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">as_grid()</span></code></a> for the dense 2-D occupancy view GriTS scores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.Table.as_grid">
+<span class="sig-name descname"><span class="pre">as_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/metrics/tables.html#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><span class="pre">Cell</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Table.as_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Table.as_grid" title="Link to this definition"></a></dt>
+<dd><p>Expand spans into a dense 2-D grid; a spanned position repeats its cell.</p>
+<p>Each physical grid position holds the (shared) <a class="reference internal" href="#ek.Cell" title="ek.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> covering it, so
+two tables with the same topology have grids of the same shape – the view
+GriTS aligns position-by-position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.Table.coerce">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">coerce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Table.coerce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Table.coerce" title="Link to this definition"></a></dt>
+<dd><p>Coerce a <a class="reference internal" href="#ek.Table" title="ek.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, an HTML string, or a 2-D grid into a Table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.Table.from_grid">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Table.from_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Table.from_grid" title="Link to this definition"></a></dt>
+<dd><p>Build a Table from a 2-D grid of cell texts (<code class="docutils literal notranslate"><span class="pre">None</span></code> = spanned-over).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.Table.from_html">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#Table.from_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Table.from_html" title="Link to this definition"></a></dt>
+<dd><p>Parse an HTML <code class="docutils literal notranslate"><span class="pre">&lt;table&gt;</span></code> (with <code class="docutils literal notranslate"><span class="pre">colspan</span></code>/<code class="docutils literal notranslate"><span class="pre">rowspan</span></code>) into a Table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.TedsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">TedsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/tables.html#TedsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.TedsMetric" title="Link to this definition"></a></dt>
+<dd><p>TEDS / TEDS-Struct as a <a class="reference internal" href="ek/base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (clean-room on <code class="docutils literal notranslate"><span class="pre">apted</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>structure_only</strong> – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, ignore cell text and score structure alone
+(TEDS-Struct), isolating table-structure accuracy from OCR noise.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code> (full TEDS: structure + content).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.TedsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/metrics/tables.html#TedsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.TedsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus TEDS = <strong>mean</strong> of per-table TEDS (the PubTabNet/OmniDocBench
+convention). Each per-table TEDS is already node-count-normalized, so the
+reported corpus statistic is the average, not a pooled edit-rate. The pooled
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">sum(dist)/sum(nodes)</span></code> is available from the per-item <code class="docutils literal notranslate"><span class="pre">detail</span></code> if a
+size-weighted variant is wanted instead.</p>
 </dd></dl>
 
 </dd></dl>

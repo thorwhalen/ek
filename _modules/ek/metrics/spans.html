@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.metrics.spans &mdash; ek 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.metrics.spans</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.metrics.spans</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Span / slot precision-recall-F1 over two backends that legitimately disagree.</span>
+
+<span class="sd">Entity/slot F1 is the workhorse for fields-and-spans extraction, but a *single* F1</span>
+<span class="sd">is meaningless without naming its **match scheme** -- and the two standard backends</span>
+<span class="sd">diverge widely *and disagree with each other* (``misc/docs/ek_02`` §2.2):</span>
+
+<span class="sd">- **seqeval** (MIT, ``chakki-works``) -- CoNLL ``conlleval``-compatible entity F1</span>
+<span class="sd">  over BIO/IOBES tag *sequences*. Its ``conll`` (default) and ``strict`` (span+type,</span>
+<span class="sd">  keyed to a tagging scheme) modes are the reference for sequence-labelling NER.</span>
+<span class="sd">- **nervaluate** (MIT, ``MantisAI``) -- the SemEval-2013 Task 9.1 scheme over typed</span>
+<span class="sd">  *spans*, with four schemas: **strict** (span + type), **exact** (span, any type),</span>
+<span class="sd">  **partial** (boundary overlap, any type), **type** (type with span overlap). It</span>
+<span class="sd">  counts COR/INC/PAR/MIS/SPU and gives partial spans half credit.</span>
+
+<span class="sd">A model that finds &quot;Electric&quot; instead of &quot;General Electric&quot; scores F1=0 under</span>
+<span class="sd">exact-span matching but ~0.667 under a partial/token scheme -- so the scheme is *not*</span>
+<span class="sd">a default you can hide. This module makes :class:`MatchScheme` a **required keyword**</span>
+<span class="sd">with no default: you must say which contract you are scoring under.</span>
+
+<span class="sd">Both backends ship behind the ``[metrics]`` extra and are imported lazily, so</span>
+<span class="sd">importing ``ek`` never pulls them in. Each :class:`~ek.base.Score` carries the raw</span>
+<span class="sd">TP/FP/FN (or COR/INC/PAR/MIS/SPU) counts in its ``detail`` so</span>
+<span class="sd">:meth:`SpanF1Metric.aggregate` micro-averages over a corpus -- never a naive mean of</span>
+<span class="sd">per-document F1s.</span>
+
+<span class="sd">Input shapes</span>
+<span class="sd">------------</span>
+<span class="sd">- ``seqeval`` schemes (:attr:`MatchScheme.SEQEVAL_CONLL`,</span>
+<span class="sd">  :attr:`MatchScheme.SEQEVAL_STRICT`): ``pred`` and ``gold`` are **tag sequences** --</span>
+<span class="sd">  a list of BIO/IOBES tags (e.g. ``[&quot;B-PER&quot;, &quot;I-PER&quot;, &quot;O&quot;]``).</span>
+<span class="sd">- ``nervaluate`` schemes (:attr:`MatchScheme.STRICT`, ``EXACT``, ``PARTIAL``,</span>
+<span class="sd">  ``TYPE``): ``pred`` and ``gold`` are **span lists** -- a list of</span>
+<span class="sd">  ``{&quot;label&quot;, &quot;start&quot;, &quot;end&quot;}`` dicts.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.metrics.spans import SpanF1Metric, MatchScheme</span>
+<span class="sd">    &gt;&gt;&gt; m = SpanF1Metric(scheme=MatchScheme.SEQEVAL_CONLL)</span>
+<span class="sd">    &gt;&gt;&gt; s = m([&quot;B-PER&quot;, &quot;I-PER&quot;, &quot;O&quot;], [&quot;B-PER&quot;, &quot;I-PER&quot;, &quot;O&quot;])</span>
+<span class="sd">    &gt;&gt;&gt; s.f1</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; SpanF1Metric()  # doctest: +IGNORE_EXCEPTION_DETAIL</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">    TypeError: SpanF1Metric requires an explicit scheme=MatchScheme.&lt;...&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">Score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">requires_extra</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">recall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">))</span> <span class="k">if</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="MatchScheme">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/spans.html#ek.MatchScheme">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MatchScheme</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The (backend, scheme) contract a span/slot F1 is computed under.</span>
+
+<span class="sd">    The two backends legitimately disagree (seqeval ignores other-type tags at the</span>
+<span class="sd">    tag level; nervaluate includes them), so the scheme is always explicit. The</span>
+<span class="sd">    ``SEQEVAL_*`` members consume BIO/IOBES *tag sequences*; the others consume</span>
+<span class="sd">    SemEval-2013 *span lists* via nervaluate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: seqeval, CoNLL ``conlleval``-compatible entity F1 (the default seqeval mode).</span>
+    <span class="n">SEQEVAL_CONLL</span> <span class="o">=</span> <span class="s2">&quot;seqeval_conll&quot;</span>
+    <span class="c1">#: seqeval strict mode: span boundaries AND type must match, keyed to a scheme.</span>
+    <span class="n">SEQEVAL_STRICT</span> <span class="o">=</span> <span class="s2">&quot;seqeval_strict&quot;</span>
+    <span class="c1">#: nervaluate SemEval-2013 strict: exact span boundaries AND correct type.</span>
+    <span class="n">STRICT</span> <span class="o">=</span> <span class="s2">&quot;strict&quot;</span>
+    <span class="c1">#: nervaluate exact: exact span boundaries, type ignored.</span>
+    <span class="n">EXACT</span> <span class="o">=</span> <span class="s2">&quot;exact&quot;</span>
+    <span class="c1">#: nervaluate partial: boundary *overlap* (half credit), type ignored.</span>
+    <span class="n">PARTIAL</span> <span class="o">=</span> <span class="s2">&quot;partial&quot;</span>
+    <span class="c1">#: nervaluate type: correct type with at least some span overlap.</span>
+    <span class="n">TYPE</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span></div>
+
+
+
+<span class="n">_SEQEVAL_SCHEMES</span> <span class="o">=</span> <span class="p">(</span><span class="n">MatchScheme</span><span class="o">.</span><span class="n">SEQEVAL_CONLL</span><span class="p">,</span> <span class="n">MatchScheme</span><span class="o">.</span><span class="n">SEQEVAL_STRICT</span><span class="p">)</span>
+
+<span class="c1"># Tagging scheme name -&gt; seqeval scheme class (resolved lazily inside the call).</span>
+<span class="n">_TAGGING_SCHEMES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;IOB2&quot;</span><span class="p">,</span> <span class="s2">&quot;IOBES&quot;</span><span class="p">,</span> <span class="s2">&quot;BILOU&quot;</span><span class="p">,</span> <span class="s2">&quot;IOB1&quot;</span><span class="p">,</span> <span class="s2">&quot;IOE1&quot;</span><span class="p">,</span> <span class="s2">&quot;IOE2&quot;</span><span class="p">)</span>
+
+<span class="c1"># nervaluate&#39;s result keys differ from our enum values: its &quot;type&quot; scheme is keyed</span>
+<span class="c1"># &quot;ent_type&quot; (using &quot;type&quot; raises KeyError on every TYPE-scheme call).</span>
+<span class="n">_NERV_KEY</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">MatchScheme</span><span class="o">.</span><span class="n">STRICT</span><span class="p">:</span> <span class="s2">&quot;strict&quot;</span><span class="p">,</span>
+    <span class="n">MatchScheme</span><span class="o">.</span><span class="n">EXACT</span><span class="p">:</span> <span class="s2">&quot;exact&quot;</span><span class="p">,</span>
+    <span class="n">MatchScheme</span><span class="o">.</span><span class="n">PARTIAL</span><span class="p">:</span> <span class="s2">&quot;partial&quot;</span><span class="p">,</span>
+    <span class="n">MatchScheme</span><span class="o">.</span><span class="n">TYPE</span><span class="p">:</span> <span class="s2">&quot;ent_type&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="SpanF1Metric">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/spans.html#ek.SpanF1Metric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpanF1Metric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entity/slot precision/recall/F1 under an **explicit** :class:`MatchScheme`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        scheme: REQUIRED. The (backend, scheme) contract -- there is deliberately no</span>
+<span class="sd">            default, because seqeval and nervaluate disagree and a bare F1 is</span>
+<span class="sd">            ambiguous (``misc/docs/ek_02`` §2.2). Pass a :class:`MatchScheme`.</span>
+<span class="sd">        tagging_scheme: For :attr:`MatchScheme.SEQEVAL_STRICT` only: the BIO/IOBES</span>
+<span class="sd">            tagging scheme name (e.g. ``&quot;IOB2&quot;``, ``&quot;IOBES&quot;``, ``&quot;BILOU&quot;``) that</span>
+<span class="sd">            strict-mode entity decoding is keyed to. Defaults to ``&quot;IOB2&quot;``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: if ``scheme`` is omitted (the whole point of this metric).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;span_f1&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">scheme</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MatchScheme</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">tagging_scheme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;IOB2&quot;</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">scheme</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;SpanF1Metric requires an explicit scheme=MatchScheme.&lt;...&gt;; &quot;</span>
+                <span class="s2">&quot;seqeval and nervaluate disagree, so a bare F1 is ambiguous. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Choose one of: </span><span class="si">{</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">MatchScheme</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="o">=</span> <span class="n">MatchScheme</span><span class="p">(</span><span class="n">scheme</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tagging_scheme</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_TAGGING_SCHEMES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;tagging_scheme must be one of </span><span class="si">{</span><span class="n">_TAGGING_SCHEMES</span><span class="si">}</span><span class="s2">, got &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tagging_scheme</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tagging_scheme</span> <span class="o">=</span> <span class="n">tagging_scheme</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">in</span> <span class="n">_SEQEVAL_SCHEMES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seqeval</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nervaluate</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span>
+
+    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;seqeval&quot;</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_seqeval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="c1"># CONLL = lenient conlleval decoding; STRICT = scheme-validated entities</span>
+        <span class="c1"># (a malformed sequence for the chosen tagging scheme yields no entity), so</span>
+        <span class="c1"># the two genuinely differ -- which is the whole point of the strict mode.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">is</span> <span class="n">MatchScheme</span><span class="o">.</span><span class="n">SEQEVAL_STRICT</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">seqeval</span><span class="w"> </span><span class="kn">import</span> <span class="n">scheme</span> <span class="k">as</span> <span class="n">_seqeval_scheme</span>
+
+            <span class="n">scheme_cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_seqeval_scheme</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tagging_scheme</span><span class="p">)</span>
+            <span class="n">gold_ents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strict_entities</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">scheme_cls</span><span class="p">)</span>
+            <span class="n">pred_ents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_strict_entities</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">scheme_cls</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">seqeval.metrics.sequence_labeling</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_entities</span>
+
+            <span class="n">gold_ents</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">get_entities</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gold</span><span class="p">)))</span>
+            <span class="n">pred_ents</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">get_entities</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">pred</span><span class="p">)))</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_ents</span> <span class="o">&amp;</span> <span class="n">pred_ents</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_ents</span> <span class="o">-</span> <span class="n">gold_ents</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_ents</span> <span class="o">-</span> <span class="n">pred_ents</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_score_from_counts</span><span class="p">(</span>
+            <span class="n">tp</span><span class="o">=</span><span class="n">tp</span><span class="p">,</span> <span class="n">fp</span><span class="o">=</span><span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="s2">&quot;seqeval&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_strict_entities</span><span class="p">(</span><span class="n">tags</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">scheme_cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scheme-validated ``(tag, start, end)`` entities for one tag sequence.</span>
+
+<span class="sd">        A sequence that does not conform to the chosen tagging scheme (e.g. an ``E-``</span>
+<span class="sd">        prefix under IOB2) has **no** valid strict entities -- seqeval raises, so we</span>
+<span class="sd">        treat it as empty rather than crashing a corpus evaluation on one malformed</span>
+<span class="sd">        document (invalid predictions then earn nothing, as strict scoring intends).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">seqeval.scheme</span><span class="w"> </span><span class="kn">import</span> <span class="n">Entities</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">decoded</span> <span class="o">=</span> <span class="n">Entities</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">tags</span><span class="p">)],</span> <span class="n">scheme_cls</span><span class="p">)</span><span class="o">.</span><span class="n">entities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{(</span><span class="n">e</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">end</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">}</span>
+
+    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;nervaluate&quot;</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nervaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="n">gold</span><span class="p">,</span> <span class="n">pred</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gold</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+        <span class="c1"># nervaluate is ill-defined / raises on empty inputs, so handle them here:</span>
+        <span class="c1"># empty/empty is perfect; empty gold -&gt; all preds spurious; empty pred -&gt; all</span>
+        <span class="c1"># gold missed.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">gold</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pred</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nervaluate_score</span><span class="p">(</span><span class="n">cor</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">par</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">possible</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">actual</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">gold</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nervaluate_score</span><span class="p">(</span>
+                <span class="n">cor</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">par</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">spu</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="p">),</span> <span class="n">possible</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">actual</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pred</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nervaluate_score</span><span class="p">(</span>
+                <span class="n">cor</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">par</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mis</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">gold</span><span class="p">),</span> <span class="n">spu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">possible</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">gold</span><span class="p">),</span> <span class="n">actual</span><span class="o">=</span><span class="mi">0</span>
+            <span class="p">)</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">nervaluate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evaluator</span>
+
+        <span class="n">tags</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">gold</span> <span class="o">+</span> <span class="n">pred</span><span class="p">})</span>
+        <span class="n">ev</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">([</span><span class="n">gold</span><span class="p">],</span> <span class="p">[</span><span class="n">pred</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">)</span><span class="o">.</span><span class="n">evaluate</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ev</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">ev</span>  <span class="c1"># some versions return a tuple</span>
+        <span class="n">overall</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overall&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">overall</span><span class="p">[</span><span class="n">_NERV_KEY</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="p">]]</span>
+        <span class="c1"># version-robust: nervaluate returns an EvaluationResult object (newer) or a</span>
+        <span class="c1"># plain dict (older) of the COR/INC/PAR/MIS/SPU counts.</span>
+        <span class="n">get</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nervaluate_score</span><span class="p">(</span>
+            <span class="n">cor</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;correct&quot;</span><span class="p">),</span> <span class="n">inc</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;incorrect&quot;</span><span class="p">),</span> <span class="n">par</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;partial&quot;</span><span class="p">),</span>
+            <span class="n">mis</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;missed&quot;</span><span class="p">),</span> <span class="n">spu</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spurious&quot;</span><span class="p">),</span>
+            <span class="n">possible</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;possible&quot;</span><span class="p">),</span> <span class="n">actual</span><span class="o">=</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;actual&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nervaluate_score</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="n">inc</span><span class="p">,</span> <span class="n">par</span><span class="p">,</span> <span class="n">mis</span><span class="p">,</span> <span class="n">spu</span><span class="p">,</span> <span class="n">possible</span><span class="p">,</span> <span class="n">actual</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="c1"># nervaluate counts: COR/INC/PAR/MIS/SPU, with PAR worth half credit.</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">par</span><span class="p">)</span> <span class="o">/</span> <span class="n">actual</span> <span class="k">if</span> <span class="n">actual</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">possible</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">par</span><span class="p">)</span> <span class="o">/</span> <span class="n">possible</span> <span class="k">if</span> <span class="n">possible</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">actual</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+            <span class="n">recall</span><span class="o">=</span><span class="n">recall</span><span class="p">,</span>
+            <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;span_f1[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;backend&quot;</span><span class="p">:</span> <span class="s2">&quot;nervaluate&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scheme&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">&quot;correct&quot;</span><span class="p">:</span> <span class="n">cor</span><span class="p">,</span>
+                <span class="s2">&quot;incorrect&quot;</span><span class="p">:</span> <span class="n">inc</span><span class="p">,</span>
+                <span class="s2">&quot;partial&quot;</span><span class="p">:</span> <span class="n">par</span><span class="p">,</span>
+                <span class="s2">&quot;missed&quot;</span><span class="p">:</span> <span class="n">mis</span><span class="p">,</span>
+                <span class="s2">&quot;spurious&quot;</span><span class="p">:</span> <span class="n">spu</span><span class="p">,</span>
+                <span class="s2">&quot;possible&quot;</span><span class="p">:</span> <span class="n">possible</span><span class="p">,</span>
+                <span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">actual</span><span class="p">,</span>
+                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_score_from_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">tp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fn</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">fn</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">fp</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+            <span class="n">recall</span><span class="o">=</span><span class="n">recall</span><span class="p">,</span>
+            <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;span_f1[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;scheme&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheme</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">&quot;tp&quot;</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span>
+                <span class="s2">&quot;fp&quot;</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span>
+                <span class="s2">&quot;fn&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span>
+                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">detail</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="SpanF1Metric.aggregate">
+<a class="viewcode-back" href="../../../module_docs/ek/metrics/spans.html#ek.SpanF1Metric.aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Micro-averaged F1 over the corpus (sum the raw counts, then divide once).</span>
+
+<span class="sd">        seqeval schemes carry TP/FP/FN; nervaluate schemes carry COR/INC/PAR/MIS/SPU</span>
+<span class="sd">        (PAR worth half). Both micro-average by summing counts globally -- never a</span>
+<span class="sd">        mean of per-document F1s. The two backends&#39; counts are not commensurable, so</span>
+<span class="sd">        a corpus mixing them is rejected rather than silently dropping one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">backends</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">backends</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot micro-aggregate mixed span-F1 backends </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">backends</span><span class="p">)</span><span class="si">}</span><span class="s2">; &quot;</span>
+                <span class="s2">&quot;their counts (TP/FP/FN vs COR/INC/PAR/MIS/SPU) are not commensurable. &quot;</span>
+                <span class="s2">&quot;Aggregate each backend/scheme separately.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;backend&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;nervaluate&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">):</span>
+            <span class="n">cor</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;correct&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+            <span class="n">par</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;partial&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+            <span class="n">possible</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;possible&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">possible</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">actual</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mf">1.0</span>
+            <span class="n">precision</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">par</span><span class="p">)</span> <span class="o">/</span> <span class="n">actual</span> <span class="k">if</span> <span class="n">actual</span> <span class="k">else</span> <span class="mf">0.0</span>
+            <span class="n">recall</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">par</span><span class="p">)</span> <span class="o">/</span> <span class="n">possible</span> <span class="k">if</span> <span class="n">possible</span> <span class="k">else</span> <span class="mf">0.0</span>
+            <span class="k">return</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fn&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span> <span class="o">+</span> <span class="n">fn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

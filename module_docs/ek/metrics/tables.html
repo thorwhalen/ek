@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.metrics.tables &mdash; ek 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.ocr" href="../ocr.html" />
+    <link rel="prev" title="ek.metrics.strings" href="strings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.metrics.tables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-shapes">Input shapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.tables.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.tables.GritsMetric"><code class="docutils literal notranslate"><span class="pre">GritsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.GritsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">GritsMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.tables.Table"><code class="docutils literal notranslate"><span class="pre">Table</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.Table.as_grid"><code class="docutils literal notranslate"><span class="pre">Table.as_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.Table.coerce"><code class="docutils literal notranslate"><span class="pre">Table.coerce()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.Table.from_grid"><code class="docutils literal notranslate"><span class="pre">Table.from_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.Table.from_html"><code class="docutils literal notranslate"><span class="pre">Table.from_html()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.metrics.tables.TedsMetric"><code class="docutils literal notranslate"><span class="pre">TedsMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.metrics.tables.TedsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">TedsMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.metrics.tables</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/metrics/tables.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.metrics.tables">
+<span id="ek-metrics-tables"></span><h1>ek.metrics.tables<a class="headerlink" href="#module-ek.metrics.tables" title="Link to this heading"></a></h1>
+<p>Table-structure metrics: TEDS / TEDS-Struct and GriTS (structure-only toggle).</p>
+<p>Two complementary table-recognition metrics from <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_02</span></code> §3.1:</p>
+<ul class="simple">
+<li><p><strong>TEDS</strong> (Tree-Edit-Distance-based Similarity; Zhong et al., PubTabNet, IBM,
+<a class="reference external" href="https://arxiv.org/abs/1911.10683">arXiv 1911.10683</a>) renders a table as an HTML tree and scores
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">EditDist(Ta,</span> <span class="pre">Tb)</span> <span class="pre">/</span> <span class="pre">max(|Ta|,</span> <span class="pre">|Tb|)</span></code>. It captures both <em>structure</em> and
+<em>cell content</em>. <strong>TEDS-Struct</strong> (the <code class="docutils literal notranslate"><span class="pre">structure_only=True</span></code> toggle) ignores cell
+text to isolate structure, since “taking OCR errors into account may lead to an
+unfair comparison due to the different OCR models used by various TSR methods”.</p></li>
+<li><p><strong>GriTS</strong> (Grid Table Similarity; Smock et al., Microsoft, <a class="reference external" href="https://arxiv.org/abs/2203.12555">arXiv 2203.12555</a>)
+scores the predicted table directly as a 2-D matrix and yields <strong>precision/recall</strong>
+over the most-similar common sub-grid. Its <strong>GriTS-Top</strong> (topology, structure-only)
+and <strong>GriTS-Con</strong> (content) variants share the <code class="docutils literal notranslate"><span class="pre">structure_only</span></code> toggle.</p></li>
+</ul>
+<p>Licensing note (<code class="docutils literal notranslate"><span class="pre">skills/ek-dev-licensing</span></code>): the obvious wrapper target,
+<code class="docutils literal notranslate"><span class="pre">table-recognition-metric</span></code>, pulls in the <strong>GPL</strong> <code class="docutils literal notranslate"><span class="pre">Levenshtein</span></code> package as a hard
+runtime dependency (<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">Levenshtein</span> <span class="pre">import</span> <span class="pre">distance</span></code> in its source) – a
+scanner-invisible copyleft landmine that would fail the CI license gate. So TEDS is
+implemented <strong>clean-room</strong> here on the MIT <code class="docutils literal notranslate"><span class="pre">apted</span></code> engine (already in
+<code class="docutils literal notranslate"><span class="pre">[metrics]</span></code>), and GriTS is a dependency-free pure-Python implementation of the
+2D-MSS heuristic. Both follow the precedent of reimplementing Krippendorff’s alpha in
+pure Python rather than quarantining a copyleft dependency.</p>
+<section id="input-shapes">
+<h2>Input shapes<a class="headerlink" href="#input-shapes" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pred</span></code> and <code class="docutils literal notranslate"><span class="pre">gold</span></code> are <a class="reference internal" href="#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> objects, or anything the constructors
+accept: an HTML <code class="docutils literal notranslate"><span class="pre">str</span></code> (<code class="docutils literal notranslate"><span class="pre">&lt;table&gt;...&lt;/table&gt;</span></code>; via <a class="reference internal" href="#ek.metrics.tables.Table.from_html" title="ek.metrics.tables.Table.from_html"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Table.from_html()</span></code></a>) or a
+2-D grid – a list of rows of cell strings, where <code class="docutils literal notranslate"><span class="pre">None</span></code> marks a cell spanned over
+by a neighbour (via <a class="reference internal" href="#ek.metrics.tables.Table.from_grid" title="ek.metrics.tables.Table.from_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Table.from_grid()</span></code></a>). The facade and registry coerce HTML
+strings automatically.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.metrics.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">TedsMetric</span><span class="p">,</span> <span class="n">GritsMetric</span><span class="p">,</span> <span class="n">Table</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;b&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;&lt;table&gt;&lt;tr&gt;&lt;td&gt;a&lt;/td&gt;&lt;td&gt;c&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">TedsMetric</span><span class="p">()(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>            <span class="c1"># one cell-content edit</span>
+<span class="go">0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TedsMetric</span><span class="p">(</span><span class="n">structure_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>   <span class="c1"># same structure -&gt; 1.0</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GritsMetric</span><span class="p">(</span><span class="n">structure_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># identical grid topology</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.tables.Cell">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.tables.</span></span><span class="sig-name descname"><span class="pre">Cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rowspan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colspan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Cell" title="Link to this definition"></a></dt>
+<dd><p>One logical table cell: its text plus its row/column span (&gt;=1 each).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.tables.GritsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.tables.</span></span><span class="sig-name descname"><span class="pre">GritsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#GritsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.GritsMetric" title="Link to this definition"></a></dt>
+<dd><p>GriTS-Top / GriTS-Con as a <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (pure-Python, P/R aware).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>structure_only</strong> – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, score cell topology only (GriTS-Top); when
+<code class="docutils literal notranslate"><span class="pre">False</span></code> (default), average topology with cell-content similarity
+(GriTS-Con).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.GritsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#GritsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.GritsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus GriTS F1: pool overlap and per-table cell counts, then divide once.</p>
+<p>GriTS precision = overlap / <a href="#id1"><span class="problematic" id="id2">|pred cells|</span></a> and recall = overlap / <a href="#id3"><span class="problematic" id="id4">|gold cells|</span></a>;
+the corpus statistic micro-averages by summing the numerators and
+denominators globally – never a mean of per-table F1s.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.tables.Table">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.tables.</span></span><span class="sig-name descname"><span class="pre">Table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><span class="pre">Cell</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Table" title="Link to this definition"></a></dt>
+<dd><p>A table as an ordered list of rows of <a class="reference internal" href="#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> s (the logical cells).</p>
+<p><code class="docutils literal notranslate"><span class="pre">rows[i]</span></code> is the i-th row’s logical cells in reading order; spans are carried
+on each <a class="reference internal" href="#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a>. Use <a class="reference internal" href="#ek.metrics.tables.Table.from_html" title="ek.metrics.tables.Table.from_html"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_html()</span></code></a> / <a class="reference internal" href="#ek.metrics.tables.Table.from_grid" title="ek.metrics.tables.Table.from_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_grid()</span></code></a> to build one,
+and <a class="reference internal" href="#ek.metrics.tables.Table.as_grid" title="ek.metrics.tables.Table.as_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">as_grid()</span></code></a> for the dense 2-D occupancy view GriTS scores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.Table.as_grid">
+<span class="sig-name descname"><span class="pre">as_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><span class="pre">Cell</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Table.as_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Table.as_grid" title="Link to this definition"></a></dt>
+<dd><p>Expand spans into a dense 2-D grid; a spanned position repeats its cell.</p>
+<p>Each physical grid position holds the (shared) <a class="reference internal" href="#ek.metrics.tables.Cell" title="ek.metrics.tables.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a> covering it, so
+two tables with the same topology have grids of the same shape – the view
+GriTS aligns position-by-position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.Table.coerce">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">coerce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Table.coerce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Table.coerce" title="Link to this definition"></a></dt>
+<dd><p>Coerce a <a class="reference internal" href="#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, an HTML string, or a 2-D grid into a Table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.Table.from_grid">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Table.from_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Table.from_grid" title="Link to this definition"></a></dt>
+<dd><p>Build a Table from a 2-D grid of cell texts (<code class="docutils literal notranslate"><span class="pre">None</span></code> = spanned-over).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.Table.from_html">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#Table.from_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.Table.from_html" title="Link to this definition"></a></dt>
+<dd><p>Parse an HTML <code class="docutils literal notranslate"><span class="pre">&lt;table&gt;</span></code> (with <code class="docutils literal notranslate"><span class="pre">colspan</span></code>/<code class="docutils literal notranslate"><span class="pre">rowspan</span></code>) into a Table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.metrics.tables.TedsMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.metrics.tables.</span></span><span class="sig-name descname"><span class="pre">TedsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#TedsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.TedsMetric" title="Link to this definition"></a></dt>
+<dd><p>TEDS / TEDS-Struct as a <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (clean-room on <code class="docutils literal notranslate"><span class="pre">apted</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>structure_only</strong> – When <code class="docutils literal notranslate"><span class="pre">True</span></code>, ignore cell text and score structure alone
+(TEDS-Struct), isolating table-structure accuracy from OCR noise.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code> (full TEDS: structure + content).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.metrics.tables.TedsMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/metrics/tables.html#TedsMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.metrics.tables.TedsMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Corpus TEDS = <strong>mean</strong> of per-table TEDS (the PubTabNet/OmniDocBench
+convention). Each per-table TEDS is already node-count-normalized, so the
+reported corpus statistic is the average, not a pooled edit-rate. The pooled
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">sum(dist)/sum(nodes)</span></code> is available from the per-item <code class="docutils literal notranslate"><span class="pre">detail</span></code> if a
+size-weighted variant is wanted instead.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="strings.html" class="btn btn-neutral float-left" title="ek.metrics.strings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ocr.html" class="btn btn-neutral float-right" title="ek.ocr" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

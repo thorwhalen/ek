@@ -9,9 +9,12 @@
    module_docs/ek/facade
    module_docs/ek/harness
    module_docs/ek/metrics
+   module_docs/ek/metrics/anls
    module_docs/ek/metrics/fields
    module_docs/ek/metrics/graphs
+   module_docs/ek/metrics/spans
    module_docs/ek/metrics/strings
+   module_docs/ek/metrics/tables
    module_docs/ek/ocr
    module_docs/ek/ocr/benchmark
    module_docs/ek/ocr/bridge
