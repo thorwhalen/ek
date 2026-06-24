@@ -28,3 +28,4 @@
    module_docs/ek/registry
    module_docs/ek/stores
    module_docs/ek/tools
+   module_docs/ek/validate
