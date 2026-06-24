@@ -135,3 +135,22 @@ def test_cohen_kappa_and_percent_agreement():
     d = ["no", "yes", "no", "yes"]
     assert percent_agreement(c, d) == 0.0
     assert cohen_kappa(c, d) < 0
+
+
+def test_regression_gate_rejects_metric_mismatch(tmp_path):
+    # Comparing a CER baseline against a WER report is meaningless -> refuse, not
+    # silently compare incomparable aggregates.
+    base = evaluate_store(lambda x: x, _gold(), metric="cer")
+    save_baseline(base, "cer-base", rootdir=str(tmp_path))
+    wer_report = evaluate_store(lambda x: x, _gold(), metric="wer")
+    with pytest.raises(ValueError, match="metric"):
+        regression_gate(wer_report, "cer-base", rootdir=str(tmp_path))
+
+
+def test_regression_gate_direction_from_report_for_custom_metric(tmp_path):
+    # Direction comes from the report's Score.detail['higher_is_better'], not a
+    # hardcoded name set, so an unlisted lower-is-better metric still gates right.
+    base = evaluate_store(lambda x: x, _gold(), metric="cer")
+    from ek.harness import _direction_from_report
+
+    assert _direction_from_report(base, "cer") is False

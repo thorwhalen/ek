@@ -28,6 +28,31 @@ def _f1(precision: float, recall: float) -> float:
     )
 
 
+def _field_normalizers(grammar: Optional[GraphGrammar]) -> dict:
+    """Map ``field name -> resolved canonicalizer`` from each ``FieldSpec.normalizer``.
+
+    A schema can declare a per-field canonicalizer (e.g. a date or currency folder)
+    that must be applied to that field alone before comparison; without this the
+    grammar's ``normalizer`` contract is silently ignored. Field names are taken
+    across all node types (unique enough for a flat record)."""
+    if grammar is None:
+        return {}
+    from ..canonicalize import resolve_canonicalizer
+
+    out: dict = {}
+    for node_type in grammar.node_types.values():
+        for fname, spec in node_type.fields.items():
+            name = getattr(spec, "normalizer", None)
+            if name:
+                out[fname] = resolve_canonicalizer(name)
+    return out
+
+
+def _apply(norm, value: Any) -> Any:
+    """Apply a canonicalizer to a string value (pass non-strings through unchanged)."""
+    return norm(value) if (norm is not None and isinstance(value, str)) else value
+
+
 class FieldMetric:
     """Per-field precision/recall/F1 for two dict records.
 
@@ -40,11 +65,6 @@ class FieldMetric:
         self.canonicalizer = canonicalizer
         self.name = "fields"
 
-    def _norm(self, v: Any) -> Any:
-        if self.canonicalizer is not None and isinstance(v, str):
-            return self.canonicalizer(v)
-        return v
-
     def __call__(
         self, pred: Mapping, gold: Mapping, *, grammar: Optional[GraphGrammar] = None
     ) -> Score:
@@ -53,15 +73,19 @@ class FieldMetric:
                 "FieldMetric compares Mapping records; got "
                 f"{type(pred).__name__} vs {type(gold).__name__}"
             )
+        # Per-field normalizers (from the schema) take precedence over the
+        # facade-level canonicalizer for the fields they name.
+        field_norms = _field_normalizers(grammar)
         tp = fp = fn = 0
         for key in set(gold) | set(pred):
             g = gold.get(key, _MISSING)
             p = pred.get(key, _MISSING)
+            norm = field_norms.get(key, self.canonicalizer)
             if g is _MISSING:  # predicted a field that gold does not have
                 fp += 1
             elif p is _MISSING:  # gold has a field the prediction missed
                 fn += 1
-            elif self._norm(p) == self._norm(g):
+            elif _apply(norm, p) == _apply(norm, g):
                 tp += 1
             else:  # both present but disagree
                 fp += 1

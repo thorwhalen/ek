@@ -172,3 +172,35 @@ def test_group_calibrator_routes_per_group_with_pooled_fallback():
     assert gc(0.2, group="b") > 0.5
     # unseen group falls back to the pooled calibrator (does not raise)
     assert 0.0 <= gc(0.5, group="unseen") <= 1.0
+
+
+def test_netcal_ece_runs_without_crashing():
+    # Regression: netcal_ece passed Python lists; netcal>=1.4 requires ndarrays, so
+    # it raised for every caller. (netcal bins by predicted-class confidence, a
+    # different convention from the pure-Python positive-class ECE, so they need not
+    # match numerically -- this just pins that it runs and returns a valid score.)
+    pytest.importorskip("netcal")
+    from ek.qe.calibrate import netcal_ece
+
+    probs = [0.95, 0.9, 0.2, 0.6, 0.8, 0.3, 0.55, 0.99]
+    correct = [True, True, False, True, True, False, False, True]
+    nc = netcal_ece(probs, correct, bins=5)
+    assert isinstance(nc, float) and 0.0 <= nc <= 1.0
+
+
+def test_group_calibrator_round_trips():
+    # Regression: the module told users to persist Mondrian calibrators, but
+    # GroupCalibrator had no to_dict/from_dict and was unregistered.
+    import tempfile
+
+    gc = GroupCalibrator().fit(
+        [0.2, 0.8, 0.3, 0.9], [False, True, False, True], groups=["a", "a", "b", "b"]
+    )
+    with tempfile.TemporaryDirectory() as d:
+        from ek.qe.calibrate import load_calibrator, save_calibrator
+
+        save_calibrator(gc, "g1", rootdir=d)
+        gc2 = load_calibrator("g1", rootdir=d)
+    assert isinstance(gc2, GroupCalibrator)
+    assert abs(gc(0.7, group="a") - gc2(0.7, group="a")) < 1e-9
+    assert abs(gc(0.7, group="b") - gc2(0.7, group="b")) < 1e-9

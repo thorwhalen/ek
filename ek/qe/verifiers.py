@@ -342,17 +342,24 @@ class VerifierSignal:
     validators: List[Callable[..., Iterable[Finding]]] = field(default_factory=list)
     cost_tier: int = 1
 
+    def _by_validator(
+        self, value: Any, *, spec: Optional[FieldSpec] = None
+    ) -> List[List[Finding]]:
+        """Run each validator exactly once; return its findings list (shared pass so
+        the raw score and the audit always come from the same evaluation)."""
+        return [list(v(value, spec=spec)) for v in self.validators]
+
     def findings(
         self, value: Any, *, spec: Optional[FieldSpec] = None
     ) -> List[Finding]:
         """All findings the validators produce for ``value`` (empty == all clear)."""
         out: List[Finding] = []
-        for v in self.validators:
-            out.extend(v(value, spec=spec))
+        for fs in self._by_validator(value, spec=spec):
+            out.extend(fs)
         return out
 
     def __call__(self, value: Any, *, spec: Optional[FieldSpec] = None) -> float:
         if not self.validators:
             return 1.0
-        failed = sum(1 for v in self.validators if any(v(value, spec=spec)))
+        failed = sum(1 for fs in self._by_validator(value, spec=spec) if fs)
         return 1.0 - failed / len(self.validators)

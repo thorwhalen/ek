@@ -100,3 +100,23 @@ def test_string_metric_aggregate_handles_empty():
 def test_no_default_metric_for_incompatible_types():
     with pytest.raises(TypeError):
         score(123, ["a", "b"])
+
+
+def test_field_metric_applies_per_field_normalizer():
+    # Regression: FieldSpec.normalizer was documented but never wired into FieldMetric.
+    from ek.base import FieldSpec, GraphGrammar, NodeType
+
+    g = GraphGrammar(
+        node_types={"rec": NodeType("rec", fields={
+            "name": FieldSpec("name", "string", normalizer="lower"),
+            "code": FieldSpec("code", "string"),  # no normalizer
+        })},
+        edge_types={},
+    )
+    # 'name' folds case -> match; 'code' does not -> the only mismatch.
+    s = score({"name": "ACME", "code": "ab"}, {"name": "acme", "code": "AB"},
+              metric="fields", grammar=g)
+    assert s.detail["tp"] == 1 and s.f1 < 1.0
+    s_ok = score({"name": "ACME", "code": "AB"}, {"name": "acme", "code": "AB"},
+                 metric="fields", grammar=g)
+    assert s_ok.f1 == 1.0

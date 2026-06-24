@@ -43,16 +43,38 @@ DEFAULT_LENGTH_ALPHA = 0.6
 
 _SENTINEL = object()
 
+#: Smallest probability treated as non-zero. ``log(p=0) = -inf`` clamps to
+#: ``log(DEFAULT_PROB_FLOOR)`` (mirrors the confidence floor) so a p=0 token still
+#: drives min_prob/geo_mean toward 0 instead of being silently discarded.
+DEFAULT_PROB_FLOOR = 1e-12
+
 
 # ---------------------------------------------------------------------------
 # Logprob aggregators: Sequence[log p] -> field probability score in [0, 1]
 # ---------------------------------------------------------------------------
 
 
-def _finite_logps(logps: Sequence[float]) -> list:
-    """Drop non-finite log-probabilities (a NaN/inf would poison every aggregate)
-    and clamp positives to ``0`` -- a valid ``log p`` is ``<= 0`` (``p <= 1``)."""
-    return [min(float(lp), 0.0) for lp in logps if math.isfinite(float(lp))]
+def _finite_logps(
+    logps: Sequence[float], *, prob_floor: float = DEFAULT_PROB_FLOOR
+) -> list:
+    """Sanitize log-probabilities for aggregation.
+
+    A valid ``log p`` is ``<= 0`` (``p <= 1``). ``-inf`` is the *legitimate* log of a
+    probability-0 token (an impossible/OOV unit) -- the single most damning piece of
+    evidence -- so it is **clamped** to ``log(prob_floor)`` (kept, not dropped): the
+    weakest-token and geometric-mean safety signals must reflect it (otherwise
+    ``min_prob`` returns the second-weakest token and ``geo_mean`` of an all-zero
+    field returns a *maximal* 1.0). Only ``+inf``/``NaN`` -- which cannot be a real
+    ``log p`` and would poison an aggregate -- are dropped.
+    """
+    floor = math.log(prob_floor)
+    out = []
+    for lp in logps:
+        lp = float(lp)
+        if math.isnan(lp) or lp == math.inf:
+            continue
+        out.append(floor if lp == -math.inf else min(lp, 0.0))
+    return out
 
 
 @register("aggregators", "geo_mean")
@@ -156,6 +178,11 @@ def _clean_confs(values: Any) -> list:
     return out
 
 
+#: Allowed pooling strategies for :class:`IntrinsicConfidenceSignal` (an unknown
+#: name is rejected rather than silently treated as "mean").
+_CONF_POOLS = ("min", "mean", "geo_mean")
+
+
 @dataclass
 class IntrinsicConfidenceSignal:
     """Aggregate an extractor's per-unit confidences into a field score.
@@ -174,11 +201,17 @@ class IntrinsicConfidenceSignal:
     cost_tier: int = 2
 
     def __call__(self, source: Any) -> float:
+        if self.pool not in _CONF_POOLS:
+            raise ValueError(
+                f"pool must be one of {sorted(_CONF_POOLS)}, got {self.pool!r}"
+            )
         confs = _confidences_of(source)
         if not confs:
             return 1.0
         if self.pool == "min":
             return min(confs)
         if self.pool == "geo_mean":
-            return math.exp(sum(math.log(max(c, 1e-12)) for c in confs) / len(confs))
+            return math.exp(
+                sum(math.log(max(c, DEFAULT_PROB_FLOOR)) for c in confs) / len(confs)
+            )
         return sum(confs) / len(confs)

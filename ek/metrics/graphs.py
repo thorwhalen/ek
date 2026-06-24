@@ -36,6 +36,7 @@ Example:
 
 from __future__ import annotations
 
+import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Optional
@@ -44,6 +45,11 @@ from ..base import CostWeight, GraphGrammar, Score, TypeRef
 from ..registry import MissingExtraError
 
 _MISSING = object()
+
+#: Default ceiling on per-graph node count: graph edit distance is NP-hard, so a
+#: larger pair is rejected (raise) rather than silently spinning. A keyword override
+#: on :class:`TypedGraphMetric` lifts it for callers who accept the cost.
+DEFAULT_MAX_NODES = 60
 
 
 @dataclass(frozen=True)
@@ -109,6 +115,26 @@ def _cost_resolvers(grammar: Optional[GraphGrammar], weights: Optional[CostWeigh
     return node_cost, edge_cost, field_cost
 
 
+def _graph_field_norms(grammar: Optional[GraphGrammar]) -> dict:
+    """``(node-type, field) -> resolved canonicalizer`` from each ``FieldSpec.normalizer``."""
+    if grammar is None:
+        return {}
+    from ..canonicalize import resolve_canonicalizer
+
+    out: dict = {}
+    for tname, node_type in grammar.node_types.items():
+        for fname, spec in node_type.fields.items():
+            name = getattr(spec, "normalizer", None)
+            if name:
+                out[(tname, fname)] = resolve_canonicalizer(name)
+    return out
+
+
+def _apply(norm, value: Any) -> Any:
+    """Apply a canonicalizer to a string value (pass non-strings/sentinels through)."""
+    return norm(value) if (norm is not None and isinstance(value, str)) else value
+
+
 class TypedGraphMetric:
     """Cost-weighted, type-aware typed-graph edit distance as a :class:`~ek.base.Metric`.
 
@@ -116,6 +142,9 @@ class TypedGraphMetric:
         grammar: Layer-A :class:`~ek.base.GraphGrammar` supplying cost weights (may
             also be passed per-call to ``__call__``).
         weights: Optional :data:`~ek.base.CostWeight` overriding the schema weights.
+        canonicalizer: Optional ``str -> str`` applied to field values before the
+            equality check (the facade passes ``normalize=`` through here); a schema's
+            per-field ``FieldSpec.normalizer`` takes precedence for the fields it names.
         timeout: Seconds budget for the (NP-hard) GED search; on timeout the best
             cost found so far is used (an approximation). Default 10.0.
     """
@@ -127,11 +156,15 @@ class TypedGraphMetric:
         grammar: Optional[GraphGrammar] = None,
         weights: Optional[CostWeight] = None,
         *,
+        canonicalizer=None,
         timeout: float = 10.0,
+        max_nodes: int = DEFAULT_MAX_NODES,
     ):
         self.grammar = grammar
         self.weights = weights
+        self.canonicalizer = canonicalizer
         self.timeout = timeout
+        self.max_nodes = max_nodes
 
     def __call__(
         self,
@@ -147,9 +180,16 @@ class TypedGraphMetric:
                 "TypedGraphMetric needs networkx -- install it with:  pip install ek[metrics]"
             ) from exc
 
+        active_grammar = grammar if grammar is not None else self.grammar
         node_cost, edge_cost, field_cost = _cost_resolvers(
-            grammar if grammar is not None else self.grammar, self.weights
+            active_grammar, self.weights
         )
+        # Per-field schema normalizers (precedence) over the facade canonicalizer.
+        field_norms = _graph_field_norms(active_grammar)
+
+        def _field_eq(t: str, f: str, va: Any, vb: Any) -> bool:
+            norm = field_norms.get((t, f), self.canonicalizer)
+            return _apply(norm, va) == _apply(norm, vb)
 
         def node_mass(attrs: Mapping) -> float:
             t = attrs["type"]
@@ -163,7 +203,7 @@ class TypedGraphMetric:
             return sum(
                 field_cost(ta, f)
                 for f in set(fa) | set(fb)
-                if fa.get(f, _MISSING) != fb.get(f, _MISSING)
+                if not _field_eq(ta, f, fa.get(f, _MISSING), fb.get(f, _MISSING))
             )
 
         def edge_subst(a: Mapping, b: Mapping) -> float:
@@ -191,9 +231,23 @@ class TypedGraphMetric:
                     "denom": 0.0,
                     "similarity": 1.0,
                     "higher_is_better": False,
+                    "exact": True,
                 },
             )
 
+        n_nodes = max(gp.number_of_nodes(), gg.number_of_nodes())
+        if self.max_nodes is not None and n_nodes > self.max_nodes:
+            raise ValueError(
+                f"TypedGraphMetric: {n_nodes} nodes exceeds max_nodes={self.max_nodes}. "
+                "Graph edit distance is NP-hard; raise max_nodes only if you accept the "
+                "cost, or pre-reduce the graphs."
+            )
+
+        # Time the (budgeted) NP-hard search so the result's exactness is recorded:
+        # a run that consumes its whole timeout was truncated to a best-so-far bound
+        # and is only approximate (otherwise the score is wall-clock dependent and the
+        # approximation is invisible).
+        started = time.perf_counter()
         raw = nx.graph_edit_distance(
             gp,
             gg,
@@ -205,8 +259,10 @@ class TypedGraphMetric:
             edge_ins_cost=lambda a: edge_cost(a.get("type", "")),
             timeout=self.timeout,
         )
+        elapsed = time.perf_counter() - started
         if raw is None:  # no path within budget -> fall back to the max (delete+insert)
             raw = denom
+        exact = self.timeout is None or elapsed < 0.95 * self.timeout
 
         normalized = min(1.0, raw / denom)
         return Score(
@@ -217,6 +273,8 @@ class TypedGraphMetric:
                 "denom": denom,
                 "similarity": 1.0 - normalized,
                 "higher_is_better": False,
+                "exact": exact,
+                "timeout_s": self.timeout,
             },
         )
 

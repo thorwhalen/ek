@@ -79,7 +79,7 @@ def _resolve_metric(
     if name == "fields":
         return FieldMetric(canonicalizer=canonicalizer)
     if name in ("graph", "typed_graph"):
-        return TypedGraphMetric(weights=weights)
+        return TypedGraphMetric(weights=weights, canonicalizer=canonicalizer)
     return get("metrics", name)  # registered custom metric
 
 
@@ -306,8 +306,9 @@ def estimate_quality(
         signals: Explicit :class:`~ek.base.Signal` callables ``target -> float |
             Mapping`` producing further raw signals.
         calibrator: A :class:`~ek.base.Calibrator` mapping raw score -> probability.
-            **Calibration is non-optional before gating**: with a ``policy`` but no
-            calibrator (and ``assume_calibrated`` false), a warning is issued.
+            **Calibration is non-optional before gating** (Hard Rule 1): passing a
+            ``policy`` with no calibrator and ``assume_calibrated`` false **raises** --
+            a raw, uncalibrated score must never reach a DecisionPolicy.
         validators: :class:`~ek.base.Validator` callables yielding findings. A flat
             iterable runs on every field (use spec-driven validators like
             :func:`~ek.qe.verifiers.schema_validator`). For per-field scoping pass a
@@ -319,11 +320,11 @@ def estimate_quality(
             (silences the uncalibrated-gating warning).
     """
     if policy is not None and calibrator is None and not assume_calibrated:
-        warnings.warn(
-            "estimate_quality: gating without a Calibrator. Raw signals are "
-            "uncalibrated (Hard Rule 1); fit a Calibrator first or pass "
-            "assume_calibrated=True if the input confidence is already calibrated.",
-            stacklevel=2,
+        raise ValueError(
+            "estimate_quality: refusing to gate uncalibrated signals (Hard Rule 1 -- "
+            "a raw score must be calibrated before a DecisionPolicy reads it). Fit and "
+            "pass a Calibrator, or pass assume_calibrated=True if the input confidence "
+            "is already calibrated."
         )
 
     sources = list(sources)

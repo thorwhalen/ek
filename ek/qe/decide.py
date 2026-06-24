@@ -29,7 +29,7 @@ realised coverage and re-fit on drift.
 Example:
     >>> from ek.base import Decision
     >>> gate = CostSensitiveGate(rho=9.0)          # a false-negative costs 9x a review
-    >>> gate(0.95) is Decision.ACCEPT              # tau = 1 - 1/9 ~ 0.889
+    >>> gate(0.95) is Decision.ACCEPT              # tau = rho/(1+rho) = 9/10 = 0.9
     True
     >>> gate(0.5) is Decision.FLAG
     True
@@ -73,10 +73,15 @@ def _finite(p: float, *, what: str = "confidence") -> float:
 class CostSensitiveGate:
     """Accept/flag/block from the cost ratio ``rho = c_FN / c_FP`` on calibrated ``p``.
 
-    Accept when the expected cost of accepting (an undetected error) is below the
-    cost of routing to a human: ``(1 - p) * c_FN <= c_FP``, i.e. ``p >= 1 - 1/rho``.
-    A larger ``rho`` (misses much costlier than reviews) raises the bar to
-    auto-accept. ``block_threshold`` adds an optional hard-fail band at the bottom.
+    Accept when the expected cost of accepting is below that of routing to a human.
+    Accepting risks an undetected error: cost ``(1 - p) * c_FN``. Flagging a value
+    that was actually *correct* wastes a review: cost ``p * c_FP`` (the false-positive
+    cost is incurred only with probability ``p``, not unconditionally). So accept iff
+    ``(1 - p) * c_FN <= p * c_FP``, i.e. the Bayes-optimal threshold
+    ``p >= c_FN / (c_FN + c_FP) = rho / (1 + rho)``. A larger ``rho`` (misses much
+    costlier than reviews) raises the bar to auto-accept (``tau -> 1`` as
+    ``rho -> inf``); ``rho = 1`` gives the symmetric ``tau = 0.5``.
+    ``block_threshold`` adds an optional hard-fail band at the bottom.
 
     Args:
         rho: Cost ratio ``c_FN / c_FP`` (>= 0). The single lever; no magic numbers.
@@ -95,7 +100,7 @@ class CostSensitiveGate:
         """The accept threshold on calibrated probability (derived from ``rho``)."""
         if self.accept_threshold is not None:
             return _clip01(self.accept_threshold)
-        return _clip01(1.0 - 1.0 / self.rho) if self.rho > 0 else 0.0
+        return _clip01(self.rho / (1.0 + self.rho)) if self.rho > 0 else 0.0
 
     def __call__(self, confidence: float) -> Decision:
         p = _finite(confidence)

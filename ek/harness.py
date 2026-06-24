@@ -5,9 +5,9 @@ Reference-based benchmarking (Need #1) is only useful if it is *repeatable* and
 harness adds that discipline on top of :func:`ek.score`/:func:`ek.evaluate`:
 
 - :func:`evaluate_store` -- run any ``input -> prediction`` predictor over a gold
-  store (a dict or a ``ek`` gold store), scored per stratified slice, with results
-  persisted. (The OCR benchmark in :mod:`ek.ocr` is the OCR-specific specialization
-  of this.)
+  store (a dict or a ``ek`` gold store), scored per slice (grouped by each record's
+  slice label), with results persisted. (The OCR benchmark in :mod:`ek.ocr` is the
+  OCR-specific specialization of this.)
 - :func:`save_baseline` / :func:`regression_gate` -- freeze a baseline and fail when
   a later run regresses beyond a tolerance, **per slice**, not just on the aggregate.
   This is the golden-set CI gate.
@@ -29,12 +29,24 @@ from typing import Any, Callable, Optional, Sequence
 from .facade import evaluate
 from .stores import json_store
 
-# Metrics whose Score.value is an ERROR/distance (lower is better).
+# Last-resort fallback only: metrics whose Score.value is an ERROR/distance.
+# The authoritative source is each Score's detail['higher_is_better'].
 _LOWER_IS_BETTER = {"cer", "wer", "graph", "typed_graph"}
 
 
 def _higher_is_better(metric: str) -> bool:
     return metric not in _LOWER_IS_BETTER
+
+
+def _direction_from_report(report: Any, metric: str) -> bool:
+    """Resolve higher-is-better from the report's own Scores (authoritative; every
+    metric stamps ``detail['higher_is_better']``), falling back to the metric-name set
+    only when no Score carries the flag -- so custom/unlisted metrics gate correctly."""
+    for s in getattr(report, "scores", None) or ():
+        flag = (getattr(s, "detail", None) or {}).get("higher_is_better")
+        if flag is not None:
+            return bool(flag)
+    return _higher_is_better(metric)
 
 
 # ---------------------------------------------------------------------------
@@ -189,7 +201,11 @@ def regression_gate(
         else baseline
     )
     metric = report.metric
-    hib = _higher_is_better(metric) if higher_is_better is None else higher_is_better
+    hib = (
+        _direction_from_report(report, metric)
+        if higher_is_better is None
+        else higher_is_better
+    )
     if base is None:
         # No baseline yet: nothing to regress against -> pass (first run).
         return GateResult(
@@ -198,6 +214,13 @@ def regression_gate(
             higher_is_better=hib,
             tolerance=tolerance,
             aggregate_current=report.aggregate,
+        )
+
+    base_metric = base.get("metric") if isinstance(base, dict) else None
+    if base_metric and base_metric != metric:
+        raise ValueError(
+            f"baseline metric {base_metric!r} != report metric {metric!r}; refusing "
+            "to compare incomparable scores (re-baseline against the new metric)."
         )
 
     regressions: dict = {}

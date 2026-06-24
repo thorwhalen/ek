@@ -251,6 +251,10 @@ class TemperatureCalibrator:
 
     T: float = 1.0
     kind: str = "temperature"
+    #: Golden-section search bounds and iteration count (config, not magic numbers).
+    t_min: float = 0.05
+    t_max: float = 10.0
+    max_iter: int = 60
 
     def fit(
         self, logits: Sequence[float], correct: Sequence[bool]
@@ -267,10 +271,10 @@ class TemperatureCalibrator:
                 total -= y * math.log(p) + (1 - y) * math.log(1 - p)
             return total
 
-        lo, hi = 0.05, 10.0  # golden-section search over the temperature
+        lo, hi = self.t_min, self.t_max  # golden-section search over the temperature
         gr = (math.sqrt(5) - 1) / 2
         c, d = hi - gr * (hi - lo), lo + gr * (hi - lo)
-        for _ in range(60):
+        for _ in range(self.max_iter):
             if nll(c) < nll(d):
                 hi, d = d, c
                 c = hi - gr * (hi - lo)
@@ -333,6 +337,27 @@ class GroupCalibrator:
     def __call__(self, raw_score: float, *, group: Any = None) -> float:
         cal = self.by_group.get(group, self.pooled)
         return cal(raw_score) if cal is not None else _clip01(float(raw_score))
+
+    def to_dict(self) -> dict:
+        """Serialize each per-group calibrator (keyed by stringified group) plus the
+        pooled fallback, so a fitted Mondrian calibrator round-trips like the others.
+        Group keys are stringified (they are ``NodeType``/``FieldSpec`` names)."""
+        return {
+            "kind": self.kind,
+            "by_group": {str(g): c.to_dict() for g, c in self.by_group.items()},
+            "pooled": self.pooled.to_dict() if self.pooled is not None else None,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "GroupCalibrator":
+        obj = cls()
+        obj.by_group = {
+            g: _calibrator_from_record(rec)
+            for g, rec in (d.get("by_group") or {}).items()
+        }
+        pooled = d.get("pooled")
+        obj.pooled = _calibrator_from_record(pooled) if pooled else None
+        return obj
 
 
 # ---------------------------------------------------------------------------
@@ -448,9 +473,13 @@ def netcal_ece(
     probs: Sequence[float], correct: Sequence[bool], *, bins: int = DEFAULT_N_BINS
 ) -> float:
     """ECE via ``netcal`` (behind ``ek[calibration]``); D-ECE for localized outputs lives there too."""
+    import numpy as np
     from netcal.metrics import ECE
 
-    return float(ECE(bins).measure(list(probs), [1 if c else 0 for c in correct]))
+    # netcal>=1.4 requires numpy arrays (a Python list raises); coerce explicitly.
+    p = np.asarray([float(x) for x in probs], dtype=float)
+    y = np.asarray([1 if c else 0 for c in correct], dtype=int)
+    return float(ECE(bins).measure(p, y))
 
 
 # ---------------------------------------------------------------------------
@@ -461,9 +490,22 @@ _CALIBRATORS = {
     "platt": PlattCalibrator,
     "isotonic": IsotonicCalibrator,
     "temperature": TemperatureCalibrator,
+    "group": GroupCalibrator,
 }
 for _k, _cls in _CALIBRATORS.items():
     register("calibrators", _k, _cls)
+
+
+def _calibrator_from_record(record: Any) -> Any:
+    """Reconstruct a calibrator from a stored record, dispatched on its ``kind``."""
+    if not isinstance(record, dict) or "kind" not in record:
+        raise ValueError(f"calibrator record is malformed (no 'kind'): {record!r}")
+    kind = record["kind"]
+    if kind not in _CALIBRATORS:
+        raise ValueError(
+            f"unknown calibrator kind {kind!r}; known: {sorted(_CALIBRATORS)}"
+        )
+    return _CALIBRATORS[kind].from_dict(record)
 
 
 def save_calibrator(

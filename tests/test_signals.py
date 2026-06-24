@@ -68,3 +68,21 @@ def test_intrinsic_confidence_null_safe():
     # No usable confidence anywhere (VLM/markdown case) -> 1.0, never a crash.
     res = _Ocr(blocks=[], text=None, mean_confidence=None)
     assert IntrinsicConfidenceSignal()(res) == 1.0
+
+
+def test_min_prob_keeps_zero_probability_token():
+    # Regression: -inf (log of a p=0 token) was dropped, so min_prob returned the
+    # SECOND-weakest token and geo_mean of an all-zero field returned a maximal 1.0.
+    ninf = float("-inf")
+    assert min_prob([ninf, math.log(0.9)]) < 1e-6      # weakest (p=0) dominates
+    assert geo_mean([ninf, ninf]) < 1e-6               # all-zero field -> ~0, not 1.0
+    assert geo_mean([math.log(0.9), math.log(0.8)]) > 0.8  # finite path unchanged
+    assert min_prob([]) == 1.0                          # no-evidence convention preserved
+    assert geo_mean([float("inf"), math.log(0.5)]) == 0.5  # +inf still dropped
+
+
+def test_intrinsic_confidence_rejects_unknown_pool():
+    import pytest
+
+    with pytest.raises(ValueError, match="pool must be one of"):
+        IntrinsicConfidenceSignal(pool="bogus")([0.5])

@@ -194,12 +194,18 @@ class RoverConsensus:
 
     @property
     def mean_agreement(self) -> float:
-        """Mean per-position agreement over consensus tokens (``1.0`` if degenerate).
+        """Mean per-position agreement over consensus tokens, a reference-free
+        confidence in ``[0, 1]``: ``1.0`` means every engine agreed at every emitted
+        position; lower means at least one engine dissented.
 
-        A reference-free confidence in ``[0, 1]``: ``1.0`` means every engine agreed
-        at every emitted position; lower means at least one engine dissented.
+        An **empty** consensus (no token survived voting -- NULL won every slot) means
+        the engines agreed on *nothing*, so this returns ``0.0`` when 2+ engines were
+        fused, NOT a misleading ``1.0`` (which would feed a maximal raw confidence to
+        the calibrator/gate). A single engine -- or none -- is vacuously ``1.0``.
         """
-        return sum(self.agreement) / len(self.agreement) if self.agreement else 1.0
+        if self.agreement:
+            return sum(self.agreement) / len(self.agreement)
+        return 1.0 if self.n_engines <= 1 else 0.0
 
 
 def _vote(
