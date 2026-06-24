@@ -42,8 +42,13 @@ ek = "ek.__main__:main"
 
 [project.optional-dependencies]
 # --- evaluation capability tiers (all permissively licensed) ---
-# Richer reference-based metrics: span-F1, table (TEDS/GriTS), typed-graph edit.
-metrics = ["networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss"]
+# Richer reference-based metrics: ANLS* (nested-JSON), span-F1 (seqeval AND
+# nervaluate), table TEDS/GriTS (clean-room on apted -- see note below), typed-graph
+# edit. All permissive: networkx BSD-3, sacrebleu/seqeval/nervaluate/apted/anls_star
+# MIT or Apache-2.0, zss BSD-3. anls_star's only dep is munkres (permissive).
+metrics = [
+    "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss", "anls_star",
+]
 # Calibration + conformal selective prediction.
 calibration = ["netcal", "scikit-learn", "mapie", "crepes"]
 # Post-extraction validation & correction (schema/lexicon/anomaly).
@@ -62,7 +67,7 @@ monitoring = ["nannyml", "evidently"]
 # agreement -- Krippendorff's alpha -- is pure-Python in the core, no extra needed;
 # the GPL `krippendorff` package was dropped to keep the closure permissive.)
 all = [
-    "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss",
+    "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss", "anls_star",
     "netcal", "scikit-learn", "mapie", "crepes",
     "pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy",
     "ocracy", "uqlm",
@@ -77,6 +82,10 @@ docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 #   surya-ocr (non-commercial RAIL-M weights) -- highest accuracy, internal research only
 #   Levenshtein / python-Levenshtein (GPL)    -- replaced by rapidfuzz
 #   Potato (GPL-3.0), Prodigy (proprietary)   -- HITL; HTTP-only / design reference
+#   table-recognition-metric (TEDS)           -- its OWN code is Apache-2.0 but it pulls
+#     in GPL `Levenshtein` as a hard runtime dep (a scanner-invisible landmine), so it
+#     is NOT used; TEDS/TEDS-Struct are reimplemented clean-room on apted (MIT) in
+#     ek/metrics/tables.py, and GriTS in pure Python (cf. the Krippendorff precedent).
 # The CI license gate (.github/workflows/license-gate.yml) fails the build if any
 # of these resolve into the core..hitl dependency closure.
 
