@@ -179,9 +179,9 @@ def _can_import(module: str) -> bool:
 # the import name; e.g. ek[ocr] installs `ocracy`).
 _EXTRA_PROBES: dict[str, list[str]] = {
     "ocr": ["ocracy"],
-    "metrics": ["networkx"],
-    "calibration": ["netcal"],
-    "validation": ["pydantic"],
+    "metrics": ["networkx", "anls_star", "seqeval", "nervaluate", "apted"],
+    "calibration": ["netcal", "sklearn"],
+    "validation": ["pydantic", "jsonschema"],
     "constrained": ["outlines"],
     "agreement": ["uqlm"],
     "hitl": ["label_studio_sdk"],
@@ -218,10 +218,12 @@ def check_requirements(
             }
     if extra is not None:
         probe = _EXTRA_PROBES.get(extra, [extra])
-        ok = all(_can_import(p) for p in probe)
+        missing = [p for p in probe if not _can_import(p)]
+        ok = not missing
         return {
             "ok": ok,
             "extra": extra,
-            "hint": "" if ok else f"pip install ek[{extra}]",
+            "missing": missing,
+            "hint": "" if ok else f"pip install ek[{extra}]  (missing: {', '.join(missing)})",
         }
     return {"ok": True, "hint": ""}

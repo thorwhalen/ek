@@ -63,3 +63,13 @@ def test_check_requirements_maps_extra_to_import_name():
 
     ocracy_present = importlib.util.find_spec("ocracy") is not None
     assert check_requirements(extra="ocr")["ok"] is ocracy_present
+
+
+def test_check_requirements_reports_missing_packages():
+    # A multi-package extra must report WHICH packages are missing, not a false ok.
+    r = check_requirements(extra="metrics")
+    assert "missing" in r
+    assert r["ok"] == (not r["missing"])
+    # an all-fake extra reports every probe missing
+    fake = check_requirements(extra="definitely_not_a_real_pkg_zzz")
+    assert fake["ok"] is False and fake["missing"]

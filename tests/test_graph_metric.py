@@ -109,3 +109,34 @@ def test_weights_override_callable():
     wrong = TypedGraph([TypedNode("d1", "donation", {"amount": "900", "city": "Paris"})])
     s = m(wrong, _gold())
     assert s.detail["raw_distance"] == 5.0  # one differing field at flat cost 5.0
+
+
+def test_graph_metric_applies_canonicalizer_and_field_normalizer():
+    # Regression: facade normalize= was silently dropped for graph inputs, and
+    # FieldSpec.normalizer was never applied by the graph metric.
+    from ek.canonicalize import resolve_canonicalizer
+
+    g_norm = GraphGrammar(
+        node_types={"rec": NodeType("rec", fields={
+            "name": FieldSpec("name", "string", normalizer="lower"),
+        })},
+        edge_types={},
+    )
+    a = TypedGraph(nodes=[TypedNode("n1", "rec", {"name": "ACME"})])
+    b = TypedGraph(nodes=[TypedNode("n1", "rec", {"name": "acme"})])
+    # FieldSpec.normalizer=lower -> the casing difference is folded away (distance 0).
+    assert TypedGraphMetric(grammar=g_norm)(a, b).detail["raw_distance"] == 0.0
+    # Without the normalizer, the facade-level canonicalizer must reach the metric.
+    assert TypedGraphMetric(canonicalizer=resolve_canonicalizer("lower"))(a, b).detail["raw_distance"] == 0.0
+    # And with neither, the casing difference is a real edit.
+    assert TypedGraphMetric()(a, b).detail["raw_distance"] > 0.0
+
+
+def test_graph_metric_node_count_guard():
+    # GED is NP-hard: a pair above max_nodes is rejected, not silently spun.
+    big = TypedGraph(nodes=[TypedNode(f"n{i}", "t", {}) for i in range(5)])
+    with pytest.raises(ValueError, match="max_nodes"):
+        TypedGraphMetric(max_nodes=3)(big, big)
+    # within the bound, the score records its exactness
+    small = TypedGraph(nodes=[TypedNode("n", "t", {"x": "a"})])
+    assert TypedGraphMetric()(small, small).detail["exact"] is True

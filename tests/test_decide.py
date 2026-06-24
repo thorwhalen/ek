@@ -18,12 +18,18 @@ from ek.registry import get
 
 
 def test_cost_sensitive_gate_threshold_from_rho():
-    gate = CostSensitiveGate(rho=9.0)        # tau = 1 - 1/9 ~ 0.889
-    assert abs(gate.tau - (1 - 1 / 9)) < 1e-12
+    # Bayes-optimal cost-sensitive threshold: tau = rho/(1+rho), NOT 1 - 1/rho.
+    gate = CostSensitiveGate(rho=9.0)        # tau = 9/10 = 0.9
+    assert abs(gate.tau - 9 / 10) < 1e-12
     assert gate(0.95) is Decision.ACCEPT
     assert gate(0.5) is Decision.FLAG
-    # rho <= 1 (reviews as costly as misses): accept everything
-    assert CostSensitiveGate(rho=1.0)(0.0) is Decision.ACCEPT
+    # rho == 1 (symmetric costs): threshold is the 0.5 MAP boundary, and a
+    # certain-WRONG item (p=0) must be FLAGGED, never auto-accepted.
+    assert abs(CostSensitiveGate(rho=1.0).tau - 0.5) < 1e-12
+    assert CostSensitiveGate(rho=1.0)(0.0) is Decision.FLAG
+    assert CostSensitiveGate(rho=1.0)(0.6) is Decision.ACCEPT
+    # rho < 1 (reviews costlier than misses): bar drops below 0.5 but stays > 0.
+    assert 0.0 < CostSensitiveGate(rho=0.25).tau < 0.5
     # explicit block band
     g2 = CostSensitiveGate(rho=9.0, block_threshold=0.1)
     assert g2(0.05) is Decision.BLOCK

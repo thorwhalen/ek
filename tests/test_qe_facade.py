@@ -41,8 +41,10 @@ def test_fieldestimate_calibrate_then_decide():
     assert report.decision is Decision.ACCEPT
 
 
-def test_gating_without_calibrator_warns():
-    with pytest.warns(UserWarning, match="uncalibrated"):
+def test_gating_without_calibrator_raises():
+    # Hard Rule 1: gating without a calibrator (and without assume_calibrated) is a
+    # hard error, not a warning -- a raw score must never reach a DecisionPolicy.
+    with pytest.raises(ValueError, match="uncalibrated"):
         estimate_quality(FieldEstimate(value="x", confidence=0.9), policy=CostSensitiveGate(rho=2.0))
 
 

@@ -151,3 +151,12 @@ def test_max_tokens_guards_the_quadratic_aligner():
     # raising the cap (or disabling it) lets it through
     assert rover([long_hyp, long_hyp], max_tokens=100).n_engines == 2
     assert rover([long_hyp], max_tokens=None).n_engines == 1
+
+
+def test_empty_consensus_is_zero_agreement_for_multiple_engines():
+    # Regression: an empty consensus (engines agreed on nothing) reported 1.0
+    # (maximal confidence). With 2+ engines it must be 0.0; a lone engine is 1.0.
+    from ek.qe.rover import RoverConsensus
+
+    assert RoverConsensus(tokens=[], agreement=[], n_engines=3).mean_agreement == 0.0
+    assert RoverConsensus(tokens=[], agreement=[], n_engines=1).mean_agreement == 1.0
