@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.ocr &mdash; ek 0.1.5 documentation</title>
+  <title>ek.ocr &mdash; ek 0.1.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=59fadc99"></script>
+      <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -64,15 +64,20 @@
 <li class="toctree-l1"><a class="reference internal" href="metrics/tables.html">ek.metrics.tables</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ek.ocr</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ocr.add_gold_item"><code class="docutils literal notranslate"><span class="pre">add_gold_item()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.engine_yields_tables"><code class="docutils literal notranslate"><span class="pre">engine_yields_tables()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ocr.evaluate_ocr"><code class="docutils literal notranslate"><span class="pre">evaluate_ocr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.has_table_structure"><code class="docutils literal notranslate"><span class="pre">has_table_structure()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ocr.ocracy_backend"><code class="docutils literal notranslate"><span class="pre">ocracy_backend()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ocr.profile"><code class="docutils literal notranslate"><span class="pre">profile()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ocr.read_text"><code class="docutils literal notranslate"><span class="pre">read_text()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.resolve_table_parser"><code class="docutils literal notranslate"><span class="pre">resolve_table_parser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ocr.table_from_ocr"><code class="docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ocr/bridge.html">ek.ocr.bridge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ocr/tables.html">ek.ocr.tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qe.html">ek.qe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qe/calibrate.html">ek.qe.calibrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qe/decide.html">ek.qe.decide</a></li>
@@ -127,6 +132,11 @@ from <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_0
 <li><p><a class="reference internal" href="#ek.ocr.evaluate_ocr" title="ek.ocr.evaluate_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate_ocr()</span></code></a> / <a class="reference internal" href="#ek.ocr.add_gold_item" title="ek.ocr.add_gold_item"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_gold_item()</span></code></a> – run a fleet over a gold corpus,
 score with CER/WER (globally accumulated), slice the report, and persist gold +
 results to the <code class="docutils literal notranslate"><span class="pre">dol</span></code> stores under <code class="docutils literal notranslate"><span class="pre">~/.local/share/ek/</span></code>.</p></li>
+<li><p><a class="reference internal" href="#ek.ocr.table_from_ocr" title="ek.ocr.table_from_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a> / <a class="reference internal" href="#ek.ocr.has_table_structure" title="ek.ocr.has_table_structure"><code class="xref py py-func docutils literal notranslate"><span class="pre">has_table_structure()</span></code></a> – recover the existing
+<a class="reference internal" href="metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">ek.metrics.tables.Table</span></code></a> from an <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code> (whose engine-specific table
+data lives only in <code class="docutils literal notranslate"><span class="pre">.raw</span></code>/<code class="docutils literal notranslate"><span class="pre">.markdown</span></code>) so the table metrics (TEDS / GriTS) can
+score OCR table output uniformly. The per-engine extractor is injected/registered
+under the <code class="docutils literal notranslate"><span class="pre">&quot;table_parsers&quot;</span></code> namespace (open-closed); see <a class="reference internal" href="ocr/tables.html#module-ek.ocr.tables" title="ek.ocr.tables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.ocr.tables</span></code></a>.</p></li>
 </ul>
 <p>Heavy engine SDKs and credentials are never required to import this module; they
 are checked at call time via <a class="reference internal" href="registry.html#ek.registry.check_requirements" title="ek.registry.check_requirements"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.registry.check_requirements()</span></code></a>.</p>
@@ -147,6 +157,17 @@ reference, not bytes – gold stores hold references + the expected text.</p></l
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.engine_yields_tables">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">engine_yields_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/tables.html#engine_yields_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.engine_yields_tables" title="Link to this definition"></a></dt>
+<dd><p>Whether <code class="docutils literal notranslate"><span class="pre">engine</span></code>’s capability profile claims scoreable table structure.</p>
+<p>A convenience over <a class="reference internal" href="#ek.ocr.profile" title="ek.ocr.profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.ocr.profile()</span></code></a>: returns the engine profile’s <code class="docutils literal notranslate"><span class="pre">tables</span></code>
+flag. ek treats the profile as a <em>prior</em> (Azure DI, AWS Textract, PaddleOCR and the
+markdown engines are expected to yield scoreable tables; Google Vision is not), to
+be verified empirically by actually running <a class="reference internal" href="#ek.ocr.table_from_ocr" title="ek.ocr.table_from_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a>. Use it to skip
+table scoring for engines that cannot emit cells in the first place.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -179,6 +200,15 @@ its prediction, reference, slice, score, and engine confidence/backend.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.has_table_structure">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">has_table_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ocr_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/tables.html#has_table_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.has_table_structure" title="Link to this definition"></a></dt>
+<dd><p>Whether <a class="reference internal" href="#ek.ocr.table_from_ocr" title="ek.ocr.table_from_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a> recovers a non-empty table from <code class="docutils literal notranslate"><span class="pre">ocr_result</span></code>.</p>
+<p>A thin predicate over <a class="reference internal" href="#ek.ocr.table_from_ocr" title="ek.ocr.table_from_ocr"><code class="xref py py-func docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a> (same <code class="docutils literal notranslate"><span class="pre">parser</span></code> semantics): true iff
+a table with at least one cell can be recovered. Use it to route an OCR result to
+the table metrics vs the text-only CER/WER fallback.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ek.ocr.ocracy_backend">
 <span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">ocracy_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">default_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ek/ocr/bridge.html#ocracy_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.ocracy_backend" title="Link to this definition"></a></dt>
 <dd><p>Return an <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable bound to one <code class="docutils literal notranslate"><span class="pre">ocracy</span></code> backend.</p>
@@ -208,6 +238,63 @@ its prediction, reference, slice, score, and engine confidence/backend.</p>
 <dt class="sig sig-object py" id="ek.ocr.read_text">
 <span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/bridge.html#read_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.read_text" title="Link to this definition"></a></dt>
 <dd><p>Convenience: OCR an image and return just the recognized text string.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.resolve_table_parser">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">resolve_table_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ek/ocr/tables.html#resolve_table_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.resolve_table_parser" title="Link to this definition"></a></dt>
+<dd><p>Resolve a table parser reference (a registered name or a callable) to a callable.</p>
+<p>Mirrors how other ek strategies resolve from the registry (see
+<a class="reference internal" href="registry.html#ek.registry.resolve" title="ek.registry.resolve"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.registry.resolve()</span></code></a>). A <code class="docutils literal notranslate"><span class="pre">str</span></code> is looked up under the <code class="docutils literal notranslate"><span class="pre">&quot;table_parsers&quot;</span></code>
+namespace; an already-callable parser is returned unchanged.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.ocr.table_from_ocr">
+<span class="sig-prename descclassname"><span class="pre">ek.ocr.</span></span><span class="sig-name descname"><span class="pre">table_from_ocr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ocr_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><span class="pre">Table</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/ocr/tables.html#table_from_ocr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ocr.table_from_ocr" title="Link to this definition"></a></dt>
+<dd><p>Extract a normalized <a class="reference internal" href="metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a> from an <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code>.</p>
+<p>The single seam ek’s table metrics (TEDS / GriTS) use to score OCR table output
+uniformly. Returns the recovered Table, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when the result carries no
+recoverable table structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ocr_result</strong> – Any <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code>-shaped object. ek reads only its <code class="docutils literal notranslate"><span class="pre">.raw</span></code> (the
+engine-specific payload), <code class="docutils literal notranslate"><span class="pre">.markdown</span></code> (VLM/markdown engines), and
+<code class="docutils literal notranslate"><span class="pre">.meta</span></code> – never ocracy types, so any <code class="docutils literal notranslate"><span class="pre">image</span> <span class="pre">-&gt;</span> <span class="pre">OcrResult</span></code> callable’s
+output works.</p></li>
+<li><p><strong>parser</strong> – <p>How to turn the raw payload into a table (dependency injection /
+open-closed). One of:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (default): try the built-in <strong>safe heuristics</strong> – <code class="docutils literal notranslate"><span class="pre">.raw</span></code> is
+already a <a class="reference internal" href="metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, a 2-D grid, or a
+<code class="docutils literal notranslate"><span class="pre">&lt;table&gt;...&lt;/table&gt;</span></code> HTML string; or <code class="docutils literal notranslate"><span class="pre">.raw</span></code>/<code class="docutils literal notranslate"><span class="pre">.meta</span></code> is a mapping
+carrying one of <code class="docutils literal notranslate"><span class="pre">{tables,</span> <span class="pre">table,</span> <span class="pre">cells,</span> <span class="pre">grid,</span> <span class="pre">html}</span></code>; or <code class="docutils literal notranslate"><span class="pre">.markdown</span></code>
+contains an HTML <code class="docutils literal notranslate"><span class="pre">&lt;table&gt;</span></code>. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if none match – it never
+guesses wildly.</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">str</span></code>: the name of a parser registered under <code class="docutils literal notranslate"><span class="pre">&quot;table_parsers&quot;</span></code>
+(per-engine extractor), resolved from <a class="reference internal" href="registry.html#module-ek.registry" title="ek.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.registry</span></code></a>.</p></li>
+<li><p>a callable <code class="docutils literal notranslate"><span class="pre">(raw)</span> <span class="pre">-&gt;</span> <span class="pre">Table</span> <span class="pre">|</span> <span class="pre">grid</span> <span class="pre">|</span> <span class="pre">html</span> <span class="pre">|</span> <span class="pre">None</span></code>: an inline per-engine
+extractor. It receives the result’s <code class="docutils literal notranslate"><span class="pre">.raw</span></code> (falling back to the result
+itself when there is no <code class="docutils literal notranslate"><span class="pre">.raw</span></code>).</p></li>
+</ul>
+</p></li>
+<li><p><strong>through</strong> (<em>Any non-None value an injected parser returns is fed</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param <code class="xref py py-meth docutils literal notranslate"><span class="pre">Table.coerce()</span></code>:
+:param so a parser may yield a Table:
+:param a 2-D grid:
+:param or HTML.:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A non-empty <a class="reference internal" href="metrics/tables.html#ek.metrics.tables.Table" title="ek.metrics.tables.Table"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></a>, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when no table
+structure is recoverable. An empty Table (no rows/cells) is normalized to
+<code class="docutils literal notranslate"><span class="pre">None</span></code> so the predicate <a class="reference internal" href="#ek.ocr.has_table_structure" title="ek.ocr.has_table_structure"><code class="xref py py-func docutils literal notranslate"><span class="pre">has_table_structure()</span></code></a> and downstream metrics
+see “no table”, not a degenerate one.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

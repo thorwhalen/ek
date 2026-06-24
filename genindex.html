@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; ek 0.1.5 documentation</title>
+  <title>Index &mdash; ek 0.1.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=59fadc99"></script>
+      <script src="_static/documentation_options.js?v=6e0256f3"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -63,6 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe.html">ek.qe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
@@ -109,6 +110,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
@@ -571,8 +573,13 @@
         <li><a href="module_docs/ek/ocr/profiles.html#module-ek.ocr.profiles">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    ek.ocr.tables
+
+      <ul>
+        <li><a href="module_docs/ek/ocr/tables.html#module-ek.ocr.tables">module</a>
+</li>
+      </ul></li>
       <li>
     ek.qe
 
@@ -580,6 +587,8 @@
         <li><a href="module_docs/ek/qe.html#module-ek.qe">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.qe.calibrate
 
@@ -645,6 +654,14 @@
       </ul></li>
       <li><a href="module_docs/ek/ocr/profiles.html#ek.ocr.profiles.ENGINE_PROFILES">ENGINE_PROFILES (in module ek.ocr.profiles)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.engine_yields_tables">engine_yields_tables() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/ocr.html#ek.ocr.engine_yields_tables">(in module ek.ocr)</a>
+</li>
+        <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.engine_yields_tables">(in module ek.ocr.tables)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/tools.html#ek.tools.engines">engines() (in module ek.tools)</a>
 </li>
       <li><a href="module_docs/ek.html#ek.enum_validator">enum_validator() (in module ek)</a>
@@ -870,6 +887,20 @@
   </ul></td>
 </tr></table>
 
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek.html#ek.has_table_structure">has_table_structure() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/ocr.html#ek.ocr.has_table_structure">(in module ek.ocr)</a>
+</li>
+        <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.has_table_structure">(in module ek.ocr.tables)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1085,6 +1116,8 @@
 </li>
         <li><a href="module_docs/ek/ocr/profiles.html#module-ek.ocr.profiles">ek.ocr.profiles</a>
 </li>
+        <li><a href="module_docs/ek/ocr/tables.html#module-ek.ocr.tables">ek.ocr.tables</a>
+</li>
         <li><a href="module_docs/ek/qe.html#module-ek.qe">ek.qe</a>
 </li>
         <li><a href="module_docs/ek/qe/calibrate.html#module-ek.qe.calibrate">ek.qe.calibrate</a>
@@ -1296,16 +1329,24 @@
         <li><a href="module_docs/ek/registry.html#ek.registry.requires_extra">(in module ek.registry)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.resolve">resolve() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/registry.html#ek.registry.resolve">(in module ek.registry)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.resolve_canonicalizer">resolve_canonicalizer() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.resolve_table_parser">resolve_table_parser() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/ocr.html#ek.ocr.resolve_table_parser">(in module ek.ocr)</a>
+</li>
+        <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.resolve_table_parser">(in module ek.ocr.tables)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.risk_coverage_curve">risk_coverage_curve() (in module ek)</a>
 
       <ul>
@@ -1498,6 +1539,16 @@
         <li><a href="module_docs/ek/metrics/tables.html#ek.metrics.tables.Table">(class in ek.metrics.tables)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.table_from_ocr">table_from_ocr() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/ocr.html#ek.ocr.table_from_ocr">(in module ek.ocr)</a>
+</li>
+        <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.table_from_ocr">(in module ek.ocr.tables)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.TABLE_PARSERS_NAMESPACE">TABLE_PARSERS_NAMESPACE (in module ek.ocr.tables)</a>
+</li>
       <li><a href="module_docs/ek.html#ek.CostSensitiveGate.tau">tau (ek.CostSensitiveGate property)</a>
 
       <ul>
@@ -1538,6 +1589,8 @@
         <li><a href="module_docs/ek/qe.html#ek.qe.GroupCalibrator.to_dict">(ek.qe.GroupCalibrator method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/metrics/graphs.html#ek.metrics.graphs.TypedGraph.to_networkx">to_networkx() (ek.metrics.graphs.TypedGraph method)</a>
 
       <ul>
@@ -1546,8 +1599,6 @@
         <li><a href="module_docs/ek.html#ek.TypedGraph.to_networkx">(ek.TypedGraph method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.totals_consistent">totals_consistent() (in module ek)</a>
 
       <ul>

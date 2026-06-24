@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.ocr.tables &mdash; ek 0.1.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=6e0256f3"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.ocr.tables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.ocr.tables</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Recover a normalized table from an ``OcrResult`` so ek&#39;s table metrics can score it.</span>
+
+<span class="sd">``ocracy`` exposes **no** normalized table/cell type: ``TextBlock.level`` stops at</span>
+<span class="sd">``block``, with no cell/row/column model, so OCR table structure survives only inside</span>
+<span class="sd">the engine-specific ``OcrResult.raw`` (Textract ``Block`` objects, PaddleOCR</span>
+<span class="sd">``pred_html``, Azure ``tables[]``) or in the markdown/HTML an engine emits</span>
+<span class="sd">(``res.markdown`` for VLM engines). ek therefore can&#39;t uniformly score table</span>
+<span class="sd">structure (TEDS / GriTS) off the ``OcrResult`` shape alone.</span>
+
+<span class="sd">This module is the **ek-side seam** that closes that gap *without touching ocracy*</span>
+<span class="sd">(the dependency arrow stays ``ek -&gt; ocracy``, never the reverse). It turns an</span>
+<span class="sd">``OcrResult``-shaped object into the existing :class:`ek.metrics.tables.Table` (the</span>
+<span class="sd">one TEDS/GriTS already score) -- it does **not** define a new table type.</span>
+
+<span class="sd">Because every engine stores tables differently, the per-engine extractor is an</span>
+<span class="sd">**injected** callable (open-closed / dependency-injection): pass ``parser=`` a</span>
+<span class="sd">``(raw) -&gt; Table | grid | html | None`` function, or register one under the</span>
+<span class="sd">``&quot;table_parsers&quot;`` namespace and pass its name. With no parser,</span>
+<span class="sd">:func:`table_from_ocr` falls back to a few **safe, documented** heuristics over the</span>
+<span class="sd">result&#39;s ``raw``/``markdown``/``meta`` and returns ``None`` when no table structure is</span>
+<span class="sd">present -- it never guesses wildly.</span>
+
+<span class="sd">Nothing here imports ``ocracy`` or any OCR engine: ek depends only on the</span>
+<span class="sd">``OcrResult`` *shape* (``.text`` / ``.raw`` / ``.markdown`` / ``.meta``), so this works</span>
+<span class="sd">on any ``image -&gt; OcrResult`` callable&#39;s output.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.metrics.tables import Table</span>
+<span class="sd">    &gt;&gt;&gt; class R:  # a minimal OcrResult-shaped object carrying a 2-D grid in .raw</span>
+<span class="sd">    ...     raw = {&quot;tables&quot;: [[[&quot;a&quot;, &quot;b&quot;], [&quot;c&quot;, &quot;d&quot;]]]}</span>
+<span class="sd">    &gt;&gt;&gt; t = table_from_ocr(R())</span>
+<span class="sd">    &gt;&gt;&gt; [[c.text for c in row] for row in t.rows]</span>
+<span class="sd">    [[&#39;a&#39;, &#39;b&#39;], [&#39;c&#39;, &#39;d&#39;]]</span>
+<span class="sd">    &gt;&gt;&gt; has_table_structure(R())</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; class Empty:  # no table anywhere in the result</span>
+<span class="sd">    ...     raw = {&quot;text&quot;: &quot;just prose&quot;}</span>
+<span class="sd">    &gt;&gt;&gt; table_from_ocr(Empty()) is None</span>
+<span class="sd">    True</span>
+
+<span class="sd">A registered third-party engine parser, used by name:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.registry import register</span>
+<span class="sd">    &gt;&gt;&gt; @register(&quot;table_parsers&quot;, &quot;demo&quot;)</span>
+<span class="sd">    ... def _demo(raw):</span>
+<span class="sd">    ...     return raw.get(&quot;cells&quot;)  # this engine stores a grid under raw[&#39;cells&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; class D:</span>
+<span class="sd">    ...     raw = {&quot;cells&quot;: [[&quot;x&quot;]]}</span>
+<span class="sd">    &gt;&gt;&gt; table_from_ocr(D(), parser=&quot;demo&quot;).rows[0][0].text</span>
+<span class="sd">    &#39;x&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span> <span class="k">as</span> <span class="n">_SequenceABC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..metrics.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve</span>
+
+<span class="c1">#: Registry namespace under which per-engine table parsers live. Register a parser</span>
+<span class="c1">#: with ``ek.registry.register(&quot;table_parsers&quot;, &quot;&lt;engine&gt;&quot;, fn)`` (or an</span>
+<span class="c1">#: ``ek.table_parsers`` entry point) and resolve it by name via the ``parser=`` arg.</span>
+<span class="n">TABLE_PARSERS_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;table_parsers&quot;</span>
+
+<span class="c1">#: Keys ek looks under, in order, for a table payload nested in a ``raw``/``meta`` dict</span>
+<span class="c1">#: (engine-agnostic conventions). First non-empty hit wins.</span>
+<span class="n">_RAW_TABLE_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="s2">&quot;cells&quot;</span><span class="p">,</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="table_from_ocr">
+<a class="viewcode-back" href="../../../module_docs/ek/ocr/tables.html#ek.table_from_ocr">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">table_from_ocr</span><span class="p">(</span>
+    <span class="n">ocr_result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract a normalized :class:`~ek.metrics.tables.Table` from an ``OcrResult``.</span>
+
+<span class="sd">    The single seam ek&#39;s table metrics (TEDS / GriTS) use to score OCR table output</span>
+<span class="sd">    uniformly. Returns the recovered Table, or ``None`` when the result carries no</span>
+<span class="sd">    recoverable table structure.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ocr_result: Any ``OcrResult``-shaped object. ek reads only its ``.raw`` (the</span>
+<span class="sd">            engine-specific payload), ``.markdown`` (VLM/markdown engines), and</span>
+<span class="sd">            ``.meta`` -- never ocracy types, so any ``image -&gt; OcrResult`` callable&#39;s</span>
+<span class="sd">            output works.</span>
+<span class="sd">        parser: How to turn the raw payload into a table (dependency injection /</span>
+<span class="sd">            open-closed). One of:</span>
+
+<span class="sd">            - ``None`` (default): try the built-in **safe heuristics** -- ``.raw`` is</span>
+<span class="sd">              already a :class:`~ek.metrics.tables.Table`, a 2-D grid, or a</span>
+<span class="sd">              ``&lt;table&gt;...&lt;/table&gt;`` HTML string; or ``.raw``/``.meta`` is a mapping</span>
+<span class="sd">              carrying one of ``{tables, table, cells, grid, html}``; or ``.markdown``</span>
+<span class="sd">              contains an HTML ``&lt;table&gt;``. Returns ``None`` if none match -- it never</span>
+<span class="sd">              guesses wildly.</span>
+<span class="sd">            - a ``str``: the name of a parser registered under ``&quot;table_parsers&quot;``</span>
+<span class="sd">              (per-engine extractor), resolved from :mod:`ek.registry`.</span>
+<span class="sd">            - a callable ``(raw) -&gt; Table | grid | html | None``: an inline per-engine</span>
+<span class="sd">              extractor. It receives the result&#39;s ``.raw`` (falling back to the result</span>
+<span class="sd">              itself when there is no ``.raw``).</span>
+
+<span class="sd">        Any non-``None`` value an injected parser returns is fed through</span>
+<span class="sd">        :meth:`Table.coerce`, so a parser may yield a Table, a 2-D grid, or HTML.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A non-empty :class:`~ek.metrics.tables.Table`, or ``None`` when no table</span>
+<span class="sd">        structure is recoverable. An empty Table (no rows/cells) is normalized to</span>
+<span class="sd">        ``None`` so the predicate :func:`has_table_structure` and downstream metrics</span>
+<span class="sd">        see &quot;no table&quot;, not a degenerate one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">parser</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">_run_injected_parser</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="n">parser</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">_coerce_parser_output</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">_heuristic_table</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_nonempty_table</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="has_table_structure">
+<a class="viewcode-back" href="../../../module_docs/ek/ocr/tables.html#ek.has_table_structure">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">has_table_structure</span><span class="p">(</span>
+    <span class="n">ocr_result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether :func:`table_from_ocr` recovers a non-empty table from ``ocr_result``.</span>
+
+<span class="sd">    A thin predicate over :func:`table_from_ocr` (same ``parser`` semantics): true iff</span>
+<span class="sd">    a table with at least one cell can be recovered. Use it to route an OCR result to</span>
+<span class="sd">    the table metrics vs the text-only CER/WER fallback.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">table_from_ocr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="n">parser</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_table_parser">
+<a class="viewcode-back" href="../../../module_docs/ek/ocr/tables.html#ek.resolve_table_parser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_table_parser</span><span class="p">(</span><span class="n">ref</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a table parser reference (a registered name or a callable) to a callable.</span>
+
+<span class="sd">    Mirrors how other ek strategies resolve from the registry (see</span>
+<span class="sd">    :func:`ek.registry.resolve`). A ``str`` is looked up under the ``&quot;table_parsers&quot;``</span>
+<span class="sd">    namespace; an already-callable parser is returned unchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">resolve</span><span class="p">(</span><span class="n">TABLE_PARSERS_NAMESPACE</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="engine_yields_tables">
+<a class="viewcode-back" href="../../../module_docs/ek/ocr/tables.html#ek.engine_yields_tables">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">engine_yields_tables</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``engine``&#39;s capability profile claims scoreable table structure.</span>
+
+<span class="sd">    A convenience over :func:`ek.ocr.profile`: returns the engine profile&#39;s ``tables``</span>
+<span class="sd">    flag. ek treats the profile as a *prior* (Azure DI, AWS Textract, PaddleOCR and the</span>
+<span class="sd">    markdown engines are expected to yield scoreable tables; Google Vision is not), to</span>
+<span class="sd">    be verified empirically by actually running :func:`table_from_ocr`. Use it to skip</span>
+<span class="sd">    table scoring for engines that cannot emit cells in the first place.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.profiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">profile</span>
+
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">profile</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tables&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Internals: injected-parser dispatch + the default safe heuristics</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_injected_parser</span><span class="p">(</span>
+    <span class="n">ocr_result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">parser</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run an injected/registered parser on the result&#39;s ``raw`` payload.&quot;&quot;&quot;</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="n">resolve_table_parser</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">raw</span> <span class="k">if</span> <span class="n">raw</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ocr_result</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_parser_output</span><span class="p">(</span><span class="n">candidate</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a parser&#39;s return (``None`` / Table / grid / HTML) to a Table or ``None``.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">candidate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_heuristic_table</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The default, no-parser heuristics: a few safe, documented shapes only.</span>
+
+<span class="sd">    Order: (1) ``.raw`` is already a table-ish payload (Table / grid / ``&lt;table&gt;``</span>
+<span class="sd">    HTML); (2) ``.raw``/``.meta`` is a mapping carrying a known table key; (3)</span>
+<span class="sd">    ``.markdown`` (or a ``.meta[&#39;markdown&#39;]``) contains an HTML ``&lt;table&gt;``. Anything</span>
+<span class="sd">    else -&gt; ``None`` (no wild guessing).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="s2">&quot;raw&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">direct</span> <span class="o">=</span> <span class="n">_coerce_table_like</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">direct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">direct</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">nested</span> <span class="o">=</span> <span class="n">_table_from_mapping</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nested</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nested</span>
+
+    <span class="n">meta</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">nested</span> <span class="o">=</span> <span class="n">_table_from_mapping</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nested</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">nested</span>
+
+    <span class="k">return</span> <span class="n">_table_from_markdown</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_coerce_table_like</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce ``obj`` to a Table iff it is unambiguously table-shaped, else ``None``.</span>
+
+<span class="sd">    &quot;Table-shaped&quot; means: an existing :class:`Table`, an HTML string containing a</span>
+<span class="sd">    ``&lt;table&gt;`` tag, or a 2-D grid (a sequence of row-sequences). A bare string without</span>
+<span class="sd">    a ``&lt;table&gt;`` tag, a mapping, or a flat list is **not** table-shaped here (mappings</span>
+<span class="sd">    are handled separately, by key).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Table</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">obj</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">from_html</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">_looks_like_html_table</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">_is_2d_grid</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">coerce</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_table_from_mapping</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;First table recoverable from a known key of a ``raw``/``meta`` mapping.</span>
+
+<span class="sd">    Looks under ``{tables, table, cells, grid, html}``. A ``tables`` value may be a</span>
+<span class="sd">    *list of tables*; the first non-empty one is used (single-table convention -- a</span>
+<span class="sd">    multi-table seam can be added open-closed via an injected parser).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_RAW_TABLE_KEYS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">_iter_table_candidates</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">_nonempty_table</span><span class="p">(</span><span class="n">_coerce_table_like</span><span class="p">(</span><span class="n">candidate</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">table</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_table_candidates</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield plausible single-table payloads from a mapping value.</span>
+
+<span class="sd">    A ``list of tables`` (e.g. ``raw[&#39;tables&#39;] == [grid_a, grid_b]``) yields each</span>
+<span class="sd">    table; a single table-shaped value yields just itself. Strings, mappings and</span>
+<span class="sd">    Tables are always yielded whole (never iterated into characters/items).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">Table</span><span class="p">)):</span>
+        <span class="k">yield</span> <span class="n">value</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">_is_list_of_tables</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">value</span>
+        <span class="k">return</span>
+    <span class="k">yield</span> <span class="n">value</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_table_from_markdown</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recover a table from a result&#39;s markdown HTML ``&lt;table&gt;`` (VLM/markdown engines).</span>
+
+<span class="sd">    Reads ``.markdown`` (ocracy surfaces ``meta[&#39;markdown&#39;]`` there) or, failing that,</span>
+<span class="sd">    ``.meta[&#39;markdown&#39;]``. Only an HTML ``&lt;table&gt;`` is parsed -- pipe-style markdown</span>
+<span class="sd">    tables are intentionally out of scope for the *safe* default (register a parser for</span>
+<span class="sd">    those). Returns ``None`` if there is no HTML table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">markdown</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="s2">&quot;markdown&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ocr_result</span><span class="p">,</span> <span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">markdown</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;markdown&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">markdown</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_looks_like_html_table</span><span class="p">(</span><span class="n">markdown</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Table</span><span class="o">.</span><span class="n">from_html</span><span class="p">(</span><span class="n">markdown</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_looks_like_html_table</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``text`` contains an HTML ``&lt;table&gt;`` opening tag (case-insensitive).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&lt;table&quot;</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_2d_grid</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``obj`` is a 2-D grid: a non-empty non-string sequence whose items are</span>
+<span class="sd">    all non-string sequences (rows). Empty rows are allowed; an empty outer sequence is</span>
+<span class="sd">    not a grid (nothing to score).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">_is_sequence</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_list_of_tables</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether ``obj`` is a sequence whose items are themselves table-shaped (each a</span>
+<span class="sd">    Table, an HTML/``&lt;table&gt;`` string, or a 2-D grid) -- i.e. a list *of tables*.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Table</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_looks_like_html_table</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="ow">or</span> <span class="n">_is_2d_grid</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_sequence</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A non-string, non-bytes :class:`collections.abc.Sequence` (list/tuple-like).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">_SequenceABC</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_nonempty_table</span><span class="p">(</span><span class="n">table</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Table</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize an empty Table (no cells) to ``None``; pass a non-empty one through.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">has_cells</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">table</span> <span class="k">if</span> <span class="n">has_cells</span> <span class="k">else</span> <span class="kc">None</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

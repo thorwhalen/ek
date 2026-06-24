@@ -19,6 +19,7 @@
    module_docs/ek/ocr/benchmark
    module_docs/ek/ocr/bridge
    module_docs/ek/ocr/profiles
+   module_docs/ek/ocr/tables
    module_docs/ek/qe
    module_docs/ek/qe/calibrate
    module_docs/ek/qe/decide
