@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.harness &mdash; ek 0.1.3 documentation</title>
+  <title>ek.harness &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -106,9 +106,9 @@
 <span class="sd">harness adds that discipline on top of :func:`ek.score`/:func:`ek.evaluate`:</span>
 
 <span class="sd">- :func:`evaluate_store` -- run any ``input -&gt; prediction`` predictor over a gold</span>
-<span class="sd">  store (a dict or a ``ek`` gold store), scored per stratified slice, with results</span>
-<span class="sd">  persisted. (The OCR benchmark in :mod:`ek.ocr` is the OCR-specific specialization</span>
-<span class="sd">  of this.)</span>
+<span class="sd">  store (a dict or a ``ek`` gold store), scored per slice (grouped by each record&#39;s</span>
+<span class="sd">  slice label), with results persisted. (The OCR benchmark in :mod:`ek.ocr` is the</span>
+<span class="sd">  OCR-specific specialization of this.)</span>
 <span class="sd">- :func:`save_baseline` / :func:`regression_gate` -- freeze a baseline and fail when</span>
 <span class="sd">  a later run regresses beyond a tolerance, **per slice**, not just on the aggregate.</span>
 <span class="sd">  This is the golden-set CI gate.</span>
@@ -130,12 +130,24 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.facade</span><span class="w"> </span><span class="kn">import</span> <span class="n">evaluate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_store</span>
 
-<span class="c1"># Metrics whose Score.value is an ERROR/distance (lower is better).</span>
+<span class="c1"># Last-resort fallback only: metrics whose Score.value is an ERROR/distance.</span>
+<span class="c1"># The authoritative source is each Score&#39;s detail[&#39;higher_is_better&#39;].</span>
 <span class="n">_LOWER_IS_BETTER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cer&quot;</span><span class="p">,</span> <span class="s2">&quot;wer&quot;</span><span class="p">,</span> <span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;typed_graph&quot;</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_higher_is_better</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">metric</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_LOWER_IS_BETTER</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_direction_from_report</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve higher-is-better from the report&#39;s own Scores (authoritative; every</span>
+<span class="sd">    metric stamps ``detail[&#39;higher_is_better&#39;]``), falling back to the metric-name set</span>
+<span class="sd">    only when no Score carries the flag -- so custom/unlisted metrics gate correctly.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;scores&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">():</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;higher_is_better&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_higher_is_better</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -304,7 +316,11 @@
         <span class="k">else</span> <span class="n">baseline</span>
     <span class="p">)</span>
     <span class="n">metric</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">metric</span>
-    <span class="n">hib</span> <span class="o">=</span> <span class="n">_higher_is_better</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span> <span class="k">if</span> <span class="n">higher_is_better</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">higher_is_better</span>
+    <span class="n">hib</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_direction_from_report</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">higher_is_better</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">higher_is_better</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># No baseline yet: nothing to regress against -&gt; pass (first run).</span>
         <span class="k">return</span> <span class="n">GateResult</span><span class="p">(</span>
@@ -313,6 +329,13 @@
             <span class="n">higher_is_better</span><span class="o">=</span><span class="n">hib</span><span class="p">,</span>
             <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
             <span class="n">aggregate_current</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">base_metric</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">base_metric</span> <span class="ow">and</span> <span class="n">base_metric</span> <span class="o">!=</span> <span class="n">metric</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;baseline metric </span><span class="si">{</span><span class="n">base_metric</span><span class="si">!r}</span><span class="s2"> != report metric </span><span class="si">{</span><span class="n">metric</span><span class="si">!r}</span><span class="s2">; refusing &quot;</span>
+            <span class="s2">&quot;to compare incomparable scores (re-baseline against the new metric).&quot;</span>
         <span class="p">)</span>
 
     <span class="n">regressions</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>

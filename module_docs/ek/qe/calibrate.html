@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.calibrate &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe.calibrate &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -72,6 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.factory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.GroupCalibrator.to_dict"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.to_dict()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.IsotonicCalibrator"><code class="docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a><ul>
@@ -84,6 +85,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator.t_min"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.t_min</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.calibrate.expected_calibration_error"><code class="docutils literal notranslate"><span class="pre">expected_calibration_error()</span></code></a></li>
@@ -197,6 +199,14 @@ by group key, falling back to a pooled calibrator for unseen groups.</p>
 <dd><p>Fit one calibrator per distinct group key, plus a pooled fallback.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.calibrate.GroupCalibrator.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#GroupCalibrator.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Serialize each per-group calibrator (keyed by stringified group) plus the
+pooled fallback, so a fitted Mondrian calibrator round-trips like the others.
+Group keys are stringified (they are <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code> names).</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -236,7 +246,7 @@ calibration sets.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.qe.calibrate.TemperatureCalibrator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'temperature'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'temperature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator" title="Link to this definition"></a></dt>
 <dd><p>Temperature scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(logit</span> <span class="pre">/</span> <span class="pre">T)</span></code> with one <code class="docutils literal notranslate"><span class="pre">T</span></code> fit on a holdout.</p>
 <p>Use <strong>only when you have logits</strong>: <code class="docutils literal notranslate"><span class="pre">__call__</span></code> expects a <em>logit</em>, not a
 probability. <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> softens overconfidence; the argmax is unchanged.</p>
@@ -244,6 +254,12 @@ probability. <code class="docutils literal notranslate"><span class="pre">T</spa
 <dt class="sig sig-object py" id="ek.qe.calibrate.TemperatureCalibrator.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.qe.calibrate.TemperatureCalibrator" title="ek.qe.calibrate.TemperatureCalibrator"><span class="pre">TemperatureCalibrator</span></a></span></span><a class="reference internal" href="../../../_modules/ek/qe/calibrate.html#TemperatureCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator.fit" title="Link to this definition"></a></dt>
 <dd><p>Fit <code class="docutils literal notranslate"><span class="pre">T</span></code> by minimising NLL with a bounded 1-D search.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.calibrate.TemperatureCalibrator.t_min">
+<span class="sig-name descname"><span class="pre">t_min</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></span><a class="headerlink" href="#ek.qe.calibrate.TemperatureCalibrator.t_min" title="Link to this definition"></a></dt>
+<dd><p>Golden-section search bounds and iteration count (config, not magic numbers).</p>
 </dd></dl>
 
 </dd></dl>

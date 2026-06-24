@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.facade &mdash; ek 0.1.3 documentation</title>
+  <title>ek.facade &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -153,8 +153,9 @@ becomes a <code class="docutils literal notranslate"><span class="pre">raw_signa
 <li><p><strong>signals</strong> – Explicit <a class="reference internal" href="base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a> callables <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">-&gt;</span> <span class="pre">float</span> <span class="pre">|</span>
 <span class="pre">Mapping</span></code> producing further raw signals.</p></li>
 <li><p><strong>calibrator</strong> – A <a class="reference internal" href="base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> mapping raw score -&gt; probability.
-<strong>Calibration is non-optional before gating</strong>: with a <code class="docutils literal notranslate"><span class="pre">policy</span></code> but no
-calibrator (and <code class="docutils literal notranslate"><span class="pre">assume_calibrated</span></code> false), a warning is issued.</p></li>
+<strong>Calibration is non-optional before gating</strong> (Hard Rule 1): passing a
+<code class="docutils literal notranslate"><span class="pre">policy</span></code> with no calibrator and <code class="docutils literal notranslate"><span class="pre">assume_calibrated</span></code> false <strong>raises</strong> –
+a raw, uncalibrated score must never reach a DecisionPolicy.</p></li>
 <li><p><strong>validators</strong> – <a class="reference internal" href="base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> callables yielding findings. A flat
 iterable runs on every field (use spec-driven validators like
 <a class="reference internal" href="qe/verifiers.html#ek.qe.verifiers.schema_validator" title="ek.qe.verifiers.schema_validator"><code class="xref py py-func docutils literal notranslate"><span class="pre">schema_validator()</span></code></a>). For per-field scoping pass a

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.harness &mdash; ek 0.1.3 documentation</title>
+  <title>ek.harness &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -119,9 +119,9 @@
 harness adds that discipline on top of <a class="reference internal" href="../ek.html#ek.score" title="ek.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.score()</span></code></a>/<a class="reference internal" href="../ek.html#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a>:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#ek.harness.evaluate_store" title="ek.harness.evaluate_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluate_store()</span></code></a> – run any <code class="docutils literal notranslate"><span class="pre">input</span> <span class="pre">-&gt;</span> <span class="pre">prediction</span></code> predictor over a gold
-store (a dict or a <code class="docutils literal notranslate"><span class="pre">ek</span></code> gold store), scored per stratified slice, with results
-persisted. (The OCR benchmark in <a class="reference internal" href="ocr.html#module-ek.ocr" title="ek.ocr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.ocr</span></code></a> is the OCR-specific specialization
-of this.)</p></li>
+store (a dict or a <code class="docutils literal notranslate"><span class="pre">ek</span></code> gold store), scored per slice (grouped by each record’s
+slice label), with results persisted. (The OCR benchmark in <a class="reference internal" href="ocr.html#module-ek.ocr" title="ek.ocr"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.ocr</span></code></a> is the
+OCR-specific specialization of this.)</p></li>
 <li><p><a class="reference internal" href="#ek.harness.save_baseline" title="ek.harness.save_baseline"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_baseline()</span></code></a> / <a class="reference internal" href="#ek.harness.regression_gate" title="ek.harness.regression_gate"><code class="xref py py-func docutils literal notranslate"><span class="pre">regression_gate()</span></code></a> – freeze a baseline and fail when
 a later run regresses beyond a tolerance, <strong>per slice</strong>, not just on the aggregate.
 This is the golden-set CI gate.</p></li>

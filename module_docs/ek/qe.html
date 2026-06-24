@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -80,6 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.GroupCalibrator"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.GroupCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.factory</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.GroupCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.GroupCalibrator.to_dict"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.to_dict()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.GroupConformalGate"><code class="docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a></li>
@@ -108,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.RoverSlot"><code class="docutils literal notranslate"><span class="pre">RoverSlot</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.TemperatureCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.qe.TemperatureCalibrator.t_min"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.t_min</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.VerifierSignal"><code class="docutils literal notranslate"><span class="pre">VerifierSignal</span></code></a><ul>
@@ -248,10 +250,15 @@ the end and corrupt the quantile, silently breaking the coverage guarantee).</p>
 <dt class="sig sig-object py" id="ek.qe.CostSensitiveGate">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">CostSensitiveGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/qe/decide.html#CostSensitiveGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.CostSensitiveGate" title="Link to this definition"></a></dt>
 <dd><p>Accept/flag/block from the cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on calibrated <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
-<p>Accept when the expected cost of accepting (an undetected error) is below the
-cost of routing to a human: <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">c_FP</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">1/rho</span></code>.
-A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much costlier than reviews) raises the bar to
-auto-accept. <code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
+<p>Accept when the expected cost of accepting is below that of routing to a human.
+Accepting risks an undetected error: cost <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span></code>. Flagging a value
+that was actually <em>correct</em> wastes a review: cost <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code> (the false-positive
+cost is incurred only with probability <code class="docutils literal notranslate"><span class="pre">p</span></code>, not unconditionally). So accept iff
+<code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code>, i.e. the Bayes-optimal threshold
+<code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">(c_FN</span> <span class="pre">+</span> <span class="pre">c_FP)</span> <span class="pre">=</span> <span class="pre">rho</span> <span class="pre">/</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">rho)</span></code>. A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much
+costlier than reviews) raises the bar to auto-accept (<code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">-&gt;</span> <span class="pre">1</span></code> as
+<code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">-&gt;</span> <span class="pre">inf</span></code>); <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">1</span></code> gives the symmetric <code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">=</span> <span class="pre">0.5</span></code>.
+<code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -295,6 +302,14 @@ by group key, falling back to a pooled calibrator for unseen groups.</p>
 <dt class="sig sig-object py" id="ek.qe.GroupCalibrator.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qe/calibrate.html#ek.qe.calibrate.GroupCalibrator" title="ek.qe.calibrate.GroupCalibrator"><span class="pre">GroupCalibrator</span></a></span></span><a class="reference internal" href="../../_modules/ek/qe/calibrate.html#GroupCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupCalibrator.fit" title="Link to this definition"></a></dt>
 <dd><p>Fit one calibrator per distinct group key, plus a pooled fallback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.GroupCalibrator.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/ek/qe/calibrate.html#GroupCalibrator.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupCalibrator.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Serialize each per-group calibrator (keyed by stringified group) plus the
+pooled fallback, so a fitted Mondrian calibrator round-trips like the others.
+Group keys are stringified (they are <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code> names).</p>
 </dd></dl>
 
 </dd></dl>
@@ -419,9 +434,13 @@ keep the default <code class="docutils literal notranslate"><span class="pre">1.
 <dl class="py property">
 <dt class="sig sig-object py" id="ek.qe.RoverConsensus.mean_agreement">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mean_agreement</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.qe.RoverConsensus.mean_agreement" title="Link to this definition"></a></dt>
-<dd><p>Mean per-position agreement over consensus tokens (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if degenerate).</p>
-<p>A reference-free confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed
-at every emitted position; lower means at least one engine dissented.</p>
+<dd><p>Mean per-position agreement over consensus tokens, a reference-free
+confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed at every emitted
+position; lower means at least one engine dissented.</p>
+<p>An <strong>empty</strong> consensus (no token survived voting – NULL won every slot) means
+the engines agreed on <em>nothing</em>, so this returns <code class="docutils literal notranslate"><span class="pre">0.0</span></code> when 2+ engines were
+fused, NOT a misleading <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (which would feed a maximal raw confidence to
+the calibrator/gate). A single engine – or none – is vacuously <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -440,7 +459,7 @@ at every emitted position; lower means at least one engine dissented.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'temperature'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.TemperatureCalibrator" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'temperature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.TemperatureCalibrator" title="Link to this definition"></a></dt>
 <dd><p>Temperature scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(logit</span> <span class="pre">/</span> <span class="pre">T)</span></code> with one <code class="docutils literal notranslate"><span class="pre">T</span></code> fit on a holdout.</p>
 <p>Use <strong>only when you have logits</strong>: <code class="docutils literal notranslate"><span class="pre">__call__</span></code> expects a <em>logit</em>, not a
 probability. <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> softens overconfidence; the argmax is unchanged.</p>
@@ -448,6 +467,12 @@ probability. <code class="docutils literal notranslate"><span class="pre">T</spa
 <dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qe/calibrate.html#ek.qe.calibrate.TemperatureCalibrator" title="ek.qe.calibrate.TemperatureCalibrator"><span class="pre">TemperatureCalibrator</span></a></span></span><a class="reference internal" href="../../_modules/ek/qe/calibrate.html#TemperatureCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.TemperatureCalibrator.fit" title="Link to this definition"></a></dt>
 <dd><p>Fit <code class="docutils literal notranslate"><span class="pre">T</span></code> by minimising NLL with a bounded 1-D search.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator.t_min">
+<span class="sig-name descname"><span class="pre">t_min</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></span><a class="headerlink" href="#ek.qe.TemperatureCalibrator.t_min" title="Link to this definition"></a></dt>
+<dd><p>Golden-section search bounds and iteration count (config, not magic numbers).</p>
 </dd></dl>
 
 </dd></dl>

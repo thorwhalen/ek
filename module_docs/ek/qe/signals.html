@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.signals &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe.signals &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -72,6 +72,7 @@
 <li class="toctree-l1"><a class="reference internal" href="rover.html">ek.qe.rover</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ek.qe.signals</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.DEFAULT_LENGTH_ALPHA"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LENGTH_ALPHA</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.DEFAULT_PROB_FLOOR"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PROB_FLOOR</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.IntrinsicConfidenceSignal"><code class="docutils literal notranslate"><span class="pre">IntrinsicConfidenceSignal</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.qe.signals.LogprobSignal"><code class="docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.qe.signals.LogprobSignal.aggregator"><code class="docutils literal notranslate"><span class="pre">LogprobSignal.aggregator()</span></code></a></li>
@@ -148,6 +149,14 @@ third party) can swap pooling by name.</p>
 <span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_LENGTH_ALPHA</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.6</span></span><a class="headerlink" href="#ek.qe.signals.DEFAULT_LENGTH_ALPHA" title="Link to this definition"></a></dt>
 <dd><p>Length-penalty exponent for <a class="reference internal" href="#ek.qe.signals.length_normalized" title="ek.qe.signals.length_normalized"><code class="xref py py-func docutils literal notranslate"><span class="pre">length_normalized()</span></code></a> (Wu et al. 2016 found
 <code class="docutils literal notranslate"><span class="pre">alpha</span></code> in <code class="docutils literal notranslate"><span class="pre">[0.6,</span> <span class="pre">0.7]</span></code> best); a keyword default, never a magic constant.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.qe.signals.DEFAULT_PROB_FLOOR">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.signals.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_PROB_FLOOR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-12</span></span><a class="headerlink" href="#ek.qe.signals.DEFAULT_PROB_FLOOR" title="Link to this definition"></a></dt>
+<dd><p>Smallest probability treated as non-zero. <code class="docutils literal notranslate"><span class="pre">log(p=0)</span> <span class="pre">=</span> <span class="pre">-inf</span></code> clamps to
+<code class="docutils literal notranslate"><span class="pre">log(DEFAULT_PROB_FLOOR)</span></code> (mirrors the confidence floor) so a p=0 token still
+drives min_prob/geo_mean toward 0 instead of being silently discarded.</p>
 </dd></dl>
 
 <dl class="py class">

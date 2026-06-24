@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.rover &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe.rover &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -202,9 +202,13 @@ slot) – the lever for how readily a deletion wins.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="ek.qe.rover.RoverConsensus.mean_agreement">
 <span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mean_agreement</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.qe.rover.RoverConsensus.mean_agreement" title="Link to this definition"></a></dt>
-<dd><p>Mean per-position agreement over consensus tokens (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> if degenerate).</p>
-<p>A reference-free confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed
-at every emitted position; lower means at least one engine dissented.</p>
+<dd><p>Mean per-position agreement over consensus tokens, a reference-free
+confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed at every emitted
+position; lower means at least one engine dissented.</p>
+<p>An <strong>empty</strong> consensus (no token survived voting – NULL won every slot) means
+the engines agreed on <em>nothing</em>, so this returns <code class="docutils literal notranslate"><span class="pre">0.0</span></code> when 2+ engines were
+fused, NOT a misleading <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (which would feed a maximal raw confidence to
+the calibrator/gate). A single engine – or none – is vacuously <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
 </dd></dl>
 
 <dl class="py property">

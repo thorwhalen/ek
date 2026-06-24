@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.decide &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe.decide &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -130,7 +130,7 @@
 <span class="sd">Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ek.base import Decision</span>
 <span class="sd">    &gt;&gt;&gt; gate = CostSensitiveGate(rho=9.0)          # a false-negative costs 9x a review</span>
-<span class="sd">    &gt;&gt;&gt; gate(0.95) is Decision.ACCEPT              # tau = 1 - 1/9 ~ 0.889</span>
+<span class="sd">    &gt;&gt;&gt; gate(0.95) is Decision.ACCEPT              # tau = rho/(1+rho) = 9/10 = 0.9</span>
 <span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; gate(0.5) is Decision.FLAG</span>
 <span class="sd">    True</span>
@@ -176,10 +176,15 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">CostSensitiveGate</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept/flag/block from the cost ratio ``rho = c_FN / c_FP`` on calibrated ``p``.</span>
 
-<span class="sd">    Accept when the expected cost of accepting (an undetected error) is below the</span>
-<span class="sd">    cost of routing to a human: ``(1 - p) * c_FN &lt;= c_FP``, i.e. ``p &gt;= 1 - 1/rho``.</span>
-<span class="sd">    A larger ``rho`` (misses much costlier than reviews) raises the bar to</span>
-<span class="sd">    auto-accept. ``block_threshold`` adds an optional hard-fail band at the bottom.</span>
+<span class="sd">    Accept when the expected cost of accepting is below that of routing to a human.</span>
+<span class="sd">    Accepting risks an undetected error: cost ``(1 - p) * c_FN``. Flagging a value</span>
+<span class="sd">    that was actually *correct* wastes a review: cost ``p * c_FP`` (the false-positive</span>
+<span class="sd">    cost is incurred only with probability ``p``, not unconditionally). So accept iff</span>
+<span class="sd">    ``(1 - p) * c_FN &lt;= p * c_FP``, i.e. the Bayes-optimal threshold</span>
+<span class="sd">    ``p &gt;= c_FN / (c_FN + c_FP) = rho / (1 + rho)``. A larger ``rho`` (misses much</span>
+<span class="sd">    costlier than reviews) raises the bar to auto-accept (``tau -&gt; 1`` as</span>
+<span class="sd">    ``rho -&gt; inf``); ``rho = 1`` gives the symmetric ``tau = 0.5``.</span>
+<span class="sd">    ``block_threshold`` adds an optional hard-fail band at the bottom.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        rho: Cost ratio ``c_FN / c_FP`` (&gt;= 0). The single lever; no magic numbers.</span>
@@ -198,7 +203,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The accept threshold on calibrated probability (derived from ``rho``).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decision</span><span class="p">:</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">_finite</span><span class="p">(</span><span class="n">confidence</span><span class="p">)</span>

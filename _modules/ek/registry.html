@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.registry &mdash; ek 0.1.3 documentation</title>
+  <title>ek.registry &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -298,9 +298,9 @@
 <span class="c1"># the import name; e.g. ek[ocr] installs `ocracy`).</span>
 <span class="n">_EXTRA_PROBES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;ocr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ocracy&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;networkx&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;calibration&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;netcal&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pydantic&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;networkx&quot;</span><span class="p">,</span> <span class="s2">&quot;anls_star&quot;</span><span class="p">,</span> <span class="s2">&quot;seqeval&quot;</span><span class="p">,</span> <span class="s2">&quot;nervaluate&quot;</span><span class="p">,</span> <span class="s2">&quot;apted&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;calibration&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;netcal&quot;</span><span class="p">,</span> <span class="s2">&quot;sklearn&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pydantic&quot;</span><span class="p">,</span> <span class="s2">&quot;jsonschema&quot;</span><span class="p">],</span>
     <span class="s2">&quot;constrained&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;outlines&quot;</span><span class="p">],</span>
     <span class="s2">&quot;agreement&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;uqlm&quot;</span><span class="p">],</span>
     <span class="s2">&quot;hitl&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;label_studio_sdk&quot;</span><span class="p">],</span>
@@ -339,11 +339,13 @@
             <span class="p">}</span>
     <span class="k">if</span> <span class="n">extra</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">probe</span> <span class="o">=</span> <span class="n">_EXTRA_PROBES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="p">[</span><span class="n">extra</span><span class="p">])</span>
-        <span class="n">ok</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">_can_import</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probe</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probe</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">_can_import</span><span class="p">(</span><span class="n">p</span><span class="p">)]</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">missing</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span>
             <span class="s2">&quot;extra&quot;</span><span class="p">:</span> <span class="n">extra</span><span class="p">,</span>
-            <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;pip install ek[</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;missing&quot;</span><span class="p">:</span> <span class="n">missing</span><span class="p">,</span>
+            <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;pip install ek[</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">]  (missing: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;ok&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;hint&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span></div>
 

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.metrics.fields &mdash; ek 0.1.3 documentation</title>
+  <title>ek.metrics.fields &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -129,6 +129,31 @@
     <span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_field_normalizers</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map ``field name -&gt; resolved canonicalizer`` from each ``FieldSpec.normalizer``.</span>
+
+<span class="sd">    A schema can declare a per-field canonicalizer (e.g. a date or currency folder)</span>
+<span class="sd">    that must be applied to that field alone before comparison; without this the</span>
+<span class="sd">    grammar&#39;s ``normalizer`` contract is silently ignored. Field names are taken</span>
+<span class="sd">    across all node types (unique enough for a flat record).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..canonicalize</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_canonicalizer</span>
+
+    <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">grammar</span><span class="o">.</span><span class="n">node_types</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">node_type</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;normalizer&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_canonicalizer</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a canonicalizer to a string value (pass non-strings through unchanged).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">value</span>
+
+
 <div class="viewcode-block" id="FieldMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/fields.html#ek.FieldMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FieldMetric</span><span class="p">:</span>
@@ -143,11 +168,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span> <span class="o">=</span> <span class="n">canonicalizer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;fields&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">v</span>
-
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
@@ -156,15 +176,19 @@
                 <span class="s2">&quot;FieldMetric compares Mapping records; got &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
+        <span class="c1"># Per-field normalizers (from the schema) take precedence over the</span>
+        <span class="c1"># facade-level canonicalizer for the fields they name.</span>
+        <span class="n">field_norms</span> <span class="o">=</span> <span class="n">_field_normalizers</span><span class="p">(</span><span class="n">grammar</span><span class="p">)</span>
         <span class="n">tp</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred</span><span class="p">):</span>
             <span class="n">g</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">_MISSING</span><span class="p">)</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">_MISSING</span><span class="p">)</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="n">field_norms</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="n">_MISSING</span><span class="p">:</span>  <span class="c1"># predicted a field that gold does not have</span>
                 <span class="n">fp</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">elif</span> <span class="n">p</span> <span class="ow">is</span> <span class="n">_MISSING</span><span class="p">:</span>  <span class="c1"># gold has a field the prediction missed</span>
                 <span class="n">fn</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norm</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_norm</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+            <span class="k">elif</span> <span class="n">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="n">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
                 <span class="n">tp</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># both present but disagree</span>
                 <span class="n">fp</span> <span class="o">+=</span> <span class="mi">1</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.decide &mdash; ek 0.1.3 documentation</title>
+  <title>ek.qe.decide &mdash; ek 0.1.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../_static/documentation_options.js?v=fd825880"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -152,7 +152,7 @@ realised coverage and re-fit on drift.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decision</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span> <span class="o">=</span> <span class="n">CostSensitiveGate</span><span class="p">(</span><span class="n">rho</span><span class="o">=</span><span class="mf">9.0</span><span class="p">)</span>          <span class="c1"># a false-negative costs 9x a review</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span>              <span class="c1"># tau = 1 - 1/9 ~ 0.889</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ACCEPT</span>              <span class="c1"># tau = rho/(1+rho) = 9/10 = 0.9</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Decision</span><span class="o">.</span><span class="n">FLAG</span>
 <span class="go">True</span>
@@ -195,10 +195,15 @@ the end and corrupt the quantile, silently breaking the coverage guarantee).</p>
 <dt class="sig sig-object py" id="ek.qe.decide.CostSensitiveGate">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.decide.</span></span><span class="sig-name descname"><span class="pre">CostSensitiveGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/qe/decide.html#CostSensitiveGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.decide.CostSensitiveGate" title="Link to this definition"></a></dt>
 <dd><p>Accept/flag/block from the cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on calibrated <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
-<p>Accept when the expected cost of accepting (an undetected error) is below the
-cost of routing to a human: <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">c_FP</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">1/rho</span></code>.
-A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much costlier than reviews) raises the bar to
-auto-accept. <code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
+<p>Accept when the expected cost of accepting is below that of routing to a human.
+Accepting risks an undetected error: cost <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span></code>. Flagging a value
+that was actually <em>correct</em> wastes a review: cost <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code> (the false-positive
+cost is incurred only with probability <code class="docutils literal notranslate"><span class="pre">p</span></code>, not unconditionally). So accept iff
+<code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code>, i.e. the Bayes-optimal threshold
+<code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">(c_FN</span> <span class="pre">+</span> <span class="pre">c_FP)</span> <span class="pre">=</span> <span class="pre">rho</span> <span class="pre">/</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">rho)</span></code>. A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much
+costlier than reviews) raises the bar to auto-accept (<code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">-&gt;</span> <span class="pre">1</span></code> as
+<code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">-&gt;</span> <span class="pre">inf</span></code>); <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">1</span></code> gives the symmetric <code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">=</span> <span class="pre">0.5</span></code>.
+<code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
