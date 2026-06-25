@@ -144,10 +144,13 @@ from .validate import (
     canonicalize_corrector,
     cross_field_validator,
     lexicon_corrector,
+    llm_corrector,
+    lm_surprisal_validator,
     ordering_validator,
     stop_on_correction,
     stop_on_flag,
     validation_pipeline,
+    zscore_anomaly_findings,
 )
 from .stores import app_folder, cache_this, json_store, mall, persistent_cache
 
@@ -255,6 +258,9 @@ __all__ = [
     "cross_field_validator",
     "ordering_validator",
     "benford_findings",
+    "zscore_anomaly_findings",
+    "lm_surprisal_validator",
+    "llm_corrector",
     "stop_on_correction",
     "stop_on_flag",
     # registry
