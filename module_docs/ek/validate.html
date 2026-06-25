@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.validate &mdash; ek 0.1.6 documentation</title>
+  <title>ek.validate &mdash; ek 0.1.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6e0256f3"></script>
+      <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -81,6 +81,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.DEFAULT_BENFORD_MIN_N"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BENFORD_MIN_N</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.DEFAULT_BENFORD_TOL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BENFORD_TOL</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.DEFAULT_LEXICON_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LEXICON_THRESHOLD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.validate.DEFAULT_ZSCORE_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">DEFAULT_ZSCORE_THRESHOLD</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.Layer"><code class="docutils literal notranslate"><span class="pre">Layer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.ValidationResult"><code class="docutils literal notranslate"><span class="pre">ValidationResult</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.validate.ValidationResult.clean"><code class="docutils literal notranslate"><span class="pre">ValidationResult.clean</span></code></a></li>
@@ -92,11 +93,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.canonicalize_corrector"><code class="docutils literal notranslate"><span class="pre">canonicalize_corrector()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.cross_field_validator"><code class="docutils literal notranslate"><span class="pre">cross_field_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.lexicon_corrector"><code class="docutils literal notranslate"><span class="pre">lexicon_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.validate.llm_corrector"><code class="docutils literal notranslate"><span class="pre">llm_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.validate.lm_surprisal_validator"><code class="docutils literal notranslate"><span class="pre">lm_surprisal_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.ordering_validator"><code class="docutils literal notranslate"><span class="pre">ordering_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.stop_on_correction"><code class="docutils literal notranslate"><span class="pre">stop_on_correction()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.stop_on_flag"><code class="docutils literal notranslate"><span class="pre">stop_on_flag()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.validate.validation_pipeline"><code class="docutils literal notranslate"><span class="pre">validation_pipeline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.validate.zscore_anomaly_findings"><code class="docutils literal notranslate"><span class="pre">zscore_anomaly_findings()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -151,14 +155,23 @@ is applied to the value <em>before the next layer runs</em> (the noisy-channel c
 cheap deterministic fix short-circuits the expensive layers), and an injectable
 <code class="docutils literal notranslate"><span class="pre">stop_when</span></code> policy ends the pass early (e.g. once a value is corrected or clean).</p>
 <p>The deterministic layers here need no extra dependencies (<code class="docutils literal notranslate"><span class="pre">rapidfuzz</span></code> is core). The
-softer/heavier layers are documented <strong>extension points</strong>, not shipped wiring – plug
-any <code class="docutils literal notranslate"><span class="pre">Corrector</span></code>/<code class="docutils literal notranslate"><span class="pre">Validator</span></code> of your own:</p>
+softer/heavier layers ship as <strong>dependency-injected</strong> layers: the layer is dep-free
+and you inject the model/LLM call (your in-domain LM scorer, your LLM client), so the
+expensive backend is your deployment choice, not a default dependency.</p>
 <ul class="simple">
-<li><p><strong>L3 LM surprisal</strong> (FLAG): score substrings under an in-domain n-gram/masked LM
-(KenLM / <code class="docutils literal notranslate"><span class="pre">minicons</span></code> PLL) and flag low-probability spans.</p></li>
-<li><p><strong>L4 constrained generation</strong> (generative extractors only): <code class="docutils literal notranslate"><span class="pre">outlines</span></code>/XGrammar.</p></li>
-<li><p><strong>L5 neural/LLM correction</strong> (CORRECT, gated): the only layer that invents content;
-send it only flagged spans, verify its output, keep an audit trail.</p></li>
+<li><p><strong>L3 LM surprisal</strong> (FLAG): <a class="reference internal" href="#ek.validate.lm_surprisal_validator" title="ek.validate.lm_surprisal_validator"><code class="xref py py-func docutils literal notranslate"><span class="pre">lm_surprisal_validator()</span></code></a> takes an injected
+<code class="docutils literal notranslate"><span class="pre">(str)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> surprisal scorer (n-gram / masked-LM PLL, e.g. <code class="docutils literal notranslate"><span class="pre">minicons</span></code>) and
+flags low-probability spans. Statistical anomaly without an LM:
+<a class="reference internal" href="#ek.validate.benford_findings" title="ek.validate.benford_findings"><code class="xref py py-func docutils literal notranslate"><span class="pre">benford_findings()</span></code></a> (leading-digit) and <a class="reference internal" href="#ek.validate.zscore_anomaly_findings" title="ek.validate.zscore_anomaly_findings"><code class="xref py py-func docutils literal notranslate"><span class="pre">zscore_anomaly_findings()</span></code></a>
+(robust median/MAD magnitude outliers), both dep-free.</p></li>
+<li><p><strong>L5 neural/LLM correction</strong> (CORRECT, gated): <a class="reference internal" href="#ek.validate.llm_corrector" title="ek.validate.llm_corrector"><code class="xref py py-func docutils literal notranslate"><span class="pre">llm_corrector()</span></code></a> takes an
+injected <code class="docutils literal notranslate"><span class="pre">(str)</span> <span class="pre">-&gt;</span> <span class="pre">Optional[str]</span></code> correction call; it is the only layer that
+invents content, so it fires only on already-flagged values (<code class="docutils literal notranslate"><span class="pre">only_flagged</span></code>),
+reads the pipeline’s findings, and keeps the original for audit.</p></li>
+<li><p><strong>L4 constrained generation</strong> is a <em>generation</em>-time concern (it constrains a
+generative extractor, not post-hoc output – ek_04 separates “constrain-on-generate”
+from “post-hoc validation”), so it lives on the extraction side
+(<code class="docutils literal notranslate"><span class="pre">ek[constrained]</span></code>: <code class="docutils literal notranslate"><span class="pre">outlines</span></code>/XGrammar/<code class="docutils literal notranslate"><span class="pre">instructor</span></code>), not in this pipeline.</p></li>
 </ul>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.validate</span><span class="w"> </span><span class="kn">import</span> <span class="n">validation_pipeline</span><span class="p">,</span> <span class="n">lexicon_corrector</span><span class="p">,</span> <span class="n">stop_on_correction</span>
@@ -210,6 +223,13 @@ The <code class="docutils literal notranslate"><span class="pre">layer</span></c
 match to be auto-applied as a correction rather than flagged. 0.8 catches typical
 single-edit and transposition typos (“Frnace”-&gt;”France” ~0.83) while the wide gap
 to an unrelated word (~0.3) keeps false corrections rare.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.validate.DEFAULT_ZSCORE_THRESHOLD">
+<span class="sig-prename descclassname"><span class="pre">ek.validate.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_ZSCORE_THRESHOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3.5</span></span><a class="headerlink" href="#ek.validate.DEFAULT_ZSCORE_THRESHOLD" title="Link to this definition"></a></dt>
+<dd><p>Modified (median/MAD) z-score above which a value is flagged an outlier
+(Iglewicz &amp; Hoaglin recommend 3.5).</p>
 </dd></dl>
 
 <dl class="py data">
@@ -302,6 +322,40 @@ vocabulary, set <code class="docutils literal notranslate"><span class="pre">fla
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ek.validate.llm_corrector">
+<span class="sig-prename descclassname"><span class="pre">ek.validate.</span></span><span class="sig-name descname"><span class="pre">llm_corrector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">correct_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_flagged</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'llm_correct'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.validate.Corrector" title="ek.validate.Corrector"><span class="pre">Corrector</span></a></span></span><a class="reference internal" href="../../_modules/ek/validate.html#llm_corrector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.validate.llm_corrector" title="Link to this definition"></a></dt>
+<dd><p>L5: a <strong>gated</strong> neural/LLM corrector – the only layer that invents content.</p>
+<p><code class="docutils literal notranslate"><span class="pre">correct_fn</span></code> is an <strong>injected</strong> <code class="docutils literal notranslate"><span class="pre">(value)</span> <span class="pre">-&gt;</span> <span class="pre">Optional[str]</span></code> (bring your own
+LLM/seq2seq call; return a corrected string, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to leave the value
+unchanged). It is the most expensive and stochastic layer, so by default
+(<code class="docutils literal notranslate"><span class="pre">only_flagged</span></code>) it fires <strong>only on a value that a cheaper layer already
+FLAGged</strong> – gate it to the residual, never let it silently rewrite clean fields
+(this layer reads the pipeline’s accumulated findings via <code class="docutils literal notranslate"><span class="pre">wants_findings</span></code>).
+Emits a CORRECT finding; the pipeline applies the rewrite and keeps the original
+for audit. Always verify its output downstream – it can make text worse.</p>
+<p>Recipe (Anthropic): <code class="docutils literal notranslate"><span class="pre">correct_fn=lambda</span> <span class="pre">v:</span> <span class="pre">client.messages.create(model=...,</span>
+<span class="pre">messages=[{&quot;role&quot;:</span> <span class="pre">&quot;user&quot;,</span> <span class="pre">&quot;content&quot;:</span> <span class="pre">prompt(v)}]).content[0].text.strip()</span></code> with
+<code class="docutils literal notranslate"><span class="pre">client</span> <span class="pre">=</span> <span class="pre">anthropic.Anthropic()</span></code> (MIT). Constrain/verify the result and keep an
+audit trail.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.validate.lm_surprisal_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.validate.</span></span><span class="sig-name descname"><span class="pre">lm_surprisal_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scorer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">higher_is_worse</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'lm_prior'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#ek.base.Finding" title="ek.base.Finding"><span class="pre">Finding</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ek/validate.html#lm_surprisal_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.validate.lm_surprisal_validator" title="Link to this definition"></a></dt>
+<dd><p>L3: FLAG a value whose language-model surprisal crosses <code class="docutils literal notranslate"><span class="pre">threshold</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">scorer</span></code> is an <strong>injected</strong> <code class="docutils literal notranslate"><span class="pre">(str)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> returning a surprisal /
+perplexity / negative-log-likelihood (dependency injection: bring your own
+in-domain n-gram or masked-LM scorer – an <em>in-domain</em> prior is what makes this
+useful). FLAG-only on its own; pair it with a candidate generator
+(<code class="docutils literal notranslate"><span class="pre">lexicon_corrector</span></code> / <code class="docutils literal notranslate"><span class="pre">llm_corrector</span></code>) to actually correct. Set
+<code class="docutils literal notranslate"><span class="pre">higher_is_worse=False</span></code> if your scorer returns a probability (higher = better).</p>
+<p>Recipe (masked-LM pseudo-log-likelihood): wrap <code class="docutils literal notranslate"><span class="pre">minicons</span></code> –
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">minicons</span> <span class="pre">import</span> <span class="pre">scorer;</span> <span class="pre">m</span> <span class="pre">=</span> <span class="pre">scorer.MaskedLMScorer(&quot;bert-base-uncased&quot;,</span> <span class="pre">&quot;cpu&quot;)</span></code>
+– and pass <code class="docutils literal notranslate"><span class="pre">scorer=lambda</span> <span class="pre">s:</span> <span class="pre">-m.sequence_score([s])[0]</span></code> (surprisal = negative
+PLL). <code class="docutils literal notranslate"><span class="pre">minicons</span></code> is MIT; install your own LM backend (it pulls torch).</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ek.validate.ordering_validator">
 <span class="sig-prename descclassname"><span class="pre">ek.validate.</span></span><span class="sig-name descname"><span class="pre">ordering_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cross_field'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#ek.base.Finding" title="ek.base.Finding"><span class="pre">Finding</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/ek/validate.html#ordering_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.validate.ordering_validator" title="Link to this definition"></a></dt>
 <dd><p>FLAG a record whose comparable values at <code class="docutils literal notranslate"><span class="pre">keys</span></code> are not ascending.</p>
@@ -343,6 +397,25 @@ before the next layer runs – so a cheap deterministic fix is what the expensiv
 layers then see (the noisy-channel chain). <code class="docutils literal notranslate"><span class="pre">stop_when</span></code> is an injectable
 early-exit policy over the findings accumulated so far (see
 <a class="reference internal" href="#ek.validate.stop_on_correction" title="ek.validate.stop_on_correction"><code class="xref py py-func docutils literal notranslate"><span class="pre">stop_on_correction()</span></code></a> / <a class="reference internal" href="#ek.validate.stop_on_flag" title="ek.validate.stop_on_flag"><code class="xref py py-func docutils literal notranslate"><span class="pre">stop_on_flag()</span></code></a>); the default runs every layer.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.validate.zscore_anomaly_findings">
+<span class="sig-prename descclassname"><span class="pre">ek.validate.</span></span><span class="sig-name descname"><span class="pre">zscore_anomaly_findings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numbers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'anomaly'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../../_modules/ek/validate.html#zscore_anomaly_findings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.validate.zscore_anomaly_findings" title="Link to this definition"></a></dt>
+<dd><p>FLAG numeric values that are robust-z-score outliers (median + MAD based).</p>
+<p>A reference-free, <strong>dependency-free</strong> anomaly check that complements
+<a class="reference internal" href="#ek.validate.benford_findings" title="ek.validate.benford_findings"><code class="xref py py-func docutils literal notranslate"><span class="pre">benford_findings()</span></code></a> (which checks the leading-digit <em>distribution</em>; this
+checks individual <em>magnitudes</em>). For a numeric column it computes each value’s
+<strong>modified z-score</strong> – <code class="docutils literal notranslate"><span class="pre">0.6745</span> <span class="pre">*</span> <span class="pre">(x</span> <span class="pre">-</span> <span class="pre">median)</span> <span class="pre">/</span> <span class="pre">MAD</span></code> – which is robust to the
+very outliers it is looking for, and FLAGs those whose absolute score exceeds
+<code class="docutils literal notranslate"><span class="pre">threshold</span></code>. One FLAG per outlying value (carrying its index); <strong>FLAG-only</strong> –
+it routes a value to review, never edits. Skipped below <code class="docutils literal notranslate"><span class="pre">min_n</span></code> (robust
+statistics on a handful of points are noise). When the MAD is 0 (a <em>near</em>-constant
+column, e.g. many identical values plus one outlier) it falls back to the
+mean-absolute-deviation scale (Iglewicz &amp; Hoaglin), so a lone outlier is still
+caught; a <em>truly</em> constant column (no spread at all) yields no findings. For
+<em>multivariate</em> outliers, plug an isolation forest via <code class="docutils literal notranslate"><span class="pre">pyod</span></code> (already in
+<code class="docutils literal notranslate"><span class="pre">ek[validation]</span></code>) as a custom validator.</p>
 </dd></dl>
 
 </section>

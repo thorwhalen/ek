@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to ek’s documentation! &mdash; ek 0.1.6 documentation</title>
+  <title>Welcome to ek’s documentation! &mdash; ek 0.1.7 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6e0256f3"></script>
+      <script src="_static/documentation_options.js?v=ca7ad2ea"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -181,6 +181,8 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.krippendorff_alpha"><code class="docutils literal notranslate"><span class="pre">krippendorff_alpha()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.lexicon_corrector"><code class="docutils literal notranslate"><span class="pre">lexicon_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.llm_corrector"><code class="docutils literal notranslate"><span class="pre">llm_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.lm_surprisal_validator"><code class="docutils literal notranslate"><span class="pre">lm_surprisal_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.load_baseline"><code class="docutils literal notranslate"><span class="pre">load_baseline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.load_calibrator"><code class="docutils literal notranslate"><span class="pre">load_calibrator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.luhn_check"><code class="docutils literal notranslate"><span class="pre">luhn_check()</span></code></a></li>
@@ -209,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.table_from_ocr"><code class="docutils literal notranslate"><span class="pre">table_from_ocr()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.totals_consistent"><code class="docutils literal notranslate"><span class="pre">totals_consistent()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.validation_pipeline"><code class="docutils literal notranslate"><span class="pre">validation_pipeline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek.html#ek.zscore_anomaly_findings"><code class="docutils literal notranslate"><span class="pre">zscore_anomaly_findings()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/__main__.html">ek.__main__</a><ul>
@@ -502,17 +505,21 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.DEFAULT_BENFORD_MIN_N"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BENFORD_MIN_N</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.DEFAULT_BENFORD_TOL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BENFORD_TOL</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.DEFAULT_LEXICON_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LEXICON_THRESHOLD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.DEFAULT_ZSCORE_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">DEFAULT_ZSCORE_THRESHOLD</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.Layer"><code class="docutils literal notranslate"><span class="pre">Layer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.ValidationResult"><code class="docutils literal notranslate"><span class="pre">ValidationResult</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.benford_findings"><code class="docutils literal notranslate"><span class="pre">benford_findings()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.canonicalize_corrector"><code class="docutils literal notranslate"><span class="pre">canonicalize_corrector()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.cross_field_validator"><code class="docutils literal notranslate"><span class="pre">cross_field_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.lexicon_corrector"><code class="docutils literal notranslate"><span class="pre">lexicon_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.llm_corrector"><code class="docutils literal notranslate"><span class="pre">llm_corrector()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.lm_surprisal_validator"><code class="docutils literal notranslate"><span class="pre">lm_surprisal_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.ordering_validator"><code class="docutils literal notranslate"><span class="pre">ordering_validator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.stop_on_correction"><code class="docutils literal notranslate"><span class="pre">stop_on_correction()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.stop_on_flag"><code class="docutils literal notranslate"><span class="pre">stop_on_flag()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.validate"><code class="docutils literal notranslate"><span class="pre">validate()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.validation_pipeline"><code class="docutils literal notranslate"><span class="pre">validation_pipeline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/ek/validate.html#ek.validate.zscore_anomaly_findings"><code class="docutils literal notranslate"><span class="pre">zscore_anomaly_findings()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -525,8 +532,8 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p>Release: 0.1.6</p>
-<p>Last change: Jun 24, 2026</p>
+<p>Release: 0.1.7</p>
+<p>Last change: Jun 25, 2026</p>
 </section>
 
 
