@@ -25,14 +25,23 @@ cheap deterministic fix short-circuits the expensive layers), and an injectable
 ``stop_when`` policy ends the pass early (e.g. once a value is corrected or clean).
 
 The deterministic layers here need no extra dependencies (``rapidfuzz`` is core). The
-softer/heavier layers are documented **extension points**, not shipped wiring -- plug
-any ``Corrector``/``Validator`` of your own:
+softer/heavier layers ship as **dependency-injected** layers: the layer is dep-free
+and you inject the model/LLM call (your in-domain LM scorer, your LLM client), so the
+expensive backend is your deployment choice, not a default dependency.
 
-- **L3 LM surprisal** (FLAG): score substrings under an in-domain n-gram/masked LM
-  (KenLM / ``minicons`` PLL) and flag low-probability spans.
-- **L4 constrained generation** (generative extractors only): ``outlines``/XGrammar.
-- **L5 neural/LLM correction** (CORRECT, gated): the only layer that invents content;
-  send it only flagged spans, verify its output, keep an audit trail.
+- **L3 LM surprisal** (FLAG): :func:`lm_surprisal_validator` takes an injected
+  ``(str) -> float`` surprisal scorer (n-gram / masked-LM PLL, e.g. ``minicons``) and
+  flags low-probability spans. Statistical anomaly without an LM:
+  :func:`benford_findings` (leading-digit) and :func:`zscore_anomaly_findings`
+  (robust median/MAD magnitude outliers), both dep-free.
+- **L5 neural/LLM correction** (CORRECT, gated): :func:`llm_corrector` takes an
+  injected ``(str) -> Optional[str]`` correction call; it is the only layer that
+  invents content, so it fires only on already-flagged values (``only_flagged``),
+  reads the pipeline's findings, and keeps the original for audit.
+- **L4 constrained generation** is a *generation*-time concern (it constrains a
+  generative extractor, not post-hoc output -- ek_04 separates "constrain-on-generate"
+  from "post-hoc validation"), so it lives on the extraction side
+  (``ek[constrained]``: ``outlines``/XGrammar/``instructor``), not in this pipeline.
 
 Example:
     >>> from ek.validate import validation_pipeline, lexicon_corrector, stop_on_correction
@@ -181,7 +190,15 @@ def validation_pipeline(
         original = value
         collected: list[Finding] = []
         for layer in layers:
-            layer_findings = list(layer(value, spec=spec))
+            # A layer that sets ``wants_findings = True`` (e.g. a gated L5 corrector
+            # that should fire only on already-flagged values) receives the findings
+            # accumulated by the cheaper layers before it.
+            if getattr(layer, "wants_findings", False):
+                layer_findings = list(
+                    layer(value, spec=spec, findings=tuple(collected))
+                )
+            else:
+                layer_findings = list(layer(value, spec=spec))
             collected.extend(layer_findings)
             if apply_corrections:
                 for finding in layer_findings:
@@ -445,3 +462,190 @@ def validate(
         *layers, apply_corrections=apply_corrections, stop_when=stop_when
     )
     return pipe(value, spec=spec)
+
+
+# ---------------------------------------------------------------------------
+# Statistical anomaly detection beyond Benford (FLAG; corpus-level, dep-free)
+# ---------------------------------------------------------------------------
+
+#: Modified (median/MAD) z-score above which a value is flagged an outlier
+#: (Iglewicz & Hoaglin recommend 3.5).
+DEFAULT_ZSCORE_THRESHOLD = 3.5
+
+#: 0.6745 = Phi^-1(0.75); scales the MAD to a standard-deviation estimate.
+_MAD_TO_SIGMA = 0.6745
+
+
+def _as_float(x: Any) -> Optional[float]:
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return None
+    return v if math.isfinite(v) else None
+
+
+def _median(xs: Sequence[float]) -> float:
+    s = sorted(xs)
+    n = len(s)
+    mid = n // 2
+    return s[mid] if n % 2 else (s[mid - 1] + s[mid]) / 2.0
+
+
+def zscore_anomaly_findings(
+    numbers: Iterable[Any],
+    *,
+    field: str = "",
+    threshold: float = DEFAULT_ZSCORE_THRESHOLD,
+    min_n: int = DEFAULT_BENFORD_MIN_N,
+    layer: str = "anomaly",
+) -> list:
+    """FLAG numeric values that are robust-z-score outliers (median + MAD based).
+
+    A reference-free, **dependency-free** anomaly check that complements
+    :func:`benford_findings` (which checks the leading-digit *distribution*; this
+    checks individual *magnitudes*). For a numeric column it computes each value's
+    **modified z-score** -- ``0.6745 * (x - median) / MAD`` -- which is robust to the
+    very outliers it is looking for, and FLAGs those whose absolute score exceeds
+    ``threshold``. One FLAG per outlying value (carrying its index); **FLAG-only** --
+    it routes a value to review, never edits. Skipped below ``min_n`` (robust
+    statistics on a handful of points are noise). When the MAD is 0 (a *near*-constant
+    column, e.g. many identical values plus one outlier) it falls back to the
+    mean-absolute-deviation scale (Iglewicz & Hoaglin), so a lone outlier is still
+    caught; a *truly* constant column (no spread at all) yields no findings. For
+    *multivariate* outliers, plug an isolation forest via ``pyod`` (already in
+    ``ek[validation]``) as a custom validator.
+    """
+    pairs = [(i, _as_float(x)) for i, x in enumerate(numbers)]
+    pairs = [(i, v) for i, v in pairs if v is not None]
+    if len(pairs) < min_n:
+        return []
+    xs = [v for _, v in pairs]
+    med = _median(xs)
+    devs = [abs(v - med) for v in xs]
+    mad = _median(devs)
+    if mad > 0:
+        scale = _MAD_TO_SIGMA / mad
+    else:
+        # MAD collapses to 0 when >half the values are identical; fall back to the
+        # mean absolute deviation so a lone outlier in a near-constant column is still
+        # scored (1.253314 = sqrt(pi/2), the MeanAD->sigma factor).
+        mean_ad = sum(devs) / len(devs)
+        if mean_ad == 0:
+            return []  # a truly constant column has no outliers
+        scale = 1.0 / (1.253314 * mean_ad)
+    findings = []
+    for i, v in pairs:
+        score = scale * (v - med)
+        if abs(score) > threshold:
+            findings.append(
+                Finding(
+                    field=field,
+                    layer=layer,
+                    severity=Severity.FLAG,
+                    message=(
+                        f"value {v} at index {i} is a robust-z outlier "
+                        f"(|z|={abs(score):.1f} > {threshold})"
+                    ),
+                )
+            )
+    return findings
+
+
+# ---------------------------------------------------------------------------
+# Layer 3 -- language-model surprisal (FLAG; dependency-injected scorer)
+# ---------------------------------------------------------------------------
+
+
+def lm_surprisal_validator(
+    scorer: Callable[[str], float],
+    *,
+    threshold: float,
+    higher_is_worse: bool = True,
+    field_name: str = "",
+    layer: str = "lm_prior",
+) -> Callable[..., Iterable[Finding]]:
+    """L3: FLAG a value whose language-model surprisal crosses ``threshold``.
+
+    ``scorer`` is an **injected** ``(str) -> float`` returning a surprisal /
+    perplexity / negative-log-likelihood (dependency injection: bring your own
+    in-domain n-gram or masked-LM scorer -- an *in-domain* prior is what makes this
+    useful). FLAG-only on its own; pair it with a candidate generator
+    (``lexicon_corrector`` / ``llm_corrector``) to actually correct. Set
+    ``higher_is_worse=False`` if your scorer returns a probability (higher = better).
+
+    Recipe (masked-LM pseudo-log-likelihood): wrap ``minicons`` --
+    ``from minicons import scorer; m = scorer.MaskedLMScorer("bert-base-uncased", "cpu")``
+    -- and pass ``scorer=lambda s: -m.sequence_score([s])[0]`` (surprisal = negative
+    PLL). ``minicons`` is MIT; install your own LM backend (it pulls torch).
+    """
+
+    def validate(value: Any, *, spec: Optional[FieldSpec] = None) -> Iterable[Finding]:
+        if not isinstance(value, str) or not value:
+            return
+        score = float(scorer(value))
+        anomalous = score > threshold if higher_is_worse else score < threshold
+        if anomalous:
+            rel = ">" if higher_is_worse else "<"
+            yield Finding(
+                field=_field_name(field_name, spec),
+                layer=layer,
+                severity=Severity.FLAG,
+                message=f"language-model surprisal {score:.3f} {rel} {threshold}",
+            )
+
+    validate.layer = layer
+    return validate
+
+
+# ---------------------------------------------------------------------------
+# Layer 5 -- gated neural / LLM correction (CORRECT; dependency-injected call)
+# ---------------------------------------------------------------------------
+
+
+def llm_corrector(
+    correct_fn: Callable[[str], Optional[str]],
+    *,
+    only_flagged: bool = True,
+    field_name: str = "",
+    layer: str = "llm_correct",
+) -> Corrector:
+    """L5: a **gated** neural/LLM corrector -- the only layer that invents content.
+
+    ``correct_fn`` is an **injected** ``(value) -> Optional[str]`` (bring your own
+    LLM/seq2seq call; return a corrected string, or ``None`` to leave the value
+    unchanged). It is the most expensive and stochastic layer, so by default
+    (``only_flagged``) it fires **only on a value that a cheaper layer already
+    FLAGged** -- gate it to the residual, never let it silently rewrite clean fields
+    (this layer reads the pipeline's accumulated findings via ``wants_findings``).
+    Emits a CORRECT finding; the pipeline applies the rewrite and keeps the original
+    for audit. Always verify its output downstream -- it can make text worse.
+
+    Recipe (Anthropic): ``correct_fn=lambda v: client.messages.create(model=...,
+    messages=[{"role": "user", "content": prompt(v)}]).content[0].text.strip()`` with
+    ``client = anthropic.Anthropic()`` (MIT). Constrain/verify the result and keep an
+    audit trail.
+    """
+
+    def correct(
+        value: Any,
+        *,
+        spec: Optional[FieldSpec] = None,
+        findings: Sequence[Finding] = (),
+    ) -> Iterable[Finding]:
+        if not isinstance(value, str):
+            return
+        if only_flagged and not any(f.severity is Severity.FLAG for f in findings):
+            return  # gated: nothing cheaper flagged this value, so do not pay for an LLM
+        proposed = correct_fn(value)
+        if isinstance(proposed, str) and proposed != value:
+            yield Finding(
+                field=_field_name(field_name, spec),
+                layer=layer,
+                severity=Severity.CORRECT,
+                suggestion=proposed,
+                message=f"LLM correction {value!r} -> {proposed!r}",
+            )
+
+    correct.layer = layer
+    correct.wants_findings = True  # the pipeline passes accumulated findings (gating)
+    return correct
