@@ -92,9 +92,14 @@ Four design rules that are easy to get wrong (they were caught in review — do 
    uncalibrated judge score.
 
 Plus: agent metrics are **stochastic**, so the scalar `regression_gate` is unsound for them — use
-`agent_regression_gate` (Wilson/bootstrap intervals, compared as intervals) and record
-`RunProvenance` (seed, model, **user-simulator**, suite version, scaffold); the gate *refuses* to
-compare runs whose simulator or suite version changed.
+`agent_regression_gate`, which tests the **difference** `current - baseline` with both runs'
+uncertainty folded in (a Newcombe interval on the success rate; a combined-SE bound on `pass^k`).
+Two tempting shortcuts are *both* wrong and both were shipped-then-fixed here: comparing our
+interval to the baseline's **point** (the baseline is itself noisy → one flake reads as a
+regression), and asking whether two 95% CIs **overlap** (that is a ~0.5% test, not a 5% one → a
+15-point drop goes invisible). Record `RunProvenance` (seed, model, **user-simulator**, suite
+version, scaffold); the gate *refuses* to compare runs whose simulator or suite version changed,
+and refuses an empty run **or an empty baseline** (which would be a permanent free pass).
 
 Both flagship must-builds are now built: the **cost-weighted typed-graph distance**
 (`ek/metrics/graphs.py`) and the **ROVER** engine (`ek/qe/rover.py`). The reference-free
