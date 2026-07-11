@@ -1027,6 +1027,37 @@ def test_missing_argument_is_not_free_against_a_gold_none():
     assert m([Step("s", {"x": None})], [("s", {})]).value > 0.0  # nor a hallucinated one
 
 
+def test_match_calls_fast_path_does_not_change_results():
+    """The no-repeats fast path must be a PURE optimisation.
+
+    Regression test: an earlier version took the fast path whenever *gold* had no repeated tool
+    name -- but with gold=[s(q=a)] and pred=[s(q=z), s(q=a)] there is still a real choice, and
+    first-come handed the gold call to the WRONG pred, discarding the exact match (F1 0.0).
+    The assignment is only forced when NEITHER side repeats a tool name.
+    """
+    gold = [("s", {"q": "a"})]
+    pred = [("s", {"q": "z"}), ("s", {"q": "a"})]  # the EXACT match comes second
+    pairs, extra, _missed = match_calls(pred, gold)
+    assert pairs == [(("s", {"q": "a"}), ("s", {"q": "a"}))], "exact match was discarded"
+    assert extra == [("s", {"q": "z"})]
+    # 1 TP, 1 spurious FP, 0 FN -> P=0.5, R=1.0
+    assert ToolCallMetric()(pred, gold).f1 == pytest.approx(2 / 3)
+
+
+def test_match_calls_conservation_law():
+    """Every predicted call is matched exactly once or unmatched -- never both, never twice."""
+    rng = random.Random(11)
+    tools, vals = ["a", "b", "c"], ["x", "y", "z"]
+    for _ in range(200):
+        gen = lambda: [  # noqa: E731
+            (rng.choice(tools), {"q": rng.choice(vals)}) for _ in range(rng.randint(0, 5))
+        ]
+        pred, gold = gen(), gen()
+        pairs, extra, missed = match_calls(pred, gold)
+        assert len(pairs) + len(extra) == len(pred)
+        assert len(pairs) + len(missed) == len(gold)
+
+
 def test_match_calls_does_not_mis_assign_on_partial_overlap():
     """Global best-first: a strong pairing must not be stolen by a weaker earlier one."""
     gold = [("s", {"a": 1, "b": 1}), ("s", {"a": 1})]

@@ -137,15 +137,23 @@ def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
     used_gold: set = set()
     pairs: list = []
 
-    # Fast path: when no tool name is repeated in gold there is nothing to disambiguate, so the
-    # assignment is forced and we can skip building/sorting the full P x G candidate table
-    # (which otherwise dominates the cost on long episodes).
-    if all(len(v) == 1 for v in by_tool_gold.values()):
+    # Fast path: only when NEITHER side repeats a tool name is the assignment actually forced.
+    # (Requiring it of gold alone is a bug: with gold=[s(q=a)] and pred=[s(q=z), s(q=a)] the
+    # first-come rule would hand the gold call to the WRONG pred and discard the exact match.
+    # Then there is a genuine choice to make, and only the scored path can make it.)
+    by_tool_pred: dict = {}
+    for i, (tool, _args) in enumerate(pred_calls):
+        by_tool_pred.setdefault(tool, []).append(i)
+    forced = all(len(v) == 1 for v in by_tool_gold.values()) and all(
+        len(v) == 1 for v in by_tool_pred.values()
+    )
+
+    if forced:
         for p_i, (tool, _p_args) in enumerate(pred_calls):
             candidates = by_tool_gold.get(tool, ())
-            g_i = candidates[0] if candidates else None
-            if g_i is None or g_i in used_gold:
+            if not candidates:
                 continue
+            g_i = candidates[0]
             used_pred.add(p_i)
             used_gold.add(g_i)
             pairs.append((p_i, g_i))
