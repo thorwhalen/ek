@@ -60,6 +60,16 @@ agreement = ["uqlm"]
 # OCR fleet (the first concrete instance). Install specific engines via ocracy's
 # own per-backend extras, e.g. ocracy[tesseract], ocracy[google-vision].
 ocr = ["ocracy"]
+# Agent & assistant evaluation (the second concrete instance -- see ek/agents/).
+# NOTE: `ek.agents` itself needs NONE of these. Scoring an episode (pass^k, cost-per-success,
+# tool-call AST/F1, trajectory distance, LLM-judge) is pure-python core, and the bridges
+# duck-type -- so ek can score an Inspect/DeepEval run without importing either. This extra
+# only supplies the external harnesses you may want to *run*.
+# Licenses verified against the resolved 423-package closure (2026-07): inspect-ai MIT,
+# agentevals MIT, deepeval Apache-2.0, ragas Apache-2.0; no copyleft/non-commercial.
+# Quarantined (NEVER a default): Arize Phoenix (Elastic-2.0, source-available -- HTTP-only),
+# LangSmith / Braintrust (proprietary SaaS -- HTTP sinks only; use Braintrust's MIT `autoevals`).
+agents = ["inspect-ai", "agentevals", "deepeval", "ragas"]
 # Human-in-the-loop review surface + label-free monitoring.
 hitl = ["label-studio-sdk"]
 monitoring = ["nannyml", "evidently"]
@@ -71,6 +81,7 @@ all = [
     "netcal", "scikit-learn", "mapie", "crepes",
     "pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy",
     "ocracy", "uqlm",
+    "inspect-ai", "agentevals", "deepeval", "ragas",
 ]
 # --- tooling ---
 dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
@@ -86,8 +97,16 @@ docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 #     in GPL `Levenshtein` as a hard runtime dep (a scanner-invisible landmine), so it
 #     is NOT used; TEDS/TEDS-Struct are reimplemented clean-room on apted (MIT) in
 #     ek/metrics/tables.py, and GriTS in pure Python (cf. the Krippendorff precedent).
+#   arize-phoenix (Elastic-2.0)               -- source-available, NOT OSI; forbids offering
+#     the software as a hosted/managed service. Declares ELv2 in its License *field* but ships
+#     NO trove classifier, so a classifier-only scanner misses it -- the gate reads the field.
+#   LangSmith / Braintrust (proprietary SaaS) -- HTTP sinks only, never a dep. Braintrust's
+#     `autoevals` (MIT) is the usable OSS half.
+#   deepeval                                  -- permissive (Apache-2.0) but phones home
+#     (Confident-AI telemetry). Not a license issue; disable telemetry before use.
 # The CI license gate (.github/workflows/license-gate.yml) fails the build if any
-# of these resolve into the core..hitl dependency closure.
+# of these resolve into the core..agents dependency closure, and now also flags any package
+# declaring NO license (the scanner-invisible case) for manual audit.
 
 [tool.ruff]
 line-length = 88

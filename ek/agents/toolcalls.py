@@ -1,0 +1,288 @@
+"""Tool-call correctness: BFCL-style AST matching over a *multiset* of calls.
+
+The Berkeley Function Calling Leaderboard defines the reference algorithm: parse the emitted
+call and -- **without executing it** -- check that the function name matches, that every
+expected argument is present with the right value (case-insensitive, whitespace-folded string
+comparison), and that no argument outside the schema was hallucinated. Arguments are matched
+**by name**, so argument *order* is irrelevant; element order *within a list value* is not
+(``misc/docs/ek_08``, ``misc/docs/ek_12``).
+
+**Why this cannot just reuse** :class:`~ek.metrics.fields.FieldMetric`. That metric compares two
+flat records *keyed by field name* -- the key **is** the alignment. A trajectory's tool calls are
+a **keyless multiset**: two ``search(q=...)`` calls collide onto one key, and reordering or
+repeating a call silently miscounts. So this module adds the missing layer -- an **assignment**
+between predicted and gold calls -- and then reuses ``FieldMetric``'s exact TP/FP/FN accounting
+and micro-averaged aggregation on top of it.
+
+Cost-sensitivity is the reason to build this rather than borrow one: the per-argument weights
+come from the Layer-A grammar (``FieldSpec.importance``), so a wrong argument to a *destructive*
+tool is not one unit of error. No off-the-shelf tool-call metric models that.
+
+Example:
+    >>> from ek.agents.base import Step
+    >>> pred = [Step("search", {"q": "cats"}), Step("answer", {"a": "meow"})]
+    >>> gold = [("search", {"q": "cats"}), ("answer", {"a": "meow"})]
+    >>> ToolCallMetric()(pred, gold).f1
+    1.0
+    >>> hallucinated = [Step("search", {"q": "cats"}), Step("delete_all", {})]
+    >>> round(ToolCallMetric()(hallucinated, gold).f1, 3)     # 1 TP, 1 FP, 1 FN
+    0.5
+"""
+
+from __future__ import annotations
+
+from collections.abc import Mapping, Sequence
+from typing import Any, Optional
+
+from ..base import GraphGrammar, Score
+from ..canonicalize import default_canonicalizer, resolve_canonicalizer
+from .base import as_call
+
+_MISSING = object()
+
+
+def _f1(precision: float, recall: float) -> float:
+    return (
+        (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    )
+
+
+def _norm_value(value: Any, canon) -> Any:
+    """Canonicalize a value for comparison (strings folded; lists elementwise, order kept)."""
+    if isinstance(value, str):
+        return canon(value) if canon is not None else value
+    if isinstance(value, (list, tuple)):
+        return tuple(_norm_value(v, canon) for v in value)
+    return value
+
+
+def _arg_costs(grammar: Optional[GraphGrammar], tool: str, names) -> dict:
+    """Per-argument cost weights for a tool, read off the Layer-A grammar (default 1.0)."""
+    if grammar is None:
+        return {n: 1.0 for n in names}
+    return {n: grammar.field_cost(tool, n) for n in names}
+
+
+def _tool_weight(grammar: Optional[GraphGrammar], tool: str) -> float:
+    return grammar.node_cost(tool) if grammar is not None else 1.0
+
+
+def _arg_diff(
+    pred_args: Mapping, gold_args: Mapping, *, tool: str, grammar, canon
+) -> tuple:
+    """Weighted TP/FP/FN over one call's arguments (the FieldMetric accounting, weighted).
+
+    A present-but-wrong argument counts as **both** spurious and missed -- the conventional
+    slot-error accounting ``FieldMetric`` uses.
+    """
+    names = set(gold_args) | set(pred_args)
+    costs = _arg_costs(grammar, tool, names)
+    tp = fp = fn = 0.0
+    for name in names:
+        g = gold_args.get(name, _MISSING)
+        p = pred_args.get(name, _MISSING)
+        w = costs.get(name, 1.0)
+        if g is _MISSING:  # an argument the schema/gold never had -> hallucinated
+            fp += w
+        elif p is _MISSING:  # a required argument the agent omitted
+            fn += w
+        elif _norm_value(p, canon) == _norm_value(g, canon):
+            tp += w
+        else:
+            fp += w
+            fn += w
+    return tp, fp, fn
+
+
+def _call_matches(pred_args: Mapping, gold_args: Mapping, *, canon) -> bool:
+    """Exact AST match on one call's arguments (all present, all equal, none extra)."""
+    if set(pred_args) != set(gold_args):
+        return False
+    return all(
+        _norm_value(pred_args[k], canon) == _norm_value(gold_args[k], canon)
+        for k in gold_args
+    )
+
+
+def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
+    """Assign predicted calls to gold calls -- the layer ``FieldMetric`` does not provide.
+
+    Calls are grouped by tool name (a call to the *wrong tool* is never a match), and within a
+    tool name the assignment greedily prefers pairs whose arguments agree, so identical repeated
+    calls are interchangeable but a reordered pair is still matched. Returns
+    ``(pairs, unmatched_pred, unmatched_gold)`` where ``pairs`` are ``(pred_call, gold_call)``.
+
+    Example:
+        >>> pairs, up, ug = match_calls([("s", {"q": "b"}), ("s", {"q": "a"})],
+        ...                             [("s", {"q": "a"}), ("s", {"q": "b"})])
+        >>> len(pairs), up, ug          # order-insensitive within a tool name
+        (2, [], [])
+    """
+    pred_calls = [as_call(x) for x in pred]
+    gold_calls = [as_call(x) for x in gold]
+
+    by_tool_gold: dict = {}
+    for i, (tool, args) in enumerate(gold_calls):
+        by_tool_gold.setdefault(tool, []).append(i)
+
+    used_gold: set = set()
+    pairs: list = []
+    unmatched_pred: list = []
+
+    # Two passes so that an exact-argument match is never stolen by an earlier approximate one.
+    for exact_only in (True, False):
+        for p_i, (tool, p_args) in enumerate(pred_calls):
+            if any(p_i == x for x, _ in pairs):
+                continue
+            candidates = [g for g in by_tool_gold.get(tool, []) if g not in used_gold]
+            if not candidates:
+                continue
+            best = None
+            for g_i in candidates:
+                _, g_args = gold_calls[g_i]
+                exact = _call_matches(p_args, g_args, canon=canon)
+                if exact_only and not exact:
+                    continue
+                overlap = sum(
+                    1
+                    for k in set(g_args) & set(p_args)
+                    if _norm_value(p_args[k], canon) == _norm_value(g_args[k], canon)
+                )
+                if best is None or overlap > best[1]:
+                    best = (g_i, overlap)
+            if best is not None:
+                used_gold.add(best[0])
+                pairs.append((p_i, best[0]))
+
+    matched_pred = {p for p, _ in pairs}
+    unmatched_pred = [
+        pred_calls[i] for i in range(len(pred_calls)) if i not in matched_pred
+    ]
+    unmatched_gold = [
+        gold_calls[i] for i in range(len(gold_calls)) if i not in used_gold
+    ]
+    resolved = [(pred_calls[p], gold_calls[g]) for p, g in pairs]
+    return resolved, unmatched_pred, unmatched_gold
+
+
+class ToolCallMetric:
+    """Tool-call correctness (BFCL AST match) as a cost-weighted :class:`~ek.base.Metric`.
+
+    Args:
+        level: ``"call"`` (default) scores whole calls -- a call is a TP only on an exact AST
+            match; ``"arg"`` gives partial credit at argument granularity.
+        canonicalizer: ``str -> str`` applied to string arguments before comparison
+            (BFCL's case/whitespace folding). Defaults to ``ek``'s default canonicalizer.
+        grammar: Layer-A grammar supplying per-tool and per-argument cost weights (may also be
+            passed per call).
+
+    The ``Score`` carries ``tp``/``fp``/``fn`` in ``detail`` so :func:`ek.evaluate` aggregates a
+    correct **micro**-averaged F1 over the corpus rather than averaging per-episode F1s.
+    """
+
+    name = "tool_call"
+
+    def __init__(
+        self,
+        level: str = "call",
+        *,
+        canonicalizer=None,
+        grammar: Optional[GraphGrammar] = None,
+    ):
+        if level not in ("call", "arg"):
+            raise ValueError(f"level must be 'call' or 'arg', got {level!r}")
+        self.level = level
+        # BFCL compares argument values case-insensitively with whitespace folding, so unlike
+        # the IE metrics (where None means "compare raw") the default here is the standard
+        # canonicalizer. Pass ``canonicalizer=str`` for a raw, byte-exact comparison.
+        self.canonicalizer = (
+            resolve_canonicalizer(canonicalizer)
+            if canonicalizer is not None
+            else default_canonicalizer()
+        )
+        self.grammar = grammar
+
+    def __call__(
+        self, pred: Any, gold: Any, *, grammar: Optional[GraphGrammar] = None
+    ) -> Score:
+        g = grammar if grammar is not None else self.grammar
+        canon = self.canonicalizer
+        pred_calls = _calls_of(pred)
+        gold_calls = _calls_of(gold)
+
+        pairs, extra, missed = match_calls(pred_calls, gold_calls, canon=canon)
+
+        tp = fp = fn = 0.0
+        for (p_tool, p_args), (g_tool, g_args) in pairs:
+            if self.level == "call":
+                w = _tool_weight(g, g_tool)
+                if _call_matches(p_args, g_args, canon=canon):
+                    tp += w
+                else:  # right tool, wrong arguments -> both spurious and missed
+                    fp += w
+                    fn += w
+            else:
+                a_tp, a_fp, a_fn = _arg_diff(
+                    p_args, g_args, tool=g_tool, grammar=g, canon=canon
+                )
+                tp += a_tp
+                fp += a_fp
+                fn += a_fn
+
+        # A call the agent invented (including a should-not-call) is pure FP; one it skipped, FN.
+        for tool, args in extra:
+            fp += _tool_weight(g, tool) + (
+                0.0 if self.level == "call" else sum(_arg_costs(g, tool, args).values())
+            )
+        for tool, args in missed:
+            fn += _tool_weight(g, tool) + (
+                0.0 if self.level == "call" else sum(_arg_costs(g, tool, args).values())
+            )
+
+        precision = tp / (tp + fp) if (tp + fp) else (1.0 if fn == 0 else 0.0)
+        recall = tp / (tp + fn) if (tp + fn) else (1.0 if fp == 0 else 0.0)
+        f1 = _f1(precision, recall)
+        return Score(
+            value=f1,
+            precision=precision,
+            recall=recall,
+            f1=f1,
+            metric="tool_call",
+            detail={
+                "tp": tp,
+                "fp": fp,
+                "fn": fn,
+                "level": self.level,
+                "n_matched": len(pairs),
+                "n_spurious": len(extra),
+                "n_missed": len(missed),
+                "higher_is_better": True,
+            },
+        )
+
+    def aggregate(self, scores: Sequence[Score]) -> float:
+        """Micro-averaged F1 over the corpus (sum TP/FP/FN, then divide) -- never a mean."""
+        tp = sum(s.detail.get("tp", 0.0) for s in scores)
+        fp = sum(s.detail.get("fp", 0.0) for s in scores)
+        fn = sum(s.detail.get("fn", 0.0) for s in scores)
+        if tp + fp + fn == 0:
+            return 1.0  # nothing to call and nothing called -> perfect
+        precision = tp / (tp + fp) if (tp + fp) else 0.0
+        recall = tp / (tp + fn) if (tp + fn) else 0.0
+        return _f1(precision, recall)
+
+
+def _calls_of(x: Any) -> Sequence:
+    """Read a call sequence off an Episode, a Trajectory, or a bare list of calls."""
+    traj = getattr(x, "trajectory", None)
+    if traj is not None:
+        return list(traj.steps)
+    steps = getattr(x, "steps", None)
+    if steps is not None:
+        return list(steps)
+    if isinstance(x, Sequence) and not isinstance(x, (str, bytes)):
+        return list(x)
+    raise TypeError(
+        f"ToolCallMetric needs an Episode, a Trajectory, or a sequence of calls; "
+        f"got {type(x).__name__}"
+    )

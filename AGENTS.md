@@ -64,7 +64,37 @@ callable.
 | `ek/facade.py` | `score`, `evaluate`, `estimate_quality` |
 | `ek/harness.py` | offline harness: `evaluate_store`, regression gate, baselines, IAA |
 | `ek/ocr/` | the OCR instance: ocracy bridge, capability profiles, benchmark |
+| `ek/agents/` | the **agent instance**: episodes, pass^k, cost-per-success, tool-call/trajectory metrics, judge, agent harness |
 | `ek/tools.py`, `ek/__main__.py` | CLI (`argh`, `_dispatch_funcs` SSOT) |
+
+### The agent instance (`ek/agents/`) — cost per successful task
+
+The second concrete instance (mirrors `ek/ocr/`). Agent evaluation is the **same 2×2** on a
+different object: the evaluated thing is an **episode** (tool calls + observations ending in a
+final state) and the unit is **cost per successfully completed task**, not cost per token.
+Layer A becomes a **task/tool grammar** (`ToolSpec`/`TaskSpec` build a `GraphGrammar`;
+`FieldSpec.importance` = the cost of a wrong argument, so a wrong argument to a *destructive*
+tool is not one unit of error); Layer B becomes the `Episode` (`Trajectory`, `Cost`,
+`RunProvenance`). **`ek.agents` adds zero dependencies** — it is pure-python, and the bridges
+duck-type, so ek scores an Inspect/DeepEval run without importing either.
+
+Four design rules that are easy to get wrong (they were caught in review — do not "simplify" them back):
+
+1. **`pass^k` is not a `Metric`.** It is cross-task (k trials per task); `Metric.__call__(pred, gold)`
+   cannot express it. It lives in the harness as pure functions + a `ReliabilityReport`.
+2. **`TrajectoryMetric` must not use the GED engine.** `networkx.graph_edit_distance` is an
+   isomorphism search: it **ignores step order**, caps at `max_nodes=60`, and is timeout-nondeterministic.
+   Trajectories are linear → a Needleman–Wunsch sequence edit distance that reuses the *cost model*.
+3. **Tool calls need a multiset matcher.** `FieldMetric` keys by field name; two `search(q=…)` calls
+   collide. Match first (`match_calls`), *then* reuse `FieldMetric`'s TP/FP/FN counting.
+4. **Only a reference-free, criteria-only judge is a `Signal`.** A reference-based judge is a `Metric`;
+   pairwise judging needs two outputs (a helper). And **Hard Rule 1 applies to judges** — never gate an
+   uncalibrated judge score.
+
+Plus: agent metrics are **stochastic**, so the scalar `regression_gate` is unsound for them — use
+`agent_regression_gate` (Wilson/bootstrap intervals, compared as intervals) and record
+`RunProvenance` (seed, model, **user-simulator**, suite version, scaffold); the gate *refuses* to
+compare runs whose simulator or suite version changed.
 
 Both flagship must-builds are now built: the **cost-weighted typed-graph distance**
 (`ek/metrics/graphs.py`) and the **ROVER** engine (`ek/qe/rover.py`). The reference-free
@@ -87,17 +117,28 @@ Read the relevant one before working on its area:
 - **`ek-dev-add-signal`** — adding a reference-free signal/calibrator/policy
   (`estimate_quality()` side).
 - **`ek-dev-ocr`** — the OCR instance on top of `ocracy`.
+- **`ek-dev-agents`** — the agent instance: episodes, `pass^k`, cost-per-successful-task,
+  tool-call/trajectory metrics, the judge, and the variance-aware gate.
 
 Dev skills are living artifacts: revise them as the code changes; mark stale ones
 with `metadata.delete-after: <milestone>` rather than deleting.
 
 ## Research reports (`misc/docs/`, read on demand)
 
+**Information extraction (`ek_01`–`ek_06`).**
 `information-extraction-evaluation-conceptual-map.md` is the map into six reports:
 `ek_01` OCR systems inventory · `ek_02` reference-based/offline eval · `ek_03`
 reference-free QE/calibration/selective prediction · `ek_04` post-extraction
 validation & correction · `ek_05` HITL/active-learning/monitoring · `ek_06` library
 landscape & integration map (the architecture report).
+
+**Agents & assistants (`ek_07`–`ek_12`).** `ek_07` is the map into five more:
+`ek_07` conceptual map (the 2×2 lifted onto an episode; pass@k vs pass^k) · `ek_08`
+task-success & outcome-based eval (state-based oracles, BFCL, contamination) · `ek_09`
+LLM-as-judge & reference-free agent QE (biases, judge validation, RAG faithfulness) ·
+`ek_10` trajectory/tool-use/multi-turn (+ memory, self-reflection, safety) · `ek_11`
+cost per successful task (Cost-of-Pass, routing/cascades, error bars) · `ek_12` agent-eval
+library landscape & integration map (**read before writing agent code**).
 
 ---
 

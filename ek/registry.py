@@ -186,6 +186,9 @@ _EXTRA_PROBES: dict[str, list[str]] = {
     "agreement": ["uqlm"],
     "hitl": ["label_studio_sdk"],
     "monitoring": ["nannyml"],
+    # Agent evaluation needs NO extra to score episodes -- ek.agents is pure-python and the
+    # bridges duck-type. The extra only supplies the external harnesses you may want to *run*.
+    "agents": ["inspect_ai"],
 }
 
 
