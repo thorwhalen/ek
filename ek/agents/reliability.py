@@ -127,6 +127,74 @@ def wilson_interval(
     return (max(0.0, center - margin), min(1.0, center + margin))
 
 
+def newcombe_difference(
+    successes_a: int,
+    n_a: int,
+    successes_b: int,
+    n_b: int,
+    *,
+    z: float = DEFAULT_Z,
+) -> tuple:
+    """Newcombe score interval for the **difference** of two proportions ``p_a - p_b``.
+
+    This is the right instrument for "did the agent get worse than its baseline?", and it is
+    strictly better than the tempting shortcut of *checking whether two 95% CIs overlap*.
+    Non-overlap is not a 5% test -- it is roughly a 0.5% one, so it buys its low false-alarm
+    rate by going nearly blind: on a 60-task suite it cannot see a 15-point success-rate drop.
+    A difference interval keeps the same false-alarm rate and recovers most of the power,
+    because the variance of a difference is not the sum of two interval widths.
+
+    Newcombe (1998) method 10: build each proportion's Wilson interval, then
+
+        lower = (p_a - p_b) - sqrt((p_a - l_a)^2 + (u_b - p_b)^2)
+        upper = (p_a - p_b) + sqrt((u_a - p_a)^2 + (p_b - l_b)^2)
+
+    Returns ``(lower, upper)``. The difference is a *confident regression* when ``upper < 0``.
+
+    Example:
+        >>> lo, hi = newcombe_difference(50, 100, 90, 100)   # 50% now vs 90% before
+        >>> hi < 0                                            # confidently worse
+        True
+        >>> lo, hi = newcombe_difference(89, 100, 90, 100)   # 89% vs 90% -- noise
+        >>> hi > 0
+        True
+    """
+    if n_a <= 0 or n_b <= 0:
+        return (-1.0, 1.0)  # no information -> the maximally uninformative interval
+    p_a, p_b = successes_a / n_a, successes_b / n_b
+    l_a, u_a = wilson_interval(successes_a, n_a, z=z)
+    l_b, u_b = wilson_interval(successes_b, n_b, z=z)
+    delta = p_a - p_b
+    lower = delta - math.sqrt((p_a - l_a) ** 2 + (u_b - p_b) ** 2)
+    upper = delta + math.sqrt((u_a - p_a) ** 2 + (p_b - l_b) ** 2)
+    return (max(-1.0, lower), min(1.0, upper))
+
+
+def _se_from_ci(ci: Sequence, *, z: float = DEFAULT_Z) -> Optional[float]:
+    """Back out a standard error from a symmetric-ish CI (for statistics we only store as CIs)."""
+    if not ci or ci[0] is None or ci[1] is None:
+        return None
+    width = float(ci[1]) - float(ci[0])
+    if not math.isfinite(width) or width < 0:
+        return None
+    return width / (2 * z)
+
+
+def difference_upper_bound(
+    value_a: float, ci_a: Sequence, value_b: float, ci_b: Sequence, *, z: float = DEFAULT_Z
+) -> Optional[float]:
+    """Upper bound of ``a - b`` for two statistics known only through their CIs.
+
+    Used for ``pass^k`` (a mean of per-task estimators, not a raw proportion), where a Newcombe
+    interval does not apply but the same principle does: test the **difference**, combining both
+    runs' uncertainty, rather than asking whether two intervals happen to overlap.
+    """
+    se_a, se_b = _se_from_ci(ci_a, z=z), _se_from_ci(ci_b, z=z)
+    if se_a is None or se_b is None:
+        return None
+    return (value_a - value_b) + z * math.sqrt(se_a**2 + se_b**2)
+
+
 def bootstrap_ci(
     values: Sequence[float],
     statistic,
@@ -176,6 +244,7 @@ class ReliabilityReport:
     k: int = 1
     n_tasks: int = 0
     n_trials: int = 0
+    n_success: int = 0
     success_rate: float = 0.0
     success_ci: tuple = (0.0, 1.0)
     # ``None`` (not 0.0) when no task had enough trials to estimate at k: "we could not
@@ -323,6 +392,7 @@ def reliability(
         k=k,
         n_tasks=n_tasks,
         n_trials=n_trials,
+        n_success=total_c,
         success_rate=(total_c / n_trials) if n_trials else 0.0,
         success_ci=wilson_interval(total_c, n_trials),
         pass_at_k=mean_at,

@@ -47,7 +47,13 @@ from ..registry import resolve
 from ..stores import json_store
 from .base import Episode, RunProvenance, TaskSpec, suite_grammar
 from .cost import ModelPrice, cost_of_pass, cost_report, episode_dollars
-from .reliability import ReliabilityReport, bootstrap_ci, reliability
+from .reliability import (
+    ReliabilityReport,
+    bootstrap_ci,
+    difference_upper_bound,
+    newcombe_difference,
+    reliability,
+)
 
 
 def _as_tasks(tasks: Any) -> list:
@@ -194,6 +200,16 @@ def _score_metrics(
     This is how the cost weights on ``ToolSpec``/``FieldSpec.importance`` actually reach a
     tool-call or trajectory metric on the harness path (otherwise they are inert).
     """
+    gold_less = [t.task_id for t in task_list if t.gold is None]
+    if gold_less:
+        # Dropping them in silence would report an empty/partial metrics block as if it covered
+        # the suite. Say what was excluded and why.
+        warnings.warn(
+            f"run_suite(metrics=...): {len(gold_less)} task(s) have no `gold` and were excluded "
+            f"from the extra metrics (e.g. {gold_less[:3]}). Set TaskSpec.gold to score them.",
+            stacklevel=3,
+        )
+
     out: dict = {}
     for name, metric in metrics.items():
         scores = []
@@ -209,7 +225,7 @@ def _score_metrics(
             if hasattr(metric, "aggregate")
             else sum(float(s) for s in scores) / len(scores)
         )
-        out[name] = {"aggregate": aggregate, "n": len(scores)}
+        out[name] = {"aggregate": aggregate, "n": len(scores), "n_excluded": len(gold_less)}
     return out
 
 
@@ -274,6 +290,9 @@ def _summary(report: ReliabilityReport) -> dict:
         "k": report.k,
         "n_tasks": report.n_tasks,
         "n_trials": report.n_trials,
+        # Persist the raw COUNTS, not just the rate: a proper two-sample test on the difference
+        # needs (successes, n) for both runs, and a rate alone cannot reconstruct them.
+        "n_success": report.n_success,
         "success_rate": report.success_rate,
         "success_ci": list(report.success_ci),
         "pass_at_k": _json_num(report.pass_at_k),
@@ -296,7 +315,19 @@ def _summary(report: ReliabilityReport) -> dict:
 def save_agent_baseline(
     report: ReliabilityReport, name: str, *, rootdir: Optional[str] = None
 ) -> dict:
-    """Freeze a run as a named baseline (including its provenance, so the gate can guard it)."""
+    """Freeze a run as a named baseline (including its provenance, so the gate can guard it).
+
+    Raises:
+        ValueError: if the run evaluated nothing. An empty baseline is worse than no baseline --
+            it is a *permanent free pass*, because every bound in it is the maximally-uncertain
+            default and no later run can be shown to fall below it.
+    """
+    if report.n_trials == 0:
+        raise ValueError(
+            f"save_agent_baseline({name!r}): refusing to freeze a run that evaluated ZERO "
+            "trials. Such a baseline can never be regressed against -- it would pass every "
+            "future run, including a totally broken one."
+        )
     record = _summary(report)
     json_store("baselines", rootdir=rootdir)[name] = record
     return record
@@ -379,6 +410,16 @@ def agent_regression_gate(
             cost_per_success=report.cost.get("cost_per_success"),
         )
 
+    # A baseline recorded from an EMPTY run is a permanent free pass: every one of its bounds is
+    # the maximally-uncertain default, so nothing can ever be shown to fall below it. Guarding
+    # only the *current* run would just move the hole one hop upstream.
+    if not base.get("n_trials"):
+        raise ValueError(
+            "agent_regression_gate: the baseline recorded ZERO trials, so it cannot be "
+            "regressed against -- every bound in it is the maximally-uncertain default, and "
+            "any run at all would 'pass'. Re-baseline from a real run."
+        )
+
     current_key = _comparability(_summary(report))
     base_key = _comparability(base)
     if current_key != base_key:
@@ -396,39 +437,59 @@ def agent_regression_gate(
     cur_cost = report.cost.get("cost_per_success")
     cost_ci = report.cost.get("cost_ci") or (None, None)
 
-    # A suite that shrank is not the same experiment.
+    # A suite that shrank is not the same experiment. (`is not None`, not truthiness: a
+    # zero-task baseline must not slip through the check by being falsy.)
     base_tasks = base.get("n_tasks")
-    if base_tasks and report.n_tasks < base_tasks:
+    if base_tasks is not None and report.n_tasks < base_tasks:
         reasons.append(
             f"the suite shrank: {report.n_tasks} tasks vs {base_tasks} in the baseline -- "
             "not the same experiment (re-baseline, or restore the missing tasks)."
         )
 
-    # THE core rule. The baseline is itself a NOISY ESTIMATE, so comparing our interval to its
-    # *point* is wrong: a Wilson upper bound only reaches 1.0 when every trial passed, so a
-    # single flake against a perfect baseline would read as a "confident regression". Compare
-    # interval to interval, and fail only when they do not overlap (current entirely below).
-    hat_floor = _lower(base, "pass_hat_k_ci", base_hat)
-    if (
-        base_hat is not None
-        and report.pass_hat_k is not None
-        and hat_floor is not None
-        and report.pass_hat_k_ci[1] < hat_floor - tolerance
-    ):
-        reasons.append(
-            f"pass^{report.k} regressed: CI {_fmt_ci(report.pass_hat_k_ci)} lies entirely "
-            f"below the baseline CI (floor {hat_floor:.3f}, tolerance {tolerance})"
+    # THE core rule: test the DIFFERENCE, with both runs' uncertainty folded in.
+    #
+    # Two wrong ways to do this, both of which we have now been bitten by:
+    #   * compare our interval to the baseline's POINT -- the baseline is itself a noisy
+    #     estimate, so one flake against a lucky baseline reads as a confident regression;
+    #   * ask whether the two 95% intervals OVERLAP -- that is not a 5% test but roughly a
+    #     0.5% one, and it buys its calm by going blind (a 15-point drop on a 60-task suite
+    #     becomes invisible). A gate that cannot see a real regression is as broken as one
+    #     that cries wolf.
+    # So: a proper two-sample interval on (current - baseline). Regression iff its UPPER bound
+    # is below -tolerance, i.e. we are confident the true change is negative.
+    base_succ, base_trials = base.get("n_success"), base.get("n_trials")
+    if base_succ is not None and base_trials:
+        _lo, hi = newcombe_difference(
+            report.n_success, report.n_trials, base_succ, base_trials
         )
-    rate_floor = _lower(base, "success_ci", base_rate)
-    if (
-        base_rate is not None
-        and rate_floor is not None
-        and report.success_ci[1] < rate_floor - tolerance
-    ):
+        if hi < -tolerance:
+            reasons.append(
+                f"success rate regressed: {report.success_rate:.3f} vs baseline "
+                f"{base_rate:.3f}; the 95% interval for the change tops out at {hi:+.3f} "
+                f"(tolerance {tolerance})"
+            )
+    elif base_rate is not None and report.success_ci[1] < base_rate - tolerance:
+        # Legacy baseline with no counts: fall back to the (cruder) interval-vs-point test.
         reasons.append(
-            f"success rate regressed: CI {_fmt_ci(report.success_ci)} lies entirely below "
-            f"the baseline CI (floor {rate_floor:.3f}, tolerance {tolerance})"
+            f"success rate regressed: CI {_fmt_ci(report.success_ci)} lies below baseline "
+            f"{base_rate:.3f} (tolerance {tolerance})"
         )
+
+    # pass^k is a mean of per-task estimators, not a raw proportion, so Newcombe does not apply
+    # -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty.
+    if base_hat is not None and report.pass_hat_k is not None:
+        hi = difference_upper_bound(
+            report.pass_hat_k,
+            report.pass_hat_k_ci,
+            base_hat,
+            base.get("pass_hat_k_ci") or (base_hat, base_hat),
+        )
+        if hi is not None and hi < -tolerance:
+            reasons.append(
+                f"pass^{report.k} regressed: {report.pass_hat_k:.3f} vs baseline "
+                f"{base_hat:.3f}; the interval for the change tops out at {hi:+.3f} "
+                f"(tolerance {tolerance})"
+            )
     # Cost: fail only if we are CONFIDENT it rose (our low above the baseline's high).
     cost_ceiling = _upper(base, "cost_ci", base_cost)
     if (

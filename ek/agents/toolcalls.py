@@ -133,30 +133,44 @@ def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
     for i, (tool, _args) in enumerate(gold_calls):
         by_tool_gold.setdefault(tool, []).append(i)
 
-    # Score every same-tool candidate pair, then take them best-first.
-    candidates: list = []
-    for p_i, (tool, p_args) in enumerate(pred_calls):
-        for g_i in by_tool_gold.get(tool, ()):
-            g_args = gold_calls[g_i][1]
-            exact = _call_matches(p_args, g_args, canon=canon)
-            overlap = sum(
-                1
-                for key in set(g_args) & set(p_args)
-                if _norm_value(p_args[key], canon) == _norm_value(g_args[key], canon)
-            )
-            # Prefer exact, then most agreeing args; ties broken by position for determinism.
-            candidates.append((0 if exact else 1, -overlap, p_i, g_i))
-    candidates.sort()
-
     used_pred: set = set()
     used_gold: set = set()
     pairs: list = []
-    for _rank, _neg_overlap, p_i, g_i in candidates:
-        if p_i in used_pred or g_i in used_gold:
-            continue
-        used_pred.add(p_i)
-        used_gold.add(g_i)
-        pairs.append((p_i, g_i))
+
+    # Fast path: when no tool name is repeated in gold there is nothing to disambiguate, so the
+    # assignment is forced and we can skip building/sorting the full P x G candidate table
+    # (which otherwise dominates the cost on long episodes).
+    if all(len(v) == 1 for v in by_tool_gold.values()):
+        for p_i, (tool, _p_args) in enumerate(pred_calls):
+            candidates = by_tool_gold.get(tool, ())
+            g_i = candidates[0] if candidates else None
+            if g_i is None or g_i in used_gold:
+                continue
+            used_pred.add(p_i)
+            used_gold.add(g_i)
+            pairs.append((p_i, g_i))
+    else:
+        # Score every same-tool candidate pair, then take them globally best-first.
+        candidates_scored: list = []
+        for p_i, (tool, p_args) in enumerate(pred_calls):
+            for g_i in by_tool_gold.get(tool, ()):
+                g_args = gold_calls[g_i][1]
+                exact = _call_matches(p_args, g_args, canon=canon)
+                overlap = sum(
+                    1
+                    for key in set(g_args) & set(p_args)
+                    if _norm_value(p_args[key], canon) == _norm_value(g_args[key], canon)
+                )
+                # Prefer exact, then most agreeing args; ties broken by position (determinism).
+                candidates_scored.append((0 if exact else 1, -overlap, p_i, g_i))
+        candidates_scored.sort()
+
+        for _rank, _neg_overlap, p_i, g_i in candidates_scored:
+            if p_i in used_pred or g_i in used_gold:
+                continue
+            used_pred.add(p_i)
+            used_gold.add(g_i)
+            pairs.append((p_i, g_i))
 
     unmatched_pred = [c for i, c in enumerate(pred_calls) if i not in used_pred]
     unmatched_gold = [c for i, c in enumerate(gold_calls) if i not in used_gold]

@@ -748,6 +748,49 @@ def test_agent_gate_still_catches_a_regression_that_hides_under_noise(tmp_path):
     assert not gate.passed and gate.reasons
 
 
+def test_agent_gate_has_real_statistical_POWER(tmp_path):
+    """The gate must not buy its calm by going blind.
+
+    Testing whether two 95% CIs *overlap* is not a 5% test but roughly a 0.5% one -- it makes a
+    modest-but-real regression invisible. This pins actual power: a 90% -> 70% drop on a
+    200-task suite (a smaller effect than the 'obvious' test above, on a realistic suite size)
+    MUST be caught. A non-overlap rule detects this ~0% of the time.
+    """
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(200)]
+    good = run_suite(_stochastic_agent(p_fail=0.10, seed=1), tasks, k=1)
+    save_agent_baseline(good, "base", rootdir=str(tmp_path))
+    worse = run_suite(_stochastic_agent(p_fail=0.30, seed=2), tasks, k=1)
+    gate = agent_regression_gate(worse, "base", rootdir=str(tmp_path))
+    assert not gate.passed, (
+        f"a 20-point regression went undetected -- the gate is underpowered "
+        f"({good.success_rate:.2f} -> {worse.success_rate:.2f})"
+    )
+
+
+def test_agent_gate_refuses_an_empty_baseline(tmp_path):
+    """An EMPTY baseline is worse than none: it is a permanent free pass.
+
+    Every bound in it is the maximally-uncertain default, so no run can be shown to fall below
+    it -- a totally broken agent would gate green. Guarding only the current run just moves the
+    hole one hop upstream.
+    """
+    empty = run_suite(as_agent(str.upper), [], k=1)
+    with pytest.raises(ValueError, match="ZERO trials"):
+        save_agent_baseline(empty, "empty", rootdir=str(tmp_path))
+
+    # ...and even if such a record exists (hand-written / from an older version), reject it.
+    ek.json_store("baselines", rootdir=str(tmp_path))["empty"] = {
+        "kind": "agent", "n_tasks": 0, "n_trials": 0, "success_rate": 0.0,
+        "success_ci": [0.0, 1.0], "pass_hat_k": None, "pass_hat_k_ci": [0.0, 1.0],
+        "provenance": {},
+    }
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(50)]
+    totally_broken = run_suite(as_agent(lambda s: "WRONG"), tasks, k=1)
+    assert totally_broken.success_rate == 0.0
+    with pytest.raises(ValueError, match="ZERO trials"):
+        agent_regression_gate(totally_broken, "empty", rootdir=str(tmp_path))
+
+
 def test_agent_gate_fails_an_empty_run(tmp_path):
     """An empty suite must NEVER be green: with no tasks every CI is [0,1], so no test can fire.
 
@@ -858,6 +901,26 @@ def test_run_suite_injects_the_suite_grammar_into_extra_metrics():
     assert detail["n"] == 1
     # With the grammar injected, the wrong `amt` is weighted 50x -- F1 must reflect that.
     assert detail["aggregate"] < 0.5
+
+
+def test_newcombe_difference_is_a_real_two_sample_test():
+    from ek.agents.reliability import newcombe_difference
+
+    # A confident regression: 50/100 vs 90/100.
+    assert newcombe_difference(50, 100, 90, 100)[1] < 0
+    # Noise: 89/100 vs 90/100 -- the interval must straddle zero.
+    lo, hi = newcombe_difference(89, 100, 90, 100)
+    assert lo < 0 < hi
+    # And it must have more POWER than a non-overlap rule: 160/200 vs 180/200 (80% vs 90%)
+    # is a real drop that overlapping-CIs would miss.
+    assert newcombe_difference(160, 200, 180, 200)[1] < 0
+
+
+def test_run_suite_warns_when_metrics_cannot_score_a_goldless_task():
+    task = TaskSpec("t1", input="x", gold=None)
+    with pytest.warns(UserWarning, match="no `gold`"):
+        run_suite(as_agent(str.upper), [task], k=1, check=lambda e, g: True,
+                  metrics={"tool_call": ToolCallMetric()})
 
 
 def test_run_suite_value_weights_the_success_rate():
