@@ -50,6 +50,7 @@ from ..base import GraphGrammar, Score
 from ..canonicalize import default_canonicalizer, resolve_canonicalizer
 from .base import as_call
 from .toolcalls import (
+    _MISSING,
     _arg_costs,
     _calls_of,
     _call_matches,
@@ -80,10 +81,14 @@ def _sub_cost(p: tuple, g: tuple, grammar: Optional[GraphGrammar], canon) -> flo
     if p_tool != g_tool:
         return _mass(p, grammar) + _mass(g, grammar)
     costs = _arg_costs(grammar, g_tool, set(p_args) | set(g_args))
+    # Use the _MISSING sentinel, not .get(name) -> None: an *omitted* argument must not compare
+    # equal to a gold argument whose value legitimately IS None (which would make skipping it,
+    # or hallucinating an extra `{"x": None}`, entirely free).
     return sum(
         w
         for name, w in costs.items()
-        if _norm_value(p_args.get(name), canon) != _norm_value(g_args.get(name), canon)
+        if _norm_value(p_args.get(name, _MISSING), canon)
+        != _norm_value(g_args.get(name, _MISSING), canon)
     )
 
 

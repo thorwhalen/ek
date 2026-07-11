@@ -39,7 +39,7 @@ from ..base import GraphGrammar, Score
 from ..canonicalize import default_canonicalizer
 from ..registry import register, resolve
 from .base import Episode
-from .cost import ModelPrice, cost_of_pass, episode_dollars
+from .cost import ModelPrice, UnknownModelPrice, cost_of_pass, episode_dollars
 
 
 @runtime_checkable
@@ -165,6 +165,17 @@ class CostPerSuccessMetric:
             raise TypeError(
                 "CostPerSuccessMetric scores an Episode (it needs the episode's Cost); got "
                 f"{type(pred).__name__}"
+            )
+        if self.price is None and self.prices is None:
+            # Resolving this metric *by name* leaves it with no rates, and the failure would
+            # otherwise surface as a baffling "no price for model ''". Say the real thing.
+            raise UnknownModelPrice(
+                "cost_per_success needs token rates, so it cannot be used by name alone. "
+                "Construct it and pass it as the metric:\n"
+                "    from ek.agents import CostPerSuccessMetric, per_million\n"
+                "    m = CostPerSuccessMetric(price=per_million(3.0, 15.0))\n"
+                "    ek.evaluate(cases, metric=m)\n"
+                "(or pass prices={model: ModelPrice(...)} / ek.agents.load_prices(...))."
             )
         ok = bool(self.check(pred, gold))
         money = episode_dollars(pred, prices=self.prices, price=self.price)

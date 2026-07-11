@@ -258,6 +258,16 @@ def cost_report(
         True
     """
     episodes = list(episodes)
+    # An UNGRADED episode is not a failed one. Counting `success is None` as falsy would make
+    # cost-per-success read `inf` on a perfectly good run that simply has not been graded yet --
+    # a terrifying number produced by a bookkeeping slip. Refuse, as `reliability()` does.
+    ungraded = [e.task_id for e in episodes if e.success is None]
+    if ungraded:
+        raise ValueError(
+            f"cost_report: {len(ungraded)} episode(s) are ungraded (success is None), e.g. "
+            f"{ungraded[:3]}. Grade them with a checker first -- an ungraded episode is not a "
+            "failed one, and silently treating it as one reports an infinite cost-of-pass."
+        )
     n = len(episodes)
     n_success = sum(1 for e in episodes if e.success)
     priced = price is not None or prices is not None

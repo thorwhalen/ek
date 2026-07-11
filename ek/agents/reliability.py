@@ -178,8 +178,11 @@ class ReliabilityReport:
     n_trials: int = 0
     success_rate: float = 0.0
     success_ci: tuple = (0.0, 1.0)
-    pass_at_k: float = 0.0
-    pass_hat_k: float = 0.0
+    # ``None`` (not 0.0) when no task had enough trials to estimate at k: "we could not
+    # measure this" and "the agent failed everything" are opposite facts, and reporting the
+    # second when the first is true is how a perfect agent gets shown as a total failure.
+    pass_at_k: Optional[float] = None
+    pass_hat_k: Optional[float] = None
     pass_hat_k_ci: tuple = (0.0, 1.0)
     stochastic: bool = True
     per_task: dict = field(default_factory=dict)
@@ -188,8 +191,8 @@ class ReliabilityReport:
     detail: dict = field(default_factory=dict)
 
     def __float__(self) -> float:
-        """The headline number is the *reliability* one."""
-        return float(self.pass_hat_k)
+        """The headline number is the *reliability* one (``nan`` if it could not be measured)."""
+        return float("nan") if self.pass_hat_k is None else float(self.pass_hat_k)
 
 
 def _group_trials(source: Any) -> dict:
@@ -262,12 +265,25 @@ def reliability(
     n_tasks = len(per_task)
     n_trials = sum(v["n"] for v in per_task.values())
     total_c = sum(v["c"] for v in per_task.values())
+    # None, not 0.0, when nothing could be estimated at this k (see ReliabilityReport).
     mean_at = (
-        sum(v["pass_at_k"] for v in per_task.values()) / n_tasks if n_tasks else 0.0
+        sum(v["pass_at_k"] for v in per_task.values()) / n_tasks if n_tasks else None
     )
     mean_hat = (
-        sum(v["pass_hat_k"] for v in per_task.values()) / n_tasks if n_tasks else 0.0
+        sum(v["pass_hat_k"] for v in per_task.values()) / n_tasks if n_tasks else None
     )
+
+    # Dropping tasks from the headline in silence is a mis-estimate, not a nicety: a suite
+    # where half the tasks have fewer than k trials would otherwise report pass^k over the
+    # other half as if it were the whole suite.
+    if skipped:
+        warnings.warn(
+            f"reliability: {len(skipped)} of {len(grouped)} task(s) have fewer than k={k} "
+            f"trials and were EXCLUDED from pass@k/pass^k (e.g. {skipped[:3]}). Run at least "
+            "k trials per task, or lower k -- the reported figures cover only the remaining "
+            f"{n_tasks} task(s).",
+            stacklevel=2,
+        )
 
     per_slice: dict = {}
     if slices:

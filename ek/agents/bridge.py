@@ -50,37 +50,87 @@ def _loads(args: Any) -> dict:
     return {}
 
 
+def _read_call(call: Any) -> Optional[tuple]:
+    """Read ``(name, args)`` from ONE tool call in any of the shapes the ecosystem emits.
+
+    There are three, and getting this wrong is a *silent* wrong answer (the call is dropped and
+    the episode scores as though the agent never called anything):
+
+    - **OpenAI wire / dict**: ``{"function": {"name": …, "arguments": "<json string>"}}`` -- the
+      name is *nested* and the arguments are a JSON **string**.
+    - **Inspect AI object**: ``ToolCall(function="get_weather", arguments={...})`` -- ``.function``
+      IS the name (a plain string), and the arguments are already a dict.
+    - **OpenAI SDK object**: ``call.function.name`` / ``call.function.arguments``.
+    """
+    if isinstance(call, Mapping):
+        fn = call.get("function", call)
+        if isinstance(fn, Mapping):  # nested: OpenAI wire format
+            name = fn.get("name") or ""
+            raw = fn.get("arguments", fn.get("args", fn.get("input", {})))
+        else:  # flat: {"function": "get_weather", "arguments": {...}}
+            name = fn if isinstance(fn, str) else call.get("name", "")
+            raw = call.get("arguments", call.get("args", call.get("input", {})))
+        return (str(name), _loads(raw)) if name else None
+
+    # Object shapes (Inspect's ToolCall, the OpenAI SDK's objects).
+    fn = getattr(call, "function", None)
+    if fn is not None and not isinstance(fn, str):  # nested object: call.function.name
+        name = getattr(fn, "name", "") or ""
+        raw = getattr(fn, "arguments", getattr(fn, "args", {}))
+    else:  # flat object: call.function is the name (Inspect)
+        name = fn if isinstance(fn, str) else (getattr(call, "name", "") or "")
+        raw = getattr(
+            call, "arguments", getattr(call, "args", getattr(call, "input", {}))
+        )
+    return (str(name), _loads(raw)) if name else None
+
+
+def _tool_use_block(block: Any) -> Optional[tuple]:
+    """Read an Anthropic ``tool_use`` content block (dict- or object-shaped)."""
+    kind = (
+        block.get("type")
+        if isinstance(block, Mapping)
+        else getattr(block, "type", None)
+    )
+    if kind != "tool_use":
+        return None
+    if isinstance(block, Mapping):
+        name, raw = block.get("name", ""), block.get("input", {})
+    else:
+        name, raw = getattr(block, "name", ""), getattr(block, "input", {})
+    return (str(name), _loads(raw)) if name else None
+
+
 def _tool_calls_of(message: Mapping) -> list:
-    """Extract ``(name, args)`` pairs from an assistant message, OpenAI- or Anthropic-shaped."""
+    """Extract ``(name, args)`` pairs from an assistant message, in any provider's shape."""
     calls: list = []
-    # OpenAI: message["tool_calls"] = [{"function": {"name":…, "arguments": "<json>"}}]
     for call in message.get("tool_calls") or ():
-        fn = call.get("function", call) if isinstance(call, Mapping) else {}
-        name = fn.get("name", "")
-        if name:
-            calls.append((name, _loads(fn.get("arguments", fn.get("args", {})))))
-    # Anthropic: message["content"] = [{"type": "tool_use", "name":…, "input": {...}}, …]
+        got = _read_call(call)
+        if got:
+            calls.append(got)
+    # Anthropic: content is a list of blocks, one of which may be a tool_use.
     content = message.get("content")
     if isinstance(content, Sequence) and not isinstance(content, (str, bytes)):
         for block in content:
-            if isinstance(block, Mapping) and block.get("type") == "tool_use":
-                name = block.get("name", "")
-                if name:
-                    calls.append((name, _loads(block.get("input", {}))))
+            got = _tool_use_block(block)
+            if got:
+                calls.append(got)
     return calls
 
 
 def _text_of(message: Mapping) -> str:
-    """The plain text of a message (flattening Anthropic-style content blocks)."""
+    """The plain text of a message (flattening content blocks, dict- or object-shaped)."""
     content = message.get("content")
     if isinstance(content, str):
         return content
-    if isinstance(content, Sequence):
-        parts = [
-            b.get("text", "")
-            for b in content
-            if isinstance(b, Mapping) and b.get("type") == "text"
-        ]
+    if isinstance(content, Sequence) and not isinstance(content, (str, bytes)):
+        parts = []
+        for block in content:
+            if isinstance(block, Mapping):
+                if block.get("type") == "text":
+                    parts.append(block.get("text", ""))
+            elif getattr(block, "type", None) == "text":
+                parts.append(getattr(block, "text", ""))
         return "".join(parts)
     return ""
 

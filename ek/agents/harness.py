@@ -36,6 +36,8 @@ Example:
 
 from __future__ import annotations
 
+import inspect
+import math
 import warnings
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field, replace
@@ -43,7 +45,7 @@ from typing import Any, Callable, Optional
 
 from ..registry import resolve
 from ..stores import json_store
-from .base import Episode, RunProvenance, TaskSpec
+from .base import Episode, RunProvenance, TaskSpec, suite_grammar
 from .cost import ModelPrice, cost_of_pass, cost_report, episode_dollars
 from .reliability import ReliabilityReport, bootstrap_ci, reliability
 
@@ -78,6 +80,7 @@ def run_suite(
     *,
     k: int = 1,
     check: Any = None,
+    metrics: Optional[Mapping] = None,
     price: Optional[ModelPrice] = None,
     prices: Optional[Mapping[str, ModelPrice]] = None,
     run: Optional[RunProvenance] = None,
@@ -91,17 +94,23 @@ def run_suite(
     Args:
         agent: The system under test: ``TaskSpec -> Episode`` (a bare answer is wrapped). It
             receives the whole spec -- ``.input``, ``.tools``, ``.gold`` -- not just the input.
+            If it accepts a keyword ``seed``, the per-trial seed is passed to it.
         tasks: :class:`~ek.agents.base.TaskSpec` s (or a ``{task_id: spec}`` mapping).
         k: Trials per task. ``k > 1`` is what makes ``pass^k`` meaningful -- and it only means
             anything if the agent is genuinely stochastic (the report warns if it is not).
         check: The success oracle -- a registered checker name or an ``(episode, gold) -> bool``
             callable. Defaults to ``"output"``; **inject a state-based/executable oracle** for a
             real suite, and run it isolated from the agent.
+        metrics: Optional ``{name: Metric}`` scored on every episode against ``task.gold``, with
+            the **suite's Layer-A grammar injected** -- this is how the tool/argument cost
+            weights reach a ``tool_call``/``trajectory`` metric. Results land in
+            ``report.detail["metrics"]``.
         price/prices: Rates for costing the episodes (see :mod:`ek.agents.cost`).
         run: :class:`~ek.agents.base.RunProvenance` for this run (model, simulator, suite
             version, scaffold). Recorded on every episode and on any baseline saved from it.
-        seed: Base RNG seed; trial *i* of each task records ``seed + i`` so trials are
-            distinguishable and a run is reproducible.
+        seed: Base RNG seed. Trial *i* of each task uses ``seed + i``: it is recorded on the
+            episode's provenance **and passed to the agent** when the agent accepts a ``seed``
+            keyword.
         persist/run_id/rootdir: Persist the run to the ``runs``/``results`` stores.
 
     Returns:
@@ -112,18 +121,30 @@ def run_suite(
     task_list = _as_tasks(tasks)
     checker = resolve("checkers", check, default="output")
     base_run = run or RunProvenance()
+    # The suite's Layer-A grammar (tools + their arg cost weights). This is what makes the
+    # extra metrics cost-sensitive: a wrong argument to a *destructive* tool is not one unit
+    # of error. Built once and injected -- it is the same frozen cost SSOT the IE side uses.
+    grammar = suite_grammar(task_list)
+    accepts_seed = _accepts_seed(agent)
 
     episodes: list = []
+    by_task: dict = {}
     for task in task_list:
         for trial in range(k):
-            trial_run = replace(
-                base_run, seed=None if seed is None else seed + trial
+            trial_seed = None if seed is None else seed + trial
+            trial_run = replace(base_run, seed=trial_seed)
+            # Actually *hand the agent* its seed when it can take one, rather than only
+            # stamping it on provenance and calling the run "reproducible".
+            result = (
+                agent(task, seed=trial_seed)
+                if (accepts_seed and trial_seed is not None)
+                else agent(task)
             )
-            result = agent(task)
             episode = _as_episode(result, task)
             episode = replace(episode, run=episode.run or trial_run)
             episode = episode.graded(bool(checker(episode, task.gold)))
             episodes.append(episode)
+            by_task.setdefault(task.task_id, []).append(episode)
 
     slices = {t.task_id: t.slice for t in task_list if t.slice is not None}
     costs = cost_report(episodes, prices=prices, price=price)
@@ -132,10 +153,64 @@ def run_suite(
     report = reliability(episodes, k=k, slices=slices or None, cost=costs)
     report.detail["episodes"] = len(episodes)
     report.detail["provenance"] = _provenance_dict(base_run)
+    report.detail["value_weighted_success"] = _value_weighted_success(task_list, by_task)
+    if metrics:
+        report.detail["metrics"] = _score_metrics(metrics, task_list, by_task, grammar)
 
     if persist:
         _persist(report, run_id=run_id, rootdir=rootdir)
     return report
+
+
+def _accepts_seed(fn: Any) -> bool:
+    """Whether the agent takes a keyword ``seed`` (same capability probe the facade uses)."""
+    try:
+        return "seed" in inspect.signature(fn).parameters
+    except (TypeError, ValueError):
+        return False
+
+
+def _value_weighted_success(task_list: Sequence[TaskSpec], by_task: Mapping) -> float:
+    """Success rate weighted by each task's ``value`` -- not all tasks are worth the same.
+
+    ``TaskSpec.value`` is the task-level analogue of ``FieldSpec.importance``: finishing a
+    high-value task counts for more than finishing a trivial one.
+    """
+    total = hit = 0.0
+    for task in task_list:
+        eps = by_task.get(task.task_id, ())
+        if not eps:
+            continue
+        total += task.value * len(eps)
+        hit += task.value * sum(1 for e in eps if e.success)
+    return (hit / total) if total else 0.0
+
+
+def _score_metrics(
+    metrics: Mapping, task_list: Sequence[TaskSpec], by_task: Mapping, grammar
+) -> dict:
+    """Score every episode with each extra metric, injecting the suite's Layer-A grammar.
+
+    This is how the cost weights on ``ToolSpec``/``FieldSpec.importance`` actually reach a
+    tool-call or trajectory metric on the harness path (otherwise they are inert).
+    """
+    out: dict = {}
+    for name, metric in metrics.items():
+        scores = []
+        for task in task_list:
+            if task.gold is None:
+                continue
+            for episode in by_task.get(task.task_id, ()):
+                scores.append(metric(episode, task.gold, grammar=grammar))
+        if not scores:
+            continue
+        aggregate = (
+            metric.aggregate(scores)
+            if hasattr(metric, "aggregate")
+            else sum(float(s) for s in scores) / len(scores)
+        )
+        out[name] = {"aggregate": aggregate, "n": len(scores)}
+    return out
 
 
 def _bootstrap_cost_ci(episodes: Sequence[Episode], *, prices, price) -> tuple:
@@ -181,6 +256,18 @@ def _persist(report: ReliabilityReport, *, run_id: Optional[str], rootdir) -> No
     }
 
 
+def _json_num(x: Any) -> Any:
+    """JSON has no ``Infinity``/``NaN``. Persist them as ``null`` rather than emit invalid JSON.
+
+    ``cost_per_success`` is legitimately ``inf`` when nothing succeeded; Python's ``json`` would
+    happily write a bare ``Infinity`` token that every strict parser (jq, a JS dashboard) rejects.
+    ``null`` here means "not measurable", which is exactly what an infinite cost-of-pass is.
+    """
+    if isinstance(x, (int, float)) and not math.isfinite(x):
+        return None
+    return x
+
+
 def _summary(report: ReliabilityReport) -> dict:
     return {
         "kind": "agent",
@@ -189,13 +276,14 @@ def _summary(report: ReliabilityReport) -> dict:
         "n_trials": report.n_trials,
         "success_rate": report.success_rate,
         "success_ci": list(report.success_ci),
-        "pass_at_k": report.pass_at_k,
-        "pass_hat_k": report.pass_hat_k,
+        "pass_at_k": _json_num(report.pass_at_k),
+        "pass_hat_k": _json_num(report.pass_hat_k),
         "pass_hat_k_ci": list(report.pass_hat_k_ci),
         "stochastic": report.stochastic,
         "per_slice": report.per_slice,
-        "cost_per_success": report.cost.get("cost_per_success"),
-        "total_dollars": report.cost.get("total_dollars"),
+        "cost_per_success": _json_num(report.cost.get("cost_per_success")),
+        "cost_ci": [_json_num(v) for v in (report.cost.get("cost_ci") or (None, None))],
+        "total_dollars": _json_num(report.cost.get("total_dollars")),
         "provenance": report.detail.get("provenance", {}),
     }
 
@@ -264,11 +352,25 @@ def agent_regression_gate(
             would be a category error (the same reason the offline gate refuses to compare two
             different metrics).
     """
-    base = (
-        load_agent_baseline(baseline, rootdir=rootdir)
-        if isinstance(baseline, str)
-        else baseline
-    )
+    if isinstance(baseline, str):
+        base = load_agent_baseline(baseline, rootdir=rootdir)
+    elif isinstance(baseline, ReliabilityReport):
+        base = _summary(baseline)  # comparing two live reports is the natural call
+    else:
+        base = baseline
+
+    # An empty run must never be green. With no tasks every CI is the maximally-uncertain
+    # [0, 1], so *no* regression test can fire and a broken loader / bad glob / over-filtered
+    # suite would sail through as a pass. Absence of evidence is not evidence of no regression.
+    if report.n_trials == 0:
+        return AgentGateResult(
+            passed=False,
+            reasons=[
+                "the run evaluated ZERO trials -- an empty suite cannot pass a regression "
+                "gate (check the task loader/filter)."
+            ],
+        )
+
     if base is None:  # no baseline yet -> first run always passes
         return AgentGateResult(
             passed=True,
@@ -294,38 +396,65 @@ def agent_regression_gate(
     cur_cost = report.cost.get("cost_per_success")
     cost_ci = report.cost.get("cost_ci") or (None, None)
 
-    # Reliability: fail only if we are CONFIDENT it dropped (whole CI below the baseline).
-    if base_hat is not None and report.pass_hat_k_ci[1] < base_hat - tolerance:
+    # A suite that shrank is not the same experiment.
+    base_tasks = base.get("n_tasks")
+    if base_tasks and report.n_tasks < base_tasks:
         reasons.append(
-            f"pass^{report.k} regressed: CI {_fmt_ci(report.pass_hat_k_ci)} lies below "
-            f"baseline {base_hat:.3f} (tolerance {tolerance})"
-        )
-    if base_rate is not None and report.success_ci[1] < base_rate - tolerance:
-        reasons.append(
-            f"success rate regressed: CI {_fmt_ci(report.success_ci)} lies below baseline "
-            f"{base_rate:.3f} (tolerance {tolerance})"
-        )
-    # Cost: fail only if we are CONFIDENT it rose.
-    if (
-        base_cost is not None
-        and cost_ci[0] is not None
-        and _finite(base_cost)
-        and _finite(cost_ci[0])
-        and cost_ci[0] > base_cost * (1.0 + cost_tolerance)
-    ):
-        reasons.append(
-            f"cost per success regressed: CI low {cost_ci[0]:.4g} exceeds baseline "
-            f"{base_cost:.4g} (+{cost_tolerance:.0%})"
+            f"the suite shrank: {report.n_tasks} tasks vs {base_tasks} in the baseline -- "
+            "not the same experiment (re-baseline, or restore the missing tasks)."
         )
 
-    # An overlapping interval is not a pass -- it is an underpowered experiment. Say so.
-    underpowered = not reasons and base_hat is not None and report.pass_hat_k < base_hat
+    # THE core rule. The baseline is itself a NOISY ESTIMATE, so comparing our interval to its
+    # *point* is wrong: a Wilson upper bound only reaches 1.0 when every trial passed, so a
+    # single flake against a perfect baseline would read as a "confident regression". Compare
+    # interval to interval, and fail only when they do not overlap (current entirely below).
+    hat_floor = _lower(base, "pass_hat_k_ci", base_hat)
+    if (
+        base_hat is not None
+        and report.pass_hat_k is not None
+        and hat_floor is not None
+        and report.pass_hat_k_ci[1] < hat_floor - tolerance
+    ):
+        reasons.append(
+            f"pass^{report.k} regressed: CI {_fmt_ci(report.pass_hat_k_ci)} lies entirely "
+            f"below the baseline CI (floor {hat_floor:.3f}, tolerance {tolerance})"
+        )
+    rate_floor = _lower(base, "success_ci", base_rate)
+    if (
+        base_rate is not None
+        and rate_floor is not None
+        and report.success_ci[1] < rate_floor - tolerance
+    ):
+        reasons.append(
+            f"success rate regressed: CI {_fmt_ci(report.success_ci)} lies entirely below "
+            f"the baseline CI (floor {rate_floor:.3f}, tolerance {tolerance})"
+        )
+    # Cost: fail only if we are CONFIDENT it rose (our low above the baseline's high).
+    cost_ceiling = _upper(base, "cost_ci", base_cost)
+    if (
+        cost_ceiling is not None
+        and cost_ci[0] is not None
+        and _finite(cost_ceiling)
+        and _finite(cost_ci[0])
+        and cost_ci[0] > cost_ceiling * (1.0 + cost_tolerance)
+    ):
+        reasons.append(
+            f"cost per success regressed: CI low {cost_ci[0]:.4g} exceeds the baseline CI "
+            f"high {cost_ceiling:.4g} (+{cost_tolerance:.0%})"
+        )
+
+    # An overlapping interval is not a clean pass -- it is an underpowered experiment. Say so.
+    underpowered = (
+        not reasons
+        and base_hat is not None
+        and report.pass_hat_k is not None
+        and report.pass_hat_k < base_hat
+    )
     if underpowered:
         warnings.warn(
             f"agent_regression_gate: pass^{report.k} fell from {base_hat:.3f} to "
-            f"{report.pass_hat_k:.3f}, but the CI {_fmt_ci(report.pass_hat_k_ci)} still covers "
-            "the baseline -- the run is underpowered, not clean. Add trials or tasks before "
-            "trusting this pass.",
+            f"{report.pass_hat_k:.3f}, but the intervals still overlap -- the run is "
+            "underpowered, not clean. Add trials or tasks before trusting this pass.",
             stacklevel=2,
         )
 
@@ -342,11 +471,25 @@ def agent_regression_gate(
     )
 
 
+def _lower(base: Mapping, ci_key: str, point: Any) -> Any:
+    """The baseline's lower confidence bound (falling back to its point estimate)."""
+    ci = base.get(ci_key)
+    if ci and ci[0] is not None:
+        return ci[0]
+    return point
+
+
+def _upper(base: Mapping, ci_key: str, point: Any) -> Any:
+    """The baseline's upper confidence bound (falling back to its point estimate)."""
+    ci = base.get(ci_key)
+    if ci and len(ci) > 1 and ci[1] is not None:
+        return ci[1]
+    return point
+
+
 def _fmt_ci(ci: Sequence) -> str:
     return f"[{ci[0]:.3f}, {ci[1]:.3f}]"
 
 
 def _finite(x: Any) -> bool:
-    import math
-
     return isinstance(x, (int, float)) and math.isfinite(x)

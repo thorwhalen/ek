@@ -216,6 +216,11 @@ class Trajectory:
 
     steps: Sequence[Step] = ()
 
+    def __post_init__(self) -> None:
+        # Freeze the caller's sequence: a frozen dataclass holding a caller-owned *list*
+        # is not actually immutable (appending to that list grows this "frozen" trajectory).
+        object.__setattr__(self, "steps", tuple(self.steps))
+
     def __len__(self) -> int:
         return len(self.steps)
 
@@ -276,7 +281,12 @@ class Cost:
             else None,
         )
 
-    __radd__ = __add__
+    def __radd__(self, other: Any) -> "Cost":
+        # ``sum()`` starts from the int 0, so a bare ``__radd__ = __add__`` would return
+        # NotImplemented and make ``sum(costs)`` raise.
+        if other == 0 or other is None:
+            return self
+        return self.__add__(other)
 
     @property
     def total_tokens(self) -> int:
@@ -364,8 +374,12 @@ class Episode:
         return self.trajectory.calls
 
     def graded(self, success: bool) -> "Episode":
-        """A copy with ``success`` set (never mutates -- grading stays idempotent)."""
-        return replace(self, success=success)
+        """A copy with ``success`` set (never mutates -- grading stays idempotent).
+
+        ``meta`` is copied too: ``dataclasses.replace`` is a *shallow* copy, so without this
+        the "copy" would share the original's mutable ``meta`` dict.
+        """
+        return replace(self, success=success, meta=dict(self.meta))
 
 
 def is_episode(x: Any) -> bool:

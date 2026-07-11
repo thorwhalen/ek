@@ -13,7 +13,9 @@ happy paths:
 - ``pass^k`` must warn when the agent is deterministic (it degenerates to ``pass^1``).
 """
 
+import json
 import math
+import random
 import warnings
 
 import pytest
@@ -40,8 +42,11 @@ from ek.agents import (
     cost_report,
     dollars,
     episode_from_messages,
+    from_deepeval_test_case,
+    from_inspect_sample,
     judge_validation,
     load_prices,
+    match_calls,
     pairwise_judge,
     pass_at_k,
     pass_hat_k,
@@ -528,6 +533,96 @@ def test_as_agent_wraps_a_plain_function():
     assert isinstance(ep, Episode) and ep.output == "HI"
 
 
+class _InspectToolCall:
+    """Inspect AI's real shape: `.function` IS the name (a str), `.arguments` is a dict."""
+
+    def __init__(self, function, arguments):
+        self.function = function
+        self.arguments = arguments
+
+
+class _InspectMessage:
+    def __init__(self, role, content="", tool_calls=None):
+        self.role = role
+        self.content = content
+        self.tool_calls = tool_calls
+
+
+class _InspectSample:
+    def __init__(self, messages, output=None, id="s1"):
+        self.messages = messages
+        self.output = output
+        self.id = id
+
+
+class _InspectOutput:
+    def __init__(self, completion, usage=None):
+        self.completion = completion
+        self.usage = usage
+
+
+def test_from_inspect_sample_reads_object_shaped_tool_calls():
+    """Inspect's ToolCall is an OBJECT, not a mapping.
+
+    Getting this wrong drops every call and scores the episode as 'made no calls' -- a silent
+    wrong answer, not an error. Regression test for exactly that.
+    """
+    sample = _InspectSample(
+        messages=[
+            _InspectMessage("user", "weather?"),
+            _InspectMessage(
+                "assistant",
+                tool_calls=[_InspectToolCall("get_weather", {"city": "Paris"})],
+            ),
+            _InspectMessage("tool", "18C"),
+            _InspectMessage("assistant", "It is 18C."),
+        ],
+        output=_InspectOutput("It is 18C.", usage={"input_tokens": 40, "output_tokens": 9}),
+    )
+    ep = from_inspect_sample(sample)
+    assert ep.trajectory.tools == ("get_weather",), "Inspect tool calls were silently dropped"
+    assert ep.trajectory.steps[0].args == {"city": "Paris"}
+    assert ep.trajectory.steps[0].observation == "18C"
+    assert ep.output == "It is 18C."
+    assert ep.cost.input_tokens == 40
+    assert ep.task_id == "s1"
+
+
+def test_openai_sdk_object_shaped_tool_calls():
+    """The OpenAI SDK nests the name: call.function.name / call.function.arguments (a JSON str)."""
+
+    class _Fn:
+        name, arguments = "search", '{"q": "cats"}'
+
+    class _Call:
+        function = _Fn()
+
+    class _Msg:
+        role, content, tool_calls = "assistant", "", [_Call()]
+
+    traj = trajectory_from_messages([_message_dict_for_test(_Msg())])
+    assert traj.tools == ("search",)
+    assert traj.steps[0].args == {"q": "cats"}
+
+
+def _message_dict_for_test(m):
+    return {"role": m.role, "content": m.content, "tool_calls": m.tool_calls}
+
+
+def test_from_deepeval_test_case():
+    class _Tool:
+        name = "search"
+        input_parameters = {"q": "cats"}
+
+    class _Case:
+        actual_output = "meow"
+        tools_called = [_Tool()]
+
+    ep = from_deepeval_test_case(_Case(), task_id="d1")
+    assert ep.output == "meow" and ep.trajectory.tools == ("search",)
+    assert ep.trajectory.steps[0].args == {"q": "cats"}
+
+
 # ---------------------------------------------------------------------------
 # Harness: k trials, provenance, and the variance-aware gate
 # ---------------------------------------------------------------------------
@@ -614,6 +709,78 @@ def test_agent_gate_does_not_flag_pure_noise(tmp_path):
     assert agent_regression_gate(second, "base", rootdir=str(tmp_path))
 
 
+def _stochastic_agent(p_fail: float, seed: int):
+    """A genuinely FLAKY agent -- the only kind that can exercise a variance-aware gate."""
+    rng = random.Random(seed)
+
+    def agent(task):
+        wrong = rng.random() < p_fail
+        return Episode(output=("WRONG" if wrong else str(task.gold)),
+                       cost=Cost(input_tokens=1000))
+
+    return agent
+
+
+def test_agent_gate_tolerates_real_sampling_noise(tmp_path):
+    """THE load-bearing gate property, and the one a deterministic agent cannot test.
+
+    Two runs of the SAME flaky agent (same quality, different luck) must not be called a
+    regression. A gate that compares our interval to the baseline's *point* fails this: a
+    Wilson upper bound only reaches 1.0 when every trial passed, so a single unlucky flake
+    against a lucky baseline would read as a 'confident regression'.
+    """
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(60)]
+    lucky = run_suite(_stochastic_agent(p_fail=0.05, seed=1), tasks, k=1)
+    save_agent_baseline(lucky, "base", rootdir=str(tmp_path))
+    for seed in (2, 3, 4, 5):  # same agent quality, different luck
+        rerun = run_suite(_stochastic_agent(p_fail=0.05, seed=seed), tasks, k=1)
+        gate = agent_regression_gate(rerun, "base", rootdir=str(tmp_path))
+        assert gate.passed, f"noise flagged as a regression (seed={seed}): {gate.reasons}"
+
+
+def test_agent_gate_still_catches_a_regression_that_hides_under_noise(tmp_path):
+    """...but the tolerance must not be so wide that a genuine quality drop slips through."""
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(60)]
+    good = run_suite(_stochastic_agent(p_fail=0.05, seed=1), tasks, k=1)
+    save_agent_baseline(good, "base", rootdir=str(tmp_path))
+    much_worse = run_suite(_stochastic_agent(p_fail=0.60, seed=2), tasks, k=1)
+    gate = agent_regression_gate(much_worse, "base", rootdir=str(tmp_path))
+    assert not gate.passed and gate.reasons
+
+
+def test_agent_gate_fails_an_empty_run(tmp_path):
+    """An empty suite must NEVER be green: with no tasks every CI is [0,1], so no test can fire.
+
+    A broken loader or an over-filtered suite would otherwise sail through as a pass --
+    absence of evidence presented as evidence of no regression.
+    """
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(10)]
+    good = run_suite(as_agent(str.upper), tasks, k=1)
+    save_agent_baseline(good, "base", rootdir=str(tmp_path))
+    empty = run_suite(as_agent(str.upper), [], k=1)
+    gate = agent_regression_gate(empty, "base", rootdir=str(tmp_path))
+    assert not gate.passed
+    assert any("ZERO trials" in r for r in gate.reasons)
+
+
+def test_agent_gate_flags_a_shrunken_suite(tmp_path):
+    """Fewer tasks than the baseline is not the same experiment."""
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(10)]
+    good = run_suite(as_agent(str.upper), tasks, k=1)
+    save_agent_baseline(good, "base", rootdir=str(tmp_path))
+    fewer = run_suite(as_agent(str.upper), tasks[:4], k=1)
+    gate = agent_regression_gate(fewer, "base", rootdir=str(tmp_path))
+    assert not gate.passed and any("shrank" in r for r in gate.reasons)
+
+
+def test_agent_gate_accepts_a_report_as_the_baseline(tmp_path):
+    """Comparing two live reports is the most natural call -- it must not AttributeError."""
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(10)]
+    first = run_suite(as_agent(str.upper), tasks, k=1)
+    second = run_suite(as_agent(str.upper), tasks, k=1)
+    assert agent_regression_gate(second, first)
+
+
 def test_agent_gate_refuses_to_compare_across_a_changed_simulator(tmp_path):
     """A tau-bench-style user simulator is itself an LLM -- a hidden eval variable."""
     tasks = [TaskSpec("t1", input="a", gold="A")]
@@ -652,6 +819,60 @@ def test_run_suite_persists(tmp_path):
     assert ek.json_store("runs", rootdir=str(tmp_path))["r1"]["kind"] == "agent"
 
 
+def test_persisted_run_is_valid_json_even_with_infinite_cost(tmp_path):
+    """cost-per-success is legitimately `inf` when nothing succeeds -- but JSON has no Infinity."""
+    tasks = [TaskSpec("t1", input="a", gold="NEVER")]
+    run_suite(
+        as_agent(str.upper), tasks, k=1, price=per_million(1.0, 1.0),
+        persist=True, run_id="r2", rootdir=str(tmp_path),
+    )
+    raw = (tmp_path / "runs" / "r2.json").read_text()
+    assert "Infinity" not in raw, "invalid JSON: strict parsers (jq, JS) reject Infinity"
+    assert json.loads(raw)["cost_per_success"] is None  # null = "not measurable"
+
+
+def test_run_suite_passes_the_seed_to_an_agent_that_takes_one():
+    """The seed must actually reach the agent, not just be stamped on provenance."""
+    seen = []
+
+    def agent(task, *, seed=None):
+        seen.append(seed)
+        return Episode(output=str(task.gold))
+
+    run_suite(agent, [TaskSpec("t1", input="a", gold="A")], k=3, seed=100)
+    assert seen == [100, 101, 102]
+
+
+def test_run_suite_injects_the_suite_grammar_into_extra_metrics():
+    """The Layer-A cost weights must actually reach the metrics on the harness path."""
+    refund = ToolSpec("refund", params={"amt": FieldSpec("amt", importance=50.0)},
+                      destructive=True)
+    task = TaskSpec("t1", input="x", gold=[("refund", {"amt": 10})], tools=[refund])
+
+    def agent(spec):
+        return Episode(trajectory=Trajectory([Step("refund", {"amt": 999})]), output="x")
+
+    report = run_suite(agent, [task], k=1, check=lambda e, g: True,
+                       metrics={"tool_call": ToolCallMetric(level="arg")})
+    detail = report.detail["metrics"]["tool_call"]
+    assert detail["n"] == 1
+    # With the grammar injected, the wrong `amt` is weighted 50x -- F1 must reflect that.
+    assert detail["aggregate"] < 0.5
+
+
+def test_run_suite_value_weights_the_success_rate():
+    """TaskSpec.value: not all completed tasks are worth the same."""
+    tasks = [
+        TaskSpec("cheap", input="a", gold="A", value=1.0),
+        TaskSpec("precious", input="b", gold="B", value=99.0),
+    ]
+    # fails only the high-value task
+    agent = lambda t: Episode(output="A" if t.task_id == "cheap" else "WRONG")  # noqa: E731
+    report = run_suite(agent, tasks, k=1)
+    assert report.success_rate == 0.5
+    assert report.detail["value_weighted_success"] < 0.02  # the valuable one failed
+
+
 # ---------------------------------------------------------------------------
 # Facade integration: agent metrics resolve through the registry
 # ---------------------------------------------------------------------------
@@ -680,3 +901,95 @@ def test_cost_per_success_metric_requires_an_episode():
     m = CostPerSuccessMetric(price=per_million(1.0, 1.0))
     with pytest.raises(TypeError, match="Episode"):
         m("just a string", "gold")
+
+
+def test_cost_per_success_by_name_fails_with_an_actionable_message():
+    """Resolved by name it has no rates -- say the real thing, not 'no price for model ""'."""
+    ep = Episode(task_id="a", output="x", cost=Cost(input_tokens=10))
+    with pytest.raises(UnknownModelPrice, match="cannot be used by name alone"):
+        ek.score(ep, "x", metric="cost_per_success")
+
+
+# ---------------------------------------------------------------------------
+# Edge cases the first round of tests missed entirely
+# ---------------------------------------------------------------------------
+
+
+def test_reliability_warns_and_excludes_when_k_exceeds_the_trial_count():
+    """A PERFECT agent must not be reported as a total failure just because k > n."""
+    with pytest.warns(UserWarning, match="fewer than k"):
+        r = reliability({"t1": [True] * 4, "t2": [True] * 4}, k=8)
+    assert r.n_tasks == 0
+    assert r.pass_hat_k is None, "None ('not measurable') -- never 0.0 ('it failed everything')"
+    assert math.isnan(float(r))
+
+
+def test_reliability_partial_skip_is_not_silent():
+    with pytest.warns(UserWarning, match="fewer than k"):
+        r = reliability({"t1": [True] * 8, "t2": [True] * 4}, k=8)
+    assert r.n_tasks == 1 and r.detail["skipped"] == ["t2"]
+
+
+def test_cost_report_refuses_ungraded_episodes():
+    """An ungraded episode is not a failed one -- do not silently report an infinite cost."""
+    with pytest.raises(ValueError, match="ungraded"):
+        cost_report([Episode(task_id="a", cost=Cost(input_tokens=1))],
+                    price=per_million(1.0, 1.0))
+
+
+def test_cost_sums_with_builtin_sum():
+    """sum() starts from int 0, so a naive __radd__ = __add__ would raise."""
+    total = sum([Cost(input_tokens=1), Cost(input_tokens=2), Cost(input_tokens=3)])
+    assert total.input_tokens == 6
+
+
+def test_trajectory_is_immutable_even_if_the_caller_mutates_their_list():
+    steps = [Step("a", {})]
+    traj = Trajectory(steps)
+    steps.append(Step("b", {}))
+    assert len(traj) == 1, "a frozen Trajectory must not grow when the caller's list does"
+
+
+def test_graded_does_not_share_meta_with_the_original():
+    ep = Episode(task_id="t", meta={"k": 1})
+    graded = ep.graded(True)
+    graded.meta["k"] = 2
+    assert ep.meta["k"] == 1, "replace() is a shallow copy -- meta must be copied"
+
+
+def test_missing_argument_is_not_free_against_a_gold_none():
+    """A skipped argument must not compare equal to a gold argument whose value IS None."""
+    m = TrajectoryMetric()
+    assert m([Step("s", {})], [("s", {"x": None})]).value > 0.0
+    assert m([Step("s", {"x": None})], [("s", {})]).value > 0.0  # nor a hallucinated one
+
+
+def test_match_calls_does_not_mis_assign_on_partial_overlap():
+    """Global best-first: a strong pairing must not be stolen by a weaker earlier one."""
+    gold = [("s", {"a": 1, "b": 1}), ("s", {"a": 1})]
+    pred = [("s", {"a": 1, "z": 1}), ("s", {"a": 1, "b": 1, "z": 1})]
+    pairs, extra, missed = match_calls(pred, gold)
+    assert not extra and not missed
+    # A pair is (pred_call, gold_call), each being (tool, args).
+    # pred[1] {a,b,z} agrees with gold[0] {a,b} on BOTH a and b -> it must claim gold[0];
+    # a naive in-order greedy would hand gold[0] to pred[0] (which agrees only on `a`).
+    for (_p_tool, p_args), (_g_tool, g_args) in pairs:
+        if g_args == {"a": 1, "b": 1}:
+            assert p_args == {"a": 1, "b": 1, "z": 1}, "strong pairing was stolen by a weaker one"
+            break
+    else:
+        pytest.fail("gold call {a,b} was never matched")
+
+
+def test_judge_reads_a_none_output_rather_than_the_episode_object():
+    seen = []
+    sig = JudgeSignal(lambda out, *, criteria="": seen.append(out) or 0.0)
+    sig(Episode(output=None))
+    assert seen == [None], "an empty answer must reach the judge as None, not as an Episode"
+
+
+def test_empty_trajectories_and_suites_do_not_explode():
+    assert TrajectoryMetric()([], []).value == 0.0
+    assert ToolCallMetric()([], []).f1 == 1.0  # nothing to call, nothing called
+    empty = run_suite(as_agent(str.upper), [], k=1)
+    assert empty.n_trials == 0 and empty.pass_hat_k is None

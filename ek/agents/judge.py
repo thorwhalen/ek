@@ -56,11 +56,18 @@ ALPHA_GOOD = 0.8
 ALPHA_TENTATIVE = 0.67
 
 
+_ABSENT = object()
+
+
 def _output_of(target: Any) -> Any:
-    """The text a judge should read, off an Episode, a FieldEstimate, or a raw value."""
+    """The text a judge should read, off an Episode, a FieldEstimate, or a raw value.
+
+    Presence of the attribute decides, not truthiness: an ``Episode(output=None)`` must hand the
+    judge ``None`` (an empty answer -- which a judge should score badly), never the Episode object.
+    """
     for attr in ("output", "value", "text"):
-        got = getattr(target, attr, None)
-        if got is not None:
+        got = getattr(target, attr, _ABSENT)
+        if got is not _ABSENT:
             return got
     return target
 

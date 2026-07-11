@@ -107,10 +107,18 @@ def _call_matches(pred_args: Mapping, gold_args: Mapping, *, canon) -> bool:
 def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
     """Assign predicted calls to gold calls -- the layer ``FieldMetric`` does not provide.
 
-    Calls are grouped by tool name (a call to the *wrong tool* is never a match), and within a
-    tool name the assignment greedily prefers pairs whose arguments agree, so identical repeated
-    calls are interchangeable but a reordered pair is still matched. Returns
-    ``(pairs, unmatched_pred, unmatched_gold)`` where ``pairs`` are ``(pred_call, gold_call)``.
+    Calls are grouped by tool name (a call to the *wrong tool* is never a match). Within a tool
+    name, candidate pairs are scored and taken **globally best-first** (exact-argument matches
+    before partial ones, more agreeing arguments before fewer), so identical repeated calls are
+    interchangeable and a reordered pair is still matched -- while a strong pairing can never be
+    stolen by a weaker one that merely happened to come first in the prediction.
+
+    This is a deterministic greedy approximation to the optimal assignment. It is exact for the
+    common cases (distinct calls, repeats, reorderings); a full min-cost bipartite matching
+    (Hungarian) could differ only on pathological many-to-many partial-overlap sets, and is not
+    worth a dependency here.
+
+    Returns ``(pairs, unmatched_pred, unmatched_gold)``, ``pairs`` being ``(pred_call, gold_call)``.
 
     Example:
         >>> pairs, up, ug = match_calls([("s", {"q": "b"}), ("s", {"q": "a"})],
@@ -122,46 +130,37 @@ def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
     gold_calls = [as_call(x) for x in gold]
 
     by_tool_gold: dict = {}
-    for i, (tool, args) in enumerate(gold_calls):
+    for i, (tool, _args) in enumerate(gold_calls):
         by_tool_gold.setdefault(tool, []).append(i)
 
+    # Score every same-tool candidate pair, then take them best-first.
+    candidates: list = []
+    for p_i, (tool, p_args) in enumerate(pred_calls):
+        for g_i in by_tool_gold.get(tool, ()):
+            g_args = gold_calls[g_i][1]
+            exact = _call_matches(p_args, g_args, canon=canon)
+            overlap = sum(
+                1
+                for key in set(g_args) & set(p_args)
+                if _norm_value(p_args[key], canon) == _norm_value(g_args[key], canon)
+            )
+            # Prefer exact, then most agreeing args; ties broken by position for determinism.
+            candidates.append((0 if exact else 1, -overlap, p_i, g_i))
+    candidates.sort()
+
+    used_pred: set = set()
     used_gold: set = set()
     pairs: list = []
-    unmatched_pred: list = []
+    for _rank, _neg_overlap, p_i, g_i in candidates:
+        if p_i in used_pred or g_i in used_gold:
+            continue
+        used_pred.add(p_i)
+        used_gold.add(g_i)
+        pairs.append((p_i, g_i))
 
-    # Two passes so that an exact-argument match is never stolen by an earlier approximate one.
-    for exact_only in (True, False):
-        for p_i, (tool, p_args) in enumerate(pred_calls):
-            if any(p_i == x for x, _ in pairs):
-                continue
-            candidates = [g for g in by_tool_gold.get(tool, []) if g not in used_gold]
-            if not candidates:
-                continue
-            best = None
-            for g_i in candidates:
-                _, g_args = gold_calls[g_i]
-                exact = _call_matches(p_args, g_args, canon=canon)
-                if exact_only and not exact:
-                    continue
-                overlap = sum(
-                    1
-                    for k in set(g_args) & set(p_args)
-                    if _norm_value(p_args[k], canon) == _norm_value(g_args[k], canon)
-                )
-                if best is None or overlap > best[1]:
-                    best = (g_i, overlap)
-            if best is not None:
-                used_gold.add(best[0])
-                pairs.append((p_i, best[0]))
-
-    matched_pred = {p for p, _ in pairs}
-    unmatched_pred = [
-        pred_calls[i] for i in range(len(pred_calls)) if i not in matched_pred
-    ]
-    unmatched_gold = [
-        gold_calls[i] for i in range(len(gold_calls)) if i not in used_gold
-    ]
-    resolved = [(pred_calls[p], gold_calls[g]) for p, g in pairs]
+    unmatched_pred = [c for i, c in enumerate(pred_calls) if i not in used_pred]
+    unmatched_gold = [c for i, c in enumerate(gold_calls) if i not in used_gold]
+    resolved = [(pred_calls[p], gold_calls[g]) for p, g in sorted(pairs)]
     return resolved, unmatched_pred, unmatched_gold
 
 
