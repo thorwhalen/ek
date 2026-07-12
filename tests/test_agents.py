@@ -767,6 +767,50 @@ def test_agent_gate_has_real_statistical_POWER(tmp_path):
     )
 
 
+def test_gate_skips_the_pass_k_arm_at_k_equals_1(tmp_path):
+    """At k=1, pass^1 IS the success rate -- re-testing it with a worse method only adds noise.
+
+    pass^1 = C(c,1)/C(n,1) = c/n, identically the success rate. Running the (less well
+    calibrated) SE-from-CI arm on it would contribute zero power and only false alarms.
+    """
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(40)]
+    perfect = run_suite(as_agent(str.upper), tasks, k=1)
+    assert perfect.pass_hat_k == perfect.success_rate  # the identity that makes the arm redundant
+    save_agent_baseline(perfect, "base", rootdir=str(tmp_path))
+
+    # A perfect baseline has a ZERO-WIDTH pass^k CI. The old arm would treat that as certainty
+    # and collapse back to interval-vs-point -- flagging a single flake as a regression.
+    def one_flake(task):
+        return Episode(output=("WRONG" if task.task_id == "t3" else "A"))
+
+    gate = agent_regression_gate(run_suite(one_flake, tasks, k=1), "base", rootdir=str(tmp_path))
+    assert gate.passed, f"one flake vs a perfect baseline must not fail: {gate.reasons}"
+    assert not any("pass^" in r for r in gate.reasons)
+
+
+def test_gate_rejects_malformed_baselines(tmp_path):
+    """A malformed record must fail loudly, never silently skip the check it cannot make."""
+    store = ek.json_store("baselines", rootdir=str(tmp_path))
+    tasks = [TaskSpec(f"t{i}", input="a", gold="A") for i in range(10)]
+    report = run_suite(as_agent(str.upper), tasks, k=1)
+
+    store["no_trials_key"] = {"kind": "agent", "success_rate": 1.0, "provenance": {}}
+    with pytest.raises(ValueError, match="no 'n_trials'"):
+        agent_regression_gate(report, "no_trials_key", rootdir=str(tmp_path))
+
+    # n_success > n_trials used to blow up with a raw `math domain error` from wilson_interval.
+    store["impossible"] = {
+        "kind": "agent", "n_trials": 10, "n_success": 99, "success_rate": 1.0, "provenance": {},
+    }
+    with pytest.raises(ValueError, match="n_success"):
+        agent_regression_gate(report, "impossible", rootdir=str(tmp_path))
+
+    # counts but no rate at all -> the success check would be SILENTLY skipped.
+    store["no_rate"] = {"kind": "agent", "n_trials": 10, "provenance": {}}
+    with pytest.raises(ValueError, match="silently skipped"):
+        agent_regression_gate(report, "no_rate", rootdir=str(tmp_path))
+
+
 def test_agent_gate_refuses_an_empty_baseline(tmp_path):
     """An EMPTY baseline is worse than none: it is a permanent free pass.
 

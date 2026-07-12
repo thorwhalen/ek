@@ -59,13 +59,23 @@ _ALLOWLIST: set[str] = {
     # scanner-invisible pattern. Audited 2026-07: the wheel ships the full Apache-2.0 text at
     # dist-info/licenses/LICENSE (Zed Industries' Agent Client Protocol). Permissive; cleared.
     "agent-client-protocol",
+    # Tree edit distance, used by the TEDS table metric (ek[metrics]). Declares no license in
+    # its PyPI metadata; its terms live in a repo file -- the scanner-invisible case ek's own
+    # licensing register already names. Audited 2026-07: BSD-3-Clause. Permissive; cleared.
+    "zss",
+    # NVIDIA's redistributable CUDA *runtime*, pulled transitively by torch (BSD) when an extra
+    # needs it. Same audited justification as the nvidia-* prefixes below: a hardware-driver
+    # runtime the end user installs for acceleration, not a copyleft/non-commercial library ek
+    # ships. A CPU-only install omits it entirely. Audited 2026-07; cleared.
+    "cuda-toolkit",
 }
 
 # A blank/UNKNOWN license field is not "fine", it is *unaudited* -- the terms may live in a
 # repo file the scanner never reads (this is exactly how TorchCP's LGPL and surya-ocr's
-# non-commercial weights hide). We surface these loudly for manual review rather than letting
-# them pass in silence. Clear one by reading its actual LICENSE file and adding it to
-# _ALLOWLIST above with a justification.
+# non-commercial weights hide). This is a HARD FAILURE, not a notice: a warning that still
+# exits 0 is precisely the hiding place we are trying to close -- nobody reads a green build's
+# log. Clear a package by reading its actual LICENSE file and adding it to _ALLOWLIST above
+# with a dated justification.
 _UNKNOWN = ("UNKNOWN", "", "NONE")
 
 # Name *prefixes* cleared as an audited override. The NVIDIA CUDA runtime wheels
@@ -102,18 +112,6 @@ def main(path: str) -> int:
             elif license_text.upper() in _UNKNOWN:
                 unaudited.append(name)
 
-    if unaudited:
-        print(
-            "REVIEW REQUIRED -- packages declaring no license in their metadata (the terms may "
-            "live in a repo/wheel file the scanner cannot see):"
-        )
-        for name in unaudited:
-            print(f"  - {name}")
-        print(
-            "  Read each one's actual LICENSE file; if permissive, add it to _ALLOWLIST in "
-            "this script with a dated justification.\n"
-        )
-
     if violations:
         print("License gate FAILED -- forbidden licenses in the dependency closure:")
         for name, lic, reason in violations:
@@ -122,8 +120,23 @@ def main(path: str) -> int:
             "\nQuarantine these behind an explicit, opt-in install (never a default "
             "extra). See skills/ek-dev-licensing."
         )
+
+    if unaudited:
+        print(
+            "License gate FAILED -- packages declaring NO license in their metadata. The terms "
+            "may live in a repo/wheel file the scanner cannot see, which is exactly how a "
+            "copyleft or non-commercial dependency hides:"
+        )
+        for name in unaudited:
+            print(f"  - {name}")
+        print(
+            "\nRead each one's actual LICENSE file. If permissive, add it to _ALLOWLIST in this "
+            "script with a dated justification; if not, quarantine it behind an opt-in extra."
+        )
+
+    if violations or unaudited:
         return 1
-    print("License gate passed: no copyleft/non-commercial licenses in the closure.")
+    print("License gate passed: no copyleft/non-commercial/unaudited licenses in the closure.")
     return 0
 
 

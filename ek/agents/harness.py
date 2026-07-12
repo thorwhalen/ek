@@ -8,9 +8,17 @@ test over a suite **k times per task** (reliability needs repeats), grades each 
 comparison with ``tolerance=0.0`` -- correct for a deterministic OCR benchmark, **unsound** for
 an agent. Agent metrics are random variables: re-running the same agent moves the number. A
 point gate therefore (a) flags sampling noise as a regression and (b) misses a real regression
-that hides inside the tolerance band. :func:`agent_regression_gate` compares **intervals**
-(Wilson on the success rate, bootstrap on ``pass^k`` and on the skewed cost-per-success ratio)
-and only fails when the *whole* current interval sits on the wrong side of the baseline.
+that hides inside the tolerance band.
+
+:func:`agent_regression_gate` instead tests the **difference** ``current - baseline`` with both
+runs' uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound
+on ``pass^k``), failing only when the upper bound of that change is confidently negative. Two
+tempting shortcuts are **both wrong**, and this module has shipped and fixed each of them:
+comparing our interval to the baseline's *point* (the baseline is itself noisy, so one flake
+against a lucky baseline reads as a regression), and asking whether two 95% intervals *overlap*
+(that is a ~0.5% test, not a 5% one -- it goes blind to a 15-point drop on a 60-task suite).
+An empty run, and an empty **baseline**, are both refused: with no trials every bound is the
+maximally-uncertain default, so nothing could ever be shown to fall below it.
 
 **Hidden eval variables.** In a tau-bench-style suite the *user simulator is itself an LLM* --
 change its model or prompt and the scores move, silently. So a baseline records its
@@ -49,6 +57,7 @@ from .base import Episode, RunProvenance, TaskSpec, suite_grammar
 from .cost import ModelPrice, cost_of_pass, cost_report, episode_dollars
 from .reliability import (
     ReliabilityReport,
+    _se_from_ci,
     bootstrap_ci,
     difference_upper_bound,
     newcombe_difference,
@@ -297,7 +306,7 @@ def _summary(report: ReliabilityReport) -> dict:
         "success_ci": list(report.success_ci),
         "pass_at_k": _json_num(report.pass_at_k),
         "pass_hat_k": _json_num(report.pass_hat_k),
-        "pass_hat_k_ci": list(report.pass_hat_k_ci),
+        "pass_hat_k_ci": [_json_num(v) for v in report.pass_hat_k_ci],
         "stochastic": report.stochastic,
         "per_slice": report.per_slice,
         "cost_per_success": _json_num(report.cost.get("cost_per_success")),
@@ -372,16 +381,29 @@ def agent_regression_gate(
 ) -> AgentGateResult:
     """Fail only when the evidence says the agent **really** got worse -- not on noise.
 
-    A regression is declared only if the *entire* current interval lies on the wrong side of the
-    baseline point (minus ``tolerance``): the upper bound of the ``pass^k`` / success-rate CI is
-    below the baseline, or the lower bound of the cost-per-success CI is above it. Overlapping
-    intervals are *not* a regression -- they are an underpowered experiment, and the result says so.
+    Tests the **difference** ``current - baseline``, with *both* runs' uncertainty folded in:
+    a Newcombe score interval on the success rate, and (for ``k > 1``) a combined-SE bound on
+    ``pass^k``. A regression is declared only when the upper bound of that change is below
+    ``-tolerance`` -- i.e. we are confident the true change is negative.
+
+    Two tempting shortcuts are **both wrong**, and this module has shipped and fixed each:
+
+    - Comparing our interval to the baseline's **point**. The baseline is *itself* a noisy
+      estimate; a Wilson upper bound only reaches 1.0 when every trial passed, so a single flake
+      against a lucky baseline reads as a "confident regression".
+    - Asking whether the two 95% intervals **overlap**. That is not a 5% test but roughly a 0.5%
+      one: it buys a calm gate by going blind (a 15-point drop on a 60-task suite becomes
+      invisible). A gate that cannot see a real regression is as broken as one that cries wolf.
+
+    A result that is merely *worse but not significantly so* is not a clean pass either -- it is
+    an underpowered experiment, and the result says so (``underpowered``, plus a warning).
 
     Raises:
         ValueError: if the baseline was produced with a different **user simulator**, suite
             version, or scaffold -- those runs are not comparable, and silently comparing them
             would be a category error (the same reason the offline gate refuses to compare two
-            different metrics).
+            different metrics); if the baseline recorded zero trials (a permanent free pass); or
+            if it is malformed.
     """
     if isinstance(baseline, str):
         base = load_agent_baseline(baseline, rootdir=rootdir)
@@ -410,15 +432,7 @@ def agent_regression_gate(
             cost_per_success=report.cost.get("cost_per_success"),
         )
 
-    # A baseline recorded from an EMPTY run is a permanent free pass: every one of its bounds is
-    # the maximally-uncertain default, so nothing can ever be shown to fall below it. Guarding
-    # only the *current* run would just move the hole one hop upstream.
-    if not base.get("n_trials"):
-        raise ValueError(
-            "agent_regression_gate: the baseline recorded ZERO trials, so it cannot be "
-            "regressed against -- every bound in it is the maximally-uncertain default, and "
-            "any run at all would 'pass'. Re-baseline from a real run."
-        )
+    _validate_baseline(base)
 
     current_key = _comparability(_summary(report))
     base_key = _comparability(base)
@@ -477,13 +491,25 @@ def agent_regression_gate(
 
     # pass^k is a mean of per-task estimators, not a raw proportion, so Newcombe does not apply
     # -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty.
-    if base_hat is not None and report.pass_hat_k is not None:
+    #
+    # At k == 1 this arm is worse than useless and is SKIPPED. With one trial per task
+    # pass^1 = C(c,1)/C(n,1) = c/n, which is *identically* the success rate -- so it would
+    # re-test the very statistic the Newcombe arm above already tested, using a strictly less
+    # well-calibrated method (an SE back-derived from a bootstrap percentile interval). It
+    # contributes no power, only false alarms.
+    if report.k > 1 and base_hat is not None and report.pass_hat_k is not None:
+        base_ci = base.get("pass_hat_k_ci") or (base_hat, base_hat)
         hi = difference_upper_bound(
-            report.pass_hat_k,
-            report.pass_hat_k_ci,
-            base_hat,
-            base.get("pass_hat_k_ci") or (base_hat, base_hat),
+            report.pass_hat_k, report.pass_hat_k_ci, base_hat, base_ci
         )
+        # A zero-width baseline CI (a *perfect* baseline: every task passed every trial) would
+        # contribute zero uncertainty and silently reduce this back to the interval-vs-POINT
+        # test this module exists to avoid -- and a perfect baseline is not rare. Floor the
+        # baseline's SE with the current run's rather than pretend it is certain.
+        if _se_from_ci(base_ci) in (None, 0.0) and _se_from_ci(report.pass_hat_k_ci):
+            hi = difference_upper_bound(
+                report.pass_hat_k, report.pass_hat_k_ci, base_hat, report.pass_hat_k_ci
+            )
         if hi is not None and hi < -tolerance:
             reasons.append(
                 f"pass^{report.k} regressed: {report.pass_hat_k:.3f} vs baseline "
@@ -514,8 +540,8 @@ def agent_regression_gate(
     if underpowered:
         warnings.warn(
             f"agent_regression_gate: pass^{report.k} fell from {base_hat:.3f} to "
-            f"{report.pass_hat_k:.3f}, but the intervals still overlap -- the run is "
-            "underpowered, not clean. Add trials or tasks before trusting this pass.",
+            f"{report.pass_hat_k:.3f}, but the drop is not statistically significant -- the run "
+            "is underpowered, not clean. Add trials or tasks before trusting this pass.",
             stacklevel=2,
         )
 
@@ -530,6 +556,40 @@ def agent_regression_gate(
         cost_per_success_baseline=base_cost,
         underpowered=underpowered,
     )
+
+
+def _validate_baseline(base: Mapping) -> None:
+    """Reject a baseline that cannot be honestly regressed against.
+
+    A hand-written or older-format record can be *malformed* rather than merely empty, and each
+    of these failed badly before: a missing ``n_trials`` was reported as "recorded ZERO trials"
+    (misleading -- it is a missing key); ``n_success > n_trials`` blew up with a raw
+    ``math domain error`` out of ``wilson_interval``; and a record with counts but no rate at all
+    caused the success check to be **silently skipped** -- a gate that quietly tests nothing.
+    """
+    if "n_trials" not in base:
+        raise ValueError(
+            "agent_regression_gate: malformed baseline -- no 'n_trials' key. It was not "
+            "produced by save_agent_baseline; re-baseline from a real run."
+        )
+    n_trials = base.get("n_trials") or 0
+    if n_trials <= 0:
+        raise ValueError(
+            "agent_regression_gate: the baseline recorded ZERO trials, so it cannot be "
+            "regressed against -- every bound in it is the maximally-uncertain default, and "
+            "any run at all would 'pass'. Re-baseline from a real run."
+        )
+    n_success = base.get("n_success")
+    if n_success is not None and not (0 <= n_success <= n_trials):
+        raise ValueError(
+            f"agent_regression_gate: malformed baseline -- n_success={n_success} is not in "
+            f"[0, n_trials={n_trials}]."
+        )
+    if n_success is None and base.get("success_rate") is None:
+        raise ValueError(
+            "agent_regression_gate: malformed baseline -- it carries neither 'n_success' nor "
+            "'success_rate', so the success check would be silently skipped. Re-baseline."
+        )
 
 
 def _lower(base: Mapping, ci_key: str, point: Any) -> Any:

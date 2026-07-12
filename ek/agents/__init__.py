@@ -90,6 +90,8 @@ from .metrics import (
 from .reliability import (
     ReliabilityReport,
     bootstrap_ci,
+    difference_upper_bound,
+    newcombe_difference,
     pass_at_k,
     pass_hat_k,
     reliability,
@@ -134,6 +136,8 @@ __all__ = [
     "ReliabilityReport",
     "wilson_interval",
     "bootstrap_ci",
+    "newcombe_difference",
+    "difference_upper_bound",
     # cost (the other half of the objective)
     "ModelPrice",
     "per_million",
