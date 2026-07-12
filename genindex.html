@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; ek 0.1.7 documentation</title>
+  <title>Index &mdash; ek 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ca7ad2ea"></script>
+      <script src="_static/documentation_options.js?v=22607128"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,6 +48,16 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek.html">ek</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/base.html">ek.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ek/facade.html">ek.facade</a></li>
@@ -123,6 +133,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
@@ -137,9 +148,41 @@
         <li><a href="module_docs/ek/ocr/benchmark.html#ek.ocr.benchmark.add_gold_item">(in module ek.ocr.benchmark)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/ek.html#ek.AnlsMetric.aggregate">aggregate() (ek.AnlsMetric method)</a>
+      <li><a href="module_docs/ek/agents.html#ek.agents.agent_regression_gate">agent_regression_gate() (in module ek.agents)</a>
 
       <ul>
+        <li><a href="module_docs/ek/agents/harness.html#ek.agents.harness.agent_regression_gate">(in module ek.agents.harness)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.AgentGateResult">AgentGateResult (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/harness.html#ek.agents.harness.AgentGateResult">(class in ek.agents.harness)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.CostPerSuccessMetric.aggregate">aggregate() (ek.agents.CostPerSuccessMetric method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.JudgeMetric.aggregate">(ek.agents.judge.JudgeMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.JudgeMetric.aggregate">(ek.agents.JudgeMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.CostPerSuccessMetric.aggregate">(ek.agents.metrics.CostPerSuccessMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.TaskSuccessMetric.aggregate">(ek.agents.metrics.TaskSuccessMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.TaskSuccessMetric.aggregate">(ek.agents.TaskSuccessMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ToolCallMetric.aggregate">(ek.agents.ToolCallMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents/toolcalls.html#ek.agents.toolcalls.ToolCallMetric.aggregate">(ek.agents.toolcalls.ToolCallMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents/trajectory.html#ek.agents.trajectory.TrajectoryMetric.aggregate">(ek.agents.trajectory.TrajectoryMetric method)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.TrajectoryMetric.aggregate">(ek.agents.TrajectoryMetric method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.AnlsMetric.aggregate">(ek.AnlsMetric method)</a>
+</li>
         <li><a href="module_docs/ek.html#ek.FieldMetric.aggregate">(ek.FieldMetric method)</a>
 </li>
         <li><a href="module_docs/ek.html#ek.GritsMetric.aggregate">(ek.GritsMetric method)</a>
@@ -199,6 +242,8 @@
         <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.AgreementSignal">(class in ek.qe.rover)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.ALPHA_GOOD">ALPHA_GOOD (in module ek.agents.judge)</a>
+</li>
       <li><a href="module_docs/ek.html#ek.AnlsMetric">AnlsMetric (class in ek)</a>
 
       <ul>
@@ -219,6 +264,18 @@
         <li><a href="module_docs/ek/stores.html#ek.stores.app_folder">(in module ek.stores)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.as_agent">as_agent() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.as_agent">(in module ek.agents.bridge)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.as_call">as_call() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.as_call">(in module ek.agents.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/metrics.html#ek.metrics.Table.as_grid">as_grid() (ek.metrics.Table method)</a>
 
       <ul>
@@ -235,12 +292,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/validate.html#ek.validate.BENFORD_EXPECTED">BENFORD_EXPECTED (in module ek.validate)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.benford_findings">benford_findings() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/validate.html#ek.validate.benford_findings">(in module ek.validate)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.bootstrap_ci">bootstrap_ci() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.bootstrap_ci">(in module ek.agents.reliability)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -255,10 +318,34 @@
         <li><a href="module_docs/ek/stores.html#ek.stores.cache_this">(in module ek.stores)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.ModelPrice.cached_rate">cached_rate (ek.agents.cost.ModelPrice property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ModelPrice.cached_rate">(ek.agents.ModelPrice property)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.Calibrator">Calibrator (class in ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.Calibrator">(class in ek.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Step.call">call (ek.agents.base.Step property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Step.call">(ek.agents.Step property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Episode.calls">calls (ek.agents.base.Episode property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Trajectory.calls">(ek.agents.base.Trajectory property)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Episode.calls">(ek.agents.Episode property)</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Trajectory.calls">(ek.agents.Trajectory property)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.Episode.calls">(ek.Episode property)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.canonicalize_corrector">canonicalize_corrector() (in module ek)</a>
@@ -289,6 +376,12 @@
 
       <ul>
         <li><a href="module_docs/ek/registry.html#ek.registry.check_requirements">(in module ek.registry)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.Checker">Checker (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.Checker">(class in ek.agents.metrics)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.checksum_validator">checksum_validator() (in module ek)</a>
@@ -325,6 +418,12 @@
       </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.collapse_whitespace">collapse_whitespace() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.RunProvenance.comparability_key">comparability_key() (ek.agents.base.RunProvenance method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.RunProvenance.comparability_key">(ek.agents.RunProvenance method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/base.html#ek.base.ConfidenceSource">ConfidenceSource (in module ek.base)</a>
 </li>
       <li><a href="module_docs/ek.html#ek.ConformalGate">ConformalGate (class in ek)</a>
@@ -347,10 +446,42 @@
         <li><a href="module_docs/ek/validate.html#ek.validate.Corrector">(class in ek.validate)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.Cost">Cost (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Cost">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar.cost">cost() (ek.base.GraphGrammar method)</a>
 
       <ul>
         <li><a href="module_docs/ek.html#ek.GraphGrammar.cost">(ek.GraphGrammar method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.cost_from_usage">cost_from_usage() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.cost_from_usage">(in module ek.agents.bridge)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.cost_of_pass">cost_of_pass() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.cost_of_pass">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/tools.html#ek.tools.cost_per_success">cost_per_success() (in module ek.tools)</a>
+</li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.cost_report">cost_report() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.cost_report">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.CostPerSuccessMetric">CostPerSuccessMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.CostPerSuccessMetric">(class in ek.agents.metrics)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.CostSensitiveGate">CostSensitiveGate (class in ek)</a>
@@ -393,9 +524,15 @@
       </ul></li>
       <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.DEFAULT_ALPHA">DEFAULT_ALPHA (in module ek.qe.decide)</a>
 </li>
+      <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.DEFAULT_BATCH_DISCOUNT">DEFAULT_BATCH_DISCOUNT (in module ek.agents.cost)</a>
+</li>
       <li><a href="module_docs/ek/validate.html#ek.validate.DEFAULT_BENFORD_MIN_N">DEFAULT_BENFORD_MIN_N (in module ek.validate)</a>
 </li>
       <li><a href="module_docs/ek/validate.html#ek.validate.DEFAULT_BENFORD_TOL">DEFAULT_BENFORD_TOL (in module ek.validate)</a>
+</li>
+      <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.DEFAULT_BOOTSTRAP_RESAMPLES">DEFAULT_BOOTSTRAP_RESAMPLES (in module ek.agents.reliability)</a>
+</li>
+      <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.DEFAULT_CACHE_DISCOUNT">DEFAULT_CACHE_DISCOUNT (in module ek.agents.cost)</a>
 </li>
       <li><a href="module_docs/ek.html#ek.default_canonicalizer">default_canonicalizer() (in module ek)</a>
 
@@ -411,12 +548,12 @@
         <li><a href="module_docs/ek/base.html#ek.base.default_cost_weight">(in module ek.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.DEFAULT_LENGTH_ALPHA">DEFAULT_LENGTH_ALPHA (in module ek.qe.signals)</a>
 </li>
       <li><a href="module_docs/ek/validate.html#ek.validate.DEFAULT_LEXICON_THRESHOLD">DEFAULT_LEXICON_THRESHOLD (in module ek.validate)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/metrics/graphs.html#ek.metrics.graphs.DEFAULT_MAX_NODES">DEFAULT_MAX_NODES (in module ek.metrics.graphs)</a>
 </li>
       <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_MAX_TOKENS">DEFAULT_MAX_TOKENS (in module ek.qe.rover)</a>
@@ -431,14 +568,32 @@
 </li>
       <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.DEFAULT_RISK_TARGET">DEFAULT_RISK_TARGET (in module ek.qe.decide)</a>
 </li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.DEFAULT_TASK_VALUE">DEFAULT_TASK_VALUE (in module ek.agents.base)</a>
+</li>
       <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.DEFAULT_TOKEN_CONF">DEFAULT_TOKEN_CONF (in module ek.qe.rover)</a>
 </li>
       <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.DEFAULT_TOTALS_TOL">DEFAULT_TOTALS_TOL (in module ek.qe.verifiers)</a>
 </li>
+      <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.DEFAULT_Z">DEFAULT_Z (in module ek.agents.reliability)</a>
+</li>
       <li><a href="module_docs/ek/validate.html#ek.validate.DEFAULT_ZSCORE_THRESHOLD">DEFAULT_ZSCORE_THRESHOLD (in module ek.validate)</a>
 </li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.DESTRUCTIVE_WEIGHT">DESTRUCTIVE_WEIGHT (in module ek.agents.base)</a>
+</li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.difference_upper_bound">difference_upper_bound() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.difference_upper_bound">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/__main__.html#ek.__main__.dispatch_with_namespaces">dispatch_with_namespaces() (in module ek.__main__)</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.dollars">dollars() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.dollars">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -469,6 +624,76 @@
 
       <ul>
         <li><a href="module_docs/ek/__main__.html#module-ek.__main__">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#module-ek.agents">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.base
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#module-ek.agents.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.bridge
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#module-ek.agents.bridge">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.cost
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#module-ek.agents.cost">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.harness
+
+      <ul>
+        <li><a href="module_docs/ek/agents/harness.html#module-ek.agents.harness">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.judge
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#module-ek.agents.judge">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.metrics
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#module-ek.agents.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.reliability
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#module-ek.agents.reliability">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.toolcalls
+
+      <ul>
+        <li><a href="module_docs/ek/agents/toolcalls.html#module-ek.agents.toolcalls">module</a>
+</li>
+      </ul></li>
+      <li>
+    ek.agents.trajectory
+
+      <ul>
+        <li><a href="module_docs/ek/agents/trajectory.html#module-ek.agents.trajectory">module</a>
 </li>
       </ul></li>
       <li>
@@ -562,6 +787,8 @@
         <li><a href="module_docs/ek/ocr/benchmark.html#module-ek.ocr.benchmark">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.ocr.bridge
 
@@ -590,8 +817,6 @@
         <li><a href="module_docs/ek/qe.html#module-ek.qe">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.qe.calibrate
 
@@ -675,6 +900,26 @@
         <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.enum_validator">(in module ek.qe.verifiers)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.Episode">Episode (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Episode">(class in ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Episode">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.episode_dollars">episode_dollars() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.episode_dollars">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.episode_from_messages">episode_from_messages() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.episode_from_messages">(in module ek.agents.bridge)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.estimate_quality">estimate_quality() (in module ek)</a>
 
       <ul>
@@ -755,10 +1000,22 @@
         <li><a href="module_docs/ek/base.html#ek.base.FieldSpec">(class in ek.base)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.final_state_match">final_state_match() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.final_state_match">(in module ek.agents.metrics)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.Finding">Finding (class in ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.Finding">(class in ek.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.JudgeSignal.finding">finding() (ek.agents.judge.JudgeSignal method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.JudgeSignal.finding">(ek.agents.JudgeSignal method)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.VerifierSignal.findings">findings() (ek.qe.verifiers.VerifierSignal method)</a>
@@ -815,6 +1072,12 @@
         <li><a href="module_docs/ek.html#ek.ValidationResult.flagged">(ek.ValidationResult property)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.from_deepeval_test_case">from_deepeval_test_case() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.from_deepeval_test_case">(in module ek.agents.bridge)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/metrics.html#ek.metrics.Table.from_grid">from_grid() (ek.metrics.Table class method)</a>
 
       <ul>
@@ -829,6 +1092,12 @@
         <li><a href="module_docs/ek/metrics/tables.html#ek.metrics.tables.Table.from_html">(ek.metrics.tables.Table class method)</a>
 </li>
         <li><a href="module_docs/ek.html#ek.Table.from_html">(ek.Table class method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.from_inspect_sample">from_inspect_sample() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.from_inspect_sample">(in module ek.agents.bridge)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -855,14 +1124,30 @@
         <li><a href="module_docs/ek/registry.html#ek.registry.get">(in module ek.registry)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Episode.graded">graded() (ek.agents.base.Episode method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Episode.graded">(ek.agents.Episode method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.Episode.graded">(ek.Episode method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.TaskSpec.grammar">grammar() (ek.agents.base.TaskSpec method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.TaskSpec.grammar">(ek.agents.TaskSpec method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.TaskSpec.grammar">(ek.TaskSpec method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.GraphGrammar">GraphGrammar (class in ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar">(class in ek.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.GritsMetric">GritsMetric (class in ek)</a>
 
       <ul>
@@ -923,10 +1208,16 @@
         <li><a href="module_docs/ek/qe/signals.html#ek.qe.signals.IntrinsicConfidenceSignal">(class in ek.qe.signals)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn10_check">isbn10_check() (in module ek.qe.verifiers)</a>
+      <li><a href="module_docs/ek/agents.html#ek.agents.is_episode">is_episode() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.is_episode">(in module ek.agents.base)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn10_check">isbn10_check() (in module ek.qe.verifiers)</a>
+</li>
       <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.isbn13_check">isbn13_check() (in module ek.qe.verifiers)</a>
 </li>
       <li><a href="module_docs/ek.html#ek.isbn_check">isbn_check() (in module ek)</a>
@@ -955,6 +1246,28 @@
 
       <ul>
         <li><a href="module_docs/ek/stores.html#ek.stores.json_store">(in module ek.stores)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.JUDGE_COST_TIER">JUDGE_COST_TIER (in module ek.agents.judge)</a>
+</li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.judge_validation">judge_validation() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.judge_validation">(in module ek.agents.judge)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.JudgeMetric">JudgeMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.JudgeMetric">(class in ek.agents.judge)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.JudgeSignal">JudgeSignal (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.JudgeSignal">(class in ek.agents.judge)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1005,6 +1318,12 @@
         <li><a href="module_docs/ek/validate.html#ek.validate.lm_surprisal_validator">(in module ek.validate)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.load_agent_baseline">load_agent_baseline() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/harness.html#ek.agents.harness.load_agent_baseline">(in module ek.agents.harness)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.load_baseline">load_baseline() (in module ek)</a>
 
       <ul>
@@ -1019,6 +1338,12 @@
         <li><a href="module_docs/ek/qe.html#ek.qe.load_calibrator">(in module ek.qe)</a>
 </li>
         <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.load_calibrator">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.load_prices">load_prices() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.load_prices">(in module ek.agents.cost)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.LogprobSignal">LogprobSignal (class in ek)</a>
@@ -1057,6 +1382,12 @@
       </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.mark_class_count">mark_class_count() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.match_calls">match_calls() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/toolcalls.html#ek.agents.toolcalls.match_calls">(in module ek.agents.toolcalls)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.MatchScheme">MatchScheme (class in ek)</a>
 
       <ul>
@@ -1093,6 +1424,12 @@
       </ul></li>
       <li><a href="module_docs/ek/registry.html#ek.registry.MissingExtraError">MissingExtraError</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.ModelPrice">ModelPrice (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.ModelPrice">(class in ek.agents.cost)</a>
+</li>
+      </ul></li>
       <li>
     module
 
@@ -1100,6 +1437,26 @@
         <li><a href="module_docs/ek.html#module-ek">ek</a>
 </li>
         <li><a href="module_docs/ek/__main__.html#module-ek.__main__">ek.__main__</a>
+</li>
+        <li><a href="module_docs/ek/agents.html#module-ek.agents">ek.agents</a>
+</li>
+        <li><a href="module_docs/ek/agents/base.html#module-ek.agents.base">ek.agents.base</a>
+</li>
+        <li><a href="module_docs/ek/agents/bridge.html#module-ek.agents.bridge">ek.agents.bridge</a>
+</li>
+        <li><a href="module_docs/ek/agents/cost.html#module-ek.agents.cost">ek.agents.cost</a>
+</li>
+        <li><a href="module_docs/ek/agents/harness.html#module-ek.agents.harness">ek.agents.harness</a>
+</li>
+        <li><a href="module_docs/ek/agents/judge.html#module-ek.agents.judge">ek.agents.judge</a>
+</li>
+        <li><a href="module_docs/ek/agents/metrics.html#module-ek.agents.metrics">ek.agents.metrics</a>
+</li>
+        <li><a href="module_docs/ek/agents/reliability.html#module-ek.agents.reliability">ek.agents.reliability</a>
+</li>
+        <li><a href="module_docs/ek/agents/toolcalls.html#module-ek.agents.toolcalls">ek.agents.toolcalls</a>
+</li>
+        <li><a href="module_docs/ek/agents/trajectory.html#module-ek.agents.trajectory">ek.agents.trajectory</a>
 </li>
         <li><a href="module_docs/ek/base.html#module-ek.base">ek.base</a>
 </li>
@@ -1168,18 +1525,24 @@
       </ul></li>
       <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.netcal_ece">netcal_ece() (in module ek.qe.calibrate)</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.newcombe_difference">newcombe_difference() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.newcombe_difference">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.nfc">nfc() (in module ek.canonicalize)</a>
 </li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.nfkc">nfkc() (in module ek.canonicalize)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/base.html#ek.base.GraphGrammar.node_cost">node_cost() (ek.base.GraphGrammar method)</a>
 
       <ul>
         <li><a href="module_docs/ek.html#ek.GraphGrammar.node_cost">(ek.GraphGrammar method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.NodePath">NodePath (class in ek)</a>
 
       <ul>
@@ -1206,14 +1569,20 @@
         <li><a href="module_docs/ek/ocr/bridge.html#ek.ocr.bridge.ocracy_backend">(in module ek.ocr.bridge)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/base.html#ek.base.OcrBackend">OcrBackend (in module ek.base)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.ordering_validator">ordering_validator() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/validate.html#ek.validate.ordering_validator">(in module ek.validate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.output_match">output_match() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.output_match">(in module ek.agents.metrics)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1230,6 +1599,12 @@
         <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.ConformalGate.p_value">(ek.qe.decide.ConformalGate method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.pairwise_judge">pairwise_judge() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/judge.html#ek.agents.judge.pairwise_judge">(in module ek.agents.judge)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.MatchScheme.PARTIAL">PARTIAL (ek.MatchScheme attribute)</a>
 
       <ul>
@@ -1238,14 +1613,38 @@
         <li><a href="module_docs/ek/metrics/spans.html#ek.metrics.spans.MatchScheme.PARTIAL">(ek.metrics.spans.MatchScheme attribute)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.pass_at_k">pass_at_k() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.pass_at_k">(in module ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.pass_at_k">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.pass_hat_k">pass_hat_k() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.pass_hat_k">(in module ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.pass_hat_k">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/tools.html#ek.tools.pass_k">pass_k() (in module ek.tools)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.per_million">per_million() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.per_million">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.percent_agreement">percent_agreement() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/harness.html#ek.harness.percent_agreement">(in module ek.harness)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.persistent_cache">persistent_cache() (in module ek)</a>
 
       <ul>
@@ -1258,6 +1657,12 @@
         <li><a href="module_docs/ek/qe.html#ek.qe.PlattCalibrator">(class in ek.qe)</a>
 </li>
         <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.PlattCalibrator">(class in ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.price_of">price_of() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.price_of">(in module ek.agents.cost)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek/ocr.html#ek.ocr.profile">profile() (in module ek.ocr)</a>
@@ -1304,6 +1709,18 @@
         <li><a href="module_docs/ek/ocr/bridge.html#ek.ocr.bridge.read_text">(in module ek.ocr.bridge)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/cost.html#ek.agents.cost.ModelPrice.reasoning_rate">reasoning_rate (ek.agents.cost.ModelPrice property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ModelPrice.reasoning_rate">(ek.agents.ModelPrice property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.recorded_success">recorded_success() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.recorded_success">(in module ek.agents.metrics)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.regex_validator">regex_validator() (in module ek)</a>
 
       <ul>
@@ -1324,12 +1741,24 @@
         <li><a href="module_docs/ek/harness.html#ek.harness.regression_gate">(in module ek.harness)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.reliability">reliability() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.reliability">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.reliability_curve">reliability_curve() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/qe.html#ek.qe.reliability_curve">(in module ek.qe)</a>
 </li>
         <li><a href="module_docs/ek/qe/calibrate.html#ek.qe.calibrate.reliability_curve">(in module ek.qe.calibrate)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.ReliabilityReport">ReliabilityReport (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.ReliabilityReport">(class in ek.agents.reliability)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.Report">Report (class in ek)</a>
@@ -1344,14 +1773,14 @@
         <li><a href="module_docs/ek/registry.html#ek.registry.requires_extra">(in module ek.registry)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek.html#ek.resolve">resolve() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/registry.html#ek.registry.resolve">(in module ek.registry)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.resolve_canonicalizer">resolve_canonicalizer() (in module ek.canonicalize)</a>
 </li>
       <li><a href="module_docs/ek.html#ek.resolve_table_parser">resolve_table_parser() (in module ek)</a>
@@ -1402,12 +1831,32 @@
         <li><a href="module_docs/ek/qe/rover.html#ek.qe.rover.RoverSlot">(class in ek.qe.rover)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek.html#ek.run_suite">run_suite() (in module ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.run_suite">(in module ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/harness.html#ek.agents.harness.run_suite">(in module ek.agents.harness)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.RunProvenance">RunProvenance (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.RunProvenance">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.save_agent_baseline">save_agent_baseline() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/harness.html#ek.agents.harness.save_agent_baseline">(in module ek.agents.harness)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.save_baseline">save_baseline() (in module ek)</a>
 
       <ul>
@@ -1430,6 +1879,8 @@
         <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.schema_validator">(in module ek.qe.verifiers)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/trajectory.html#ek.agents.trajectory.SCHEMES">SCHEMES (in module ek.agents.trajectory)</a>
+</li>
       <li><a href="module_docs/ek.html#ek.Score">Score (class in ek)</a>
 
       <ul>
@@ -1494,6 +1945,12 @@
         <li><a href="module_docs/ek/qe/decide.html#ek.qe.decide.split_conformal_quantile">(in module ek.qe.decide)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.Step">Step (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Step">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.Canonicalizer.steps">steps (ek.canonicalize.Canonicalizer property)</a>
 
       <ul>
@@ -1532,6 +1989,12 @@
 </li>
       <li><a href="module_docs/ek/canonicalize.html#ek.canonicalize.strip_punctuation">strip_punctuation() (in module ek.canonicalize)</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.suite_grammar">suite_grammar() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.suite_grammar">(in module ek.agents.base)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1564,6 +2027,20 @@
       </ul></li>
       <li><a href="module_docs/ek/ocr/tables.html#ek.ocr.tables.TABLE_PARSERS_NAMESPACE">TABLE_PARSERS_NAMESPACE (in module ek.ocr.tables)</a>
 </li>
+      <li><a href="module_docs/ek.html#ek.TaskSpec">TaskSpec (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.TaskSpec">(class in ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.TaskSpec">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.TaskSuccessMetric">TaskSuccessMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/metrics.html#ek.agents.metrics.TaskSuccessMetric">(class in ek.agents.metrics)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.CostSensitiveGate.tau">tau (ek.CostSensitiveGate property)</a>
 
       <ul>
@@ -1604,8 +2081,6 @@
         <li><a href="module_docs/ek/qe.html#ek.qe.GroupCalibrator.to_dict">(ek.qe.GroupCalibrator method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ek/metrics/graphs.html#ek.metrics.graphs.TypedGraph.to_networkx">to_networkx() (ek.metrics.graphs.TypedGraph method)</a>
 
       <ul>
@@ -1614,12 +2089,72 @@
         <li><a href="module_docs/ek.html#ek.TypedGraph.to_networkx">(ek.TypedGraph method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.ToolSpec.to_node_type">to_node_type() (ek.agents.base.ToolSpec method)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ToolSpec.to_node_type">(ek.agents.ToolSpec method)</a>
+</li>
+        <li><a href="module_docs/ek.html#ek.ToolSpec.to_node_type">(ek.ToolSpec method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.tool_grammar">tool_grammar() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.tool_grammar">(in module ek.agents.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.ToolCallMetric">ToolCallMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/toolcalls.html#ek.agents.toolcalls.ToolCallMetric">(class in ek.agents.toolcalls)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Trajectory.tools">tools (ek.agents.base.Trajectory property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Trajectory.tools">(ek.agents.Trajectory property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek.html#ek.ToolSpec">ToolSpec (class in ek)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ToolSpec">(class in ek.agents)</a>
+</li>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.ToolSpec">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Cost.total_tokens">total_tokens (ek.agents.base.Cost property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.Cost.total_tokens">(ek.agents.Cost property)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ek.html#ek.totals_consistent">totals_consistent() (in module ek)</a>
 
       <ul>
         <li><a href="module_docs/ek/qe.html#ek.qe.totals_consistent">(in module ek.qe)</a>
 </li>
         <li><a href="module_docs/ek/qe/verifiers.html#ek.qe.verifiers.totals_consistent">(in module ek.qe.verifiers)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.Trajectory">Trajectory (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/base.html#ek.agents.base.Trajectory">(class in ek.agents.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.trajectory_from_messages">trajectory_from_messages() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/bridge.html#ek.agents.bridge.trajectory_from_messages">(in module ek.agents.bridge)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.TrajectoryMetric">TrajectoryMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/trajectory.html#ek.agents.trajectory.TrajectoryMetric">(class in ek.agents.trajectory)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ek.html#ek.MatchScheme.TYPE">TYPE (ek.MatchScheme attribute)</a>
@@ -1671,6 +2206,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/agents.html#ek.agents.UnknownModelPrice">UnknownModelPrice</a>, <a href="module_docs/ek/agents/cost.html#ek.agents.cost.UnknownModelPrice">[1]</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1718,12 +2261,26 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/ek/tools.html#ek.tools.wer">wer() (in module ek.tools)</a>
+      <li><a href="module_docs/ek/agents/base.html#ek.agents.base.ToolSpec.weight">weight (ek.agents.base.ToolSpec property)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents.html#ek.agents.ToolSpec.weight">(ek.agents.ToolSpec property)</a>
 </li>
+        <li><a href="module_docs/ek.html#ek.ToolSpec.weight">(ek.ToolSpec property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ek/tools.html#ek.tools.wer">wer() (in module ek.tools)</a>
+</li>
       <li><a href="module_docs/ek/tools.html#ek.tools.where">where() (in module ek.tools)</a>
 </li>
+      <li><a href="module_docs/ek/agents.html#ek.agents.wilson_interval">wilson_interval() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="module_docs/ek/agents/reliability.html#ek.agents.reliability.wilson_interval">(in module ek.agents.reliability)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

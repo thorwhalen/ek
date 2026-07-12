@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.base &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.agents.bridge" href="bridge.html" />
+    <link rel="prev" title="ek.agents" href="../agents.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agents.html">ek.agents</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.agents.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.Cost"><code class="docutils literal notranslate"><span class="pre">Cost</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Cost.total_tokens"><code class="docutils literal notranslate"><span class="pre">Cost.total_tokens</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.DEFAULT_TASK_VALUE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_TASK_VALUE</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.DESTRUCTIVE_WEIGHT"><code class="docutils literal notranslate"><span class="pre">DESTRUCTIVE_WEIGHT</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.Episode"><code class="docutils literal notranslate"><span class="pre">Episode</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Episode.calls"><code class="docutils literal notranslate"><span class="pre">Episode.calls</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Episode.graded"><code class="docutils literal notranslate"><span class="pre">Episode.graded()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.RunProvenance"><code class="docutils literal notranslate"><span class="pre">RunProvenance</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.RunProvenance.comparability_key"><code class="docutils literal notranslate"><span class="pre">RunProvenance.comparability_key()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.Step"><code class="docutils literal notranslate"><span class="pre">Step</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Step.call"><code class="docutils literal notranslate"><span class="pre">Step.call</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.TaskSpec"><code class="docutils literal notranslate"><span class="pre">TaskSpec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.TaskSpec.grammar"><code class="docutils literal notranslate"><span class="pre">TaskSpec.grammar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.ToolSpec"><code class="docutils literal notranslate"><span class="pre">ToolSpec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.ToolSpec.to_node_type"><code class="docutils literal notranslate"><span class="pre">ToolSpec.to_node_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.ToolSpec.weight"><code class="docutils literal notranslate"><span class="pre">ToolSpec.weight</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.Trajectory"><code class="docutils literal notranslate"><span class="pre">Trajectory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Trajectory.calls"><code class="docutils literal notranslate"><span class="pre">Trajectory.calls</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.base.Trajectory.tools"><code class="docutils literal notranslate"><span class="pre">Trajectory.tools</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.as_call"><code class="docutils literal notranslate"><span class="pre">as_call()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.is_episode"><code class="docutils literal notranslate"><span class="pre">is_episode()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.suite_grammar"><code class="docutils literal notranslate"><span class="pre">suite_grammar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.base.tool_grammar"><code class="docutils literal notranslate"><span class="pre">tool_grammar()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.agents.base</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/agents/base.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.agents.base">
+<span id="ek-agents-base"></span><h1>ek.agents.base<a class="headerlink" href="#module-ek.agents.base" title="Link to this heading"></a></h1>
+<p>Agent-evaluation data shapes: the episode (Layer B) and the task/tool grammar (Layer A).</p>
+<p>Evaluating an <em>agent</em> is the same two-layer problem <code class="docutils literal notranslate"><span class="pre">ek</span></code> already solves for
+information extraction – only the evaluated object changes. An extraction is a
+static payload; an <strong>episode</strong> is a <em>process</em>: a sequence of tool calls and
+observations ending in a final state. So:</p>
+<ul class="simple">
+<li><p><strong>Layer A – the task/tool grammar.</strong> <a class="reference internal" href="#ek.agents.base.ToolSpec" title="ek.agents.base.ToolSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolSpec</span></code></a> and <a class="reference internal" href="#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskSpec</span></code></a> are
+<em>builders</em> over the existing <a class="reference internal" href="../base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a>: a tool becomes a
+<a class="reference internal" href="../base.html#ek.base.NodeType" title="ek.base.NodeType"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeType</span></code></a> whose fields are its argument <a class="reference internal" href="../base.html#ek.base.FieldSpec" title="ek.base.FieldSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldSpec</span></code></a> s,
+and <code class="docutils literal notranslate"><span class="pre">importance</span></code> carries the <strong>cost of getting that argument wrong</strong>. A wrong
+argument to a <em>destructive</em> tool is not one unit of error. This reuses the Layer-A
+cost-weight SSOT rather than inventing a parallel schema.</p></li>
+<li><p><strong>Layer B – the episode.</strong> <a class="reference internal" href="#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> carries the <a class="reference internal" href="#ek.agents.base.Trajectory" title="ek.agents.base.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>, the
+<a class="reference internal" href="#ek.agents.base.Cost" title="ek.agents.base.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a>, the outcome, and the <a class="reference internal" href="#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code></a> – riding <em>alongside</em> the
+frozen grammar, never mutating it, exactly as <code class="docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code> does.</p></li>
+</ul>
+<p>These shapes live here, <strong>not</strong> in <a class="reference internal" href="../base.html#module-ek.base" title="ek.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.base</span></code></a>: that module is the zero-dependency,
+IE-schema-only SSOT, and the OCR instance sets the precedent that an instance’s concrete
+shapes stay out of core (core duck-types them). Nothing here is imported by <code class="docutils literal notranslate"><span class="pre">ek</span></code> core.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">book</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;book_flight&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;flight&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;flight&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">),</span>
+<span class="gp">... </span>                                       <span class="s2">&quot;seat&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;seat&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">refund</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;refund&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">importance</span><span class="o">=</span><span class="mf">20.0</span><span class="p">)},</span> <span class="n">destructive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">refund</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;refund&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">)</span>        <span class="c1"># a wrong refund amount is expensive</span>
+<span class="go">20.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;book_flight&quot;</span><span class="p">,</span> <span class="s2">&quot;seat&quot;</span><span class="p">)</span>     <span class="c1"># a wrong seat is not</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_07</span></code> (the map) and <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_12</span></code> (the integration report).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.Cost">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">Cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cached_input_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasoning_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latency_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#Cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.Cost" title="Link to this definition"></a></dt>
+<dd><p>What one episode consumed: tokens (by kind), retries, and wall-clock.</p>
+<p>Token <em>kinds</em> are tracked separately because they are <strong>priced asymmetrically</strong> –
+output typically costs ~5x input, cached input bills at a fraction, and reasoning
+tokens are billed. This is precisely why the objective is <em>dollars</em> per successful
+task and never a raw token count (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_11</span></code>). Pricing lives in
+<a class="reference internal" href="cost.html#module-ek.agents.cost" title="ek.agents.cost"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.cost</span></code></a>; this dataclass is the provider-neutral tally.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">output_tokens</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">output_tokens</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">input_tokens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">output_tokens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">retries</span>
+<span class="go">(110, 55, 1)</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.Cost.total_tokens">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">total_tokens</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#ek.agents.base.Cost.total_tokens" title="Link to this definition"></a></dt>
+<dd><p>All billed tokens (a rough size proxy – <em>not</em> a cost; see <code class="docutils literal notranslate"><span class="pre">dollars()</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.base.DEFAULT_TASK_VALUE">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_TASK_VALUE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#ek.agents.base.DEFAULT_TASK_VALUE" title="Link to this definition"></a></dt>
+<dd><p>Default value of a completed task (the task-level analog of <code class="docutils literal notranslate"><span class="pre">FieldSpec.importance</span></code>).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.base.DESTRUCTIVE_WEIGHT">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">DESTRUCTIVE_WEIGHT</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></span><a class="headerlink" href="#ek.agents.base.DESTRUCTIVE_WEIGHT" title="Link to this definition"></a></dt>
+<dd><p>Multiplier applied to a destructive tool’s importance when it is not set explicitly.
+Calling a destructive tool wrongly is categorically worse than calling a read-only one;
+a keyword-tunable default, never a magic number buried in a metric.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.Episode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">Episode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.agents.base.Trajectory" title="ek.agents.base.Trajectory"><span class="pre">Trajectory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.agents.base.Cost" title="ek.agents.base.Cost"><span class="pre">Cost</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><span class="pre">RunProvenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#ek.base.Provenance" title="ek.base.Provenance"><span class="pre">Provenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#Episode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.Episode" title="Link to this definition"></a></dt>
+<dd><p>Layer B: one agent run over one task – the object agent evaluation scores.</p>
+<p>The direct analog of <code class="docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code>: it rides alongside the frozen Layer-A
+grammar and carries the run’s metadata. It is scored <em>offline</em> against gold
+(<a class="reference internal" href="../../ek.html#ek.score" title="ek.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.score()</span></code></a> / <a class="reference internal" href="../../ek.html#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a>) and estimated <em>online</em> against a judge or a
+consensus (<a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a>) – the same object, both halves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Which task this episode answers (the k-trial grouping key).</p></li>
+<li><p><strong>trajectory</strong> – The tool calls taken.</p></li>
+<li><p><strong>output</strong> – The agent’s final user-facing answer.</p></li>
+<li><p><strong>final_state</strong> – The end state of the world (the DB, the filesystem) – what a
+state-based oracle actually grades. Success is a <em>final-state</em> check, not a
+surface-text check.</p></li>
+<li><p><strong>cost</strong> – The <a class="reference internal" href="#ek.agents.base.Cost" title="ek.agents.base.Cost"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code></a> consumed.</p></li>
+<li><p><strong>success</strong> – Filled in by a checker; <code class="docutils literal notranslate"><span class="pre">None</span></code> until graded.</p></li>
+<li><p><strong>run</strong> – The <a class="reference internal" href="#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code></a> (seed, model, simulator, suite version).</p></li>
+<li><p><strong>provenance</strong> – Optional core <a class="reference internal" href="../base.html#ek.base.Provenance" title="ek.base.Provenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Provenance</span></code></a> for click-to-source audit.</p></li>
+<li><p><strong>meta</strong> – Anything else the bridge captured.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.Episode.calls">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">calls</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#ek.agents.base.Episode.calls" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">(tool,</span> <span class="pre">args)</span></code> pairs taken, in order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.base.Episode.graded">
+<span class="sig-name descname"><span class="pre">graded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.agents.base.Episode" title="ek.agents.base.Episode"><span class="pre">Episode</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#Episode.graded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.Episode.graded" title="Link to this definition"></a></dt>
+<dd><p>A copy with <code class="docutils literal notranslate"><span class="pre">success</span></code> set (never mutates – grading stays idempotent).</p>
+<p><code class="docutils literal notranslate"><span class="pre">meta</span></code> is copied too: <code class="docutils literal notranslate"><span class="pre">dataclasses.replace</span></code> is a <em>shallow</em> copy, so without this
+the “copy” would share the original’s mutable <code class="docutils literal notranslate"><span class="pre">meta</span></code> dict.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.RunProvenance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">RunProvenance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suite_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#RunProvenance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.RunProvenance" title="Link to this definition"></a></dt>
+<dd><p>The <em>hidden eval variables</em> that decide whether two runs are even comparable.</p>
+<p>Agent evaluation is stochastic, and several of its inputs are themselves models. In a
+tau-bench-style suite the <strong>user simulator is an LLM agent</strong>, so its model/prompt/version
+silently changes results run to run. Recording these is what lets the harness <em>refuse</em>
+to compare a baseline against a run that changed the simulator or the suite – the same
+discipline <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s offline harness already applies when it refuses to compare across
+two different metrics (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_08</span></code>, <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_11</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed</strong> – RNG seed for the trial (<code class="docutils literal notranslate"><span class="pre">None</span></code> = unseeded/nondeterministic).</p></li>
+<li><p><strong>temperature</strong> – Sampling temperature of the agent under test.</p></li>
+<li><p><strong>model</strong> – The agent’s model id.</p></li>
+<li><p><strong>simulator</strong> – The <strong>user-simulator</strong> id/version – an eval variable, not a constant.</p></li>
+<li><p><strong>suite_version</strong> – Version of the task suite (contamination and task fixes move scores).</p></li>
+<li><p><strong>scaffold</strong> – The agent scaffold/harness id (the same model moves points on scaffold alone).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.base.RunProvenance.comparability_key">
+<span class="sig-name descname"><span class="pre">comparability_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#RunProvenance.comparability_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.RunProvenance.comparability_key" title="Link to this definition"></a></dt>
+<dd><p>The fields that must match for two runs to be comparable (seed excluded).</p>
+<p>Seed and temperature are <em>expected</em> to vary across trials; the simulator, the suite
+version and the scaffold are not – changing them invalidates a baseline.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.Step">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">Step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#Step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.Step" title="Link to this definition"></a></dt>
+<dd><p>One step of a trajectory: a tool call and what came back.</p>
+<p><code class="docutils literal notranslate"><span class="pre">error</span></code> is set when the call itself failed (a bad argument, a tool exception) –
+error <em>recovery</em> across subsequent steps is itself an evaluable signal.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.Step.call">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">call</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#ek.agents.base.Step.call" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">(tool,</span> <span class="pre">args)</span></code> pair – what tool-call correctness actually compares.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.TaskSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">TaskSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.agents.base.ToolSpec" title="ek.agents.base.ToolSpec"><span class="pre">ToolSpec</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#TaskSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.TaskSpec" title="Link to this definition"></a></dt>
+<dd><p>One task in a suite: its input, its oracle, its value, and its allowed tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Stable identifier (the grouping key for k-trial reliability).</p></li>
+<li><p><strong>input</strong> – Whatever the agent under test is called with.</p></li>
+<li><p><strong>gold</strong> – The reference the checker grades against (a goal state, an expected answer,
+a gold trajectory – the checker decides how to read it).</p></li>
+<li><p><strong>value</strong> – Task-level cost weight: how much a completed task is worth. The task-level
+analog of <code class="docutils literal notranslate"><span class="pre">FieldSpec.importance</span></code>; feeds value-weighted cost accounting.</p></li>
+<li><p><strong>tools</strong> – The tools this task permits (the Layer-A grammar for the task).</p></li>
+<li><p><strong>slice</strong> – Optional slice label (domain, difficulty, language) – per-slice cuts are
+mandatory, not optional (a low pass^k concentrated in one hard slice is a
+different problem from uniform flakiness).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.base.TaskSpec.grammar">
+<span class="sig-name descname"><span class="pre">grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#TaskSpec.grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.TaskSpec.grammar" title="Link to this definition"></a></dt>
+<dd><p>The Layer-A grammar for this task’s tool set.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.ToolSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">ToolSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.FieldSpec]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#ToolSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.ToolSpec" title="Link to this definition"></a></dt>
+<dd><p>One tool the agent may call: its argument schema and its error costs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The tool/function name (the AST-match ground truth).</p></li>
+<li><p><strong>params</strong> – Argument name -&gt; <a class="reference internal" href="../base.html#ek.base.FieldSpec" title="ek.base.FieldSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldSpec</span></code></a>. Each spec’s <code class="docutils literal notranslate"><span class="pre">importance</span></code>
+is the cost of getting <em>that argument</em> wrong, and its <code class="docutils literal notranslate"><span class="pre">domain</span></code> feeds
+validators – the same contract as an extracted field.</p></li>
+<li><p><strong>importance</strong> – Cost weight of the <em>call itself</em> (a missing or spurious call).
+Defaults to <a class="reference internal" href="#ek.agents.base.DESTRUCTIVE_WEIGHT" title="ek.agents.base.DESTRUCTIVE_WEIGHT"><code class="xref py py-data docutils literal notranslate"><span class="pre">DESTRUCTIVE_WEIGHT</span></code></a> when <code class="docutils literal notranslate"><span class="pre">destructive</span></code> is set, else 1.0.</p></li>
+<li><p><strong>destructive</strong> – Whether calling this tool mutates the world irreversibly (a refund,
+a delete, a send). Drives the default weight and the safety validators.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.base.ToolSpec.to_node_type">
+<span class="sig-name descname"><span class="pre">to_node_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#ek.base.NodeType" title="ek.base.NodeType"><span class="pre">NodeType</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#ToolSpec.to_node_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.ToolSpec.to_node_type" title="Link to this definition"></a></dt>
+<dd><p>Render this tool as a Layer-A <a class="reference internal" href="../base.html#ek.base.NodeType" title="ek.base.NodeType"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeType</span></code></a> (args as fields).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.ToolSpec.weight">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.agents.base.ToolSpec.weight" title="Link to this definition"></a></dt>
+<dd><p>The call-level cost weight (explicit, else destructive-aware default).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.base.Trajectory">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">Trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.agents.base.Step" title="ek.agents.base.Step"><span class="pre">Step</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/base.html#Trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.Trajectory" title="Link to this definition"></a></dt>
+<dd><p>The ordered sequence of <a class="reference internal" href="#ek.agents.base.Step" title="ek.agents.base.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a> s an agent took.</p>
+<p>A trajectory is <em>linear</em> – which is why it is scored with a sequence edit distance,
+not a graph edit distance (see <a class="reference internal" href="trajectory.html#module-ek.agents.trajectory" title="ek.agents.trajectory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.trajectory</span></code></a>).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">([</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}),</span> <span class="n">Step</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="s2">&quot;meow&quot;</span><span class="p">})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">t</span><span class="o">.</span><span class="n">tools</span>
+<span class="go">(2, (&#39;search&#39;, &#39;answer&#39;))</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.Trajectory.calls">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">calls</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#ek.agents.base.Trajectory.calls" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">(tool,</span> <span class="pre">args)</span></code> pairs in call order.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.agents.base.Trajectory.tools">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">tools</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#ek.agents.base.Trajectory.tools" title="Link to this definition"></a></dt>
+<dd><p>The tool names in call order.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.base.as_call">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">as_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#as_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.as_call" title="Link to this definition"></a></dt>
+<dd><p>Coerce a <a class="reference internal" href="#ek.agents.base.Step" title="ek.agents.base.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a>, <code class="docutils literal notranslate"><span class="pre">(tool,</span> <span class="pre">args)</span></code> tuple, or <code class="docutils literal notranslate"><span class="pre">{&quot;tool&quot;:…,</span> <span class="pre">&quot;args&quot;:…}</span></code> dict.</p>
+<p>Gold tool calls are usually written as bare pairs or dicts (no observation), while a
+prediction arrives as a <a class="reference internal" href="#ek.agents.base.Step" title="ek.agents.base.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a>; both must compare. Progressive disclosure: the
+simple literal works, the rich object works.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
+<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">((</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
+<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}})</span>
+<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">)</span>
+<span class="go">(&#39;search&#39;, {})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.base.is_episode">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">is_episode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#is_episode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.is_episode" title="Link to this definition"></a></dt>
+<dd><p>Duck-typed episode check (core never imports this module – it checks the <em>shape</em>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.base.suite_grammar">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">suite_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><span class="pre">TaskSpec</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#suite_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.suite_grammar" title="Link to this definition"></a></dt>
+<dd><p>The union grammar over a whole task suite (later tools win on name collision).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.base.tool_grammar">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.base.</span></span><span class="sig-name descname"><span class="pre">tool_grammar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">tools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ek.agents.base.ToolSpec" title="ek.agents.base.ToolSpec"><span class="pre">ToolSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/base.html#tool_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.base.tool_grammar" title="Link to this definition"></a></dt>
+<dd><p>Build the Layer-A <a class="reference internal" href="../base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphGrammar</span></code></a> from <a class="reference internal" href="#ek.agents.base.ToolSpec" title="ek.agents.base.ToolSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolSpec</span></code></a> s.</p>
+<p>The resulting grammar is the frozen cost SSOT every agent metric reads: node cost =
+the tool’s call weight, field cost = the argument’s importance.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">)},</span>
+<span class="gp">... </span>                          <span class="n">destructive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">)</span>
+<span class="go">10.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../agents.html" class="btn btn-neutral float-left" title="ek.agents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bridge.html" class="btn btn-neutral float-right" title="ek.agents.bridge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

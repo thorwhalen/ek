@@ -4,6 +4,16 @@
 
    module_docs/ek
    module_docs/ek/__main__
+   module_docs/ek/agents
+   module_docs/ek/agents/base
+   module_docs/ek/agents/bridge
+   module_docs/ek/agents/cost
+   module_docs/ek/agents/harness
+   module_docs/ek/agents/judge
+   module_docs/ek/agents/metrics
+   module_docs/ek/agents/reliability
+   module_docs/ek/agents/toolcalls
+   module_docs/ek/agents/trajectory
    module_docs/ek/base
    module_docs/ek/canonicalize
    module_docs/ek/facade

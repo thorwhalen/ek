@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.bridge &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.bridge</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.bridge</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;One-way adapters: turn whatever your agent already emits into an ``ek`` :class:`Episode`.</span>
+
+<span class="sd">The dependency direction is the ``ek -&gt; ocracy`` rule restated, and it is a **hard rule**:</span>
+<span class="sd">``ek -&gt; inspect_ai / deepeval / ragas`` (via the ``ek[agents]`` extra), **never the reverse**.</span>
+
+<span class="sd">Note what that buys: ``ek`` core depends only on the *shape* of what those tools emit, so the</span>
+<span class="sd">adapters here **duck-type** and import nothing. You need the extra to *run* Inspect or DeepEval;</span>
+<span class="sd">you do not need it to *score* what they produced -- exactly as ``ek`` evaluates any</span>
+<span class="sd">``OcrResult``-shaped object without importing an OCR engine.</span>
+
+<span class="sd">The workhorse is :func:`trajectory_from_messages`: provider-shaped chat transcripts (OpenAI- and</span>
+<span class="sd">Anthropic-style ``tool_calls`` / ``tool_use`` blocks) are the universal wire format for a</span>
+<span class="sd">tool-using agent, and parsing them needs no SDK at all.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; messages = [</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;weather in Paris?&quot;},</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;assistant&quot;, &quot;tool_calls&quot;: [</span>
+<span class="sd">    ...         {&quot;function&quot;: {&quot;name&quot;: &quot;get_weather&quot;, &quot;arguments&quot;: &#39;{&quot;city&quot;: &quot;Paris&quot;}&#39;}}]},</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;tool&quot;, &quot;content&quot;: &quot;18C&quot;},</span>
+<span class="sd">    ...     {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;It is 18C in Paris.&quot;},</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; traj = trajectory_from_messages(messages)</span>
+<span class="sd">    &gt;&gt;&gt; traj.tools</span>
+<span class="sd">    (&#39;get_weather&#39;,)</span>
+<span class="sd">    &gt;&gt;&gt; traj.steps[0].args, traj.steps[0].observation</span>
+<span class="sd">    ({&#39;city&#39;: &#39;Paris&#39;}, &#39;18C&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">Step</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">Trajectory</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_loads</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool arguments arrive as a JSON *string* on the wire; as a dict in-process.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parsed</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;_&quot;</span><span class="p">:</span> <span class="n">parsed</span><span class="p">}</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="c1"># A malformed tool-call payload is itself an evaluable failure, not a crash.</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;_malformed&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_call</span><span class="p">(</span><span class="n">call</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read ``(name, args)`` from ONE tool call in any of the shapes the ecosystem emits.</span>
+
+<span class="sd">    There are three, and getting this wrong is a *silent* wrong answer (the call is dropped and</span>
+<span class="sd">    the episode scores as though the agent never called anything):</span>
+
+<span class="sd">    - **OpenAI wire / dict**: ``{&quot;function&quot;: {&quot;name&quot;: …, &quot;arguments&quot;: &quot;&lt;json string&gt;&quot;}}`` -- the</span>
+<span class="sd">      name is *nested* and the arguments are a JSON **string**.</span>
+<span class="sd">    - **Inspect AI object**: ``ToolCall(function=&quot;get_weather&quot;, arguments={...})`` -- ``.function``</span>
+<span class="sd">      IS the name (a plain string), and the arguments are already a dict.</span>
+<span class="sd">    - **OpenAI SDK object**: ``call.function.name`` / ``call.function.arguments``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="n">call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="n">call</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>  <span class="c1"># nested: OpenAI wire format</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arguments&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="p">{})))</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># flat: {&quot;function&quot;: &quot;get_weather&quot;, &quot;arguments&quot;: {...}}</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">fn</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arguments&quot;</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="p">{})))</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Object shapes (Inspect&#39;s ToolCall, the OpenAI SDK&#39;s objects).</span>
+    <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># nested object: call.function.name</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;arguments&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># flat object: call.function is the name (Inspect)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">fn</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+            <span class="n">call</span><span class="p">,</span> <span class="s2">&quot;arguments&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tool_use_block</span><span class="p">(</span><span class="n">block</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read an Anthropic ``tool_use`` content block (dict- or object-shaped).&quot;&quot;&quot;</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+        <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">!=</span> <span class="s2">&quot;tool_use&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">block</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">block</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">_loads</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tool_calls_of</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract ``(name, args)`` pairs from an assistant message, in any provider&#39;s shape.&quot;&quot;&quot;</span>
+    <span class="n">calls</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool_calls&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">():</span>
+        <span class="n">got</span> <span class="o">=</span> <span class="n">_read_call</span><span class="p">(</span><span class="n">call</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">got</span><span class="p">:</span>
+            <span class="n">calls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">got</span><span class="p">)</span>
+    <span class="c1"># Anthropic: content is a list of blocks, one of which may be a tool_use.</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="n">got</span> <span class="o">=</span> <span class="n">_tool_use_block</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">got</span><span class="p">:</span>
+                <span class="n">calls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">got</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">calls</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_text_of</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The plain text of a message (flattening content blocks, dict- or object-shaped).&quot;&quot;&quot;</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">content</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">block</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+                    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="trajectory_from_messages">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.trajectory_from_messages">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">trajectory_from_messages</span><span class="p">(</span><span class="n">messages</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Mapping</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Trajectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse a chat transcript into a :class:`~ek.agents.base.Trajectory`.</span>
+
+<span class="sd">    Each assistant tool call becomes a :class:`~ek.agents.base.Step`, and the *next* tool/result</span>
+<span class="sd">    message becomes that step&#39;s ``observation``. A tool message carrying an error marks the step</span>
+<span class="sd">    as errored -- error *recovery* across later steps is itself an evaluable signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">steps</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pending</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="n">role</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;assistant&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">_tool_calls_of</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+                <span class="n">pending</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="n">tool</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">role</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">pending</span><span class="p">:</span>
+            <span class="c1"># Attach results to the outstanding calls, in order.</span>
+            <span class="n">observation</span> <span class="o">=</span> <span class="n">_text_of</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="ow">or</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">)</span>
+            <span class="n">is_error</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;is_error&quot;</span><span class="p">))</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">pending</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Step</span><span class="p">(</span>
+                    <span class="n">tool</span><span class="o">=</span><span class="n">step</span><span class="o">.</span><span class="n">tool</span><span class="p">,</span>
+                    <span class="n">args</span><span class="o">=</span><span class="n">step</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+                    <span class="n">observation</span><span class="o">=</span><span class="n">observation</span><span class="p">,</span>
+                    <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span> <span class="k">if</span> <span class="n">is_error</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+    <span class="n">steps</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pending</span><span class="p">)</span>  <span class="c1"># calls that never got a result (the agent stopped)</span>
+    <span class="k">return</span> <span class="n">Trajectory</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cost_from_usage">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.cost_from_usage">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cost_from_usage</span><span class="p">(</span><span class="n">usage</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">latency_s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Cost</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a :class:`~ek.agents.base.Cost` from a provider ``usage`` object or dict.</span>
+
+<span class="sd">    Understands the OpenAI (``prompt_tokens`` / ``completion_tokens``) and Anthropic</span>
+<span class="sd">    (``input_tokens`` / ``output_tokens`` / ``cache_read_input_tokens``) spellings.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; c = cost_from_usage({&quot;prompt_tokens&quot;: 100, &quot;completion_tokens&quot;: 20})</span>
+<span class="sd">        &gt;&gt;&gt; c.input_tokens, c.output_tokens</span>
+<span class="sd">        (100, 20)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="o">*</span><span class="n">names</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">usage</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">usage</span> <span class="ow">and</span> <span class="n">usage</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">usage</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">got</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">usage</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">got</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">got</span>
+        <span class="k">return</span> <span class="n">default</span>
+
+    <span class="k">return</span> <span class="n">Cost</span><span class="p">(</span>
+        <span class="n">input_tokens</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;input_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;prompt_tokens&quot;</span><span class="p">)),</span>
+        <span class="n">output_tokens</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;completion_tokens&quot;</span><span class="p">)),</span>
+        <span class="n">cached_input_tokens</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span>
+            <span class="n">get</span><span class="p">(</span><span class="s2">&quot;cache_read_input_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;cached_tokens&quot;</span><span class="p">,</span> <span class="s2">&quot;cache_read_tokens&quot;</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">reasoning_tokens</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reasoning_tokens&quot;</span><span class="p">)),</span>
+        <span class="n">latency_s</span><span class="o">=</span><span class="n">latency_s</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="episode_from_messages">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.episode_from_messages">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">episode_from_messages</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Mapping</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">usage</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">final_state</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">latency_s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Episode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a full :class:`~ek.agents.base.Episode` from a transcript (+ optional usage/state).</span>
+
+<span class="sd">    ``output`` defaults to the last assistant text -- the agent&#39;s final answer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">trajectory</span> <span class="o">=</span> <span class="n">trajectory_from_messages</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">assistant_texts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">_text_of</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;assistant&quot;</span>
+        <span class="p">]</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">assistant_texts</span><span class="p">)</span> <span class="k">if</span> <span class="n">t</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Episode</span><span class="p">(</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="n">trajectory</span><span class="o">=</span><span class="n">trajectory</span><span class="p">,</span>
+        <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">,</span>
+        <span class="n">final_state</span><span class="o">=</span><span class="n">final_state</span><span class="p">,</span>
+        <span class="n">cost</span><span class="o">=</span><span class="n">cost_from_usage</span><span class="p">(</span><span class="n">usage</span><span class="p">,</span> <span class="n">latency_s</span><span class="o">=</span><span class="n">latency_s</span><span class="p">)</span> <span class="k">if</span> <span class="n">usage</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="from_inspect_sample">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.from_inspect_sample">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_inspect_sample</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Episode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapt an Inspect AI ``EvalSample``-shaped object into an :class:`Episode` (duck-typed).</span>
+
+<span class="sd">    Reads ``.messages``, ``.output`` and ``.id`` -- no ``inspect_ai`` import required, so scoring</span>
+<span class="sd">    an Inspect log never drags the harness into ``ek``&#39;s dependency closure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s2">&quot;messages&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="n">_message_dict</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">]</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">completion</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;completion&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">usage</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;usage&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">episode_from_messages</span><span class="p">(</span>
+        <span class="n">raw</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span>
+        <span class="n">output</span><span class="o">=</span><span class="n">completion</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_message_dict</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Best-effort dict view of a message object (Inspect/DeepEval carry dataclass-ish shapes).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;tool_calls&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">&quot;tool_calls&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="from_deepeval_test_case">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.from_deepeval_test_case">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_deepeval_test_case</span><span class="p">(</span><span class="n">case</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Episode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adapt a DeepEval ``LLMTestCase``-shaped object into an :class:`Episode` (duck-typed).</span>
+
+<span class="sd">    Reads ``.actual_output`` and ``.tools_called``. Note DeepEval phones home by default</span>
+<span class="sd">    (Confident-AI telemetry) -- disable it before use if that matters to you; ``ek`` never</span>
+<span class="sd">    enables it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="s2">&quot;tools_called&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Step</span><span class="p">(</span>
+            <span class="n">tool</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">t</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="n">args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">&quot;input_parameters&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tools</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">Episode</span><span class="p">(</span>
+        <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span>
+        <span class="n">trajectory</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">),</span>
+        <span class="n">output</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">case</span><span class="p">,</span> <span class="s2">&quot;actual_output&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="as_agent">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/bridge.html#ek.agents.as_agent">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">as_agent</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap a plain ``input -&gt; answer`` function into the harness&#39;s ``TaskSpec -&gt; Episode`` shape.</span>
+
+<span class="sd">    Progressive disclosure: the trivial agent should not have to learn the Episode type.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from ek.agents.base import TaskSpec</span>
+<span class="sd">        &gt;&gt;&gt; agent = as_agent(str.upper)</span>
+<span class="sd">        &gt;&gt;&gt; agent(TaskSpec(&quot;t1&quot;, input=&quot;hi&quot;)).output</span>
+<span class="sd">        &#39;HI&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">task</span><span class="p">:</span> <span class="n">TaskSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Episode</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">fn</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">input</span><span class="p">))</span>
+
+    <span class="n">run</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;agent&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">run</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

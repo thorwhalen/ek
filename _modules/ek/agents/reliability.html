@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.reliability &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.reliability</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.reliability</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Reliability: ``pass@k`` (capability) vs ``pass^k`` (consistency), and their error bars.</span>
+
+<span class="sd">The single most important distinction in agent evaluation. ``pass@k`` asks *can it ever do</span>
+<span class="sd">this?*; ``pass^k`` asks *does it do this every single time?* -- and only the second is a</span>
+<span class="sd">production metric. A customer-facing agent that succeeds &quot;usually&quot; is not shippable, and</span>
+<span class="sd">``pass^k`` is the number that exposes it: on tau-bench, gpt-4o clears ~61% of retail tasks at</span>
+<span class="sd">``pass^1`` but only ~25% at ``pass^8`` (``misc/docs/ek_07``, ``misc/docs/ek_08``).</span>
+
+<span class="sd">**These are not** :class:`~ek.base.Metric` **s.** A metric scores one ``(pred, gold)`` pair and</span>
+<span class="sd">:func:`ek.evaluate` aggregates independent cases; ``pass@k``/``pass^k`` are *cross-task*</span>
+<span class="sd">quantities over **k trials of the same task**, and the trial grouping is the harness&#39;s job.</span>
+<span class="sd">They ship here as pure functions plus a :class:`ReliabilityReport`.</span>
+
+<span class="sd">Two caveats the literature forces:</span>
+
+<span class="sd">- ``pass^k`` presumes **genuine run-to-run stochasticity**. On a deterministic agent every</span>
+<span class="sd">  trial is identical, ``pass^k`` collapses to ``pass^1``, and it tells you nothing new --</span>
+<span class="sd">  :func:`reliability` detects this and warns rather than reporting a falsely reassuring number.</span>
+<span class="sd">- Suites are small (a few hundred tasks), so a point estimate is not a result. Report an</span>
+<span class="sd">  interval: :func:`wilson_interval` for a success rate, :func:`bootstrap_ci` for the skewed</span>
+<span class="sd">  cost-per-success ratio. The regression gate compares **intervals, not points**.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; pass_at_k(n=5, c=2, k=1)          # capability: any 1 of 5 trials succeeded</span>
+<span class="sd">    0.4</span>
+<span class="sd">    &gt;&gt;&gt; round(pass_at_k(n=5, c=2, k=3), 4)   # some 3-subset contains a success</span>
+<span class="sd">    0.9</span>
+<span class="sd">    &gt;&gt;&gt; pass_hat_k(n=5, c=2, k=3)         # reliability: ALL of a 3-subset succeed</span>
+<span class="sd">    0.0</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Episode</span>
+
+<span class="c1">#: z for a 95% normal interval (the Wilson default). Keyword-tunable, not a magic number.</span>
+<span class="n">DEFAULT_Z</span> <span class="o">=</span> <span class="mf">1.96</span>
+
+<span class="c1">#: Resamples for the bootstrap CI on the (skewed) cost-per-success ratio.</span>
+<span class="n">DEFAULT_BOOTSTRAP_RESAMPLES</span> <span class="o">=</span> <span class="mi">2000</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The two unbiased estimators</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;k must be &gt;= 1, got </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;need n &gt;= k trials to estimate at k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">, got n=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;successes c must be in [0, n]; got c=</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">, n=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pass_at_k">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.pass_at_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pass_at_k</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unbiased ``pass@k``: probability that **at least one** of k samples succeeds.</span>
+
+<span class="sd">    The HumanEval estimator ``1 - C(n-c, k) / C(n, k)`` over ``n`` trials with ``c``</span>
+<span class="sd">    successes. This is the **capability** metric -- right when a single success is enough</span>
+<span class="sd">    (offline candidate generation behind a verifier).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; round(pass_at_k(n=10, c=1, k=1), 3)</span>
+<span class="sd">        0.1</span>
+<span class="sd">        &gt;&gt;&gt; pass_at_k(n=10, c=10, k=5)</span>
+<span class="sd">        1.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>  <span class="c1"># too few failures to fill a k-subset -&gt; some success is certain</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="pass_hat_k">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.pass_hat_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pass_hat_k</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unbiased ``pass^k``: probability that **all k** independent trials succeed.</span>
+
+<span class="sd">    The tau-bench estimator ``C(c, k) / C(n, k)``; for a per-trial success probability ``p``</span>
+<span class="sd">    it decays to ``p**k``. This is the **reliability** metric -- the one that matters when</span>
+<span class="sd">    consistency *is* the product.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; pass_hat_k(n=8, c=8, k=8)</span>
+<span class="sd">        1.0</span>
+<span class="sd">        &gt;&gt;&gt; pass_hat_k(n=8, c=4, k=2)</span>
+<span class="sd">        0.21428571428571427</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">comb</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Error bars (a point estimate on a 200-task suite is not a result)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="wilson_interval">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.wilson_interval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">wilson_interval</span><span class="p">(</span>
+    <span class="n">successes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_Z</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wilson score interval for a proportion -- correct in the tails, unlike Wald/CLT.</span>
+
+<span class="sd">    The naive normal (&quot;Wald&quot;) interval is badly wrong at small n and near 0/1 -- exactly</span>
+<span class="sd">    where agent success rates live. Wilson is the cheap, dependency-free fix.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; lo, hi = wilson_interval(0, 10)</span>
+<span class="sd">        &gt;&gt;&gt; lo == 0.0, round(hi, 3)</span>
+<span class="sd">        (True, 0.278)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">successes</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">z2</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="n">denom</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">n</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">center</span> <span class="o">-</span> <span class="n">margin</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">center</span> <span class="o">+</span> <span class="n">margin</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="newcombe_difference">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.newcombe_difference">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">newcombe_difference</span><span class="p">(</span>
+    <span class="n">successes_a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">successes_b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_Z</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Newcombe score interval for the **difference** of two proportions ``p_a - p_b``.</span>
+
+<span class="sd">    This is the right instrument for &quot;did the agent get worse than its baseline?&quot;, and it is</span>
+<span class="sd">    strictly better than the tempting shortcut of *checking whether two 95% CIs overlap*.</span>
+<span class="sd">    Non-overlap is not a 5% test -- it is roughly a 0.5% one, so it buys its low false-alarm</span>
+<span class="sd">    rate by going nearly blind: on a 60-task suite it cannot see a 15-point success-rate drop.</span>
+<span class="sd">    A difference interval keeps the same false-alarm rate and recovers most of the power,</span>
+<span class="sd">    because the variance of a difference is not the sum of two interval widths.</span>
+
+<span class="sd">    Newcombe (1998) method 10: build each proportion&#39;s Wilson interval, then</span>
+
+<span class="sd">        lower = (p_a - p_b) - sqrt((p_a - l_a)^2 + (u_b - p_b)^2)</span>
+<span class="sd">        upper = (p_a - p_b) + sqrt((u_a - p_a)^2 + (p_b - l_b)^2)</span>
+
+<span class="sd">    Returns ``(lower, upper)``. The difference is a *confident regression* when ``upper &lt; 0``.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; lo, hi = newcombe_difference(50, 100, 90, 100)   # 50% now vs 90% before</span>
+<span class="sd">        &gt;&gt;&gt; hi &lt; 0                                            # confidently worse</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; lo, hi = newcombe_difference(89, 100, 90, 100)   # 89% vs 90% -- noise</span>
+<span class="sd">        &gt;&gt;&gt; hi &gt; 0</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n_a</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_b</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># no information -&gt; the maximally uninformative interval</span>
+    <span class="n">p_a</span><span class="p">,</span> <span class="n">p_b</span> <span class="o">=</span> <span class="n">successes_a</span> <span class="o">/</span> <span class="n">n_a</span><span class="p">,</span> <span class="n">successes_b</span> <span class="o">/</span> <span class="n">n_b</span>
+    <span class="n">l_a</span><span class="p">,</span> <span class="n">u_a</span> <span class="o">=</span> <span class="n">wilson_interval</span><span class="p">(</span><span class="n">successes_a</span><span class="p">,</span> <span class="n">n_a</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">l_b</span><span class="p">,</span> <span class="n">u_b</span> <span class="o">=</span> <span class="n">wilson_interval</span><span class="p">(</span><span class="n">successes_b</span><span class="p">,</span> <span class="n">n_b</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">p_a</span> <span class="o">-</span> <span class="n">p_b</span>
+    <span class="n">lower</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p_a</span> <span class="o">-</span> <span class="n">l_a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">u_b</span> <span class="o">-</span> <span class="n">p_b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">upper</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">u_a</span> <span class="o">-</span> <span class="n">p_a</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">p_b</span> <span class="o">-</span> <span class="n">l_b</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lower</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_se_from_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_Z</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Back out a standard error from a symmetric-ish CI (for statistics we only store as CIs).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ci</span> <span class="ow">or</span> <span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">width</span><span class="p">)</span> <span class="ow">or</span> <span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">width</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">z</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="difference_upper_bound">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.difference_upper_bound">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">difference_upper_bound</span><span class="p">(</span>
+    <span class="n">value_a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ci_a</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">value_b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ci_b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_Z</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Upper bound of ``a - b`` for two statistics known only through their CIs.</span>
+
+<span class="sd">    Used for ``pass^k`` (a mean of per-task estimators, not a raw proportion), where a Newcombe</span>
+<span class="sd">    interval does not apply but the same principle does: test the **difference**, combining both</span>
+<span class="sd">    runs&#39; uncertainty, rather than asking whether two intervals happen to overlap.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">se_a</span><span class="p">,</span> <span class="n">se_b</span> <span class="o">=</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">ci_a</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">),</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">ci_b</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">se_a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">se_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">value_a</span> <span class="o">-</span> <span class="n">value_b</span><span class="p">)</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">se_a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">se_b</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="bootstrap_ci">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.bootstrap_ci">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">bootstrap_ci</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">statistic</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">resamples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_BOOTSTRAP_RESAMPLES</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Percentile bootstrap CI for any ``statistic`` over ``values`` (deterministic by seed).</span>
+
+<span class="sd">    Used for the **cost-per-success ratio**, whose distribution is skewed and heavy-tailed</span>
+<span class="sd">    (a normal interval on it is meaningless).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; lo, hi = bootstrap_ci([1.0] * 20, lambda v: sum(v) / len(v), resamples=50)</span>
+<span class="sd">        &gt;&gt;&gt; lo == hi == 1.0</span>
+<span class="sd">        True</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">resamples</span><span class="p">):</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="p">[</span><span class="n">values</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">statistic</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
+    <span class="n">stats</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">lo_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">alpha</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stats</span><span class="p">))</span>
+    <span class="n">hi_i</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stats</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="n">lo_i</span><span class="p">],</span> <span class="n">stats</span><span class="p">[</span><span class="n">hi_i</span><span class="p">])</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># The report</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ReliabilityReport">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.ReliabilityReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReliabilityReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Corpus-level reliability over a k-trial run, with per-task and per-slice cuts.</span>
+
+<span class="sd">    ``success_rate`` is micro (over all trials); ``pass_at_k``/``pass_hat_k`` are averaged</span>
+<span class="sd">    over *tasks* (each task&#39;s own unbiased estimator), never over trials.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_trials</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_success</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">success_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">success_ci</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="c1"># ``None`` (not 0.0) when no task had enough trials to estimate at k: &quot;we could not</span>
+    <span class="c1"># measure this&quot; and &quot;the agent failed everything&quot; are opposite facts, and reporting the</span>
+    <span class="c1"># second when the first is true is how a perfect agent gets shown as a total failure.</span>
+    <span class="n">pass_at_k</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pass_hat_k</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pass_hat_k_ci</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">stochastic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">per_task</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">per_slice</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">cost</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The headline number is the *reliability* one (``nan`` if it could not be measured).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_group_trials</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Group ``{task_id: [bool, ...]}`` from episodes or an already-grouped mapping.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">tid</span><span class="p">:</span> <span class="p">[</span><span class="nb">bool</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">outcomes</span><span class="p">]</span> <span class="k">for</span> <span class="n">tid</span><span class="p">,</span> <span class="n">outcomes</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="n">grouped</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ep</span> <span class="ow">in</span> <span class="n">source</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">Episode</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;task_id&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;reliability() takes Episodes or a {task_id: [bool, ...]} mapping; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ep</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ep</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;episode for task </span><span class="si">{</span><span class="n">ep</span><span class="o">.</span><span class="n">task_id</span><span class="si">!r}</span><span class="s2"> is ungraded (success is None); &quot;</span>
+                <span class="s2">&quot;run it through a checker (see ek.agents.TaskSuccessMetric) first.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">grouped</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">ep</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">ep</span><span class="o">.</span><span class="n">success</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">grouped</span>
+
+
+<div class="viewcode-block" id="reliability">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/reliability.html#ek.reliability">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reliability</span><span class="p">(</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">slices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">warn_deterministic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReliabilityReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute ``pass@k`` / ``pass^k`` / success-rate over a k-trial run.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        source: Graded :class:`~ek.agents.base.Episode` s (grouped by ``task_id``), or an</span>
+<span class="sd">            already-grouped ``{task_id: [bool, ...]}`` mapping.</span>
+<span class="sd">        k: The k of pass@k / pass^k. Tasks with fewer than k trials are skipped (and</span>
+<span class="sd">            counted in ``detail[&#39;skipped&#39;]``) rather than silently mis-estimated.</span>
+<span class="sd">        slices: Optional ``{task_id: slice_label}`` for per-slice cuts.</span>
+<span class="sd">        cost: An optional cost report (from :func:`ek.agents.cost_report`) to carry along --</span>
+<span class="sd">            reliability without cost is only half the picture.</span>
+<span class="sd">        warn_deterministic: Warn when **no** task shows mixed outcomes across trials, in</span>
+<span class="sd">            which case ``pass^k`` degenerates to ``pass^1`` and is not informative.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; r = reliability({&quot;t1&quot;: [True, True, False], &quot;t2&quot;: [True, True, True]}, k=2)</span>
+<span class="sd">        &gt;&gt;&gt; r.n_tasks, r.k</span>
+<span class="sd">        (2, 2)</span>
+<span class="sd">        &gt;&gt;&gt; round(r.pass_hat_k, 3)      # t1: C(2,2)/C(3,2)=1/3 ; t2: 1.0</span>
+<span class="sd">        0.667</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grouped</span> <span class="o">=</span> <span class="n">_group_trials</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+    <span class="n">per_task</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">skipped</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">any_mixed</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">outcomes</span> <span class="ow">in</span> <span class="n">grouped</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outcomes</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">outcomes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">skipped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+            <span class="n">any_mixed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">per_task</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+            <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span>
+            <span class="s2">&quot;pass_at_k&quot;</span><span class="p">:</span> <span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">),</span>
+            <span class="s2">&quot;pass_hat_k&quot;</span><span class="p">:</span> <span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="n">n_tasks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">per_task</span><span class="p">)</span>
+    <span class="n">n_trials</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">total_c</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="c1"># None, not 0.0, when nothing could be estimated at this k (see ReliabilityReport).</span>
+    <span class="n">mean_at</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;pass_at_k&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="n">n_tasks</span> <span class="k">if</span> <span class="n">n_tasks</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+    <span class="n">mean_hat</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;pass_hat_k&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="n">n_tasks</span> <span class="k">if</span> <span class="n">n_tasks</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Dropping tasks from the headline in silence is a mis-estimate, not a nicety: a suite</span>
+    <span class="c1"># where half the tasks have fewer than k trials would otherwise report pass^k over the</span>
+    <span class="c1"># other half as if it were the whole suite.</span>
+    <span class="k">if</span> <span class="n">skipped</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;reliability: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">)</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">grouped</span><span class="p">)</span><span class="si">}</span><span class="s2"> task(s) have fewer than k=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;trials and were EXCLUDED from pass@k/pass^k (e.g. </span><span class="si">{</span><span class="n">skipped</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">). Run at least &quot;</span>
+            <span class="s2">&quot;k trials per task, or lower k -- the reported figures cover only the remaining &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n_tasks</span><span class="si">}</span><span class="s2"> task(s).&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">per_slice</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">slices</span><span class="p">:</span>
+        <span class="n">buckets</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">slices</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">buckets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">buckets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">per_slice</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;n_tasks&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">vs</span><span class="p">),</span>
+                <span class="s2">&quot;pass_at_k&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;pass_at_k&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">vs</span><span class="p">),</span>
+                <span class="s2">&quot;pass_hat_k&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;pass_hat_k&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">vs</span><span class="p">),</span>
+                <span class="s2">&quot;success_rate&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">),</span>
+            <span class="p">}</span>
+
+    <span class="n">stochastic</span> <span class="o">=</span> <span class="n">any_mixed</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">warn_deterministic</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">any_mixed</span> <span class="ow">and</span> <span class="n">n_tasks</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;reliability: no task showed mixed outcomes across trials -- the agent looks &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;deterministic, so pass^</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> degenerates to pass^1 and measures nothing new. &quot;</span>
+            <span class="s2">&quot;Ensure real run-to-run stochasticity (temperature, seeds, a simulated user) &quot;</span>
+            <span class="s2">&quot;or report pass^1 instead.&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Bootstrap the pass^k CI over TASKS (the sampling unit), so the regression gate can</span>
+    <span class="c1"># compare intervals rather than points on a few-hundred-task suite.</span>
+    <span class="n">hat_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="s2">&quot;pass_hat_k&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">per_task</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+    <span class="n">hat_ci</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">bootstrap_ci</span><span class="p">(</span><span class="n">hat_values</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">hat_values</span>
+        <span class="k">else</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ReliabilityReport</span><span class="p">(</span>
+        <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="n">n_tasks</span><span class="o">=</span><span class="n">n_tasks</span><span class="p">,</span>
+        <span class="n">n_trials</span><span class="o">=</span><span class="n">n_trials</span><span class="p">,</span>
+        <span class="n">n_success</span><span class="o">=</span><span class="n">total_c</span><span class="p">,</span>
+        <span class="n">success_rate</span><span class="o">=</span><span class="p">(</span><span class="n">total_c</span> <span class="o">/</span> <span class="n">n_trials</span><span class="p">)</span> <span class="k">if</span> <span class="n">n_trials</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">success_ci</span><span class="o">=</span><span class="n">wilson_interval</span><span class="p">(</span><span class="n">total_c</span><span class="p">,</span> <span class="n">n_trials</span><span class="p">),</span>
+        <span class="n">pass_at_k</span><span class="o">=</span><span class="n">mean_at</span><span class="p">,</span>
+        <span class="n">pass_hat_k</span><span class="o">=</span><span class="n">mean_hat</span><span class="p">,</span>
+        <span class="n">pass_hat_k_ci</span><span class="o">=</span><span class="n">hat_ci</span><span class="p">,</span>
+        <span class="n">stochastic</span><span class="o">=</span><span class="n">stochastic</span><span class="p">,</span>
+        <span class="n">per_task</span><span class="o">=</span><span class="n">per_task</span><span class="p">,</span>
+        <span class="n">per_slice</span><span class="o">=</span><span class="n">per_slice</span><span class="p">,</span>
+        <span class="n">cost</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span> <span class="k">if</span> <span class="n">cost</span> <span class="k">else</span> <span class="p">{},</span>
+        <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;skipped&quot;</span><span class="p">:</span> <span class="n">skipped</span><span class="p">}</span> <span class="k">if</span> <span class="n">skipped</span> <span class="k">else</span> <span class="p">{},</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.harness &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.agents.judge" href="judge.html" />
+    <link rel="prev" title="ek.agents.cost" href="cost.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.agents.harness</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.harness.AgentGateResult"><code class="docutils literal notranslate"><span class="pre">AgentGateResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.harness.agent_regression_gate"><code class="docutils literal notranslate"><span class="pre">agent_regression_gate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.harness.load_agent_baseline"><code class="docutils literal notranslate"><span class="pre">load_agent_baseline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.harness.run_suite"><code class="docutils literal notranslate"><span class="pre">run_suite()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.harness.save_agent_baseline"><code class="docutils literal notranslate"><span class="pre">save_agent_baseline()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.agents.harness</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/agents/harness.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.agents.harness">
+<span id="ek-agents-harness"></span><h1>ek.agents.harness<a class="headerlink" href="#module-ek.agents.harness" title="Link to this heading"></a></h1>
+<p>The agent task-suite harness: k trials, per-slice cuts, and a gate that survives noise.</p>
+<p><a class="reference internal" href="#ek.agents.harness.run_suite" title="ek.agents.harness.run_suite"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_suite()</span></code></a> is <a class="reference internal" href="../../ek.html#ek.evaluate_store" title="ek.evaluate_store"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate_store()</span></code></a> specialized for agents: it runs the system under
+test over a suite <strong>k times per task</strong> (reliability needs repeats), grades each episode with an
+<em>injected</em> checker, and reports <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> + cost + latency per slice.</p>
+<p><strong>Why a separate gate.</strong> <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s offline <a class="reference internal" href="../../ek.html#ek.regression_gate" title="ek.regression_gate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.regression_gate()</span></code></a> is a scalar point
+comparison with <code class="docutils literal notranslate"><span class="pre">tolerance=0.0</span></code> – correct for a deterministic OCR benchmark, <strong>unsound</strong> for
+an agent. Agent metrics are random variables: re-running the same agent moves the number. A
+point gate therefore (a) flags sampling noise as a regression and (b) misses a real regression
+that hides inside the tolerance band.</p>
+<p><a class="reference internal" href="#ek.agents.harness.agent_regression_gate" title="ek.agents.harness.agent_regression_gate"><code class="xref py py-func docutils literal notranslate"><span class="pre">agent_regression_gate()</span></code></a> instead tests the <strong>difference</strong> <code class="docutils literal notranslate"><span class="pre">current</span> <span class="pre">-</span> <span class="pre">baseline</span></code> with both
+runs’ uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound
+on <code class="docutils literal notranslate"><span class="pre">pass^k</span></code>), failing only when the upper bound of that change is confidently negative. Two
+tempting shortcuts are <strong>both wrong</strong>, and this module has shipped and fixed each of them:
+comparing our interval to the baseline’s <em>point</em> (the baseline is itself noisy, so one flake
+against a lucky baseline reads as a regression), and asking whether two 95% intervals <em>overlap</em>
+(that is a ~0.5% test, not a 5% one – it goes blind to a 15-point drop on a 60-task suite).
+An empty run, and an empty <strong>baseline</strong>, are both refused: with no trials every bound is the
+maximally-uncertain default, so nothing could ever be shown to fall below it.</p>
+<p><strong>Hidden eval variables.</strong> In a tau-bench-style suite the <em>user simulator is itself an LLM</em> –
+change its model or prompt and the scores move, silently. So a baseline records its
+<a class="reference internal" href="base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code></a> and the gate <strong>refuses</strong> to compare across a changed
+simulator, suite version, or scaffold, exactly as the offline gate already refuses to compare
+two different metrics. Comparing across them is not a regression check, it is a category error.</p>
+<p><strong>Verifier isolation is a security property.</strong> The checker must run where the agent’s trajectory
+cannot reach it (a red-team produced a ~10-line <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> that rewrote every test outcome
+to “passed”). <code class="docutils literal notranslate"><span class="pre">ek</span></code> cannot enforce your sandbox – it only refuses to pretend the problem does
+not exist.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">TaskSpec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">TaskSpec</span><span class="p">(</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;2+2&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">&quot;4&quot;</span><span class="p">),</span> <span class="n">TaskSpec</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;3+3&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">&quot;6&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">agent</span><span class="p">(</span><span class="n">task</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">answers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;2+2&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;3+3&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">}</span>      <span class="c1"># gets t2 wrong, every time</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">Episode</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="n">answers</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">input</span><span class="p">],</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">run_suite</span><span class="p">(</span><span class="n">agent</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">success_rate</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span>
+<span class="go">(0.5, 0.5)</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.harness.AgentGateResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.harness.</span></span><span class="sig-name descname"><span class="pre">AgentGateResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">passed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reasons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_hat_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_hat_k_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_rate_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_per_success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_per_success_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underpowered</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/harness.html#AgentGateResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.harness.AgentGateResult" title="Link to this definition"></a></dt>
+<dd><p>Outcome of a variance-aware agent regression check.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.harness.agent_regression_gate">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.harness.</span></span><span class="sig-name descname"><span class="pre">agent_regression_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><span class="pre">ReliabilityReport</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.agents.harness.AgentGateResult" title="ek.agents.harness.AgentGateResult"><span class="pre">AgentGateResult</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/harness.html#agent_regression_gate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.harness.agent_regression_gate" title="Link to this definition"></a></dt>
+<dd><p>Fail only when the evidence says the agent <strong>really</strong> got worse – not on noise.</p>
+<p>Tests the <strong>difference</strong> <code class="docutils literal notranslate"><span class="pre">current</span> <span class="pre">-</span> <span class="pre">baseline</span></code>, with <em>both</em> runs’ uncertainty folded in:
+a Newcombe score interval on the success rate, and (for <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>) a combined-SE bound on
+<code class="docutils literal notranslate"><span class="pre">pass^k</span></code>. A regression is declared only when the upper bound of that change is below
+<code class="docutils literal notranslate"><span class="pre">-tolerance</span></code> – i.e. we are confident the true change is negative.</p>
+<p>Two tempting shortcuts are <strong>both wrong</strong>, and this module has shipped and fixed each:</p>
+<ul class="simple">
+<li><p>Comparing our interval to the baseline’s <strong>point</strong>. The baseline is <em>itself</em> a noisy
+estimate; a Wilson upper bound only reaches 1.0 when every trial passed, so a single flake
+against a lucky baseline reads as a “confident regression”.</p></li>
+<li><p>Asking whether the two 95% intervals <strong>overlap</strong>. That is not a 5% test but roughly a 0.5%
+one: it buys a calm gate by going blind (a 15-point drop on a 60-task suite becomes
+invisible). A gate that cannot see a real regression is as broken as one that cries wolf.</p></li>
+</ul>
+<p>A result that is merely <em>worse but not significantly so</em> is not a clean pass either – it is
+an underpowered experiment, and the result says so (<code class="docutils literal notranslate"><span class="pre">underpowered</span></code>, plus a warning).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the baseline was produced with a different <strong>user simulator</strong>, suite
+    version, or scaffold – those runs are not comparable, and silently comparing them
+    would be a category error (the same reason the offline gate refuses to compare two
+    different metrics); if the baseline recorded zero trials (a permanent free pass); or
+    if it is malformed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.harness.load_agent_baseline">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.harness.</span></span><span class="sig-name descname"><span class="pre">load_agent_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/harness.html#load_agent_baseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.harness.load_agent_baseline" title="Link to this definition"></a></dt>
+<dd><p>Load a named agent baseline (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.harness.run_suite">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.harness.</span></span><span class="sig-name descname"><span class="pre">run_suite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><span class="pre">TaskSpec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><span class="pre">RunProvenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><span class="pre">ReliabilityReport</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/harness.html#run_suite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.harness.run_suite" title="Link to this definition"></a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">agent</span></code> over a task suite, <code class="docutils literal notranslate"><span class="pre">k</span></code> trials per task, and report reliability + cost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>agent</strong> – The system under test: <code class="docutils literal notranslate"><span class="pre">TaskSpec</span> <span class="pre">-&gt;</span> <span class="pre">Episode</span></code> (a bare answer is wrapped). It
+receives the whole spec – <code class="docutils literal notranslate"><span class="pre">.input</span></code>, <code class="docutils literal notranslate"><span class="pre">.tools</span></code>, <code class="docutils literal notranslate"><span class="pre">.gold</span></code> – not just the input.
+If it accepts a keyword <code class="docutils literal notranslate"><span class="pre">seed</span></code>, the per-trial seed is passed to it.</p></li>
+<li><p><strong>tasks</strong> – <a class="reference internal" href="base.html#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskSpec</span></code></a> s (or a <code class="docutils literal notranslate"><span class="pre">{task_id:</span> <span class="pre">spec}</span></code> mapping).</p></li>
+<li><p><strong>k</strong> – Trials per task. <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> is what makes <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> meaningful – and it only means
+anything if the agent is genuinely stochastic (the report warns if it is not).</p></li>
+<li><p><strong>check</strong> – The success oracle – a registered checker name or an <code class="docutils literal notranslate"><span class="pre">(episode,</span> <span class="pre">gold)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code>
+callable. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>; <strong>inject a state-based/executable oracle</strong> for a
+real suite, and run it isolated from the agent.</p></li>
+<li><p><strong>metrics</strong> – Optional <code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">Metric}</span></code> scored on every episode against <code class="docutils literal notranslate"><span class="pre">task.gold</span></code>, with
+the <strong>suite’s Layer-A grammar injected</strong> – this is how the tool/argument cost
+weights reach a <code class="docutils literal notranslate"><span class="pre">tool_call</span></code>/<code class="docutils literal notranslate"><span class="pre">trajectory</span></code> metric. Results land in
+<code class="docutils literal notranslate"><span class="pre">report.detail[&quot;metrics&quot;]</span></code>.</p></li>
+<li><p><strong>price/prices</strong> – Rates for costing the episodes (see <a class="reference internal" href="cost.html#module-ek.agents.cost" title="ek.agents.cost"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.cost</span></code></a>).</p></li>
+<li><p><strong>run</strong> – <a class="reference internal" href="base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code></a> for this run (model, simulator, suite
+version, scaffold). Recorded on every episode and on any baseline saved from it.</p></li>
+<li><p><strong>seed</strong> – Base RNG seed. Trial <em>i</em> of each task uses <code class="docutils literal notranslate"><span class="pre">seed</span> <span class="pre">+</span> <span class="pre">i</span></code>: it is recorded on the
+episode’s provenance <strong>and passed to the agent</strong> when the agent accepts a <code class="docutils literal notranslate"><span class="pre">seed</span></code>
+keyword.</p></li>
+<li><p><strong>persist/run_id/rootdir</strong> – Persist the run to the <code class="docutils literal notranslate"><span class="pre">runs</span></code>/<code class="docutils literal notranslate"><span class="pre">results</span></code> stores.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliabilityReport</span></code></a> carrying <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code>, <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> (with
+a bootstrap CI), the success rate (with a Wilson CI), the per-slice cuts, and the cost
+report – because reliability without cost is only half the answer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.harness.save_agent_baseline">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.harness.</span></span><span class="sig-name descname"><span class="pre">save_agent_baseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><span class="pre">ReliabilityReport</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/harness.html#save_agent_baseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.harness.save_agent_baseline" title="Link to this definition"></a></dt>
+<dd><p>Freeze a run as a named baseline (including its provenance, so the gate can guard it).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – if the run evaluated nothing. An empty baseline is worse than no baseline –
+    it is a <em>permanent free pass</em>, because every bound in it is the maximally-uncertain
+    default and no later run can be shown to fall below it.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cost.html" class="btn btn-neutral float-left" title="ek.agents.cost" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="judge.html" class="btn btn-neutral float-right" title="ek.agents.judge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

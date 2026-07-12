@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.judge &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.judge</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.judge</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;LLM-as-judge: a reference-free :class:`~ek.base.Signal`, a reference-based</span>
+<span class="sd">:class:`~ek.base.Metric`, and the validation that must precede either.</span>
+
+<span class="sd">When a task has no checkable outcome, an LLM judge is the fallback. It is also a **liability</span>
+<span class="sd">unless validated and calibrated**, because its known failure modes have double-digit effect</span>
+<span class="sd">sizes: *position* bias (which answer came first), *verbosity* bias (longer looks better),</span>
+<span class="sd">*self-preference* (a model prefers its own text). ``misc/docs/ek_09`` has the numbers.</span>
+
+<span class="sd">Three seams, deliberately kept apart (they are not interchangeable):</span>
+
+<span class="sd">- :class:`JudgeSignal` -- **reference-free, criteria-only**. This is the only judge that is a</span>
+<span class="sd">  ``Signal``: it scores an output against *criteria*, with no gold, so it plugs into</span>
+<span class="sd">  :func:`ek.estimate_quality`&#39;s ``signal -&gt; calibrate -&gt; validate -&gt; decide`` cascade. Its</span>
+<span class="sd">  ``cost_tier`` is the highest in the framework, so an escalation policy runs the cheap signals</span>
+<span class="sd">  first and pays for the judge only on residual uncertainty.</span>
+<span class="sd">- :class:`JudgeMetric` -- **reference-based**. A judge that needs the gold answer is not a</span>
+<span class="sd">  Signal at all; it is a Metric, and it belongs on the :func:`ek.score` side.</span>
+<span class="sd">- :func:`pairwise_judge` -- pairwise comparison needs *two* outputs and cannot fit</span>
+<span class="sd">  ``Signal.__call__(one_output)``. It is a helper, and it **swaps the order and averages** --</span>
+<span class="sd">  the standard, necessary correction for position bias.</span>
+
+<span class="sd">**Hard Rule 1 applies to judges.** A raw judge score is not a probability. Calibrate it before</span>
+<span class="sd">any :class:`~ek.base.DecisionPolicy` reads it -- :func:`ek.estimate_quality` already refuses to</span>
+<span class="sd">gate an uncalibrated signal, and a judge is no exception (-&gt; ``misc/docs/ek_03``).</span>
+
+<span class="sd">**Known facade limitation, stated plainly:** :func:`ek.estimate_quality` currently averages *all*</span>
+<span class="sd">raw signals into one confidence and calibrates that single mean. Mixing a judge score with, say,</span>
+<span class="sd">a logprob -- different scales, different reliabilities -- and fitting one calibrator over the</span>
+<span class="sd">mean is not statistically sound. Until per-signal-family calibration lands, either run the judge</span>
+<span class="sd">as the *only* signal, or calibrate it separately and pass the calibrated value.</span>
+
+<span class="sd">``ek`` never imports an LLM SDK: ``judge`` is an **injected callable**.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; stub = lambda output, *, criteria=&quot;&quot;, reference=None: 0.9 if &quot;meow&quot; in output else 0.1</span>
+<span class="sd">    &gt;&gt;&gt; sig = JudgeSignal(stub, criteria=&quot;Is the answer helpful?&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; sig(&quot;the cat says meow&quot;)</span>
+<span class="sd">    0.9</span>
+<span class="sd">    &gt;&gt;&gt; sig.cost_tier                       # the most expensive signal family</span>
+<span class="sd">    5</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Finding</span><span class="p">,</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">Score</span><span class="p">,</span> <span class="n">Severity</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..harness</span><span class="w"> </span><span class="kn">import</span> <span class="n">cohen_kappa</span><span class="p">,</span> <span class="n">krippendorff_alpha</span><span class="p">,</span> <span class="n">percent_agreement</span>
+
+<span class="c1">#: Judges are the most expensive signal family -- run cheap signals first and escalate.</span>
+<span class="n">JUDGE_COST_TIER</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1">#: Krippendorff conventions: &gt;= 0.8 is good agreement, 0.67-0.8 only tentative.</span>
+<span class="n">ALPHA_GOOD</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">ALPHA_TENTATIVE</span> <span class="o">=</span> <span class="mf">0.67</span>
+
+
+<span class="n">_ABSENT</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_output_of</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The text a judge should read, off an Episode, a FieldEstimate, or a raw value.</span>
+
+<span class="sd">    Presence of the attribute decides, not truthiness: an ``Episode(output=None)`` must hand the</span>
+<span class="sd">    judge ``None`` (an empty answer -- which a judge should score badly), never the Episode object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">):</span>
+        <span class="n">got</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">_ABSENT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">got</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_ABSENT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">got</span>
+    <span class="k">return</span> <span class="n">target</span>
+
+
+<div class="viewcode-block" id="JudgeSignal">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.JudgeSignal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JudgeSignal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference-free, criteria-only LLM judge as a :class:`~ek.base.Signal`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        judge: An **injected** callable ``(output, *, criteria) -&gt; float``. ``ek`` core never</span>
+<span class="sd">            imports an LLM client; you pass your own (or an ``ek[judge]`` adapter).</span>
+<span class="sd">        criteria: The rubric the judge scores against, bound at construction (exactly as</span>
+<span class="sd">            :class:`~ek.qe.signals.LogprobSignal` binds its aggregator), so the object still</span>
+<span class="sd">            satisfies ``Signal.__call__(output) -&gt; float``.</span>
+<span class="sd">        cost_tier: :data:`JUDGE_COST_TIER` -- the most expensive tier.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">judge</span><span class="p">:</span> <span class="n">Callable</span>
+    <span class="n">criteria</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">JUDGE_COST_TIER</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;judge&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">_output_of</span><span class="p">(</span><span class="n">target</span><span class="p">),</span> <span class="n">criteria</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="p">))</span>
+
+<div class="viewcode-block" id="JudgeSignal.finding">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.JudgeSignal.finding">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">rationale</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Finding</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Surface a judge&#39;s *rationale* as a :class:`~ek.base.Finding` (not just a scalar).</span>
+
+<span class="sd">        A judge&#39;s reasoning is auditable evidence; a bare number throws it away.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Finding</span><span class="p">(</span>
+            <span class="n">field</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="s2">&quot;judge&quot;</span><span class="p">,</span> <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">rationale</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="JudgeMetric">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.JudgeMetric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JudgeMetric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A **reference-based** LLM judge as a :class:`~ek.base.Metric` (the ``score()`` side).</span>
+
+<span class="sd">    A judge that reads the gold answer is not a reference-free signal, so it does not belong in</span>
+<span class="sd">    :func:`ek.estimate_quality`. It lives here.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        judge: Injected ``(output, *, criteria, reference) -&gt; float`` in ``[0, 1]``.</span>
+<span class="sd">        criteria: The rubric.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;judge&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">judge</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">criteria</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">judge</span> <span class="o">=</span> <span class="n">judge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span> <span class="o">=</span> <span class="n">criteria</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">_output_of</span><span class="p">(</span><span class="n">pred</span><span class="p">),</span> <span class="n">criteria</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="n">gold</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;judge&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="p">,</span> <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="JudgeMetric.aggregate">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.JudgeMetric.aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mean judge score (a judge score *is* per-item; there is no global accumulation).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span> <span class="k">if</span> <span class="n">scores</span> <span class="k">else</span> <span class="mf">0.0</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="pairwise_judge">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.pairwise_judge">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pairwise_judge</span><span class="p">(</span>
+    <span class="n">judge</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">criteria</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairwise preference for ``a`` over ``b``, **corrected for position bias**.</span>
+
+<span class="sd">    Position bias is not a rounding error -- judges materially prefer whichever answer they see</span>
+<span class="sd">    first. The standard correction is to ask twice with the order swapped and average, which is</span>
+<span class="sd">    why this cannot be a plain ``Signal`` (it needs two outputs).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        judge: Injected ``(a, b, *, criteria) -&gt; float`` in ``[0, 1]``, the preference for ``a``.</span>
+<span class="sd">        swap: Ask again with the arguments swapped and average (default; disable only if your</span>
+<span class="sd">            judge is known to be order-invariant).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Preference for ``a`` in ``[0, 1]`` (``0.5`` = a tie).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; first_wins = lambda x, y, *, criteria=&quot;&quot;: 1.0     # a maximally position-biased judge</span>
+<span class="sd">        &gt;&gt;&gt; pairwise_judge(first_wins, &quot;A&quot;, &quot;B&quot;)              # swapping exposes it as a tie</span>
+<span class="sd">        0.5</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">forward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">judge</span><span class="p">(</span><span class="n">_output_of</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">_output_of</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">swap</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">forward</span>
+    <span class="n">backward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">judge</span><span class="p">(</span><span class="n">_output_of</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">_output_of</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">criteria</span><span class="o">=</span><span class="n">criteria</span><span class="p">))</span>
+    <span class="c1"># backward is the preference for b; the preference for a is its complement.</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">forward</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">backward</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span></div>
+
+
+
+<div class="viewcode-block" id="judge_validation">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/judge.html#ek.agents.judge_validation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">judge_validation</span><span class="p">(</span>
+    <span class="n">judge_labels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">human_labels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nominal&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Certify a judge against human labels **before** trusting it. No new code -- reuse the IAA.</span>
+
+<span class="sd">    A judge is just another annotator, so ``ek``&#39;s existing inter-annotator-agreement machinery</span>
+<span class="sd">    (which already tells you the *ceiling* of a gold standard) is exactly the right instrument:</span>
+<span class="sd">    Krippendorff&#39;s alpha is the default (it alone handles any number of raters, any measurement</span>
+<span class="sd">    level, and missing data); Cohen&#39;s kappa applies for exactly two raters on complete nominal</span>
+<span class="sd">    data. This reproduces the MT-Bench judge-vs-human protocol.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``alpha``, ``kappa``, ``percent_agreement``, ``n``, and a ``verdict`` against the</span>
+<span class="sd">        conventional thresholds (alpha &gt;= 0.8 good, 0.67-0.8 tentative, below that unreliable).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; r = judge_validation([1, 1, 0, 0], [1, 1, 0, 0])</span>
+<span class="sd">        &gt;&gt;&gt; r[&quot;alpha&quot;], r[&quot;verdict&quot;]</span>
+<span class="sd">        (1.0, &#39;good&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">judge_labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">human_labels</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;judge and human must label the same items&quot;</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">krippendorff_alpha</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">judge_labels</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">human_labels</span><span class="p">)],</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">judge_labels</span><span class="p">),</span>
+        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span>
+        <span class="s2">&quot;percent_agreement&quot;</span><span class="p">:</span> <span class="n">percent_agreement</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">judge_labels</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">human_labels</span><span class="p">)),</span>
+        <span class="s2">&quot;verdict&quot;</span><span class="p">:</span> <span class="n">_alpha_verdict</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;nominal&quot;</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;kappa&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cohen_kappa</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">judge_labels</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">human_labels</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_alpha_verdict</span><span class="p">(</span><span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="n">ALPHA_GOOD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;good&quot;</span>
+    <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="n">ALPHA_TENTATIVE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;tentative&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;unreliable&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

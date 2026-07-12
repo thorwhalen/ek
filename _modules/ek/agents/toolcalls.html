@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.toolcalls &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.toolcalls</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.toolcalls</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tool-call correctness: BFCL-style AST matching over a *multiset* of calls.</span>
+
+<span class="sd">The Berkeley Function Calling Leaderboard defines the reference algorithm: parse the emitted</span>
+<span class="sd">call and -- **without executing it** -- check that the function name matches, that every</span>
+<span class="sd">expected argument is present with the right value (case-insensitive, whitespace-folded string</span>
+<span class="sd">comparison), and that no argument outside the schema was hallucinated. Arguments are matched</span>
+<span class="sd">**by name**, so argument *order* is irrelevant; element order *within a list value* is not</span>
+<span class="sd">(``misc/docs/ek_08``, ``misc/docs/ek_12``).</span>
+
+<span class="sd">**Why this cannot just reuse** :class:`~ek.metrics.fields.FieldMetric`. That metric compares two</span>
+<span class="sd">flat records *keyed by field name* -- the key **is** the alignment. A trajectory&#39;s tool calls are</span>
+<span class="sd">a **keyless multiset**: two ``search(q=...)`` calls collide onto one key, and reordering or</span>
+<span class="sd">repeating a call silently miscounts. So this module adds the missing layer -- an **assignment**</span>
+<span class="sd">between predicted and gold calls -- and then reuses ``FieldMetric``&#39;s exact TP/FP/FN accounting</span>
+<span class="sd">and micro-averaged aggregation on top of it.</span>
+
+<span class="sd">Cost-sensitivity is the reason to build this rather than borrow one: the per-argument weights</span>
+<span class="sd">come from the Layer-A grammar (``FieldSpec.importance``), so a wrong argument to a *destructive*</span>
+<span class="sd">tool is not one unit of error. No off-the-shelf tool-call metric models that.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.agents.base import Step</span>
+<span class="sd">    &gt;&gt;&gt; pred = [Step(&quot;search&quot;, {&quot;q&quot;: &quot;cats&quot;}), Step(&quot;answer&quot;, {&quot;a&quot;: &quot;meow&quot;})]</span>
+<span class="sd">    &gt;&gt;&gt; gold = [(&quot;search&quot;, {&quot;q&quot;: &quot;cats&quot;}), (&quot;answer&quot;, {&quot;a&quot;: &quot;meow&quot;})]</span>
+<span class="sd">    &gt;&gt;&gt; ToolCallMetric()(pred, gold).f1</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; hallucinated = [Step(&quot;search&quot;, {&quot;q&quot;: &quot;cats&quot;}), Step(&quot;delete_all&quot;, {})]</span>
+<span class="sd">    &gt;&gt;&gt; round(ToolCallMetric()(hallucinated, gold).f1, 3)     # 1 TP, 1 FP, 1 FN</span>
+<span class="sd">    0.5</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">Score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..canonicalize</span><span class="w"> </span><span class="kn">import</span> <span class="n">default_canonicalizer</span><span class="p">,</span> <span class="n">resolve_canonicalizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">as_call</span>
+
+<span class="n">_MISSING</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">recall</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">))</span> <span class="k">if</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_norm_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">canon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonicalize a value for comparison (strings folded; lists elementwise, order kept).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">canon</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">canon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_norm_value</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">canon</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_arg_costs</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">],</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-argument cost weights for a tool, read off the Layer-A grammar (default 1.0).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">grammar</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tool_weight</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">],</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">grammar</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span> <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_arg_diff</span><span class="p">(</span>
+    <span class="n">pred_args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">gold_args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">grammar</span><span class="p">,</span> <span class="n">canon</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Weighted TP/FP/FN over one call&#39;s arguments (the FieldMetric accounting, weighted).</span>
+
+<span class="sd">    A present-but-wrong argument counts as **both** spurious and missed -- the conventional</span>
+<span class="sd">    slot-error accounting ``FieldMetric`` uses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gold_args</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred_args</span><span class="p">)</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="n">_arg_costs</span><span class="p">(</span><span class="n">grammar</span><span class="p">,</span> <span class="n">tool</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+    <span class="n">tp</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">gold_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_MISSING</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">pred_args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">_MISSING</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">costs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="n">_MISSING</span><span class="p">:</span>  <span class="c1"># an argument the schema/gold never had -&gt; hallucinated</span>
+            <span class="n">fp</span> <span class="o">+=</span> <span class="n">w</span>
+        <span class="k">elif</span> <span class="n">p</span> <span class="ow">is</span> <span class="n">_MISSING</span><span class="p">:</span>  <span class="c1"># a required argument the agent omitted</span>
+            <span class="n">fn</span> <span class="o">+=</span> <span class="n">w</span>
+        <span class="k">elif</span> <span class="n">_norm_value</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">canon</span><span class="p">)</span> <span class="o">==</span> <span class="n">_norm_value</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">canon</span><span class="p">):</span>
+            <span class="n">tp</span> <span class="o">+=</span> <span class="n">w</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">+=</span> <span class="n">w</span>
+            <span class="n">fn</span> <span class="o">+=</span> <span class="n">w</span>
+    <span class="k">return</span> <span class="n">tp</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_call_matches</span><span class="p">(</span><span class="n">pred_args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">gold_args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">canon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exact AST match on one call&#39;s arguments (all present, all equal, none extra).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">pred_args</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gold_args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="n">_norm_value</span><span class="p">(</span><span class="n">pred_args</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">canon</span><span class="p">)</span> <span class="o">==</span> <span class="n">_norm_value</span><span class="p">(</span><span class="n">gold_args</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">canon</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">gold_args</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="match_calls">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/toolcalls.html#ek.agents.match_calls">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">match_calls</span><span class="p">(</span><span class="n">pred</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">canon</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assign predicted calls to gold calls -- the layer ``FieldMetric`` does not provide.</span>
+
+<span class="sd">    Calls are grouped by tool name (a call to the *wrong tool* is never a match). Within a tool</span>
+<span class="sd">    name, candidate pairs are scored and taken **globally best-first** (exact-argument matches</span>
+<span class="sd">    before partial ones, more agreeing arguments before fewer), so identical repeated calls are</span>
+<span class="sd">    interchangeable and a reordered pair is still matched -- while a strong pairing can never be</span>
+<span class="sd">    stolen by a weaker one that merely happened to come first in the prediction.</span>
+
+<span class="sd">    This is a deterministic greedy approximation to the optimal assignment. It is exact for the</span>
+<span class="sd">    common cases (distinct calls, repeats, reorderings); a full min-cost bipartite matching</span>
+<span class="sd">    (Hungarian) could differ only on pathological many-to-many partial-overlap sets, and is not</span>
+<span class="sd">    worth a dependency here.</span>
+
+<span class="sd">    Returns ``(pairs, unmatched_pred, unmatched_gold)``, ``pairs`` being ``(pred_call, gold_call)``.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; pairs, up, ug = match_calls([(&quot;s&quot;, {&quot;q&quot;: &quot;b&quot;}), (&quot;s&quot;, {&quot;q&quot;: &quot;a&quot;})],</span>
+<span class="sd">        ...                             [(&quot;s&quot;, {&quot;q&quot;: &quot;a&quot;}), (&quot;s&quot;, {&quot;q&quot;: &quot;b&quot;})])</span>
+<span class="sd">        &gt;&gt;&gt; len(pairs), up, ug          # order-insensitive within a tool name</span>
+<span class="sd">        (2, [], [])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pred_calls</span> <span class="o">=</span> <span class="p">[</span><span class="n">as_call</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pred</span><span class="p">]</span>
+    <span class="n">gold_calls</span> <span class="o">=</span> <span class="p">[</span><span class="n">as_call</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">gold</span><span class="p">]</span>
+
+    <span class="n">by_tool_gold</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">_args</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gold_calls</span><span class="p">):</span>
+        <span class="n">by_tool_gold</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">used_pred</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">used_gold</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">pairs</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Fast path: only when NEITHER side repeats a tool name is the assignment actually forced.</span>
+    <span class="c1"># (Requiring it of gold alone is a bug: with gold=[s(q=a)] and pred=[s(q=z), s(q=a)] the</span>
+    <span class="c1"># first-come rule would hand the gold call to the WRONG pred and discard the exact match.</span>
+    <span class="c1"># Then there is a genuine choice to make, and only the scored path can make it.)</span>
+    <span class="n">by_tool_pred</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">_args</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_calls</span><span class="p">):</span>
+        <span class="n">by_tool_pred</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">forced</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">by_tool_gold</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">by_tool_pred</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">forced</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p_i</span><span class="p">,</span> <span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">_p_args</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_calls</span><span class="p">):</span>
+            <span class="n">candidates</span> <span class="o">=</span> <span class="n">by_tool_gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="p">())</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">candidates</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">g_i</span> <span class="o">=</span> <span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">used_pred</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span>
+            <span class="n">used_gold</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">g_i</span><span class="p">)</span>
+            <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">p_i</span><span class="p">,</span> <span class="n">g_i</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Score every same-tool candidate pair, then take them globally best-first.</span>
+        <span class="n">candidates_scored</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p_i</span><span class="p">,</span> <span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="n">p_args</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_calls</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">g_i</span> <span class="ow">in</span> <span class="n">by_tool_gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="p">()):</span>
+                <span class="n">g_args</span> <span class="o">=</span> <span class="n">gold_calls</span><span class="p">[</span><span class="n">g_i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">exact</span> <span class="o">=</span> <span class="n">_call_matches</span><span class="p">(</span><span class="n">p_args</span><span class="p">,</span> <span class="n">g_args</span><span class="p">,</span> <span class="n">canon</span><span class="o">=</span><span class="n">canon</span><span class="p">)</span>
+                <span class="n">overlap</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">g_args</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">p_args</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">_norm_value</span><span class="p">(</span><span class="n">p_args</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">canon</span><span class="p">)</span> <span class="o">==</span> <span class="n">_norm_value</span><span class="p">(</span><span class="n">g_args</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">canon</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="c1"># Prefer exact, then most agreeing args; ties broken by position (determinism).</span>
+                <span class="n">candidates_scored</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span> <span class="k">if</span> <span class="n">exact</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">overlap</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">g_i</span><span class="p">))</span>
+        <span class="n">candidates_scored</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">_rank</span><span class="p">,</span> <span class="n">_neg_overlap</span><span class="p">,</span> <span class="n">p_i</span><span class="p">,</span> <span class="n">g_i</span> <span class="ow">in</span> <span class="n">candidates_scored</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p_i</span> <span class="ow">in</span> <span class="n">used_pred</span> <span class="ow">or</span> <span class="n">g_i</span> <span class="ow">in</span> <span class="n">used_gold</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">used_pred</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span>
+            <span class="n">used_gold</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">g_i</span><span class="p">)</span>
+            <span class="n">pairs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">p_i</span><span class="p">,</span> <span class="n">g_i</span><span class="p">))</span>
+
+    <span class="n">unmatched_pred</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pred_calls</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_pred</span><span class="p">]</span>
+    <span class="n">unmatched_gold</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gold_calls</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_gold</span><span class="p">]</span>
+    <span class="n">resolved</span> <span class="o">=</span> <span class="p">[(</span><span class="n">pred_calls</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">gold_calls</span><span class="p">[</span><span class="n">g</span><span class="p">])</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pairs</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">resolved</span><span class="p">,</span> <span class="n">unmatched_pred</span><span class="p">,</span> <span class="n">unmatched_gold</span></div>
+
+
+
+<div class="viewcode-block" id="ToolCallMetric">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/toolcalls.html#ek.agents.ToolCallMetric">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolCallMetric</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool-call correctness (BFCL AST match) as a cost-weighted :class:`~ek.base.Metric`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        level: ``&quot;call&quot;`` (default) scores whole calls -- a call is a TP only on an exact AST</span>
+<span class="sd">            match; ``&quot;arg&quot;`` gives partial credit at argument granularity.</span>
+<span class="sd">        canonicalizer: ``str -&gt; str`` applied to string arguments before comparison</span>
+<span class="sd">            (BFCL&#39;s case/whitespace folding). Defaults to ``ek``&#39;s default canonicalizer.</span>
+<span class="sd">        grammar: Layer-A grammar supplying per-tool and per-argument cost weights (may also be</span>
+<span class="sd">            passed per call).</span>
+
+<span class="sd">    The ``Score`` carries ``tp``/``fp``/``fn`` in ``detail`` so :func:`ek.evaluate` aggregates a</span>
+<span class="sd">    correct **micro**-averaged F1 over the corpus rather than averaging per-episode F1s.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;tool_call&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;call&quot;</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">canonicalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;call&quot;</span><span class="p">,</span> <span class="s2">&quot;arg&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;level must be &#39;call&#39; or &#39;arg&#39;, got </span><span class="si">{</span><span class="n">level</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="c1"># BFCL compares argument values case-insensitively with whitespace folding, so unlike</span>
+        <span class="c1"># the IE metrics (where None means &quot;compare raw&quot;) the default here is the standard</span>
+        <span class="c1"># canonicalizer. Pass ``canonicalizer=str`` for a raw, byte-exact comparison.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">resolve_canonicalizer</span><span class="p">(</span><span class="n">canonicalizer</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">canonicalizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="n">default_canonicalizer</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span> <span class="o">=</span> <span class="n">grammar</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">grammar</span> <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span>
+        <span class="n">canon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span>
+        <span class="n">pred_calls</span> <span class="o">=</span> <span class="n">_calls_of</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+        <span class="n">gold_calls</span> <span class="o">=</span> <span class="n">_calls_of</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span>
+
+        <span class="n">pairs</span><span class="p">,</span> <span class="n">extra</span><span class="p">,</span> <span class="n">missed</span> <span class="o">=</span> <span class="n">match_calls</span><span class="p">(</span><span class="n">pred_calls</span><span class="p">,</span> <span class="n">gold_calls</span><span class="p">,</span> <span class="n">canon</span><span class="o">=</span><span class="n">canon</span><span class="p">)</span>
+
+        <span class="n">tp</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">p_tool</span><span class="p">,</span> <span class="n">p_args</span><span class="p">),</span> <span class="p">(</span><span class="n">g_tool</span><span class="p">,</span> <span class="n">g_args</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;call&quot;</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">_tool_weight</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">g_tool</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">_call_matches</span><span class="p">(</span><span class="n">p_args</span><span class="p">,</span> <span class="n">g_args</span><span class="p">,</span> <span class="n">canon</span><span class="o">=</span><span class="n">canon</span><span class="p">):</span>
+                    <span class="n">tp</span> <span class="o">+=</span> <span class="n">w</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># right tool, wrong arguments -&gt; both spurious and missed</span>
+                    <span class="n">fp</span> <span class="o">+=</span> <span class="n">w</span>
+                    <span class="n">fn</span> <span class="o">+=</span> <span class="n">w</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">a_tp</span><span class="p">,</span> <span class="n">a_fp</span><span class="p">,</span> <span class="n">a_fn</span> <span class="o">=</span> <span class="n">_arg_diff</span><span class="p">(</span>
+                    <span class="n">p_args</span><span class="p">,</span> <span class="n">g_args</span><span class="p">,</span> <span class="n">tool</span><span class="o">=</span><span class="n">g_tool</span><span class="p">,</span> <span class="n">grammar</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">canon</span><span class="o">=</span><span class="n">canon</span>
+                <span class="p">)</span>
+                <span class="n">tp</span> <span class="o">+=</span> <span class="n">a_tp</span>
+                <span class="n">fp</span> <span class="o">+=</span> <span class="n">a_fp</span>
+                <span class="n">fn</span> <span class="o">+=</span> <span class="n">a_fn</span>
+
+        <span class="c1"># A call the agent invented (including a should-not-call) is pure FP; one it skipped, FN.</span>
+        <span class="k">for</span> <span class="n">tool</span><span class="p">,</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">+=</span> <span class="n">_tool_weight</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">tool</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span>
+                <span class="mf">0.0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;call&quot;</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="n">_arg_costs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">tool</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="p">)</span>
+        <span class="k">for</span> <span class="n">tool</span><span class="p">,</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">missed</span><span class="p">:</span>
+            <span class="n">fn</span> <span class="o">+=</span> <span class="n">_tool_weight</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">tool</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span>
+                <span class="mf">0.0</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;call&quot;</span> <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="n">_arg_costs</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">tool</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="p">)</span>
+
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">fn</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">fp</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
+            <span class="n">recall</span><span class="o">=</span><span class="n">recall</span><span class="p">,</span>
+            <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;tool_call&quot;</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;tp&quot;</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span>
+                <span class="s2">&quot;fp&quot;</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span>
+                <span class="s2">&quot;fn&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span>
+                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+                <span class="s2">&quot;n_matched&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">),</span>
+                <span class="s2">&quot;n_spurious&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">extra</span><span class="p">),</span>
+                <span class="s2">&quot;n_missed&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">missed</span><span class="p">),</span>
+                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="ToolCallMetric.aggregate">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/toolcalls.html#ek.agents.ToolCallMetric.aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Micro-averaged F1 over the corpus (sum TP/FP/FN, then divide) -- never a mean.&quot;&quot;&quot;</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tp&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fp&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fn&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span> <span class="o">+</span> <span class="n">fn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span>  <span class="c1"># nothing to call and nothing called -&gt; perfect</span>
+        <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">recall</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="n">_f1</span><span class="p">(</span><span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_calls_of</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a call sequence off an Episode, a Trajectory, or a bare list of calls.&quot;&quot;&quot;</span>
+    <span class="n">traj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">traj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">traj</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;ToolCallMetric needs an Episode, a Trajectory, or a sequence of calls; &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

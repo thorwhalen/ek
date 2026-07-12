@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.tools &mdash; ek 0.1.7 documentation</title>
+  <title>ek.tools &mdash; ek 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=ca7ad2ea"></script>
+      <script src="../../_static/documentation_options.js?v=22607128"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,6 +48,16 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek.html">ek</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/base.html">ek.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/ek/facade.html">ek.facade</a></li>
@@ -199,8 +209,74 @@
 
 
 
+<span class="c1"># --- agent &amp; assistant evaluation (cost per successful task) ---------------------</span>
+
+
+<div class="viewcode-block" id="pass_k">
+<a class="viewcode-back" href="../../module_docs/ek/tools.html#ek.tools.pass_k">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pass_k</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;pass@k (capability) and pass^k (reliability) from ``c`` successes in ``n`` trials.</span>
+
+<span class="sd">    ``pass@k`` asks &quot;can it *ever* do this?&quot;; ``pass^k`` asks &quot;does it do this *every* time?&quot;</span>
+<span class="sd">    -- and only the second is a production number.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        python -m ek pass-k 10 9 --k 8      # a 90%-reliable agent, judged over 8 trials</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">pass_at_k</span><span class="p">,</span> <span class="n">pass_hat_k</span>
+
+    <span class="c1"># This module is the string-in/value-out dispatch layer (the CLI hands us strings).</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span>
+        <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span>
+        <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span>
+        <span class="s2">&quot;pass_at_k&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="s2">&quot;pass_hat_k&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">),</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="cost_per_success">
+<a class="viewcode-back" href="../../module_docs/ek/tools.html#ek.tools.cost_per_success">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cost_per_success</span><span class="p">(</span>
+    <span class="n">total_dollars</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">successes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">attempts</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost-of-Pass: dollars per *successfully completed* task (``inf`` if none succeeded).</span>
+
+<span class="sd">    The unit that matters for an agent -- tokens spent on a failed episode are pure waste.</span>
+
+<span class="sd">    Example::</span>
+
+<span class="sd">        python -m ek cost-per-success 12.50 5 --attempts 20</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">cost_of_pass</span>
+
+    <span class="n">total_dollars</span><span class="p">,</span> <span class="n">successes</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">total_dollars</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">successes</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;total_dollars&quot;</span><span class="p">:</span> <span class="n">total_dollars</span><span class="p">,</span>
+        <span class="s2">&quot;successes&quot;</span><span class="p">:</span> <span class="n">successes</span><span class="p">,</span>
+        <span class="s2">&quot;cost_per_success&quot;</span><span class="p">:</span> <span class="n">cost_of_pass</span><span class="p">(</span><span class="n">total_dollars</span><span class="p">,</span> <span class="n">successes</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">attempts</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;success_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">successes</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="n">attempts</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
 <span class="c1">#: SSOT of the functions exposed by the ``ek`` CLI.</span>
-<span class="n">_dispatch_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">cer</span><span class="p">,</span> <span class="n">wer</span><span class="p">,</span> <span class="n">rover</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">engines</span><span class="p">,</span> <span class="n">version</span><span class="p">]</span>
+<span class="n">_dispatch_funcs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">cer</span><span class="p">,</span>
+    <span class="n">wer</span><span class="p">,</span>
+    <span class="n">rover</span><span class="p">,</span>
+    <span class="n">pass_k</span><span class="p">,</span>
+    <span class="n">cost_per_success</span><span class="p">,</span>
+    <span class="n">where</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">,</span>
+    <span class="n">engines</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">,</span>
+<span class="p">]</span>
 </pre></div>
 
            </div>

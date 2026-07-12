@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek &mdash; ek 0.1.7 documentation</title>
+  <title>ek &mdash; ek 0.1.8 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=ca7ad2ea"></script>
+      <script src="../_static/documentation_options.js?v=22607128"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -76,6 +76,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.Decision"><code class="docutils literal notranslate"><span class="pre">Decision</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.DecisionPolicy"><code class="docutils literal notranslate"><span class="pre">DecisionPolicy</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.EdgeType"><code class="docutils literal notranslate"><span class="pre">EdgeType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.Episode"><code class="docutils literal notranslate"><span class="pre">Episode</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Episode.calls"><code class="docutils literal notranslate"><span class="pre">Episode.calls</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.Episode.graded"><code class="docutils literal notranslate"><span class="pre">Episode.graded()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.FieldEstimate"><code class="docutils literal notranslate"><span class="pre">FieldEstimate</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.FieldMetric"><code class="docutils literal notranslate"><span class="pre">FieldMetric</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.FieldMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">FieldMetric.aggregate()</span></code></a></li>
@@ -157,6 +162,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#ek.Table.from_html"><code class="docutils literal notranslate"><span class="pre">Table.from_html()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.TaskSpec"><code class="docutils literal notranslate"><span class="pre">TaskSpec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.TaskSpec.grammar"><code class="docutils literal notranslate"><span class="pre">TaskSpec.grammar()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.TedsMetric"><code class="docutils literal notranslate"><span class="pre">TedsMetric</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.TedsMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">TedsMetric.aggregate()</span></code></a></li>
 </ul>
@@ -164,6 +173,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ek.TemperatureCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.fit()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ek.TemperatureCalibrator.t_min"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.t_min</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.ToolSpec"><code class="docutils literal notranslate"><span class="pre">ToolSpec</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.ToolSpec.to_node_type"><code class="docutils literal notranslate"><span class="pre">ToolSpec.to_node_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ek.ToolSpec.weight"><code class="docutils literal notranslate"><span class="pre">ToolSpec.weight</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.TypeRef"><code class="docutils literal notranslate"><span class="pre">TypeRef</span></code></a></li>
@@ -219,6 +233,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.mall"><code class="docutils literal notranslate"><span class="pre">mall()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.names"><code class="docutils literal notranslate"><span class="pre">names()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.ordering_validator"><code class="docutils literal notranslate"><span class="pre">ordering_validator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.pass_at_k"><code class="docutils literal notranslate"><span class="pre">pass_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.pass_hat_k"><code class="docutils literal notranslate"><span class="pre">pass_hat_k()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.percent_agreement"><code class="docutils literal notranslate"><span class="pre">percent_agreement()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.persistent_cache"><code class="docutils literal notranslate"><span class="pre">persistent_cache()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.range_validator"><code class="docutils literal notranslate"><span class="pre">range_validator()</span></code></a></li>
@@ -231,6 +247,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ek.resolve_table_parser"><code class="docutils literal notranslate"><span class="pre">resolve_table_parser()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.risk_coverage_curve"><code class="docutils literal notranslate"><span class="pre">risk_coverage_curve()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.rover"><code class="docutils literal notranslate"><span class="pre">rover()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.run_suite"><code class="docutils literal notranslate"><span class="pre">run_suite()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.save_baseline"><code class="docutils literal notranslate"><span class="pre">save_baseline()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.save_calibrator"><code class="docutils literal notranslate"><span class="pre">save_calibrator()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.schema_validator"><code class="docutils literal notranslate"><span class="pre">schema_validator()</span></code></a></li>
@@ -245,6 +262,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ek/agents/trajectory.html">ek.agents.trajectory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/base.html">ek.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/canonicalize.html">ek.canonicalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ek/facade.html">ek.facade</a></li>
@@ -515,6 +542,47 @@ failed verifier is what forces a block, upstream).</p></li>
 <dt class="sig sig-object py" id="ek.EdgeType">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">EdgeType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/base.html#EdgeType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.EdgeType" title="Link to this definition"></a></dt>
 <dd><p>A directed relation kind between two <a class="reference internal" href="#ek.NodeType" title="ek.NodeType"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeType</span></code></a> names.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.Episode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">Episode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/agents/base.html#ek.agents.base.Trajectory" title="ek.agents.base.Trajectory"><span class="pre">Trajectory</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/agents/base.html#ek.agents.base.Cost" title="ek.agents.base.Cost"><span class="pre">Cost</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/agents/base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><span class="pre">RunProvenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/base.html#ek.base.Provenance" title="ek.base.Provenance"><span class="pre">Provenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/base.html#Episode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Episode" title="Link to this definition"></a></dt>
+<dd><p>Layer B: one agent run over one task – the object agent evaluation scores.</p>
+<p>The direct analog of <code class="docutils literal notranslate"><span class="pre">AnnotatedExtraction</span></code>: it rides alongside the frozen Layer-A
+grammar and carries the run’s metadata. It is scored <em>offline</em> against gold
+(<a class="reference internal" href="#ek.score" title="ek.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.score()</span></code></a> / <a class="reference internal" href="#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a>) and estimated <em>online</em> against a judge or a
+consensus (<a class="reference internal" href="#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a>) – the same object, both halves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Which task this episode answers (the k-trial grouping key).</p></li>
+<li><p><strong>trajectory</strong> – The tool calls taken.</p></li>
+<li><p><strong>output</strong> – The agent’s final user-facing answer.</p></li>
+<li><p><strong>final_state</strong> – The end state of the world (the DB, the filesystem) – what a
+state-based oracle actually grades. Success is a <em>final-state</em> check, not a
+surface-text check.</p></li>
+<li><p><strong>cost</strong> – The <code class="xref py py-class docutils literal notranslate"><span class="pre">Cost</span></code> consumed.</p></li>
+<li><p><strong>success</strong> – Filled in by a checker; <code class="docutils literal notranslate"><span class="pre">None</span></code> until graded.</p></li>
+<li><p><strong>run</strong> – The <code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code> (seed, model, simulator, suite version).</p></li>
+<li><p><strong>provenance</strong> – Optional core <a class="reference internal" href="ek/base.html#ek.base.Provenance" title="ek.base.Provenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">Provenance</span></code></a> for click-to-source audit.</p></li>
+<li><p><strong>meta</strong> – Anything else the bridge captured.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.Episode.calls">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">calls</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#ek.Episode.calls" title="Link to this definition"></a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">(tool,</span> <span class="pre">args)</span></code> pairs taken, in order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.Episode.graded">
+<span class="sig-name descname"><span class="pre">graded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/agents/base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><span class="pre">Episode</span></a></span></span><a class="reference internal" href="../_modules/ek/agents/base.html#Episode.graded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.Episode.graded" title="Link to this definition"></a></dt>
+<dd><p>A copy with <code class="docutils literal notranslate"><span class="pre">success</span></code> set (never mutates – grading stays idempotent).</p>
+<p><code class="docutils literal notranslate"><span class="pre">meta</span></code> is copied too: <code class="docutils literal notranslate"><span class="pre">dataclasses.replace</span></code> is a <em>shallow</em> copy, so without this
+the “copy” would share the original’s mutable <code class="docutils literal notranslate"><span class="pre">meta</span></code> dict.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1036,6 +1104,34 @@ GriTS aligns position-by-position.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="ek.TaskSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">TaskSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tools</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/agents/base.html#ek.agents.base.ToolSpec" title="ek.agents.base.ToolSpec"><span class="pre">ToolSpec</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/base.html#TaskSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.TaskSpec" title="Link to this definition"></a></dt>
+<dd><p>One task in a suite: its input, its oracle, its value, and its allowed tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Stable identifier (the grouping key for k-trial reliability).</p></li>
+<li><p><strong>input</strong> – Whatever the agent under test is called with.</p></li>
+<li><p><strong>gold</strong> – The reference the checker grades against (a goal state, an expected answer,
+a gold trajectory – the checker decides how to read it).</p></li>
+<li><p><strong>value</strong> – Task-level cost weight: how much a completed task is worth. The task-level
+analog of <code class="docutils literal notranslate"><span class="pre">FieldSpec.importance</span></code>; feeds value-weighted cost accounting.</p></li>
+<li><p><strong>tools</strong> – The tools this task permits (the Layer-A grammar for the task).</p></li>
+<li><p><strong>slice</strong> – Optional slice label (domain, difficulty, language) – per-slice cuts are
+mandatory, not optional (a low pass^k concentrated in one hard slice is a
+different problem from uniform flakiness).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.TaskSpec.grammar">
+<span class="sig-name descname"><span class="pre">grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/base.html#ek.base.GraphGrammar" title="ek.base.GraphGrammar"><span class="pre">GraphGrammar</span></a></span></span><a class="reference internal" href="../_modules/ek/agents/base.html#TaskSpec.grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.TaskSpec.grammar" title="Link to this definition"></a></dt>
+<dd><p>The Layer-A grammar for this task’s tool set.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="ek.TedsMetric">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">TedsMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">structure_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/metrics/tables.html#TedsMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.TedsMetric" title="Link to this definition"></a></dt>
 <dd><p>TEDS / TEDS-Struct as a <a class="reference internal" href="ek/base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (clean-room on <code class="docutils literal notranslate"><span class="pre">apted</span></code>).</p>
@@ -1074,6 +1170,38 @@ probability. <code class="docutils literal notranslate"><span class="pre">T</spa
 <dt class="sig sig-object py" id="ek.TemperatureCalibrator.t_min">
 <span class="sig-name descname"><span class="pre">t_min</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></span><a class="headerlink" href="#ek.TemperatureCalibrator.t_min" title="Link to this definition"></a></dt>
 <dd><p>Golden-section search bounds and iteration count (config, not magic numbers).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.ToolSpec">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">ToolSpec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~ek.base.FieldSpec]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">importance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/base.html#ToolSpec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ToolSpec" title="Link to this definition"></a></dt>
+<dd><p>One tool the agent may call: its argument schema and its error costs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The tool/function name (the AST-match ground truth).</p></li>
+<li><p><strong>params</strong> – Argument name -&gt; <a class="reference internal" href="ek/base.html#ek.base.FieldSpec" title="ek.base.FieldSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldSpec</span></code></a>. Each spec’s <code class="docutils literal notranslate"><span class="pre">importance</span></code>
+is the cost of getting <em>that argument</em> wrong, and its <code class="docutils literal notranslate"><span class="pre">domain</span></code> feeds
+validators – the same contract as an extracted field.</p></li>
+<li><p><strong>importance</strong> – Cost weight of the <em>call itself</em> (a missing or spurious call).
+Defaults to <code class="xref py py-data docutils literal notranslate"><span class="pre">DESTRUCTIVE_WEIGHT</span></code> when <code class="docutils literal notranslate"><span class="pre">destructive</span></code> is set, else 1.0.</p></li>
+<li><p><strong>destructive</strong> – Whether calling this tool mutates the world irreversibly (a refund,
+a delete, a send). Drives the default weight and the safety validators.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.ToolSpec.to_node_type">
+<span class="sig-name descname"><span class="pre">to_node_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/base.html#ek.base.NodeType" title="ek.base.NodeType"><span class="pre">NodeType</span></a></span></span><a class="reference internal" href="../_modules/ek/agents/base.html#ToolSpec.to_node_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.ToolSpec.to_node_type" title="Link to this definition"></a></dt>
+<dd><p>Render this tool as a Layer-A <a class="reference internal" href="ek/base.html#ek.base.NodeType" title="ek.base.NodeType"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeType</span></code></a> (args as fields).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.ToolSpec.weight">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">weight</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></span><a class="headerlink" href="#ek.ToolSpec.weight" title="Link to this definition"></a></dt>
+<dd><p>The call-level cost weight (explicit, else destructive-aware default).</p>
 </dd></dl>
 
 </dd></dl>
@@ -1865,6 +1993,38 @@ partial records.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ek.pass_at_k">
+<span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">pass_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/agents/reliability.html#pass_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.pass_at_k" title="Link to this definition"></a></dt>
+<dd><p>Unbiased <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code>: probability that <strong>at least one</strong> of k samples succeeds.</p>
+<p>The HumanEval estimator <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">C(n-c,</span> <span class="pre">k)</span> <span class="pre">/</span> <span class="pre">C(n,</span> <span class="pre">k)</span></code> over <code class="docutils literal notranslate"><span class="pre">n</span></code> trials with <code class="docutils literal notranslate"><span class="pre">c</span></code>
+successes. This is the <strong>capability</strong> metric – right when a single success is enough
+(offline candidate generation behind a verifier).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.pass_hat_k">
+<span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">pass_hat_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/agents/reliability.html#pass_hat_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.pass_hat_k" title="Link to this definition"></a></dt>
+<dd><p>Unbiased <code class="docutils literal notranslate"><span class="pre">pass^k</span></code>: probability that <strong>all k</strong> independent trials succeed.</p>
+<p>The tau-bench estimator <code class="docutils literal notranslate"><span class="pre">C(c,</span> <span class="pre">k)</span> <span class="pre">/</span> <span class="pre">C(n,</span> <span class="pre">k)</span></code>; for a per-trial success probability <code class="docutils literal notranslate"><span class="pre">p</span></code>
+it decays to <code class="docutils literal notranslate"><span class="pre">p**k</span></code>. This is the <strong>reliability</strong> metric – the one that matters when
+consistency <em>is</em> the product.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.21428571428571427</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ek.percent_agreement">
 <span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">percent_agreement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rater_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rater_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/ek/harness.html#percent_agreement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.percent_agreement" title="Link to this definition"></a></dt>
 <dd><p>Raw fraction of items two raters labelled identically.</p>
@@ -2031,6 +2191,43 @@ default <code class="xref py py-func docutils literal notranslate"><span class="
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A <a class="reference internal" href="#ek.RoverConsensus" title="ek.RoverConsensus"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a> with the consensus <code class="docutils literal notranslate"><span class="pre">tokens</span></code>/<code class="docutils literal notranslate"><span class="pre">text</span></code>, the per-slot
 breakdown, and the per-consensus-token <code class="docutils literal notranslate"><span class="pre">agreement</span></code> usable as a raw signal.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.run_suite">
+<span class="sig-prename descclassname"><span class="pre">ek.</span></span><span class="sig-name descname"><span class="pre">run_suite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="ek/agents/base.html#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><span class="pre">TaskSpec</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/agents/cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="ek/agents/cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="ek/agents/base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><span class="pre">RunProvenance</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="ek/agents/reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><span class="pre">ReliabilityReport</span></a></span></span><a class="reference internal" href="../_modules/ek/agents/harness.html#run_suite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.run_suite" title="Link to this definition"></a></dt>
+<dd><p>Run <code class="docutils literal notranslate"><span class="pre">agent</span></code> over a task suite, <code class="docutils literal notranslate"><span class="pre">k</span></code> trials per task, and report reliability + cost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>agent</strong> – The system under test: <code class="docutils literal notranslate"><span class="pre">TaskSpec</span> <span class="pre">-&gt;</span> <span class="pre">Episode</span></code> (a bare answer is wrapped). It
+receives the whole spec – <code class="docutils literal notranslate"><span class="pre">.input</span></code>, <code class="docutils literal notranslate"><span class="pre">.tools</span></code>, <code class="docutils literal notranslate"><span class="pre">.gold</span></code> – not just the input.
+If it accepts a keyword <code class="docutils literal notranslate"><span class="pre">seed</span></code>, the per-trial seed is passed to it.</p></li>
+<li><p><strong>tasks</strong> – <a class="reference internal" href="ek/agents/base.html#ek.agents.base.TaskSpec" title="ek.agents.base.TaskSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskSpec</span></code></a> s (or a <code class="docutils literal notranslate"><span class="pre">{task_id:</span> <span class="pre">spec}</span></code> mapping).</p></li>
+<li><p><strong>k</strong> – Trials per task. <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> is what makes <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> meaningful – and it only means
+anything if the agent is genuinely stochastic (the report warns if it is not).</p></li>
+<li><p><strong>check</strong> – The success oracle – a registered checker name or an <code class="docutils literal notranslate"><span class="pre">(episode,</span> <span class="pre">gold)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code>
+callable. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>; <strong>inject a state-based/executable oracle</strong> for a
+real suite, and run it isolated from the agent.</p></li>
+<li><p><strong>metrics</strong> – Optional <code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">Metric}</span></code> scored on every episode against <code class="docutils literal notranslate"><span class="pre">task.gold</span></code>, with
+the <strong>suite’s Layer-A grammar injected</strong> – this is how the tool/argument cost
+weights reach a <code class="docutils literal notranslate"><span class="pre">tool_call</span></code>/<code class="docutils literal notranslate"><span class="pre">trajectory</span></code> metric. Results land in
+<code class="docutils literal notranslate"><span class="pre">report.detail[&quot;metrics&quot;]</span></code>.</p></li>
+<li><p><strong>price/prices</strong> – Rates for costing the episodes (see <a class="reference internal" href="ek/agents/cost.html#module-ek.agents.cost" title="ek.agents.cost"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.cost</span></code></a>).</p></li>
+<li><p><strong>run</strong> – <a class="reference internal" href="ek/agents/base.html#ek.agents.base.RunProvenance" title="ek.agents.base.RunProvenance"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code></a> for this run (model, simulator, suite
+version, scaffold). Recorded on every episode and on any baseline saved from it.</p></li>
+<li><p><strong>seed</strong> – Base RNG seed. Trial <em>i</em> of each task uses <code class="docutils literal notranslate"><span class="pre">seed</span> <span class="pre">+</span> <span class="pre">i</span></code>: it is recorded on the
+episode’s provenance <strong>and passed to the agent</strong> when the agent accepts a <code class="docutils literal notranslate"><span class="pre">seed</span></code>
+keyword.</p></li>
+<li><p><strong>persist/run_id/rootdir</strong> – Persist the run to the <code class="docutils literal notranslate"><span class="pre">runs</span></code>/<code class="docutils literal notranslate"><span class="pre">results</span></code> stores.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="ek/agents/reliability.html#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliabilityReport</span></code></a> carrying <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code>, <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> (with
+a bootstrap CI), the success rate (with a Wilson CI), the per-slice cuts, and the cost
+report – because reliability without cost is only half the answer.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,0 +1,577 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.base &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Agent-evaluation data shapes: the episode (Layer B) and the task/tool grammar (Layer A).</span>
+
+<span class="sd">Evaluating an *agent* is the same two-layer problem ``ek`` already solves for</span>
+<span class="sd">information extraction -- only the evaluated object changes. An extraction is a</span>
+<span class="sd">static payload; an **episode** is a *process*: a sequence of tool calls and</span>
+<span class="sd">observations ending in a final state. So:</span>
+
+<span class="sd">- **Layer A -- the task/tool grammar.** :class:`ToolSpec` and :class:`TaskSpec` are</span>
+<span class="sd">  *builders* over the existing :class:`~ek.base.GraphGrammar`: a tool becomes a</span>
+<span class="sd">  :class:`~ek.base.NodeType` whose fields are its argument :class:`~ek.base.FieldSpec` s,</span>
+<span class="sd">  and ``importance`` carries the **cost of getting that argument wrong**. A wrong</span>
+<span class="sd">  argument to a *destructive* tool is not one unit of error. This reuses the Layer-A</span>
+<span class="sd">  cost-weight SSOT rather than inventing a parallel schema.</span>
+<span class="sd">- **Layer B -- the episode.** :class:`Episode` carries the :class:`Trajectory`, the</span>
+<span class="sd">  :class:`Cost`, the outcome, and the :class:`RunProvenance` -- riding *alongside* the</span>
+<span class="sd">  frozen grammar, never mutating it, exactly as ``AnnotatedExtraction`` does.</span>
+
+<span class="sd">These shapes live here, **not** in :mod:`ek.base`: that module is the zero-dependency,</span>
+<span class="sd">IE-schema-only SSOT, and the OCR instance sets the precedent that an instance&#39;s concrete</span>
+<span class="sd">shapes stay out of core (core duck-types them). Nothing here is imported by ``ek`` core.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.base import FieldSpec</span>
+<span class="sd">    &gt;&gt;&gt; book = ToolSpec(&quot;book_flight&quot;, params={&quot;flight&quot;: FieldSpec(&quot;flight&quot;, &quot;string&quot;),</span>
+<span class="sd">    ...                                        &quot;seat&quot;: FieldSpec(&quot;seat&quot;, &quot;string&quot;)})</span>
+<span class="sd">    &gt;&gt;&gt; refund = ToolSpec(&quot;refund&quot;, params={&quot;amount&quot;: FieldSpec(&quot;amount&quot;, &quot;number&quot;,</span>
+<span class="sd">    ...                                     importance=20.0)}, destructive=True)</span>
+<span class="sd">    &gt;&gt;&gt; g = tool_grammar(book, refund)</span>
+<span class="sd">    &gt;&gt;&gt; g.field_cost(&quot;refund&quot;, &quot;amount&quot;)        # a wrong refund amount is expensive</span>
+<span class="sd">    20.0</span>
+<span class="sd">    &gt;&gt;&gt; g.field_cost(&quot;book_flight&quot;, &quot;seat&quot;)     # a wrong seat is not</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">See ``misc/docs/ek_07`` (the map) and ``misc/docs/ek_12`` (the integration report).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span><span class="p">,</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">NodeType</span><span class="p">,</span> <span class="n">Provenance</span>
+
+<span class="c1">#: Default value of a completed task (the task-level analog of ``FieldSpec.importance``).</span>
+<span class="n">DEFAULT_TASK_VALUE</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="c1">#: Multiplier applied to a destructive tool&#39;s importance when it is not set explicitly.</span>
+<span class="c1">#: Calling a destructive tool wrongly is categorically worse than calling a read-only one;</span>
+<span class="c1">#: a keyword-tunable default, never a magic number buried in a metric.</span>
+<span class="n">DESTRUCTIVE_WEIGHT</span> <span class="o">=</span> <span class="mf">10.0</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Layer A -- the task/tool grammar (builders over GraphGrammar)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="ToolSpec">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.ToolSpec">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ToolSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One tool the agent may call: its argument schema and its error costs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: The tool/function name (the AST-match ground truth).</span>
+<span class="sd">        params: Argument name -&gt; :class:`~ek.base.FieldSpec`. Each spec&#39;s ``importance``</span>
+<span class="sd">            is the cost of getting *that argument* wrong, and its ``domain`` feeds</span>
+<span class="sd">            validators -- the same contract as an extracted field.</span>
+<span class="sd">        importance: Cost weight of the *call itself* (a missing or spurious call).</span>
+<span class="sd">            Defaults to :data:`DESTRUCTIVE_WEIGHT` when ``destructive`` is set, else 1.0.</span>
+<span class="sd">        destructive: Whether calling this tool mutates the world irreversibly (a refund,</span>
+<span class="sd">            a delete, a send). Drives the default weight and the safety validators.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">FieldSpec</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">importance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">destructive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The call-level cost weight (explicit, else destructive-aware default).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">importance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">importance</span>
+        <span class="k">return</span> <span class="n">DESTRUCTIVE_WEIGHT</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">destructive</span> <span class="k">else</span> <span class="mf">1.0</span>
+
+<div class="viewcode-block" id="ToolSpec.to_node_type">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.ToolSpec.to_node_type">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_node_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeType</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render this tool as a Layer-A :class:`~ek.base.NodeType` (args as fields).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NodeType</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">),</span> <span class="n">importance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="tool_grammar">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.tool_grammar">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">tool_grammar</span><span class="p">(</span><span class="o">*</span><span class="n">tools</span><span class="p">:</span> <span class="n">ToolSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphGrammar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the Layer-A :class:`~ek.base.GraphGrammar` from :class:`ToolSpec` s.</span>
+
+<span class="sd">    The resulting grammar is the frozen cost SSOT every agent metric reads: node cost =</span>
+<span class="sd">    the tool&#39;s call weight, field cost = the argument&#39;s importance.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from ek.base import FieldSpec</span>
+<span class="sd">        &gt;&gt;&gt; g = tool_grammar(ToolSpec(&quot;send&quot;, params={&quot;to&quot;: FieldSpec(&quot;to&quot;)},</span>
+<span class="sd">        ...                           destructive=True))</span>
+<span class="sd">        &gt;&gt;&gt; g.node_cost(&quot;send&quot;)</span>
+<span class="sd">        10.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">GraphGrammar</span><span class="p">(</span><span class="n">node_types</span><span class="o">=</span><span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">to_node_type</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="TaskSpec">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.TaskSpec">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TaskSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One task in a suite: its input, its oracle, its value, and its allowed tools.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        task_id: Stable identifier (the grouping key for k-trial reliability).</span>
+<span class="sd">        input: Whatever the agent under test is called with.</span>
+<span class="sd">        gold: The reference the checker grades against (a goal state, an expected answer,</span>
+<span class="sd">            a gold trajectory -- the checker decides how to read it).</span>
+<span class="sd">        value: Task-level cost weight: how much a completed task is worth. The task-level</span>
+<span class="sd">            analog of ``FieldSpec.importance``; feeds value-weighted cost accounting.</span>
+<span class="sd">        tools: The tools this task permits (the Layer-A grammar for the task).</span>
+<span class="sd">        slice: Optional slice label (domain, difficulty, language) -- per-slice cuts are</span>
+<span class="sd">            mandatory, not optional (a low pass^k concentrated in one hard slice is a</span>
+<span class="sd">            different problem from uniform flakiness).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">input</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_TASK_VALUE</span>
+    <span class="n">tools</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ToolSpec</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="nb">slice</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="TaskSpec.grammar">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.TaskSpec.grammar">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GraphGrammar</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The Layer-A grammar for this task&#39;s tool set.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="suite_grammar">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.suite_grammar">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">suite_grammar</span><span class="p">(</span><span class="n">tasks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TaskSpec</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GraphGrammar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The union grammar over a whole task suite (later tools win on name collision).&quot;&quot;&quot;</span>
+    <span class="n">node_types</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
+            <span class="n">node_types</span><span class="p">[</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tool</span><span class="o">.</span><span class="n">to_node_type</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">GraphGrammar</span><span class="p">(</span><span class="n">node_types</span><span class="o">=</span><span class="n">node_types</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Layer B -- the episode (trajectory + cost + outcome + provenance)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="Step">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.Step">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Step</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One step of a trajectory: a tool call and what came back.</span>
+
+<span class="sd">    ``error`` is set when the call itself failed (a bad argument, a tool exception) --</span>
+<span class="sd">    error *recovery* across subsequent steps is itself an evaluable signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tool</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">observation</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">error</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ``(tool, args)`` pair -- what tool-call correctness actually compares.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tool</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="as_call">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.as_call">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">as_call</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a :class:`Step`, ``(tool, args)`` tuple, or ``{&quot;tool&quot;:…, &quot;args&quot;:…}`` dict.</span>
+
+<span class="sd">    Gold tool calls are usually written as bare pairs or dicts (no observation), while a</span>
+<span class="sd">    prediction arrives as a :class:`Step`; both must compare. Progressive disclosure: the</span>
+<span class="sd">    simple literal works, the rich object works.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; as_call(Step(&quot;search&quot;, {&quot;q&quot;: &quot;cat&quot;}))</span>
+<span class="sd">        (&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; as_call((&quot;search&quot;, {&quot;q&quot;: &quot;cat&quot;}))</span>
+<span class="sd">        (&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; as_call({&quot;tool&quot;: &quot;search&quot;, &quot;args&quot;: {&quot;q&quot;: &quot;cat&quot;}})</span>
+<span class="sd">        (&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; as_call(&quot;search&quot;)</span>
+<span class="sd">        (&#39;search&#39;, {})</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Step</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">call</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;args&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;arguments&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;parameters&quot;</span><span class="p">,</span> <span class="p">{})))</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Cannot read a tool call from </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">; pass a Step, a &quot;</span>
+        <span class="s2">&quot;(tool, args) pair, or a {&#39;tool&#39;:…, &#39;args&#39;:…} mapping.&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Trajectory">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.Trajectory">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Trajectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The ordered sequence of :class:`Step` s an agent took.</span>
+
+<span class="sd">    A trajectory is *linear* -- which is why it is scored with a sequence edit distance,</span>
+<span class="sd">    not a graph edit distance (see :mod:`ek.agents.trajectory`).</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; t = Trajectory([Step(&quot;search&quot;, {&quot;q&quot;: &quot;cat&quot;}), Step(&quot;answer&quot;, {&quot;a&quot;: &quot;meow&quot;})])</span>
+<span class="sd">        &gt;&gt;&gt; len(t), t.tools</span>
+<span class="sd">        (2, (&#39;search&#39;, &#39;answer&#39;))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">steps</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Step</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Freeze the caller&#39;s sequence: a frozen dataclass holding a caller-owned *list*</span>
+        <span class="c1"># is not actually immutable (appending to that list grows this &quot;frozen&quot; trajectory).</span>
+        <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;steps&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Step</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The tool names in call order.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">tool</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ``(tool, args)`` pairs in call order.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">call</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Cost">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.Cost">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Cost</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;What one episode consumed: tokens (by kind), retries, and wall-clock.</span>
+
+<span class="sd">    Token *kinds* are tracked separately because they are **priced asymmetrically** --</span>
+<span class="sd">    output typically costs ~5x input, cached input bills at a fraction, and reasoning</span>
+<span class="sd">    tokens are billed. This is precisely why the objective is *dollars* per successful</span>
+<span class="sd">    task and never a raw token count (``misc/docs/ek_11``). Pricing lives in</span>
+<span class="sd">    :mod:`ek.agents.cost`; this dataclass is the provider-neutral tally.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; a = Cost(input_tokens=100, output_tokens=50)</span>
+<span class="sd">        &gt;&gt;&gt; b = Cost(input_tokens=10, output_tokens=5, retries=1)</span>
+<span class="sd">        &gt;&gt;&gt; c = a + b</span>
+<span class="sd">        &gt;&gt;&gt; c.input_tokens, c.output_tokens, c.retries</span>
+<span class="sd">        (110, 55, 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">input_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">output_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">cached_input_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">reasoning_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">latency_s</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;Cost&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Cost&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Cost</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latency_s</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">latency_s</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Cost</span><span class="p">(</span>
+            <span class="n">input_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">input_tokens</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">input_tokens</span><span class="p">,</span>
+            <span class="n">output_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_tokens</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">output_tokens</span><span class="p">,</span>
+            <span class="n">cached_input_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cached_input_tokens</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">cached_input_tokens</span><span class="p">,</span>
+            <span class="n">reasoning_tokens</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reasoning_tokens</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">reasoning_tokens</span><span class="p">,</span>
+            <span class="n">retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">retries</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">retries</span><span class="p">,</span>
+            <span class="n">latency_s</span><span class="o">=</span><span class="n">lat</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latency_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">latency_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Cost&quot;</span><span class="p">:</span>
+        <span class="c1"># ``sum()`` starts from the int 0, so a bare ``__radd__ = __add__`` would return</span>
+        <span class="c1"># NotImplemented and make ``sum(costs)`` raise.</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">other</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;All billed tokens (a rough size proxy -- *not* a cost; see ``dollars()``).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_tokens</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_tokens</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached_input_tokens</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">reasoning_tokens</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="RunProvenance">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.RunProvenance">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RunProvenance</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The *hidden eval variables* that decide whether two runs are even comparable.</span>
+
+<span class="sd">    Agent evaluation is stochastic, and several of its inputs are themselves models. In a</span>
+<span class="sd">    tau-bench-style suite the **user simulator is an LLM agent**, so its model/prompt/version</span>
+<span class="sd">    silently changes results run to run. Recording these is what lets the harness *refuse*</span>
+<span class="sd">    to compare a baseline against a run that changed the simulator or the suite -- the same</span>
+<span class="sd">    discipline ``ek``&#39;s offline harness already applies when it refuses to compare across</span>
+<span class="sd">    two different metrics (``misc/docs/ek_08``, ``misc/docs/ek_11``).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        seed: RNG seed for the trial (``None`` = unseeded/nondeterministic).</span>
+<span class="sd">        temperature: Sampling temperature of the agent under test.</span>
+<span class="sd">        model: The agent&#39;s model id.</span>
+<span class="sd">        simulator: The **user-simulator** id/version -- an eval variable, not a constant.</span>
+<span class="sd">        suite_version: Version of the task suite (contamination and task fixes move scores).</span>
+<span class="sd">        scaffold: The agent scaffold/harness id (the same model moves points on scaffold alone).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">simulator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">suite_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">scaffold</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<div class="viewcode-block" id="RunProvenance.comparability_key">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.RunProvenance.comparability_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">comparability_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The fields that must match for two runs to be comparable (seed excluded).</span>
+
+<span class="sd">        Seed and temperature are *expected* to vary across trials; the simulator, the suite</span>
+<span class="sd">        version and the scaffold are not -- changing them invalidates a baseline.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">simulator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">suite_version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaffold</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Episode">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.Episode">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Episode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Layer B: one agent run over one task -- the object agent evaluation scores.</span>
+
+<span class="sd">    The direct analog of ``AnnotatedExtraction``: it rides alongside the frozen Layer-A</span>
+<span class="sd">    grammar and carries the run&#39;s metadata. It is scored *offline* against gold</span>
+<span class="sd">    (:func:`ek.score` / :func:`ek.evaluate`) and estimated *online* against a judge or a</span>
+<span class="sd">    consensus (:func:`ek.estimate_quality`) -- the same object, both halves.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        task_id: Which task this episode answers (the k-trial grouping key).</span>
+<span class="sd">        trajectory: The tool calls taken.</span>
+<span class="sd">        output: The agent&#39;s final user-facing answer.</span>
+<span class="sd">        final_state: The end state of the world (the DB, the filesystem) -- what a</span>
+<span class="sd">            state-based oracle actually grades. Success is a *final-state* check, not a</span>
+<span class="sd">            surface-text check.</span>
+<span class="sd">        cost: The :class:`Cost` consumed.</span>
+<span class="sd">        success: Filled in by a checker; ``None`` until graded.</span>
+<span class="sd">        run: The :class:`RunProvenance` (seed, model, simulator, suite version).</span>
+<span class="sd">        provenance: Optional core :class:`~ek.base.Provenance` for click-to-source audit.</span>
+<span class="sd">        meta: Anything else the bridge captured.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">trajectory</span><span class="p">:</span> <span class="n">Trajectory</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Trajectory</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">final_state</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Cost</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">success</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunProvenance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">provenance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Provenance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The ``(tool, args)`` pairs taken, in order.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">calls</span>
+
+<div class="viewcode-block" id="Episode.graded">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.Episode.graded">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">graded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Episode&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A copy with ``success`` set (never mutates -- grading stays idempotent).</span>
+
+<span class="sd">        ``meta`` is copied too: ``dataclasses.replace`` is a *shallow* copy, so without this</span>
+<span class="sd">        the &quot;copy&quot; would share the original&#39;s mutable ``meta`` dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="is_episode">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/base.html#ek.is_episode">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_episode</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Duck-typed episode check (core never imports this module -- it checks the *shape*).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Episode</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+        <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;task_id&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

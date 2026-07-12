@@ -1,0 +1,268 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.metrics &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.agents.reliability" href="reliability.html" />
+    <link rel="prev" title="ek.agents.judge" href="judge.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.agents.metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.Checker"><code class="docutils literal notranslate"><span class="pre">Checker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.CostPerSuccessMetric"><code class="docutils literal notranslate"><span class="pre">CostPerSuccessMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.metrics.CostPerSuccessMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">CostPerSuccessMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.TaskSuccessMetric"><code class="docutils literal notranslate"><span class="pre">TaskSuccessMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.metrics.TaskSuccessMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">TaskSuccessMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.final_state_match"><code class="docutils literal notranslate"><span class="pre">final_state_match()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.output_match"><code class="docutils literal notranslate"><span class="pre">output_match()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.metrics.recorded_success"><code class="docutils literal notranslate"><span class="pre">recorded_success()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.agents.metrics</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/agents/metrics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.agents.metrics">
+<span id="ek-agents-metrics"></span><h1>ek.agents.metrics<a class="headerlink" href="#module-ek.agents.metrics" title="Link to this heading"></a></h1>
+<p>Task-success and cost-per-successful-task: the two metrics that drive the whole thing.</p>
+<p>Two reference-based metrics over an <a class="reference internal" href="base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a>, both of which fit
+<a class="reference internal" href="../../ek.html#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a> exactly because their corpus aggregate is a <strong>ratio of two sums</strong>, never a
+mean of per-item scores – the same discipline that makes <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s WER accumulate globally and
+its F1 micro-average (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_08</span></code>, <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_11</span></code>):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.agents.metrics.TaskSuccessMetric" title="ek.agents.metrics.TaskSuccessMetric"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskSuccessMetric</span></code></a> – grade the <strong>final state</strong>, not the surface text. The oracle is
+<em>injected</em>: <code class="docutils literal notranslate"><span class="pre">ek</span></code> never owns an LLM or a sandbox, so a checker is a plugged-in strategy
+(a database-state comparison, a hidden-test run, a programmatic predicate, a judge).
+Aggregate = the success <strong>rate</strong>.</p></li>
+<li><p><a class="reference internal" href="#ek.agents.metrics.CostPerSuccessMetric" title="ek.agents.metrics.CostPerSuccessMetric"><code class="xref py py-class docutils literal notranslate"><span class="pre">CostPerSuccessMetric</span></code></a> – <strong>Cost-of-Pass</strong>: <code class="docutils literal notranslate"><span class="pre">E[cost]</span> <span class="pre">/</span> <span class="pre">P(success)</span></code>. Aggregate =
+<code class="docutils literal notranslate"><span class="pre">sum(dollars)</span> <span class="pre">/</span> <span class="pre">sum(successes)</span></code>, diverging to <code class="docutils literal notranslate"><span class="pre">inf</span></code> when nothing succeeded. A benchmark
+that scores accuracy <em>without</em> cost lets an agent chase tiny gains with unbounded API calls,
+so this metric is the point, not a nicety.</p></li>
+</ul>
+<p><strong>A safety property, not a nicety:</strong> the checker must run somewhere the agent’s trajectory
+cannot reach. An audited agent-benchmark red-team produced a ~10-line <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code> that
+pytest auto-loads and that rewrote <em>every</em> test outcome to “passed” – scoring near-perfect
+without solving a single task. Verifier isolation is a security boundary.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">per_million</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ep</span> <span class="o">=</span> <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;42&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TaskSuccessMetric</span><span class="p">()(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;42&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">CostPerSuccessMetric</span><span class="p">(</span><span class="n">price</span><span class="o">=</span><span class="n">per_million</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="s2">&quot;42&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>          <span class="c1"># this episode&#39;s dollars</span>
+<span class="go">2.0</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.metrics.Checker">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">Checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#Checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.Checker" title="Link to this definition"></a></dt>
+<dd><p>The success oracle: did this episode leave the world in the required state?</p>
+<p>Injected, never owned by <code class="docutils literal notranslate"><span class="pre">ek</span></code> – a real suite plugs in a database-state comparison, a
+hidden-test runner, or a programmatic predicate. It must run <strong>isolated</strong> from the agent.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.metrics.CostPerSuccessMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">CostPerSuccessMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><span class="pre">ModelPrice</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#CostPerSuccessMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.CostPerSuccessMetric" title="Link to this definition"></a></dt>
+<dd><p>Cost-of-Pass: dollars per <strong>successfully completed</strong> task (<strong>lower is better</strong>).</p>
+<p>The per-episode <code class="docutils literal notranslate"><span class="pre">Score.value</span></code> is that episode’s dollar cost – the real number is the
+corpus <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>, <code class="docutils literal notranslate"><span class="pre">sum(dollars)</span> <span class="pre">/</span> <span class="pre">sum(successes)</span></code>, which is <code class="docutils literal notranslate"><span class="pre">inf</span></code> when nothing
+succeeded (infeasibility is the honest answer; a per-token metric reporting “$0.003/call”
+for an agent that never succeeds is actively misleading).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check</strong> – The success oracle (as in <a class="reference internal" href="#ek.agents.metrics.TaskSuccessMetric" title="ek.agents.metrics.TaskSuccessMetric"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskSuccessMetric</span></code></a>).</p></li>
+<li><p><strong>price</strong> – A <a class="reference internal" href="cost.html#ek.agents.cost.ModelPrice" title="ek.agents.cost.ModelPrice"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelPrice</span></code></a> applied to every episode, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to
+resolve each episode’s model against <code class="docutils literal notranslate"><span class="pre">prices</span></code>.</p></li>
+<li><p><strong>prices</strong> – A <code class="docutils literal notranslate"><span class="pre">{model:</span> <span class="pre">ModelPrice}</span></code> catalog (see <a class="reference internal" href="../agents.html#ek.agents.load_prices" title="ek.agents.load_prices"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.agents.load_prices()</span></code></a>).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.metrics.CostPerSuccessMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#CostPerSuccessMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.CostPerSuccessMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">sum(dollars)</span> <span class="pre">/</span> <span class="pre">sum(successes)</span></code> – a ratio of two sums, never a mean of ratios.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.metrics.TaskSuccessMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">TaskSuccessMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#TaskSuccessMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.TaskSuccessMetric" title="Link to this definition"></a></dt>
+<dd><p>Did the episode complete the task? (<code class="docutils literal notranslate"><span class="pre">1.0</span></code>/<code class="docutils literal notranslate"><span class="pre">0.0</span></code>; aggregate = success rate).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>check</strong> – A <a class="reference internal" href="#ek.agents.metrics.Checker" title="ek.agents.metrics.Checker"><code class="xref py py-class docutils literal notranslate"><span class="pre">Checker</span></code></a> – a registered name (<code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;final_state&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;recorded&quot;</span></code>) or any <code class="docutils literal notranslate"><span class="pre">(episode,</span> <span class="pre">gold)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code> callable. Defaults to
+<code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>; <strong>inject a state-based or executable oracle for a real suite.</strong></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.metrics.TaskSuccessMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#TaskSuccessMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.TaskSuccessMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>The success <strong>rate</strong> over the corpus.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.metrics.final_state_match">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">final_state_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">episode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#final_state_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.final_state_match" title="Link to this definition"></a></dt>
+<dd><p>Compare the episode’s <strong>final state</strong> with the goal state (the tau-bench oracle).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.metrics.output_match">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">output_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">episode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#output_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.output_match" title="Link to this definition"></a></dt>
+<dd><p>Canonicalized exact match on the final answer (the GAIA-style oracle).</p>
+<p>The weakest useful oracle, and the default only because it needs nothing. Prefer a
+state-based or executable checker whenever the task has one.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.metrics.recorded_success">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.metrics.</span></span><span class="sig-name descname"><span class="pre">recorded_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">episode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/metrics.html#recorded_success"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.metrics.recorded_success" title="Link to this definition"></a></dt>
+<dd><p>Trust a <code class="docutils literal notranslate"><span class="pre">success</span></code> already recorded on the episode (e.g. by an external harness).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="judge.html" class="btn btn-neutral float-left" title="ek.agents.judge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reliability.html" class="btn btn-neutral float-right" title="ek.agents.reliability" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.reliability &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.agents.toolcalls" href="toolcalls.html" />
+    <link rel="prev" title="ek.agents.metrics" href="metrics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.agents.reliability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.DEFAULT_BOOTSTRAP_RESAMPLES"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BOOTSTRAP_RESAMPLES</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.DEFAULT_Z"><code class="docutils literal notranslate"><span class="pre">DEFAULT_Z</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.ReliabilityReport"><code class="docutils literal notranslate"><span class="pre">ReliabilityReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.bootstrap_ci"><code class="docutils literal notranslate"><span class="pre">bootstrap_ci()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.difference_upper_bound"><code class="docutils literal notranslate"><span class="pre">difference_upper_bound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.newcombe_difference"><code class="docutils literal notranslate"><span class="pre">newcombe_difference()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.pass_at_k"><code class="docutils literal notranslate"><span class="pre">pass_at_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.pass_hat_k"><code class="docutils literal notranslate"><span class="pre">pass_hat_k()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.reliability"><code class="docutils literal notranslate"><span class="pre">reliability()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.reliability.wilson_interval"><code class="docutils literal notranslate"><span class="pre">wilson_interval()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.agents.reliability</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/agents/reliability.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.agents.reliability">
+<span id="ek-agents-reliability"></span><h1>ek.agents.reliability<a class="headerlink" href="#module-ek.agents.reliability" title="Link to this heading"></a></h1>
+<p>Reliability: <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code> (capability) vs <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> (consistency), and their error bars.</p>
+<p>The single most important distinction in agent evaluation. <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code> asks <em>can it ever do
+this?</em>; <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> asks <em>does it do this every single time?</em> – and only the second is a
+production metric. A customer-facing agent that succeeds “usually” is not shippable, and
+<code class="docutils literal notranslate"><span class="pre">pass^k</span></code> is the number that exposes it: on tau-bench, gpt-4o clears ~61% of retail tasks at
+<code class="docutils literal notranslate"><span class="pre">pass^1</span></code> but only ~25% at <code class="docutils literal notranslate"><span class="pre">pass^8</span></code> (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_07</span></code>, <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_08</span></code>).</p>
+<p><strong>These are not</strong> <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> <strong>s.</strong> A metric scores one <code class="docutils literal notranslate"><span class="pre">(pred,</span> <span class="pre">gold)</span></code> pair and
+<a class="reference internal" href="../../ek.html#ek.evaluate" title="ek.evaluate"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.evaluate()</span></code></a> aggregates independent cases; <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code>/<code class="docutils literal notranslate"><span class="pre">pass^k</span></code> are <em>cross-task</em>
+quantities over <strong>k trials of the same task</strong>, and the trial grouping is the harness’s job.
+They ship here as pure functions plus a <a class="reference internal" href="#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliabilityReport</span></code></a>.</p>
+<p>Two caveats the literature forces:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pass^k</span></code> presumes <strong>genuine run-to-run stochasticity</strong>. On a deterministic agent every
+trial is identical, <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> collapses to <code class="docutils literal notranslate"><span class="pre">pass^1</span></code>, and it tells you nothing new –
+<a class="reference internal" href="#ek.agents.reliability.reliability" title="ek.agents.reliability.reliability"><code class="xref py py-func docutils literal notranslate"><span class="pre">reliability()</span></code></a> detects this and warns rather than reporting a falsely reassuring number.</p></li>
+<li><p>Suites are small (a few hundred tasks), so a point estimate is not a result. Report an
+interval: <a class="reference internal" href="#ek.agents.reliability.wilson_interval" title="ek.agents.reliability.wilson_interval"><code class="xref py py-func docutils literal notranslate"><span class="pre">wilson_interval()</span></code></a> for a success rate, <a class="reference internal" href="#ek.agents.reliability.bootstrap_ci" title="ek.agents.reliability.bootstrap_ci"><code class="xref py py-func docutils literal notranslate"><span class="pre">bootstrap_ci()</span></code></a> for the skewed
+cost-per-success ratio. The regression gate compares <strong>intervals, not points</strong>.</p></li>
+</ul>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>          <span class="c1"># capability: any 1 of 5 trials succeeded</span>
+<span class="go">0.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>   <span class="c1"># some 3-subset contains a success</span>
+<span class="go">0.9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>         <span class="c1"># reliability: ALL of a 3-subset succeed</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.reliability.DEFAULT_BOOTSTRAP_RESAMPLES">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_BOOTSTRAP_RESAMPLES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2000</span></span><a class="headerlink" href="#ek.agents.reliability.DEFAULT_BOOTSTRAP_RESAMPLES" title="Link to this definition"></a></dt>
+<dd><p>Resamples for the bootstrap CI on the (skewed) cost-per-success ratio.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.reliability.DEFAULT_Z">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_Z</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.96</span></span><a class="headerlink" href="#ek.agents.reliability.DEFAULT_Z" title="Link to this definition"></a></dt>
+<dd><p>z for a 95% normal interval (the Wilson default). Keyword-tunable, not a magic number.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.reliability.ReliabilityReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">ReliabilityReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_ci</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_at_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_hat_k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_hat_k_ci</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stochastic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_slice</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#ReliabilityReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.ReliabilityReport" title="Link to this definition"></a></dt>
+<dd><p>Corpus-level reliability over a k-trial run, with per-task and per-slice cuts.</p>
+<p><code class="docutils literal notranslate"><span class="pre">success_rate</span></code> is micro (over all trials); <code class="docutils literal notranslate"><span class="pre">pass_at_k</span></code>/<code class="docutils literal notranslate"><span class="pre">pass_hat_k</span></code> are averaged
+over <em>tasks</em> (each task’s own unbiased estimator), never over trials.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.bootstrap_ci">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">bootstrap_ci</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statistic</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">resamples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#bootstrap_ci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.bootstrap_ci" title="Link to this definition"></a></dt>
+<dd><p>Percentile bootstrap CI for any <code class="docutils literal notranslate"><span class="pre">statistic</span></code> over <code class="docutils literal notranslate"><span class="pre">values</span></code> (deterministic by seed).</p>
+<p>Used for the <strong>cost-per-success ratio</strong>, whose distribution is skewed and heavy-tailed
+(a normal interval on it is meaningless).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">bootstrap_ci</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">resamples</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span> <span class="o">==</span> <span class="n">hi</span> <span class="o">==</span> <span class="mf">1.0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.difference_upper_bound">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">difference_upper_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.96</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#difference_upper_bound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.difference_upper_bound" title="Link to this definition"></a></dt>
+<dd><p>Upper bound of <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></code> for two statistics known only through their CIs.</p>
+<p>Used for <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> (a mean of per-task estimators, not a raw proportion), where a Newcombe
+interval does not apply but the same principle does: test the <strong>difference</strong>, combining both
+runs’ uncertainty, rather than asking whether two intervals happen to overlap.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.newcombe_difference">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">newcombe_difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">successes_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">successes_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.96</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#newcombe_difference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.newcombe_difference" title="Link to this definition"></a></dt>
+<dd><p>Newcombe score interval for the <strong>difference</strong> of two proportions <code class="docutils literal notranslate"><span class="pre">p_a</span> <span class="pre">-</span> <span class="pre">p_b</span></code>.</p>
+<p>This is the right instrument for “did the agent get worse than its baseline?”, and it is
+strictly better than the tempting shortcut of <em>checking whether two 95% CIs overlap</em>.
+Non-overlap is not a 5% test – it is roughly a 0.5% one, so it buys its low false-alarm
+rate by going nearly blind: on a 60-task suite it cannot see a 15-point success-rate drop.
+A difference interval keeps the same false-alarm rate and recovers most of the power,
+because the variance of a difference is not the sum of two interval widths.</p>
+<p>Newcombe (1998) method 10: build each proportion’s Wilson interval, then</p>
+<blockquote>
+<div><p>lower = (p_a - p_b) - sqrt((p_a - l_a)^2 + (u_b - p_b)^2)
+upper = (p_a - p_b) + sqrt((u_a - p_a)^2 + (p_b - l_b)^2)</p>
+</div></blockquote>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">(lower,</span> <span class="pre">upper)</span></code>. The difference is a <em>confident regression</em> when <code class="docutils literal notranslate"><span class="pre">upper</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">newcombe_difference</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>   <span class="c1"># 50% now vs 90% before</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span> <span class="o">&lt;</span> <span class="mi">0</span>                                            <span class="c1"># confidently worse</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">newcombe_difference</span><span class="p">(</span><span class="mi">89</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>   <span class="c1"># 89% vs 90% -- noise</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hi</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.pass_at_k">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">pass_at_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#pass_at_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.pass_at_k" title="Link to this definition"></a></dt>
+<dd><p>Unbiased <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code>: probability that <strong>at least one</strong> of k samples succeeds.</p>
+<p>The HumanEval estimator <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">C(n-c,</span> <span class="pre">k)</span> <span class="pre">/</span> <span class="pre">C(n,</span> <span class="pre">k)</span></code> over <code class="docutils literal notranslate"><span class="pre">n</span></code> trials with <code class="docutils literal notranslate"><span class="pre">c</span></code>
+successes. This is the <strong>capability</strong> metric – right when a single success is enough
+(offline candidate generation behind a verifier).</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pass_at_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.pass_hat_k">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">pass_hat_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#pass_hat_k"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.pass_hat_k" title="Link to this definition"></a></dt>
+<dd><p>Unbiased <code class="docutils literal notranslate"><span class="pre">pass^k</span></code>: probability that <strong>all k</strong> independent trials succeed.</p>
+<p>The tau-bench estimator <code class="docutils literal notranslate"><span class="pre">C(c,</span> <span class="pre">k)</span> <span class="pre">/</span> <span class="pre">C(n,</span> <span class="pre">k)</span></code>; for a per-trial success probability <code class="docutils literal notranslate"><span class="pre">p</span></code>
+it decays to <code class="docutils literal notranslate"><span class="pre">p**k</span></code>. This is the <strong>reliability</strong> metric – the one that matters when
+consistency <em>is</em> the product.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pass_hat_k</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">0.21428571428571427</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.reliability">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">reliability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_deterministic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ek.agents.reliability.ReliabilityReport" title="ek.agents.reliability.ReliabilityReport"><span class="pre">ReliabilityReport</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#reliability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.reliability" title="Link to this definition"></a></dt>
+<dd><p>Compute <code class="docutils literal notranslate"><span class="pre">pass&#64;k</span></code> / <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> / success-rate over a k-trial run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – Graded <a class="reference internal" href="base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> s (grouped by <code class="docutils literal notranslate"><span class="pre">task_id</span></code>), or an
+already-grouped <code class="docutils literal notranslate"><span class="pre">{task_id:</span> <span class="pre">[bool,</span> <span class="pre">...]}</span></code> mapping.</p></li>
+<li><p><strong>k</strong> – The k of pass&#64;k / pass^k. Tasks with fewer than k trials are skipped (and
+counted in <code class="docutils literal notranslate"><span class="pre">detail['skipped']</span></code>) rather than silently mis-estimated.</p></li>
+<li><p><strong>slices</strong> – Optional <code class="docutils literal notranslate"><span class="pre">{task_id:</span> <span class="pre">slice_label}</span></code> for per-slice cuts.</p></li>
+<li><p><strong>cost</strong> – An optional cost report (from <a class="reference internal" href="../agents.html#ek.agents.cost_report" title="ek.agents.cost_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.agents.cost_report()</span></code></a>) to carry along –
+reliability without cost is only half the picture.</p></li>
+<li><p><strong>warn_deterministic</strong> – Warn when <strong>no</strong> task shows mixed outcomes across trials, in
+which case <code class="docutils literal notranslate"><span class="pre">pass^k</span></code> degenerates to <code class="docutils literal notranslate"><span class="pre">pass^1</span></code> and is not informative.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">reliability</span><span class="p">({</span><span class="s2">&quot;t1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="s2">&quot;t2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]},</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">n_tasks</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">k</span>
+<span class="go">(2, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>      <span class="c1"># t1: C(2,2)/C(3,2)=1/3 ; t2: 1.0</span>
+<span class="go">0.667</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.reliability.wilson_interval">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.reliability.</span></span><span class="sig-name descname"><span class="pre">wilson_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">successes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.96</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/reliability.html#wilson_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.reliability.wilson_interval" title="Link to this definition"></a></dt>
+<dd><p>Wilson score interval for a proportion – correct in the tails, unlike Wald/CLT.</p>
+<p>The naive normal (“Wald”) interval is badly wrong at small n and near 0/1 – exactly
+where agent success rates live. Wilson is the cheap, dependency-free fix.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">wilson_interval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lo</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">hi</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">(True, 0.278)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metrics.html" class="btn btn-neutral float-left" title="ek.agents.metrics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="toolcalls.html" class="btn btn-neutral float-right" title="ek.agents.toolcalls" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

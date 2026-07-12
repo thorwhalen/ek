@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.judge &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ek.agents.metrics" href="metrics.html" />
+    <link rel="prev" title="ek.agents.harness" href="harness.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ek.agents.judge</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.ALPHA_GOOD"><code class="docutils literal notranslate"><span class="pre">ALPHA_GOOD</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.JUDGE_COST_TIER"><code class="docutils literal notranslate"><span class="pre">JUDGE_COST_TIER</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.JudgeMetric"><code class="docutils literal notranslate"><span class="pre">JudgeMetric</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.judge.JudgeMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">JudgeMetric.aggregate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.JudgeSignal"><code class="docutils literal notranslate"><span class="pre">JudgeSignal</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ek.agents.judge.JudgeSignal.finding"><code class="docutils literal notranslate"><span class="pre">JudgeSignal.finding()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.judge_validation"><code class="docutils literal notranslate"><span class="pre">judge_validation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.agents.judge.pairwise_judge"><code class="docutils literal notranslate"><span class="pre">pairwise_judge()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ek.agents.judge</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/ek/agents/judge.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ek.agents.judge">
+<span id="ek-agents-judge"></span><h1>ek.agents.judge<a class="headerlink" href="#module-ek.agents.judge" title="Link to this heading"></a></h1>
+<p>LLM-as-judge: a reference-free <a class="reference internal" href="../base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>, a reference-based
+<a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>, and the validation that must precede either.</p>
+<p>When a task has no checkable outcome, an LLM judge is the fallback. It is also a <strong>liability
+unless validated and calibrated</strong>, because its known failure modes have double-digit effect
+sizes: <em>position</em> bias (which answer came first), <em>verbosity</em> bias (longer looks better),
+<em>self-preference</em> (a model prefers its own text). <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_09</span></code> has the numbers.</p>
+<p>Three seams, deliberately kept apart (they are not interchangeable):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#ek.agents.judge.JudgeSignal" title="ek.agents.judge.JudgeSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">JudgeSignal</span></code></a> – <strong>reference-free, criteria-only</strong>. This is the only judge that is a
+<code class="docutils literal notranslate"><span class="pre">Signal</span></code>: it scores an output against <em>criteria</em>, with no gold, so it plugs into
+<a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">signal</span> <span class="pre">-&gt;</span> <span class="pre">calibrate</span> <span class="pre">-&gt;</span> <span class="pre">validate</span> <span class="pre">-&gt;</span> <span class="pre">decide</span></code> cascade. Its
+<code class="docutils literal notranslate"><span class="pre">cost_tier</span></code> is the highest in the framework, so an escalation policy runs the cheap signals
+first and pays for the judge only on residual uncertainty.</p></li>
+<li><p><a class="reference internal" href="#ek.agents.judge.JudgeMetric" title="ek.agents.judge.JudgeMetric"><code class="xref py py-class docutils literal notranslate"><span class="pre">JudgeMetric</span></code></a> – <strong>reference-based</strong>. A judge that needs the gold answer is not a
+Signal at all; it is a Metric, and it belongs on the <a class="reference internal" href="../../ek.html#ek.score" title="ek.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.score()</span></code></a> side.</p></li>
+<li><p><a class="reference internal" href="#ek.agents.judge.pairwise_judge" title="ek.agents.judge.pairwise_judge"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_judge()</span></code></a> – pairwise comparison needs <em>two</em> outputs and cannot fit
+<code class="docutils literal notranslate"><span class="pre">Signal.__call__(one_output)</span></code>. It is a helper, and it <strong>swaps the order and averages</strong> –
+the standard, necessary correction for position bias.</p></li>
+</ul>
+<p><strong>Hard Rule 1 applies to judges.</strong> A raw judge score is not a probability. Calibrate it before
+any <a class="reference internal" href="../base.html#ek.base.DecisionPolicy" title="ek.base.DecisionPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">DecisionPolicy</span></code></a> reads it – <a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a> already refuses to
+gate an uncalibrated signal, and a judge is no exception (-&gt; <code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code>).</p>
+<p><strong>Known facade limitation, stated plainly:</strong> <a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a> currently averages <em>all</em>
+raw signals into one confidence and calibrates that single mean. Mixing a judge score with, say,
+a logprob – different scales, different reliabilities – and fitting one calibrator over the
+mean is not statistically sound. Until per-signal-family calibration lands, either run the judge
+as the <em>only</em> signal, or calibrate it separately and pass the calibrated value.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ek</span></code> never imports an LLM SDK: <code class="docutils literal notranslate"><span class="pre">judge</span></code> is an <strong>injected callable</strong>.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stub</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">output</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="mf">0.9</span> <span class="k">if</span> <span class="s2">&quot;meow&quot;</span> <span class="ow">in</span> <span class="n">output</span> <span class="k">else</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">JudgeSignal</span><span class="p">(</span><span class="n">stub</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;Is the answer helpful?&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="p">(</span><span class="s2">&quot;the cat says meow&quot;</span><span class="p">)</span>
+<span class="go">0.9</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="o">.</span><span class="n">cost_tier</span>                       <span class="c1"># the most expensive signal family</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.judge.ALPHA_GOOD">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">ALPHA_GOOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.8</span></span><a class="headerlink" href="#ek.agents.judge.ALPHA_GOOD" title="Link to this definition"></a></dt>
+<dd><p>&gt;= 0.8 is good agreement, 0.67-0.8 only tentative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Krippendorff conventions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.judge.JUDGE_COST_TIER">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">JUDGE_COST_TIER</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></span><a class="headerlink" href="#ek.agents.judge.JUDGE_COST_TIER" title="Link to this definition"></a></dt>
+<dd><p>Judges are the most expensive signal family – run cheap signals first and escalate.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.judge.JudgeMetric">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">JudgeMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#JudgeMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.JudgeMetric" title="Link to this definition"></a></dt>
+<dd><p>A <strong>reference-based</strong> LLM judge as a <a class="reference internal" href="../base.html#ek.base.Metric" title="ek.base.Metric"><code class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a> (the <code class="docutils literal notranslate"><span class="pre">score()</span></code> side).</p>
+<p>A judge that reads the gold answer is not a reference-free signal, so it does not belong in
+<a class="reference internal" href="../../ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a>. It lives here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>judge</strong> – Injected <code class="docutils literal notranslate"><span class="pre">(output,</span> <span class="pre">*,</span> <span class="pre">criteria,</span> <span class="pre">reference)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p></li>
+<li><p><strong>criteria</strong> – The rubric.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.judge.JudgeMetric.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../base.html#ek.base.Score" title="ek.base.Score"><span class="pre">Score</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#JudgeMetric.aggregate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.JudgeMetric.aggregate" title="Link to this definition"></a></dt>
+<dd><p>Mean judge score (a judge score <em>is</em> per-item; there is no global accumulation).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.agents.judge.JudgeSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">JudgeSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'judge'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#JudgeSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.JudgeSignal" title="Link to this definition"></a></dt>
+<dd><p>A reference-free, criteria-only LLM judge as a <a class="reference internal" href="../base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>judge</strong> – An <strong>injected</strong> callable <code class="docutils literal notranslate"><span class="pre">(output,</span> <span class="pre">*,</span> <span class="pre">criteria)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>. <code class="docutils literal notranslate"><span class="pre">ek</span></code> core never
+imports an LLM client; you pass your own (or an <code class="docutils literal notranslate"><span class="pre">ek[judge]</span></code> adapter).</p></li>
+<li><p><strong>criteria</strong> – The rubric the judge scores against, bound at construction (exactly as
+<a class="reference internal" href="../qe/signals.html#ek.qe.signals.LogprobSignal" title="ek.qe.signals.LogprobSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a> binds its aggregator), so the object still
+satisfies <code class="docutils literal notranslate"><span class="pre">Signal.__call__(output)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>.</p></li>
+<li><p><strong>cost_tier</strong> – <a class="reference internal" href="#ek.agents.judge.JUDGE_COST_TIER" title="ek.agents.judge.JUDGE_COST_TIER"><code class="xref py py-data docutils literal notranslate"><span class="pre">JUDGE_COST_TIER</span></code></a> – the most expensive tier.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.agents.judge.JudgeSignal.finding">
+<span class="sig-name descname"><span class="pre">finding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rationale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../base.html#ek.base.Finding" title="ek.base.Finding"><span class="pre">Finding</span></a></span></span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#JudgeSignal.finding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.JudgeSignal.finding" title="Link to this definition"></a></dt>
+<dd><p>Surface a judge’s <em>rationale</em> as a <a class="reference internal" href="../base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a> (not just a scalar).</p>
+<p>A judge’s reasoning is auditable evidence; a bare number throws it away.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.judge.judge_validation">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">judge_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">human_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'nominal'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#judge_validation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.judge_validation" title="Link to this definition"></a></dt>
+<dd><p>Certify a judge against human labels <strong>before</strong> trusting it. No new code – reuse the IAA.</p>
+<p>A judge is just another annotator, so <code class="docutils literal notranslate"><span class="pre">ek</span></code>’s existing inter-annotator-agreement machinery
+(which already tells you the <em>ceiling</em> of a gold standard) is exactly the right instrument:
+Krippendorff’s alpha is the default (it alone handles any number of raters, any measurement
+level, and missing data); Cohen’s kappa applies for exactly two raters on complete nominal
+data. This reproduces the MT-Bench judge-vs-human protocol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">kappa</span></code>, <code class="docutils literal notranslate"><span class="pre">percent_agreement</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span></code>, and a <code class="docutils literal notranslate"><span class="pre">verdict</span></code> against the
+conventional thresholds (alpha &gt;= 0.8 good, 0.67-0.8 tentative, below that unreliable).</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">judge_validation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;verdict&quot;</span><span class="p">]</span>
+<span class="go">(1.0, &#39;good&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.judge.pairwise_judge">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.judge.</span></span><span class="sig-name descname"><span class="pre">pairwise_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../../../_modules/ek/agents/judge.html#pairwise_judge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.judge.pairwise_judge" title="Link to this definition"></a></dt>
+<dd><p>Pairwise preference for <code class="docutils literal notranslate"><span class="pre">a</span></code> over <code class="docutils literal notranslate"><span class="pre">b</span></code>, <strong>corrected for position bias</strong>.</p>
+<p>Position bias is not a rounding error – judges materially prefer whichever answer they see
+first. The standard correction is to ask twice with the order swapped and average, which is
+why this cannot be a plain <code class="docutils literal notranslate"><span class="pre">Signal</span></code> (it needs two outputs).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>judge</strong> – Injected <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b,</span> <span class="pre">*,</span> <span class="pre">criteria)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>, the preference for <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p></li>
+<li><p><strong>swap</strong> – Ask again with the arguments swapped and average (default; disable only if your
+judge is known to be order-invariant).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Preference for <code class="docutils literal notranslate"><span class="pre">a</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> (<code class="docutils literal notranslate"><span class="pre">0.5</span></code> = a tie).</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_wins</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="mf">1.0</span>     <span class="c1"># a maximally position-biased judge</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_judge</span><span class="p">(</span><span class="n">first_wins</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">)</span>              <span class="c1"># swapping exposes it as a tie</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="harness.html" class="btn btn-neutral float-left" title="ek.agents.harness" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metrics.html" class="btn btn-neutral float-right" title="ek.agents.metrics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

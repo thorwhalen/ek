@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ek.agents.harness &mdash; ek 0.1.8 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ek
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek.html">ek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/__main__.html">ek.__main__</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents.html">ek.agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/base.html">ek.agents.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/cost.html">ek.agents.cost</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/harness.html">ek.agents.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/judge.html">ek.agents.judge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/reliability.html">ek.agents.reliability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/agents/trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/base.html">ek.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/facade.html">ek.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/harness.html">ek.harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics.html">ek.metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/metrics/tables.html">ek.metrics.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr.html">ek.ocr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/ocr/tables.html">ek.ocr.tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe.html">ek.qe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/decide.html">ek.qe.decide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/rover.html">ek.qe.rover</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/signals.html">ek.qe.signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/qe/verifiers.html">ek.qe.verifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/registry.html">ek.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/stores.html">ek.stores</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/tools.html">ek.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/ek/validate.html">ek.validate</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ek.agents.harness</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ek.agents.harness</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The agent task-suite harness: k trials, per-slice cuts, and a gate that survives noise.</span>
+
+<span class="sd">:func:`run_suite` is :func:`ek.evaluate_store` specialized for agents: it runs the system under</span>
+<span class="sd">test over a suite **k times per task** (reliability needs repeats), grades each episode with an</span>
+<span class="sd">*injected* checker, and reports ``pass^k`` + cost + latency per slice.</span>
+
+<span class="sd">**Why a separate gate.** ``ek``&#39;s offline :func:`ek.regression_gate` is a scalar point</span>
+<span class="sd">comparison with ``tolerance=0.0`` -- correct for a deterministic OCR benchmark, **unsound** for</span>
+<span class="sd">an agent. Agent metrics are random variables: re-running the same agent moves the number. A</span>
+<span class="sd">point gate therefore (a) flags sampling noise as a regression and (b) misses a real regression</span>
+<span class="sd">that hides inside the tolerance band.</span>
+
+<span class="sd">:func:`agent_regression_gate` instead tests the **difference** ``current - baseline`` with both</span>
+<span class="sd">runs&#39; uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound</span>
+<span class="sd">on ``pass^k``), failing only when the upper bound of that change is confidently negative. Two</span>
+<span class="sd">tempting shortcuts are **both wrong**, and this module has shipped and fixed each of them:</span>
+<span class="sd">comparing our interval to the baseline&#39;s *point* (the baseline is itself noisy, so one flake</span>
+<span class="sd">against a lucky baseline reads as a regression), and asking whether two 95% intervals *overlap*</span>
+<span class="sd">(that is a ~0.5% test, not a 5% one -- it goes blind to a 15-point drop on a 60-task suite).</span>
+<span class="sd">An empty run, and an empty **baseline**, are both refused: with no trials every bound is the</span>
+<span class="sd">maximally-uncertain default, so nothing could ever be shown to fall below it.</span>
+
+<span class="sd">**Hidden eval variables.** In a tau-bench-style suite the *user simulator is itself an LLM* --</span>
+<span class="sd">change its model or prompt and the scores move, silently. So a baseline records its</span>
+<span class="sd">:class:`~ek.agents.base.RunProvenance` and the gate **refuses** to compare across a changed</span>
+<span class="sd">simulator, suite version, or scaffold, exactly as the offline gate already refuses to compare</span>
+<span class="sd">two different metrics. Comparing across them is not a regression check, it is a category error.</span>
+
+<span class="sd">**Verifier isolation is a security property.** The checker must run where the agent&#39;s trajectory</span>
+<span class="sd">cannot reach it (a red-team produced a ~10-line ``conftest.py`` that rewrote every test outcome</span>
+<span class="sd">to &quot;passed&quot;). ``ek`` cannot enforce your sandbox -- it only refuses to pretend the problem does</span>
+<span class="sd">not exist.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    &gt;&gt;&gt; from ek.agents.base import Cost, Episode, TaskSpec</span>
+<span class="sd">    &gt;&gt;&gt; tasks = [TaskSpec(&quot;t1&quot;, input=&quot;2+2&quot;, gold=&quot;4&quot;), TaskSpec(&quot;t2&quot;, input=&quot;3+3&quot;, gold=&quot;6&quot;)]</span>
+<span class="sd">    &gt;&gt;&gt; def agent(task):</span>
+<span class="sd">    ...     answers = {&quot;2+2&quot;: &quot;4&quot;, &quot;3+3&quot;: &quot;7&quot;}      # gets t2 wrong, every time</span>
+<span class="sd">    ...     return Episode(output=answers[task.input], cost=Cost(input_tokens=10))</span>
+<span class="sd">    &gt;&gt;&gt; report = run_suite(agent, tasks, k=1)</span>
+<span class="sd">    &gt;&gt;&gt; report.success_rate, report.pass_hat_k</span>
+<span class="sd">    (0.5, 0.5)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_store</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">RunProvenance</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">suite_grammar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelPrice</span><span class="p">,</span> <span class="n">cost_of_pass</span><span class="p">,</span> <span class="n">cost_report</span><span class="p">,</span> <span class="n">episode_dollars</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reliability</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ReliabilityReport</span><span class="p">,</span>
+    <span class="n">_se_from_ci</span><span class="p">,</span>
+    <span class="n">bootstrap_ci</span><span class="p">,</span>
+    <span class="n">difference_upper_bound</span><span class="p">,</span>
+    <span class="n">newcombe_difference</span><span class="p">,</span>
+    <span class="n">reliability</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce a task suite to a list of :class:`~ek.agents.base.TaskSpec`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">tasks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TaskSpec</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="o">**</span><span class="n">spec</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TaskSpec</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">spec</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_episode</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">TaskSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Episode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept an Episode from the agent, or wrap a bare answer into one.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">Episode</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">task_id</span> <span class="ow">or</span> <span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;task_id&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">result</span>  <span class="c1"># episode-shaped duck</span>
+    <span class="k">return</span> <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="run_suite">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/harness.html#ek.run_suite">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_suite</span><span class="p">(</span>
+    <span class="n">agent</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">TaskSpec</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">tasks</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">check</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">price</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModelPrice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">prices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelPrice</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunProvenance</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ReliabilityReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run ``agent`` over a task suite, ``k`` trials per task, and report reliability + cost.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        agent: The system under test: ``TaskSpec -&gt; Episode`` (a bare answer is wrapped). It</span>
+<span class="sd">            receives the whole spec -- ``.input``, ``.tools``, ``.gold`` -- not just the input.</span>
+<span class="sd">            If it accepts a keyword ``seed``, the per-trial seed is passed to it.</span>
+<span class="sd">        tasks: :class:`~ek.agents.base.TaskSpec` s (or a ``{task_id: spec}`` mapping).</span>
+<span class="sd">        k: Trials per task. ``k &gt; 1`` is what makes ``pass^k`` meaningful -- and it only means</span>
+<span class="sd">            anything if the agent is genuinely stochastic (the report warns if it is not).</span>
+<span class="sd">        check: The success oracle -- a registered checker name or an ``(episode, gold) -&gt; bool``</span>
+<span class="sd">            callable. Defaults to ``&quot;output&quot;``; **inject a state-based/executable oracle** for a</span>
+<span class="sd">            real suite, and run it isolated from the agent.</span>
+<span class="sd">        metrics: Optional ``{name: Metric}`` scored on every episode against ``task.gold``, with</span>
+<span class="sd">            the **suite&#39;s Layer-A grammar injected** -- this is how the tool/argument cost</span>
+<span class="sd">            weights reach a ``tool_call``/``trajectory`` metric. Results land in</span>
+<span class="sd">            ``report.detail[&quot;metrics&quot;]``.</span>
+<span class="sd">        price/prices: Rates for costing the episodes (see :mod:`ek.agents.cost`).</span>
+<span class="sd">        run: :class:`~ek.agents.base.RunProvenance` for this run (model, simulator, suite</span>
+<span class="sd">            version, scaffold). Recorded on every episode and on any baseline saved from it.</span>
+<span class="sd">        seed: Base RNG seed. Trial *i* of each task uses ``seed + i``: it is recorded on the</span>
+<span class="sd">            episode&#39;s provenance **and passed to the agent** when the agent accepts a ``seed``</span>
+<span class="sd">            keyword.</span>
+<span class="sd">        persist/run_id/rootdir: Persist the run to the ``runs``/``results`` stores.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A :class:`~ek.agents.reliability.ReliabilityReport` carrying ``pass@k``, ``pass^k`` (with</span>
+<span class="sd">        a bootstrap CI), the success rate (with a Wilson CI), the per-slice cuts, and the cost</span>
+<span class="sd">        report -- because reliability without cost is only half the answer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">task_list</span> <span class="o">=</span> <span class="n">_as_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="n">checker</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
+    <span class="n">base_run</span> <span class="o">=</span> <span class="n">run</span> <span class="ow">or</span> <span class="n">RunProvenance</span><span class="p">()</span>
+    <span class="c1"># The suite&#39;s Layer-A grammar (tools + their arg cost weights). This is what makes the</span>
+    <span class="c1"># extra metrics cost-sensitive: a wrong argument to a *destructive* tool is not one unit</span>
+    <span class="c1"># of error. Built once and injected -- it is the same frozen cost SSOT the IE side uses.</span>
+    <span class="n">grammar</span> <span class="o">=</span> <span class="n">suite_grammar</span><span class="p">(</span><span class="n">task_list</span><span class="p">)</span>
+    <span class="n">accepts_seed</span> <span class="o">=</span> <span class="n">_accepts_seed</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span>
+
+    <span class="n">episodes</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">by_task</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">task_list</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">trial_seed</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">seed</span> <span class="o">+</span> <span class="n">trial</span>
+            <span class="n">trial_run</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">base_run</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">trial_seed</span><span class="p">)</span>
+            <span class="c1"># Actually *hand the agent* its seed when it can take one, rather than only</span>
+            <span class="c1"># stamping it on provenance and calling the run &quot;reproducible&quot;.</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">agent</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">trial_seed</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">accepts_seed</span> <span class="ow">and</span> <span class="n">trial_seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">agent</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">episode</span> <span class="o">=</span> <span class="n">_as_episode</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+            <span class="n">episode</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="n">episode</span><span class="o">.</span><span class="n">run</span> <span class="ow">or</span> <span class="n">trial_run</span><span class="p">)</span>
+            <span class="n">episode</span> <span class="o">=</span> <span class="n">episode</span><span class="o">.</span><span class="n">graded</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">checker</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">gold</span><span class="p">)))</span>
+            <span class="n">episodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">episode</span><span class="p">)</span>
+            <span class="n">by_task</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">episode</span><span class="p">)</span>
+
+    <span class="n">slices</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">slice</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">task_list</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">slice</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="n">cost_report</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">price</span><span class="p">)</span>
+    <span class="n">costs</span><span class="p">[</span><span class="s2">&quot;cost_ci&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_bootstrap_cost_ci</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">price</span><span class="p">)</span>
+
+    <span class="n">report</span> <span class="o">=</span> <span class="n">reliability</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="n">slices</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">costs</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;episodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">episodes</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;provenance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_provenance_dict</span><span class="p">(</span><span class="n">base_run</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;value_weighted_success&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value_weighted_success</span><span class="p">(</span><span class="n">task_list</span><span class="p">,</span> <span class="n">by_task</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;metrics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_score_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">task_list</span><span class="p">,</span> <span class="n">by_task</span><span class="p">,</span> <span class="n">grammar</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">persist</span><span class="p">:</span>
+        <span class="n">_persist</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">run_id</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_accepts_seed</span><span class="p">(</span><span class="n">fn</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether the agent takes a keyword ``seed`` (same capability probe the facade uses).&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;seed&quot;</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_value_weighted_success</span><span class="p">(</span><span class="n">task_list</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TaskSpec</span><span class="p">],</span> <span class="n">by_task</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Success rate weighted by each task&#39;s ``value`` -- not all tasks are worth the same.</span>
+
+<span class="sd">    ``TaskSpec.value`` is the task-level analogue of ``FieldSpec.importance``: finishing a</span>
+<span class="sd">    high-value task counts for more than finishing a trivial one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">hit</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">task_list</span><span class="p">:</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">by_task</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">eps</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">task</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span>
+        <span class="n">hit</span> <span class="o">+=</span> <span class="n">task</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">eps</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">hit</span> <span class="o">/</span> <span class="n">total</span><span class="p">)</span> <span class="k">if</span> <span class="n">total</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_score_metrics</span><span class="p">(</span>
+    <span class="n">metrics</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">task_list</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TaskSpec</span><span class="p">],</span> <span class="n">by_task</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">grammar</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Score every episode with each extra metric, injecting the suite&#39;s Layer-A grammar.</span>
+
+<span class="sd">    This is how the cost weights on ``ToolSpec``/``FieldSpec.importance`` actually reach a</span>
+<span class="sd">    tool-call or trajectory metric on the harness path (otherwise they are inert).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gold_less</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">task_id</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">task_list</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">gold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">gold_less</span><span class="p">:</span>
+        <span class="c1"># Dropping them in silence would report an empty/partial metrics block as if it covered</span>
+        <span class="c1"># the suite. Say what was excluded and why.</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;run_suite(metrics=...): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gold_less</span><span class="p">)</span><span class="si">}</span><span class="s2"> task(s) have no `gold` and were excluded &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;from the extra metrics (e.g. </span><span class="si">{</span><span class="n">gold_less</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">). Set TaskSpec.gold to score them.&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">task_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">gold</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="n">by_task</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="p">()):</span>
+                <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">gold</span><span class="p">,</span> <span class="n">grammar</span><span class="o">=</span><span class="n">grammar</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">aggregate</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">metric</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="s2">&quot;aggregate&quot;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;aggregate&quot;</span><span class="p">:</span> <span class="n">aggregate</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="s2">&quot;n_excluded&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_less</span><span class="p">)}</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_bootstrap_cost_ci</span><span class="p">(</span><span class="n">episodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Episode</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bootstrap CI on the cost-per-success **ratio** (skewed: a normal interval is meaningless).</span>
+
+<span class="sd">    ``(None, None)`` when no rates were supplied -- ek does not invent prices.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">price</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">episode_dollars</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="n">prices</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">price</span><span class="p">),</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">success</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">episodes</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pairs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">ratio</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cost_of_pass</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sample</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sample</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">bootstrap_ci</span><span class="p">(</span><span class="n">pairs</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_provenance_dict</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">RunProvenance</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+        <span class="s2">&quot;simulator&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">simulator</span><span class="p">,</span>
+        <span class="s2">&quot;suite_version&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">suite_version</span><span class="p">,</span>
+        <span class="s2">&quot;scaffold&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">scaffold</span><span class="p">,</span>
+        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_persist</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">ReliabilityReport</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">rootdir</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">run_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+        <span class="n">run_id</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;agent-run-%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%S&quot;</span><span class="p">)</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">_summary</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;runs&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span>
+    <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="o">**</span><span class="n">summary</span><span class="p">,</span>
+        <span class="s2">&quot;per_task&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">per_task</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_json_num</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;JSON has no ``Infinity``/``NaN``. Persist them as ``null`` rather than emit invalid JSON.</span>
+
+<span class="sd">    ``cost_per_success`` is legitimately ``inf`` when nothing succeeded; Python&#39;s ``json`` would</span>
+<span class="sd">    happily write a bare ``Infinity`` token that every strict parser (jq, a JS dashboard) rejects.</span>
+<span class="sd">    ``null`` here means &quot;not measurable&quot;, which is exactly what an infinite cost-of-pass is.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_summary</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">ReliabilityReport</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;agent&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+        <span class="s2">&quot;n_tasks&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n_tasks</span><span class="p">,</span>
+        <span class="s2">&quot;n_trials&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n_trials</span><span class="p">,</span>
+        <span class="c1"># Persist the raw COUNTS, not just the rate: a proper two-sample test on the difference</span>
+        <span class="c1"># needs (successes, n) for both runs, and a rate alone cannot reconstruct them.</span>
+        <span class="s2">&quot;n_success&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n_success</span><span class="p">,</span>
+        <span class="s2">&quot;success_rate&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">success_rate</span><span class="p">,</span>
+        <span class="s2">&quot;success_ci&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">success_ci</span><span class="p">),</span>
+        <span class="s2">&quot;pass_at_k&quot;</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_at_k</span><span class="p">),</span>
+        <span class="s2">&quot;pass_hat_k&quot;</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">),</span>
+        <span class="s2">&quot;pass_hat_k_ci&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_json_num</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">],</span>
+        <span class="s2">&quot;stochastic&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">stochastic</span><span class="p">,</span>
+        <span class="s2">&quot;per_slice&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">,</span>
+        <span class="s2">&quot;cost_per_success&quot;</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">)),</span>
+        <span class="s2">&quot;cost_ci&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">_json_num</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_ci&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))],</span>
+        <span class="s2">&quot;total_dollars&quot;</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;total_dollars&quot;</span><span class="p">)),</span>
+        <span class="s2">&quot;provenance&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;provenance&quot;</span><span class="p">,</span> <span class="p">{}),</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Baselines + the variance-aware gate</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="save_agent_baseline">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/harness.html#ek.save_agent_baseline">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_agent_baseline</span><span class="p">(</span>
+    <span class="n">report</span><span class="p">:</span> <span class="n">ReliabilityReport</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Freeze a run as a named baseline (including its provenance, so the gate can guard it).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if the run evaluated nothing. An empty baseline is worse than no baseline --</span>
+<span class="sd">            it is a *permanent free pass*, because every bound in it is the maximally-uncertain</span>
+<span class="sd">            default and no later run can be shown to fall below it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">n_trials</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;save_agent_baseline(</span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">): refusing to freeze a run that evaluated ZERO &quot;</span>
+            <span class="s2">&quot;trials. Such a baseline can never be regressed against -- it would pass every &quot;</span>
+            <span class="s2">&quot;future run, including a totally broken one.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">record</span> <span class="o">=</span> <span class="n">_summary</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;baselines&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span>
+    <span class="k">return</span> <span class="n">record</span></div>
+
+
+
+<div class="viewcode-block" id="load_agent_baseline">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/harness.html#ek.load_agent_baseline">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_agent_baseline</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a named agent baseline (or ``None``).&quot;&quot;&quot;</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;baselines&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">store</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">store</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="AgentGateResult">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/harness.html#ek.AgentGateResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentGateResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Outcome of a variance-aware agent regression check.&quot;&quot;&quot;</span>
+
+    <span class="n">passed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">reasons</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">pass_hat_k</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pass_hat_k_baseline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">success_rate</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">success_rate_baseline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">cost_per_success</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">cost_per_success_baseline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">underpowered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">passed</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_comparability</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;provenance&quot;</span><span class="p">,</span> <span class="p">{})</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;simulator&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;suite_version&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scaffold&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="agent_regression_gate">
+<a class="viewcode-back" href="../../../module_docs/ek/agents/harness.html#ek.agent_regression_gate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">agent_regression_gate</span><span class="p">(</span>
+    <span class="n">report</span><span class="p">:</span> <span class="n">ReliabilityReport</span><span class="p">,</span>
+    <span class="n">baseline</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">cost_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AgentGateResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fail only when the evidence says the agent **really** got worse -- not on noise.</span>
+
+<span class="sd">    Tests the **difference** ``current - baseline``, with *both* runs&#39; uncertainty folded in:</span>
+<span class="sd">    a Newcombe score interval on the success rate, and (for ``k &gt; 1``) a combined-SE bound on</span>
+<span class="sd">    ``pass^k``. A regression is declared only when the upper bound of that change is below</span>
+<span class="sd">    ``-tolerance`` -- i.e. we are confident the true change is negative.</span>
+
+<span class="sd">    Two tempting shortcuts are **both wrong**, and this module has shipped and fixed each:</span>
+
+<span class="sd">    - Comparing our interval to the baseline&#39;s **point**. The baseline is *itself* a noisy</span>
+<span class="sd">      estimate; a Wilson upper bound only reaches 1.0 when every trial passed, so a single flake</span>
+<span class="sd">      against a lucky baseline reads as a &quot;confident regression&quot;.</span>
+<span class="sd">    - Asking whether the two 95% intervals **overlap**. That is not a 5% test but roughly a 0.5%</span>
+<span class="sd">      one: it buys a calm gate by going blind (a 15-point drop on a 60-task suite becomes</span>
+<span class="sd">      invisible). A gate that cannot see a real regression is as broken as one that cries wolf.</span>
+
+<span class="sd">    A result that is merely *worse but not significantly so* is not a clean pass either -- it is</span>
+<span class="sd">    an underpowered experiment, and the result says so (``underpowered``, plus a warning).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: if the baseline was produced with a different **user simulator**, suite</span>
+<span class="sd">            version, or scaffold -- those runs are not comparable, and silently comparing them</span>
+<span class="sd">            would be a category error (the same reason the offline gate refuses to compare two</span>
+<span class="sd">            different metrics); if the baseline recorded zero trials (a permanent free pass); or</span>
+<span class="sd">            if it is malformed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">load_agent_baseline</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="n">ReliabilityReport</span><span class="p">):</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">_summary</span><span class="p">(</span><span class="n">baseline</span><span class="p">)</span>  <span class="c1"># comparing two live reports is the natural call</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">baseline</span>
+
+    <span class="c1"># An empty run must never be green. With no tasks every CI is the maximally-uncertain</span>
+    <span class="c1"># [0, 1], so *no* regression test can fire and a broken loader / bad glob / over-filtered</span>
+    <span class="c1"># suite would sail through as a pass. Absence of evidence is not evidence of no regression.</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">n_trials</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AgentGateResult</span><span class="p">(</span>
+            <span class="n">passed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">reasons</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;the run evaluated ZERO trials -- an empty suite cannot pass a regression &quot;</span>
+                <span class="s2">&quot;gate (check the task loader/filter).&quot;</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">base</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># no baseline yet -&gt; first run always passes</span>
+        <span class="k">return</span> <span class="n">AgentGateResult</span><span class="p">(</span>
+            <span class="n">passed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">pass_hat_k</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span>
+            <span class="n">success_rate</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">success_rate</span><span class="p">,</span>
+            <span class="n">cost_per_success</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="n">_validate_baseline</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+    <span class="n">current_key</span> <span class="o">=</span> <span class="n">_comparability</span><span class="p">(</span><span class="n">_summary</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
+    <span class="n">base_key</span> <span class="o">=</span> <span class="n">_comparability</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">current_key</span> <span class="o">!=</span> <span class="n">base_key</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;agent_regression_gate: refusing to compare runs with different evaluation &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;conditions -- baseline (simulator, suite_version, scaffold)=</span><span class="si">{</span><span class="n">base_key</span><span class="si">!r}</span><span class="s2"> vs &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;current=</span><span class="si">{</span><span class="n">current_key</span><span class="si">!r}</span><span class="s2">. A changed user-simulator or suite version moves the &quot;</span>
+            <span class="s2">&quot;score on its own; re-baseline instead of comparing across them.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">reasons</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">base_hat</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pass_hat_k&quot;</span><span class="p">)</span>
+    <span class="n">base_rate</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success_rate&quot;</span><span class="p">)</span>
+    <span class="n">base_cost</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">)</span>
+    <span class="n">cur_cost</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">)</span>
+    <span class="n">cost_ci</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cost_ci&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># A suite that shrank is not the same experiment. (`is not None`, not truthiness: a</span>
+    <span class="c1"># zero-task baseline must not slip through the check by being falsy.)</span>
+    <span class="n">base_tasks</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_tasks&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">base_tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">n_tasks</span> <span class="o">&lt;</span> <span class="n">base_tasks</span><span class="p">:</span>
+        <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;the suite shrank: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">n_tasks</span><span class="si">}</span><span class="s2"> tasks vs </span><span class="si">{</span><span class="n">base_tasks</span><span class="si">}</span><span class="s2"> in the baseline -- &quot;</span>
+            <span class="s2">&quot;not the same experiment (re-baseline, or restore the missing tasks).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># THE core rule: test the DIFFERENCE, with both runs&#39; uncertainty folded in.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Two wrong ways to do this, both of which we have now been bitten by:</span>
+    <span class="c1">#   * compare our interval to the baseline&#39;s POINT -- the baseline is itself a noisy</span>
+    <span class="c1">#     estimate, so one flake against a lucky baseline reads as a confident regression;</span>
+    <span class="c1">#   * ask whether the two 95% intervals OVERLAP -- that is not a 5% test but roughly a</span>
+    <span class="c1">#     0.5% one, and it buys its calm by going blind (a 15-point drop on a 60-task suite</span>
+    <span class="c1">#     becomes invisible). A gate that cannot see a real regression is as broken as one</span>
+    <span class="c1">#     that cries wolf.</span>
+    <span class="c1"># So: a proper two-sample interval on (current - baseline). Regression iff its UPPER bound</span>
+    <span class="c1"># is below -tolerance, i.e. we are confident the true change is negative.</span>
+    <span class="n">base_succ</span><span class="p">,</span> <span class="n">base_trials</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_success&quot;</span><span class="p">),</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_trials&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">base_succ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">base_trials</span><span class="p">:</span>
+        <span class="n">_lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">newcombe_difference</span><span class="p">(</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">n_success</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">n_trials</span><span class="p">,</span> <span class="n">base_succ</span><span class="p">,</span> <span class="n">base_trials</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">hi</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;success rate regressed: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">success_rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs baseline &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; the 95% interval for the change tops out at </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">base_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">success_ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">base_rate</span> <span class="o">-</span> <span class="n">tolerance</span><span class="p">:</span>
+        <span class="c1"># Legacy baseline with no counts: fall back to the (cruder) interval-vs-point test.</span>
+        <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;success rate regressed: CI </span><span class="si">{</span><span class="n">_fmt_ci</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">success_ci</span><span class="p">)</span><span class="si">}</span><span class="s2"> lies below baseline &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_rate</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># pass^k is a mean of per-task estimators, not a raw proportion, so Newcombe does not apply</span>
+    <span class="c1"># -- but the same principle does: bound the DIFFERENCE using both runs&#39; uncertainty.</span>
+    <span class="c1">#</span>
+    <span class="c1"># At k == 1 this arm is worse than useless and is SKIPPED. With one trial per task</span>
+    <span class="c1"># pass^1 = C(c,1)/C(n,1) = c/n, which is *identically* the success rate -- so it would</span>
+    <span class="c1"># re-test the very statistic the Newcombe arm above already tested, using a strictly less</span>
+    <span class="c1"># well-calibrated method (an SE back-derived from a bootstrap percentile interval). It</span>
+    <span class="c1"># contributes no power, only false alarms.</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">base_hat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">base_ci</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pass_hat_k_ci&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">base_hat</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">)</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">difference_upper_bound</span><span class="p">(</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">,</span> <span class="n">base_ci</span>
+        <span class="p">)</span>
+        <span class="c1"># A zero-width baseline CI (a *perfect* baseline: every task passed every trial) would</span>
+        <span class="c1"># contribute zero uncertainty and silently reduce this back to the interval-vs-POINT</span>
+        <span class="c1"># test this module exists to avoid -- and a perfect baseline is not rare. Floor the</span>
+        <span class="c1"># baseline&#39;s SE with the current run&#39;s rather than pretend it is certain.</span>
+        <span class="k">if</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">base_ci</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">):</span>
+            <span class="n">hi</span> <span class="o">=</span> <span class="n">difference_upper_bound</span><span class="p">(</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hi</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">:</span>
+            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;pass^</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> regressed: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs baseline &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_hat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; the interval for the change tops out at </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+    <span class="c1"># Cost: fail only if we are CONFIDENT it rose (our low above the baseline&#39;s high).</span>
+    <span class="n">cost_ceiling</span> <span class="o">=</span> <span class="n">_upper</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">&quot;cost_ci&quot;</span><span class="p">,</span> <span class="n">base_cost</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">cost_ceiling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">cost_ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">_finite</span><span class="p">(</span><span class="n">cost_ceiling</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">_finite</span><span class="p">(</span><span class="n">cost_ci</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="n">cost_ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">cost_ceiling</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">cost_tolerance</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;cost per success regressed: CI low </span><span class="si">{</span><span class="n">cost_ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4g</span><span class="si">}</span><span class="s2"> exceeds the baseline CI &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;high </span><span class="si">{</span><span class="n">cost_ceiling</span><span class="si">:</span><span class="s2">.4g</span><span class="si">}</span><span class="s2"> (+</span><span class="si">{</span><span class="n">cost_tolerance</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># An overlapping interval is not a clean pass -- it is an underpowered experiment. Say so.</span>
+    <span class="n">underpowered</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="n">reasons</span>
+        <span class="ow">and</span> <span class="n">base_hat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="o">&lt;</span> <span class="n">base_hat</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">underpowered</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;agent_regression_gate: pass^</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> fell from </span><span class="si">{</span><span class="n">base_hat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> to &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, but the drop is not statistically significant -- the run &quot;</span>
+            <span class="s2">&quot;is underpowered, not clean. Add trials or tasks before trusting this pass.&quot;</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">AgentGateResult</span><span class="p">(</span>
+        <span class="n">passed</span><span class="o">=</span><span class="ow">not</span> <span class="n">reasons</span><span class="p">,</span>
+        <span class="n">reasons</span><span class="o">=</span><span class="n">reasons</span><span class="p">,</span>
+        <span class="n">pass_hat_k</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span>
+        <span class="n">pass_hat_k_baseline</span><span class="o">=</span><span class="n">base_hat</span><span class="p">,</span>
+        <span class="n">success_rate</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">success_rate</span><span class="p">,</span>
+        <span class="n">success_rate_baseline</span><span class="o">=</span><span class="n">base_rate</span><span class="p">,</span>
+        <span class="n">cost_per_success</span><span class="o">=</span><span class="n">cur_cost</span><span class="p">,</span>
+        <span class="n">cost_per_success_baseline</span><span class="o">=</span><span class="n">base_cost</span><span class="p">,</span>
+        <span class="n">underpowered</span><span class="o">=</span><span class="n">underpowered</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_baseline</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reject a baseline that cannot be honestly regressed against.</span>
+
+<span class="sd">    A hand-written or older-format record can be *malformed* rather than merely empty, and each</span>
+<span class="sd">    of these failed badly before: a missing ``n_trials`` was reported as &quot;recorded ZERO trials&quot;</span>
+<span class="sd">    (misleading -- it is a missing key); ``n_success &gt; n_trials`` blew up with a raw</span>
+<span class="sd">    ``math domain error`` out of ``wilson_interval``; and a record with counts but no rate at all</span>
+<span class="sd">    caused the success check to be **silently skipped** -- a gate that quietly tests nothing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;n_trials&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">base</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;agent_regression_gate: malformed baseline -- no &#39;n_trials&#39; key. It was not &quot;</span>
+            <span class="s2">&quot;produced by save_agent_baseline; re-baseline from a real run.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">n_trials</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_trials&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">n_trials</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;agent_regression_gate: the baseline recorded ZERO trials, so it cannot be &quot;</span>
+            <span class="s2">&quot;regressed against -- every bound in it is the maximally-uncertain default, and &quot;</span>
+            <span class="s2">&quot;any run at all would &#39;pass&#39;. Re-baseline from a real run.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">n_success</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;n_success&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_success</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">n_success</span> <span class="o">&lt;=</span> <span class="n">n_trials</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;agent_regression_gate: malformed baseline -- n_success=</span><span class="si">{</span><span class="n">n_success</span><span class="si">}</span><span class="s2"> is not in &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;[0, n_trials=</span><span class="si">{</span><span class="n">n_trials</span><span class="si">}</span><span class="s2">].&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_success</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success_rate&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;agent_regression_gate: malformed baseline -- it carries neither &#39;n_success&#39; nor &quot;</span>
+            <span class="s2">&quot;&#39;success_rate&#39;, so the success check would be silently skipped. Re-baseline.&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_lower</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">ci_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The baseline&#39;s lower confidence bound (falling back to its point estimate).&quot;&quot;&quot;</span>
+    <span class="n">ci</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ci_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ci</span> <span class="ow">and</span> <span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">point</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_upper</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">ci_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The baseline&#39;s upper confidence bound (falling back to its point estimate).&quot;&quot;&quot;</span>
+    <span class="n">ci</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ci_key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ci</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">point</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fmt_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">ci</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">ci</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">]&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_finite</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
