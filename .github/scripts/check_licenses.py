@@ -136,7 +136,9 @@ def main(path: str) -> int:
 
     if violations or unaudited:
         return 1
-    print("License gate passed: no copyleft/non-commercial/unaudited licenses in the closure.")
+    print(
+        "License gate passed: no copyleft/non-commercial/unaudited licenses in the closure."
+    )
     return 0
 
 

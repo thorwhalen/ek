@@ -168,7 +168,9 @@ def run_suite(
     report = reliability(episodes, k=k, slices=slices or None, cost=costs)
     report.detail["episodes"] = len(episodes)
     report.detail["provenance"] = _provenance_dict(base_run)
-    report.detail["value_weighted_success"] = _value_weighted_success(task_list, by_task)
+    report.detail["value_weighted_success"] = _value_weighted_success(
+        task_list, by_task
+    )
     if metrics:
         report.detail["metrics"] = _score_metrics(metrics, task_list, by_task, grammar)
 
@@ -234,7 +236,11 @@ def _score_metrics(
             if hasattr(metric, "aggregate")
             else sum(float(s) for s in scores) / len(scores)
         )
-        out[name] = {"aggregate": aggregate, "n": len(scores), "n_excluded": len(gold_less)}
+        out[name] = {
+            "aggregate": aggregate,
+            "n": len(scores),
+            "n_excluded": len(gold_less),
+        }
     return out
 
 

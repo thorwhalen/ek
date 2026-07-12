@@ -104,9 +104,7 @@ def pass_hat_k(*, n: int, c: int, k: int) -> float:
 # ---------------------------------------------------------------------------
 
 
-def wilson_interval(
-    successes: int, n: int, *, z: float = DEFAULT_Z
-) -> tuple:
+def wilson_interval(successes: int, n: int, *, z: float = DEFAULT_Z) -> tuple:
     """Wilson score interval for a proportion -- correct in the tails, unlike Wald/CLT.
 
     The naive normal ("Wald") interval is badly wrong at small n and near 0/1 -- exactly
@@ -181,7 +179,12 @@ def _se_from_ci(ci: Sequence, *, z: float = DEFAULT_Z) -> Optional[float]:
 
 
 def difference_upper_bound(
-    value_a: float, ci_a: Sequence, value_b: float, ci_b: Sequence, *, z: float = DEFAULT_Z
+    value_a: float,
+    ci_a: Sequence,
+    value_b: float,
+    ci_b: Sequence,
+    *,
+    z: float = DEFAULT_Z,
 ) -> Optional[float]:
     """Upper bound of ``a - b`` for two statistics known only through their CIs.
 

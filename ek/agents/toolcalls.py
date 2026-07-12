@@ -167,7 +167,8 @@ def match_calls(pred: Sequence, gold: Sequence, *, canon=None) -> tuple:
                 overlap = sum(
                     1
                     for key in set(g_args) & set(p_args)
-                    if _norm_value(p_args[key], canon) == _norm_value(g_args[key], canon)
+                    if _norm_value(p_args[key], canon)
+                    == _norm_value(g_args[key], canon)
                 )
                 # Prefer exact, then most agreeing args; ties broken by position (determinism).
                 candidates_scored.append((0 if exact else 1, -overlap, p_i, g_i))
