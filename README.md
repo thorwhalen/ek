@@ -49,23 +49,64 @@ report.detail["per_item"] # prediction, reference, score, confidence per documen
 Gold corpora, results, and runs persist to local `dol` stores under
 `~/.local/share/ek/`.
 
+## Evaluate an AI agent — in cost per successful task
+
+The second instance. Agent evaluation is the *same* 2×2, but the evaluated object is an
+**episode** (tool calls + observations ending in a final state) and the unit that matters is
+**cost per successfully completed task**, not cost per token — because tokens spent on a failed
+episode are pure waste.
+
+```python
+from ek.agents import TaskSpec, run_suite, per_million
+
+tasks = [TaskSpec("t1", input="2+2", gold="4", slice="easy"),
+         TaskSpec("t2", input="17*23", gold="391", slice="hard")]
+
+report = run_suite(my_agent, tasks, k=8, price=per_million(3.0, 15.0))
+
+report.pass_hat_k              # reliability: succeeds on ALL 8 trials (the production number)
+report.pass_at_k               # capability: succeeds on ANY of 8 trials
+report.success_ci              # a Wilson interval — a point estimate is not a result
+report.cost["cost_per_success"]  # Cost-of-Pass: dollars per *successful* task (inf if none)
+report.per_slice               # ...cut by difficulty
+```
+
+Two numbers, not one: an agent that "usually works" is not shippable, and `pass^k` is what
+exposes it (a 90%-reliable agent is only ~43% reliable across 8 tries). Agent scores are
+*stochastic*, so the regression gate compares **intervals, not points**, and refuses to compare
+runs whose user-simulator or suite version changed:
+
+```python
+from ek.agents import agent_regression_gate, save_agent_baseline
+save_agent_baseline(report, "v1")
+assert agent_regression_gate(new_report, "v1")   # fails only on a *real* regression, not noise
+```
+
+Also included: BFCL-style tool-call correctness (cost-weighted by the tool grammar, so a wrong
+argument to a *destructive* tool costs more), an order-sensitive trajectory distance, and an
+LLM-as-judge signal — with `judge_validation()`, because an unvalidated judge is a liability, not
+a metric. **None of this needs an extra**: `ek.agents` is pure-python, and the bridges duck-type,
+so it scores an Inspect/DeepEval run without importing either.
+
 ## Install
 
 ```bash
 pip install ek            # lean, permissive core (dol, config2py, jiwer, rapidfuzz)
 pip install "ek[ocr]"     # + the ocracy OCR fleet (install engines via ocracy extras)
+pip install "ek[agents]"  # + external agent harnesses to *run* (inspect-ai, deepeval, ragas)
 pip install "ek[all]"     # + the permissive capability tiers (metrics, calibration, ...)
 ```
 
-Heavier or copyleft/non-commercial libraries are never installed by default; see the
-extras in `pyproject.toml`. Some capabilities (e.g. the cost-weighted typed-graph
-metric and the ROVER consensus engine) are on the roadmap — see the tracking issue.
+Heavier or copyleft/non-commercial libraries are never installed by default, and a CI license
+gate enforces it; see the extras in `pyproject.toml`.
 
 ## CLI
 
 ```bash
 ek cer "hello wrld" "hello world"     # character error rate
 ek wer "hello wrld" "hello world"     # word error rate
+ek pass-k 10 9 --k 8                  # pass@k (capability) vs pass^k (reliability)
+ek cost-per-success 12.50 5           # dollars per successfully completed task
 ek where                              # the local data folder
 ek check tesseract                    # what an OCR engine needs to run
 ```

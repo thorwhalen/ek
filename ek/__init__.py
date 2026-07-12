@@ -154,6 +154,20 @@ from .validate import (
 )
 from .stores import app_folder, cache_this, json_store, mall, persistent_cache
 
+# The agent instance (mirrors `ek.ocr`). Imported last so the core facades/harness it builds
+# on are already loaded; importing it registers the agent metrics and success checkers by name
+# (so `score(episode, gold, metric="tool_call")` resolves). Agent evaluation is the same 2x2 on
+# a different object: the *episode*, scored in **cost per successfully completed task**.
+from . import agents as agents
+from .agents import (
+    Episode,
+    TaskSpec,
+    ToolSpec,
+    pass_at_k,
+    pass_hat_k,
+    run_suite,
+)
+
 __all__ = [
     # facades
     "score",
@@ -276,8 +290,16 @@ __all__ = [
     "app_folder",
     "persistent_cache",
     "cache_this",
+    # agent & assistant evaluation (cost per successful task) -- see ek.agents for the rest
+    "Episode",
+    "TaskSpec",
+    "ToolSpec",
+    "run_suite",
+    "pass_at_k",
+    "pass_hat_k",
     # subpackages
     "ocr",
+    "agents",
     "metrics",
     "canonicalize",
     "qe",

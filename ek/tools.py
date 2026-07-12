@@ -75,5 +75,65 @@ def version() -> str:
     return __version__
 
 
+# --- agent & assistant evaluation (cost per successful task) ---------------------
+
+
+def pass_k(n: int, c: int, k: int = 1) -> dict:
+    """pass@k (capability) and pass^k (reliability) from ``c`` successes in ``n`` trials.
+
+    ``pass@k`` asks "can it *ever* do this?"; ``pass^k`` asks "does it do this *every* time?"
+    -- and only the second is a production number.
+
+    Example::
+
+        python -m ek pass-k 10 9 --k 8      # a 90%-reliable agent, judged over 8 trials
+    """
+    from .agents import pass_at_k, pass_hat_k
+
+    # This module is the string-in/value-out dispatch layer (the CLI hands us strings).
+    n, c, k = int(n), int(c), int(k)
+    return {
+        "n": n,
+        "c": c,
+        "k": k,
+        "pass_at_k": round(pass_at_k(n=n, c=c, k=k), 4),
+        "pass_hat_k": round(pass_hat_k(n=n, c=c, k=k), 4),
+    }
+
+
+def cost_per_success(
+    total_dollars: float, successes: int, *, attempts: Optional[int] = None
+) -> dict:
+    """Cost-of-Pass: dollars per *successfully completed* task (``inf`` if none succeeded).
+
+    The unit that matters for an agent -- tokens spent on a failed episode are pure waste.
+
+    Example::
+
+        python -m ek cost-per-success 12.50 5 --attempts 20
+    """
+    from .agents import cost_of_pass
+
+    total_dollars, successes = float(total_dollars), int(successes)
+    out = {
+        "total_dollars": total_dollars,
+        "successes": successes,
+        "cost_per_success": cost_of_pass(total_dollars, successes),
+    }
+    if attempts:
+        out["success_rate"] = round(successes / int(attempts), 4)
+    return out
+
+
 #: SSOT of the functions exposed by the ``ek`` CLI.
-_dispatch_funcs = [cer, wer, rover, where, check, engines, version]
+_dispatch_funcs = [
+    cer,
+    wer,
+    rover,
+    pass_k,
+    cost_per_success,
+    where,
+    check,
+    engines,
+    version,
+]
