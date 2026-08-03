@@ -136,7 +136,7 @@ convention = "google"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
+testpaths = ["tests", "ek"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 [tool.wads.ci]
