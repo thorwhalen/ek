@@ -159,6 +159,14 @@ doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 [tool.wads.ci]
 project_name = ""
 
+[tool.wads.ci.install]
+# Install the permissive `metrics` tier in CI. The module docstrings of
+# ek/metrics/{anls,graphs,spans,tables}.py are executable doctests that exercise
+# the real implementations, so CI needs anls_star / networkx / seqeval / apted to
+# run them at all. Everything here is permissively licensed (see the note above
+# [tool.ruff]); quarantined libraries are still never installed.
+extras = "metrics"
+
 [tool.wads.ci.commands]
 pre_test = []
 test = []
