@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents.harness &mdash; ek 0.1.8 documentation</title>
+  <title>ek.agents.harness &mdash; ek 0.1.9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=22607128"></script>
+      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -283,7 +283,9 @@
     <span class="n">report</span> <span class="o">=</span> <span class="n">reliability</span><span class="p">(</span><span class="n">episodes</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="n">slices</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">costs</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;episodes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">episodes</span><span class="p">)</span>
     <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;provenance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_provenance_dict</span><span class="p">(</span><span class="n">base_run</span><span class="p">)</span>
-    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;value_weighted_success&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value_weighted_success</span><span class="p">(</span><span class="n">task_list</span><span class="p">,</span> <span class="n">by_task</span><span class="p">)</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;value_weighted_success&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_value_weighted_success</span><span class="p">(</span>
+        <span class="n">task_list</span><span class="p">,</span> <span class="n">by_task</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="n">metrics</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;metrics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_score_metrics</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">task_list</span><span class="p">,</span> <span class="n">by_task</span><span class="p">,</span> <span class="n">grammar</span><span class="p">)</span>
 
@@ -350,7 +352,11 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="s2">&quot;aggregate&quot;</span><span class="p">)</span>
             <span class="k">else</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;aggregate&quot;</span><span class="p">:</span> <span class="n">aggregate</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="s2">&quot;n_excluded&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_less</span><span class="p">)}</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;aggregate&quot;</span><span class="p">:</span> <span class="n">aggregate</span><span class="p">,</span>
+            <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span>
+            <span class="s2">&quot;n_excluded&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">gold_less</span><span class="p">),</span>
+        <span class="p">}</span>
     <span class="k">return</span> <span class="n">out</span>
 
 
