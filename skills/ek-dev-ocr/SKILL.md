@@ -58,13 +58,14 @@ array (decoded lazily — importing ocracy needs neither Pillow nor numpy).
 `OcrResult` (from `ocracy.base`), the SSOT shape ek evaluates:
 
 ```python
-res.text                  # full text in reading order (the headline payload)
-str(res)                  # == res.text
-for block in res: ...     # iterates res.blocks (TextBlocks)
-res.blocks                # list[TextBlock]; may be [] for VLM/markdown engines
-res.at_level("word")      # res.words / res.lines / res.paragraphs
-res.mean_confidence       # mean over blocks reporting one, else None
-res.markdown              # res.meta.get("markdown") — set by VLM engines, else None
+res.text  # full text in reading order (the headline payload)
+str(res)  # == res.text
+for block in res:
+    ...  # iterates res.blocks (TextBlocks)
+res.blocks  # list[TextBlock]; may be [] for VLM/markdown engines
+res.at_level("word")  # res.words / res.lines / res.paragraphs
+res.mean_confidence  # mean over blocks reporting one, else None
+res.markdown  # res.meta.get("markdown") — set by VLM engines, else None
 res.filter_confidence(t)  # copy keeping blocks with confidence >= t (drops None-conf)
 res.backend, res.raw, res.meta
 ```
@@ -76,11 +77,11 @@ res.backend, res.raw, res.meta
 
 ### The ledger (choose engines with eyes open)
 ```python
-ocracy.catalog                                # 64-entry Catalog (data/backends.json)
+ocracy.catalog  # 64-entry Catalog (data/backends.json)
 ocracy.find(is_local=True, open_source=True)  # filter -> new Catalog
-ocracy.find(implemented=True)                 # only the ~15 runnable today
-ocracy.catalog.compare(["tesseract","mathpix"])   # side-by-side fields
-ocracy.catalog["mathpix"].price_note          # surface this before billing!
+ocracy.find(implemented=True)  # only the ~15 runnable today
+ocracy.catalog.compare(["tesseract", "mathpix"])  # side-by-side fields
+ocracy.catalog["mathpix"].price_note  # surface this before billing!
 ```
 The catalog is a research ledger of **64 entries**; only ~15 have a working
 adapter (`google_vision, aws_textract, azure_document_intelligence, tesseract,

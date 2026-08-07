@@ -55,10 +55,10 @@ signal  ──►  calibrate  ──►  validate  ──►  decide
 def estimate_quality(
     extraction: AnnotatedExtraction,
     *,
-    sources=(),            # extra OcrResult-shaped inputs (for agreement signals)
-    calibrator=None,       # Calibrator; default Platt (smart default)
-    validators=(),         # Validator strategies (cross-field/cross-source)
-    policy=None,           # DecisionPolicy / SelectivePolicy; default a CostSensitiveGate
+    sources=(),  # extra OcrResult-shaped inputs (for agreement signals)
+    calibrator=None,  # Calibrator; default Platt (smart default)
+    validators=(),  # Validator strategies (cross-field/cross-source)
+    policy=None,  # DecisionPolicy / SelectivePolicy; default a CostSensitiveGate
 ) -> QualityReport: ...
 ```
 
@@ -140,10 +140,11 @@ final probability or a decision.
 from typing import Protocol, Mapping
 from collections.abc import Iterable
 
+
 class Signal(Protocol):
     def __call__(
-        self, extraction: 'AnnotatedExtraction', *, sources: tuple = ()
-    ) -> Mapping['NodePath', float]:
+        self, extraction: "AnnotatedExtraction", *, sources: tuple = ()
+    ) -> Mapping["NodePath", float]:
         """Map each field NodePath to a RAW (uncalibrated) score. No decisions."""
 ```
 
@@ -160,8 +161,11 @@ it pluggable, never hard-code one. Provide these `Aggregator` strategies:
 - `mean`.
 
 ```python
-def field_score(token_logps, *, aggregator=geo_mean, alpha=0.6) -> float:
-    ...  # dispatch on the injected aggregator; alpha only used by length_normalized
+def field_score(
+    token_logps, *, aggregator=geo_mean, alpha=0.6
+) -> (
+    float
+): ...  # dispatch on the injected aggregator; alpha only used by length_normalized
 ```
 
 #### AgreementSignal: the ROVER must-build
@@ -173,10 +177,10 @@ where to flag). Interface:
 
 ```python
 def rover(
-    hypotheses: 'Iterable[OcrResult]',   # ek depends only on the OcrResult SHAPE
+    hypotheses: "Iterable[OcrResult]",  # ek depends only on the OcrResult SHAPE
     *,
-    use_confidence: bool = True,         # confidence-weighted vote vs frequency-only
-) -> 'RoverConsensus':
+    use_confidence: bool = True,  # confidence-weighted vote vs frequency-only
+) -> "RoverConsensus":
     """N-way align hypotheses into a word transition network (iterative DP
     alignment), pick each slot by (optionally confidence-weighted) majority vote,
     and emit per-position agreement as a confidence signal.
@@ -199,8 +203,10 @@ never reinvent these.
 
 ```python
 class Calibrator(Protocol):
-    def fit(self, scores, correct) -> 'Calibrator': ...   # correct: bool "field-correct?"
-    def __call__(self, scores): ...                       # -> calibrated prob in [0,1]
+    def fit(
+        self, scores, correct
+    ) -> "Calibrator": ...  # correct: bool "field-correct?"
+    def __call__(self, scores): ...  # -> calibrated prob in [0,1]
 ```
 
 Provide three, by what input you have (ek_03 §2):
@@ -228,8 +234,8 @@ Reads ONLY calibrated scores (Hard Rule 1).
 ```python
 class DecisionPolicy(Protocol):
     def __call__(
-        self, calibrated: Mapping['NodePath', float], *, grammar=None
-    ) -> Mapping['NodePath', str]:   # -> {"accept","flag","block"}
+        self, calibrated: Mapping["NodePath", float], *, grammar=None
+    ) -> Mapping["NodePath", str]:  # -> {"accept","flag","block"}
         ...
 ```
 

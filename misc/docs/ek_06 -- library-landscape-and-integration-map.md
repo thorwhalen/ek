@@ -74,31 +74,40 @@ from dataclasses import dataclass, field
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+
 @dataclass(frozen=True)
 class FieldSpec:
     name: str
-    type: str                       # 'string'|'number'|'date'|'currency'|'enum'|...
-    importance: float = 1.0         # ATTRIBUTE-level cost weight (how much an error here costs)
-    domain: tuple[Any, ...] = ()    # enum members / (lo, hi) range / regex — read by validators
-    normalizer: str | None = None   # registry key: canonicalize before comparison
+    type: str  # 'string'|'number'|'date'|'currency'|'enum'|...
+    importance: float = (
+        1.0  # ATTRIBUTE-level cost weight (how much an error here costs)
+    )
+    domain: tuple[
+        Any, ...
+    ] = ()  # enum members / (lo, hi) range / regex — read by validators
+    normalizer: str | None = None  # registry key: canonicalize before comparison
+
 
 @dataclass(frozen=True)
 class NodeType:
     name: str
     fields: Mapping[str, FieldSpec]
-    importance: float = 1.0         # NODE-level cost weight
+    importance: float = 1.0  # NODE-level cost weight
+
 
 @dataclass(frozen=True)
 class EdgeType:
     name: str
-    src: str                        # source NodeType name
-    dst: str                        # target NodeType name
-    importance: float = 1.0         # EDGE-level cost weight
+    src: str  # source NodeType name
+    dst: str  # target NodeType name
+    importance: float = 1.0  # EDGE-level cost weight
+
 
 @dataclass(frozen=True)
-class GraphGrammar:                 # the schema (SSOT); cost weights live ON the types
+class GraphGrammar:  # the schema (SSOT); cost weights live ON the types
     node_types: Mapping[str, NodeType]
     edge_types: Mapping[str, EdgeType]
+
     # kind-aware default weight lookups for cost-sensitive metrics:
     def node_cost(self, name: str) -> float: ...
     def edge_cost(self, name: str) -> float: ...
@@ -111,31 +120,36 @@ Per-extraction runtime annotations: provenance for HITL drill-down, raw and cali
 
 ```python
 @dataclass(frozen=True)
-class NodePath:                    # addresses a node (and optional field) in an extracted graph
+class NodePath:  # addresses a node (and optional field) in an extracted graph
     node_id: str
-    node_type: str                 # a key into GraphGrammar.node_types
-    field: str | None = None       # a key into NodeType.fields, or None for the whole node
+    node_type: str  # a key into GraphGrammar.node_types
+    field: str | None = None  # a key into NodeType.fields, or None for the whole node
+
 
 @dataclass
 class Provenance:
     engine: str
-    source_span: tuple[int, int] | None = None     # char offsets into the raw text
-    bbox: Any = None                               # geometry for the image overlay (R1)
-    raw_transcripts: Sequence[str] = ()            # multiple raw OCR outputs for adjudication
+    source_span: tuple[int, int] | None = None  # char offsets into the raw text
+    bbox: Any = None  # geometry for the image overlay (R1)
+    raw_transcripts: Sequence[str] = ()  # multiple raw OCR outputs for adjudication
+
 
 @dataclass
-class FieldEstimate:                # one extracted value + its verification metadata
+class FieldEstimate:  # one extracted value + its verification metadata
     value: Any
-    raw_signals: dict[str, float] = field(default_factory=dict)  # intrinsic conf, logprob, agreement...
-    confidence: float | None = None                # calibrated P(correct) once through a Calibrator
-    findings: tuple["Finding", ...] = ()           # validator outputs (flag vs correct)
+    raw_signals: dict[str, float] = field(
+        default_factory=dict
+    )  # intrinsic conf, logprob, agreement...
+    confidence: float | None = None  # calibrated P(correct) once through a Calibrator
+    findings: tuple["Finding", ...] = ()  # validator outputs (flag vs correct)
     provenance: Provenance | None = None
-    decision: str | None = None                    # 'accept' | 'flag' | 'block' (selective prediction)
+    decision: str | None = None  # 'accept' | 'flag' | 'block' (selective prediction)
+
 
 @dataclass
-class AnnotatedExtraction:          # Layer B rides ALONGSIDE Layer A — never inside it
-    grammar: GraphGrammar                          # the unmutated SSOT schema, by reference
-    estimates: Mapping[NodePath, FieldEstimate]    # metadata keyed by graph path
+class AnnotatedExtraction:  # Layer B rides ALONGSIDE Layer A — never inside it
+    grammar: GraphGrammar  # the unmutated SSOT schema, by reference
+    estimates: Mapping[NodePath, FieldEstimate]  # metadata keyed by graph path
 ```
 
 ### Pluggable strategies (functions-as-parameters, typed via `Protocol`)
@@ -146,53 +160,73 @@ Every swappable behavior is a callable. Defaults are resolved from a registry by
 from typing import Protocol, runtime_checkable
 from collections.abc import Callable, Iterable
 
+
 @dataclass(frozen=True)
-class TypeRef:                          # identifies what a cost applies to, so the
-    kind: str                           #   injected cost fn can read the SSOT's weights:
-    name: str                           #   'node'|'edge' type name, or 'field's owning node
-    field: str | None = None            #   field name when kind == 'field'
+class TypeRef:  # identifies what a cost applies to, so the
+    kind: str  #   injected cost fn can read the SSOT's weights:
+    name: str  #   'node'|'edge' type name, or 'field's owning node
+    field: str | None = None  #   field name when kind == 'field'
+
 
 @runtime_checkable
-class Metric(Protocol):                 # reference-based: compare pred vs gold
+class Metric(Protocol):  # reference-based: compare pred vs gold
     # grammar carries the cost weights; field/string metrics may ignore it
-    def __call__(self, pred: Any, gold: Any, *, grammar: GraphGrammar | None = None) -> float: ...
+    def __call__(
+        self, pred: Any, gold: Any, *, grammar: GraphGrammar | None = None
+    ) -> float: ...
+
 
 @runtime_checkable
-class Validator(Protocol):              # reference-free: emit findings for a value
+class Validator(Protocol):  # reference-free: emit findings for a value
     def __call__(self, value: Any, *, spec: FieldSpec) -> Iterable["Finding"]: ...
 
-Normalizer       = Callable[[str], str]                              # canonicalize before compare
-ConfidenceSource = Callable[[FieldEstimate], Mapping[str, float]]    # reference-free signal(s)
+
+Normalizer = Callable[[str], str]  # canonicalize before compare
+ConfidenceSource = Callable[
+    [FieldEstimate], Mapping[str, float]
+]  # reference-free signal(s)
 # the cost fn reads the SSOT: a typed reference into the grammar -> weight
-CostWeight       = Callable[[GraphGrammar, TypeRef], float]          # default: read *.importance
+CostWeight = Callable[[GraphGrammar, TypeRef], float]  # default: read *.importance
+
 
 @runtime_checkable
 class Calibrator(Protocol):
     def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "Calibrator": ...
-    def __call__(self, raw_score: float) -> float: ...               # -> calibrated P(correct)
+    def __call__(self, raw_score: float) -> float: ...  # -> calibrated P(correct)
+
 
 @runtime_checkable
-class SelectivePolicy(Protocol):        # risk-coverage operating point -> a decision
-    def __call__(self, confidence: float) -> str: ...                # 'accept'|'flag'|'block'
+class SelectivePolicy(Protocol):  # risk-coverage operating point -> a decision
+    def __call__(self, confidence: float) -> str: ...  # 'accept'|'flag'|'block'
 ```
 
 ### The facade — progressive disclosure (one-liner defaults; full control underneath)
 
 ```python
-def score(pred, gold, *, grammar: GraphGrammar | None = None,
-          metric: Metric | str | None = None,
-          normalize: Normalizer | None = None,
-          weights: CostWeight | None = None) -> "Report":
+def score(
+    pred,
+    gold,
+    *,
+    grammar: GraphGrammar | None = None,
+    metric: Metric | str | None = None,
+    normalize: Normalizer | None = None,
+    weights: CostWeight | None = None,
+) -> "Report":
     """Reference-based. Picks the metric by output-object type unless one is given:
     str -> CER/WER (jiwer) or chrF (sacrebleu); fields -> nervaluate span-F1;
     table -> TEDS (table-recognition-metric); graph -> cost-weighted GED (networkx)."""
-    metric = _resolve_metric(metric, pred, gold, grammar)     # SSOT registry dispatch
+    metric = _resolve_metric(metric, pred, gold, grammar)  # SSOT registry dispatch
     ...
 
-def estimate_quality(extraction, *, sources: Sequence[ConfidenceSource] = (),
-                     calibrator: Calibrator | None = None,
-                     validators: Sequence[Validator] = (),
-                     policy: SelectivePolicy | None = None) -> "QualityReport":
+
+def estimate_quality(
+    extraction,
+    *,
+    sources: Sequence[ConfidenceSource] = (),
+    calibrator: Calibrator | None = None,
+    validators: Sequence[Validator] = (),
+    policy: SelectivePolicy | None = None,
+) -> "QualityReport":
     """Reference-free. Gather signals -> calibrate -> validate -> decide accept/flag/block."""
     ...
 ```
@@ -213,21 +247,33 @@ OCR is one (noisy) front-end among many (PDF, DOCX, XLSX, DB). The uniform `OcrR
 @dataclass
 class OcrUnit:
     text: str
-    bbox: Any = None                 # NORMALIZED to one convention (top-left origin, 0..1) in the adapter
-    confidence: float | None = None  # raw, engine-native scale (None if the engine emits none)
-    logprob: float | None = None     # generative engines only (TrOCR/OpenAI; Mistral pre-derived)
-    level: str = "word"              # 'symbol'|'word'|'line'|'region' — engines differ (R1)
+    bbox: Any = (
+        None  # NORMALIZED to one convention (top-left origin, 0..1) in the adapter
+    )
+    confidence: float | None = (
+        None  # raw, engine-native scale (None if the engine emits none)
+    )
+    logprob: float | None = (
+        None  # generative engines only (TrOCR/OpenAI; Mistral pre-derived)
+    )
+    level: str = "word"  # 'symbol'|'word'|'line'|'region' — engines differ (R1)
+
 
 @dataclass
 class OcrResult:
     text: str
     units: Sequence[OcrUnit]
     engine: str
-    confidence_grain: str            # finest native grain available, from R1: e.g. 'symbol'|'word'|'line'|'none'
-    has_real_provenance: bool        # False for Mistral text spans / Claude / OpenAI (model-guessed)
-    calibrated: bool = False         # True only for Mathpix (R1: the sole calibrated emitter)
+    confidence_grain: str  # finest native grain available, from R1: e.g. 'symbol'|'word'|'line'|'none'
+    has_real_provenance: (
+        bool  # False for Mistral text spans / Claude / OpenAI (model-guessed)
+    )
+    calibrated: bool = False  # True only for Mathpix (R1: the sole calibrated emitter)
 
-OcrBackend = Callable[[bytes], OcrResult]   # tesseract, rapidocr, doctr, gcv, textract, ... all conform
+
+OcrBackend = Callable[
+    [bytes], OcrResult
+]  # tesseract, rapidocr, doctr, gcv, textract, ... all conform
 ```
 
 The table below is the concrete R1→R6 bridge: it routes each engine's native signal to a `ConfidenceSource` path and a calibration treatment. Three paths emerge — **(i) intrinsic confidence → calibrate**, **(ii) token logprobs → recover then calibrate**, **(iii) no signal → built agreement layer** (`uqlm` self-consistency for VLMs; the ROVER engine for multi-OCR voting).

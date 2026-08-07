@@ -47,10 +47,11 @@ A crucial connection to the R1 capability inventory: OCR engines expose raw, **u
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field, model_validator
 
+
 class Donation(BaseModel):
     donor: Annotated[str, Field(min_length=1)]
     amount_usd: Annotated[float, Field(gt=0, le=1_000_000)]
-    country: Literal["US", "CA", "GB", "FR", "DE"]   # enum prior
+    country: Literal["US", "CA", "GB", "FR", "DE"]  # enum prior
     pledged: float
     received: float
 
@@ -124,32 +125,41 @@ Consistent with a functional/declarative Python style (composition over inherita
 from dataclasses import dataclass
 from typing import Callable, Protocol
 
+
 @dataclass(frozen=True)
 class Finding:
-    field: str; layer: str; severity: str; message: str
-    suggestion: str | None = None   # present iff the layer can CORRECT
+    field: str
+    layer: str
+    severity: str
+    message: str
+    suggestion: str | None = None  # present iff the layer can CORRECT
+
 
 class Validator(Protocol):
     layer: str
+
     def __call__(self, record: dict) -> list[Finding]: ...
+
 
 # Each layer is a plain function (or a closure capturing its config/deps).
 # Compose them declaratively; order encodes the cheap->expensive spine.
 def pipeline(*validators: Validator) -> Callable[[dict], list[Finding]]:
     def run(record: dict) -> list[Finding]:
         findings: list[Finding] = []
-        for v in validators:                 # short-circuit policy is injectable
+        for v in validators:  # short-circuit policy is injectable
             findings.extend(v(record))
         return findings
+
     return run
 
+
 validate = pipeline(
-    canonicalize,            # Layer 0  (CORRECTS, deterministic)
-    schema_checks,           # Layer 1  (FLAG/coerce; pydantic/pandera)
-    enum_fuzzy_resolve,      # Layer 2  (CORRECT on closed sets; rapidfuzz/symspell)
-    lm_surprisal_flags,      # Layer 3  (FLAG; kenlm/minicons, in-domain-tuned)
-    cross_source_vote,       # cross-cutting (FLAG/CORRECT by agreement; ROVER/self-consistency)
-    benford_outlier_flags,   # cross-cutting (FLAG; pyod/scipy)
+    canonicalize,  # Layer 0  (CORRECTS, deterministic)
+    schema_checks,  # Layer 1  (FLAG/coerce; pydantic/pandera)
+    enum_fuzzy_resolve,  # Layer 2  (CORRECT on closed sets; rapidfuzz/symspell)
+    lm_surprisal_flags,  # Layer 3  (FLAG; kenlm/minicons, in-domain-tuned)
+    cross_source_vote,  # cross-cutting (FLAG/CORRECT by agreement; ROVER/self-consistency)
+    benford_outlier_flags,  # cross-cutting (FLAG; pyod/scipy)
     # llm_correct,           # Layer 5  (CORRECT; gated to flagged spans only)
 )
 ```

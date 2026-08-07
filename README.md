@@ -7,9 +7,11 @@ a general problem, so the core is source-agnostic and the OCR pieces are optiona
 ```python
 import ek
 
-ek.score("hello wrld", "hello world")          # -> Score(value=0.0909..., metric='cer')
-ek.score("hello wrld", "hello world", metric="wer").value   # 0.5
-ek.evaluate([("ct", "cat"), ("dg", "dog")], metric="cer").aggregate   # 0.333... (global CER)
+ek.score("hello wrld", "hello world")  # -> Score(value=0.0909..., metric='cer')
+ek.score("hello wrld", "hello world", metric="wer").value  # 0.5
+ek.evaluate(
+    [("ct", "cat"), ("dg", "dog")], metric="cer"
+).aggregate  # 0.333... (global CER)
 ```
 
 ## What it does
@@ -37,13 +39,23 @@ benchmark any of its ~16 engines — or any `image -> OcrResult` callable of you
 ```python
 import ek.ocr
 
-gold = {"inv-1": {"image": "scan.png", "reference_text": "INVOICE 2024", "slice": "invoices"}}
+gold = {
+    "inv-1": {
+        "image": "scan.png",
+        "reference_text": "INVOICE 2024",
+        "slice": "invoices",
+    }
+}
 report = ek.ocr.evaluate_ocr(
-    "ocrmac", gold, metric="cer", normalize=["lower", "collapse_whitespace"], persist=True,
+    "ocrmac",
+    gold,
+    metric="cer",
+    normalize=["lower", "collapse_whitespace"],
+    persist=True,
 )
-report.aggregate          # corpus CER
-report.per_slice          # CER per document slice
-report.detail["per_item"] # prediction, reference, score, confidence per document
+report.aggregate  # corpus CER
+report.per_slice  # CER per document slice
+report.detail["per_item"]  # prediction, reference, score, confidence per document
 ```
 
 Gold corpora, results, and runs persist to local `dol` stores under
@@ -59,16 +71,20 @@ episode are pure waste.
 ```python
 from ek.agents import TaskSpec, run_suite, per_million
 
-tasks = [TaskSpec("t1", input="2+2", gold="4", slice="easy"),
-         TaskSpec("t2", input="17*23", gold="391", slice="hard")]
+tasks = [
+    TaskSpec("t1", input="2+2", gold="4", slice="easy"),
+    TaskSpec("t2", input="17*23", gold="391", slice="hard"),
+]
 
 report = run_suite(my_agent, tasks, k=8, price=per_million(3.0, 15.0))
 
-report.pass_hat_k              # reliability: succeeds on ALL 8 trials (the production number)
-report.pass_at_k               # capability: succeeds on ANY of 8 trials
-report.success_ci              # a Wilson interval — a point estimate is not a result
-report.cost["cost_per_success"]  # Cost-of-Pass: dollars per *successful* task (inf if none)
-report.per_slice               # ...cut by difficulty
+report.pass_hat_k  # reliability: succeeds on ALL 8 trials (the production number)
+report.pass_at_k  # capability: succeeds on ANY of 8 trials
+report.success_ci  # a Wilson interval — a point estimate is not a result
+report.cost[
+    "cost_per_success"
+]  # Cost-of-Pass: dollars per *successful* task (inf if none)
+report.per_slice  # ...cut by difficulty
 ```
 
 Two numbers, not one: an agent that "usually works" is not shippable, and `pass^k` is what
@@ -78,8 +94,11 @@ runs whose user-simulator or suite version changed:
 
 ```python
 from ek.agents import agent_regression_gate, save_agent_baseline
+
 save_agent_baseline(report, "v1")
-assert agent_regression_gate(new_report, "v1")   # fails only on a *real* regression, not noise
+assert agent_regression_gate(
+    new_report, "v1"
+)  # fails only on a *real* regression, not noise
 ```
 
 Also included: BFCL-style tool-call correctness (cost-weighted by the tool grammar, so a wrong

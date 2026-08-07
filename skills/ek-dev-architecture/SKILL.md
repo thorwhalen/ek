@@ -53,28 +53,34 @@ Carries types **and** importance/cost weights. Shared by the offline path, the o
 @dataclass(frozen=True)
 class FieldSpec:
     name: str
-    type: str                       # 'string'|'number'|'date'|'currency'|'enum'|...
-    importance: float = 1.0         # attribute-level cost weight
-    domain: tuple[Any, ...] = ()    # enum members / (lo, hi) range / regex — read by validators
-    normalizer: str | None = None   # registry key: canonicalize before comparison
+    type: str  # 'string'|'number'|'date'|'currency'|'enum'|...
+    importance: float = 1.0  # attribute-level cost weight
+    domain: tuple[
+        Any, ...
+    ] = ()  # enum members / (lo, hi) range / regex — read by validators
+    normalizer: str | None = None  # registry key: canonicalize before comparison
+
 
 @dataclass(frozen=True)
 class NodeType:
     name: str
     fields: Mapping[str, FieldSpec]
-    importance: float = 1.0         # node-level cost weight
+    importance: float = 1.0  # node-level cost weight
+
 
 @dataclass(frozen=True)
 class EdgeType:
     name: str
-    src: str                        # source NodeType name
-    dst: str                        # target NodeType name
-    importance: float = 1.0         # edge-level cost weight
+    src: str  # source NodeType name
+    dst: str  # target NodeType name
+    importance: float = 1.0  # edge-level cost weight
+
 
 @dataclass(frozen=True)
-class GraphGrammar:                  # the schema (SSOT)
+class GraphGrammar:  # the schema (SSOT)
     node_types: Mapping[str, NodeType]
     edge_types: Mapping[str, EdgeType]
+
     def node_cost(self, name: str) -> float: ...
     def edge_cost(self, name: str) -> float: ...
     def field_cost(self, node: str, field: str) -> float: ...
@@ -86,37 +92,43 @@ The frozen `GraphGrammar` is **referenced, never mutated**. Per-value metadata i
 
 ```python
 @dataclass(frozen=True)
-class NodePath:                     # addresses a node (and optional field) in an extracted graph
+class NodePath:  # addresses a node (and optional field) in an extracted graph
     node_id: str
-    node_type: str                  # key into GraphGrammar.node_types
-    field: str | None = None        # key into NodeType.fields, or None for the whole node
+    node_type: str  # key into GraphGrammar.node_types
+    field: str | None = None  # key into NodeType.fields, or None for the whole node
+
 
 @dataclass
 class Provenance:
     engine: str
     source_span: tuple[int, int] | None = None  # char offsets into raw text
-    bbox: Any = None                            # geometry for the image overlay
-    raw_transcripts: Sequence[str] = ()         # multiple raw OCR outputs for adjudication
+    bbox: Any = None  # geometry for the image overlay
+    raw_transcripts: Sequence[str] = ()  # multiple raw OCR outputs for adjudication
+
 
 @dataclass
-class FieldEstimate:                # one extracted value + its verification metadata
+class FieldEstimate:  # one extracted value + its verification metadata
     value: Any
-    raw_signals: dict[str, float] = field(default_factory=dict)  # intrinsic conf, logprob, agreement...
-    confidence: float | None = None              # calibrated P(correct), once through a Calibrator
-    findings: tuple["Finding", ...] = ()         # validator outputs
+    raw_signals: dict[str, float] = field(
+        default_factory=dict
+    )  # intrinsic conf, logprob, agreement...
+    confidence: float | None = None  # calibrated P(correct), once through a Calibrator
+    findings: tuple["Finding", ...] = ()  # validator outputs
     provenance: Provenance | None = None
-    decision: str | None = None                  # 'accept' | 'flag' | 'block'
+    decision: str | None = None  # 'accept' | 'flag' | 'block'
+
 
 @dataclass
 class Finding:
     field: str
-    layer: str                                   # which validation layer fired
-    severity: str                                # 'correct' | 'flag'
+    layer: str  # which validation layer fired
+    severity: str  # 'correct' | 'flag'
     message: str
     suggestion: Any = None
 
+
 @dataclass
-class AnnotatedExtraction:          # Layer B alongside Layer A, never inside it
+class AnnotatedExtraction:  # Layer B alongside Layer A, never inside it
     grammar: GraphGrammar
     estimates: Mapping[NodePath, FieldEstimate]
 ```
@@ -130,17 +142,23 @@ Detail: `misc/docs/ek_06 -- library-landscape-and-integration-map.md` (section "
 ## 4. The two facades (both share the Layer-A object)
 
 ```python
-def score(pred, gold, *, grammar=None, metric=None, normalize=None, weights=None) -> Score:
+def score(
+    pred, gold, *, grammar=None, metric=None, normalize=None, weights=None
+) -> Score:
     """Reference-based / offline, ONE comparison. Metric dispatched by output type
     unless given: str -> CER/WER (jiwer); record/dict -> field-F1; (extras add
     chrF/sacrebleu, span-F1/nervaluate, TEDS, cost-weighted GED/networkx)."""
+
 
 def evaluate(cases, *, metric=None, grammar=None, normalize=None) -> Report:
     """Reference-based / offline, a CORPUS of (pred, gold[, slice]) cases. Aggregates
     via the metric's own aggregator (global CER/WER accumulation, micro-F1) -- never
     a naive mean -- with optional per-slice cuts. The harness/benchmark build on this."""
 
-def estimate_quality(extraction, *, sources=(), calibrator=None, validators=(), policy=None) -> QualityReport:
+
+def estimate_quality(
+    extraction, *, sources=(), calibrator=None, validators=(), policy=None
+) -> QualityReport:
     """Reference-free / online. Gather signals -> calibrate -> validate -> decide accept/flag/block."""
 ```
 
@@ -161,24 +179,28 @@ Every swappable behavior is a **callable conforming to a `typing.Protocol`**, re
 class Metric(Protocol):
     def __call__(self, pred, gold, *, grammar: GraphGrammar | None = None) -> float: ...
 
+
 @runtime_checkable
 class Validator(Protocol):
     def __call__(self, value, *, spec: FieldSpec) -> Iterable[Finding]: ...
 
+
 @runtime_checkable
 class Calibrator(Protocol):
     def fit(self, scores: Sequence[float], correct: Sequence[bool]) -> "Calibrator": ...
-    def __call__(self, raw_score: float) -> float: ...   # -> calibrated P(correct)
+    def __call__(self, raw_score: float) -> float: ...  # -> calibrated P(correct)
+
 
 @runtime_checkable
-class SelectivePolicy(Protocol):                          # a.k.a. DecisionPolicy
-    def __call__(self, confidence: float) -> str: ...     # 'accept'|'flag'|'block'
+class SelectivePolicy(Protocol):  # a.k.a. DecisionPolicy
+    def __call__(self, confidence: float) -> str: ...  # 'accept'|'flag'|'block'
+
 
 # Callable aliases:
-Normalizer       = Callable[[str], str]
-ConfidenceSource = Callable[[FieldEstimate], Mapping[str, float]]   # a.k.a. Signal
-CostWeight       = Callable[[GraphGrammar, TypeRef], float]          # default: read *.importance
-OcrBackend       = Callable[[bytes], "OcrResult"]
+Normalizer = Callable[[str], str]
+ConfidenceSource = Callable[[FieldEstimate], Mapping[str, float]]  # a.k.a. Signal
+CostWeight = Callable[[GraphGrammar, TypeRef], float]  # default: read *.importance
+OcrBackend = Callable[[bytes], "OcrResult"]
 ```
 
 Core protocols: **Metric, Validator, Calibrator, DecisionPolicy/SelectivePolicy, Signal**. Aliases: **Normalizer, ConfidenceSource, CostWeight, OcrBackend**.
@@ -214,7 +236,7 @@ Every `.py` needs a module docstring (ruff D100 enforced). Keyword-only beyond t
 ## 7. Persistence model
 
 ```python
-config2py.AppData("ek")            # resolves ~/.local/share/ek/
+config2py.AppData("ek")  # resolves ~/.local/share/ek/
 dol.Jsons(get_artifact_dir(kind))  # a JSON MutableMapping store per kind
 ```
 

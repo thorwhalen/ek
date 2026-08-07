@@ -15,9 +15,11 @@ Every metric is a `typing.Protocol` callable, registry-resolved, injected keywor
 
 ```python
 @runtime_checkable
-class Metric(Protocol):                 # reference-based: compare pred vs gold
+class Metric(Protocol):  # reference-based: compare pred vs gold
     # grammar carries the cost weights; field/string metrics may ignore it
-    def __call__(self, pred: Any, gold: Any, *, grammar: GraphGrammar | None = None) -> float: ...
+    def __call__(
+        self, pred: Any, gold: Any, *, grammar: GraphGrammar | None = None
+    ) -> float: ...
 ```
 
 Rules:
@@ -33,15 +35,22 @@ Rules:
 # score() is the single-pair facade (returns Score); evaluate() is the corpus
 # facade (returns Report, aggregating via the metric's own .aggregate()).
 
-def score(pred, gold, *, grammar: GraphGrammar | None = None,
-          metric: Metric | str | None = None,
-          normalize: Normalizer | None = None,
-          weights: CostWeight | None = None) -> "Score":
+
+def score(
+    pred,
+    gold,
+    *,
+    grammar: GraphGrammar | None = None,
+    metric: Metric | str | None = None,
+    normalize: Normalizer | None = None,
+    weights: CostWeight | None = None,
+) -> "Score":
     """str -> CER/WER (jiwer); record/dict -> field-F1; (extras add chrF/sacrebleu,
     span-F1/nervaluate, TEDS, cost-weighted GED/networkx)."""
     canon = resolve_canonicalizer(normalize)
-    m = _resolve_metric(metric, pred, gold, canon)            # SSOT registry dispatch
+    m = _resolve_metric(metric, pred, gold, canon)  # SSOT registry dispatch
     return m(pred, gold, grammar=grammar)
+
 
 def evaluate(cases, *, metric=None, grammar=None, normalize=None) -> "Report":
     """Corpus of (pred, gold[, slice]) -> Report; aggregate via metric.aggregate()."""
@@ -83,11 +92,13 @@ Example wrapper shape (string CER via jiwer):
 
 ```python
 """String-level reference metrics (CER/WER) wrapping jiwer."""
+
 import jiwer
+
 
 def cer(pred: str, gold: str, *, grammar=None) -> float:
     """Character similarity = 1 - CER. Canonicalize before calling."""
-    err = jiwer.cer(reference=gold, hypothesis=pred)   # 0 perfect; can exceed 1.0
+    err = jiwer.cer(reference=gold, hypothesis=pred)  # 0 perfect; can exceed 1.0
     return max(0.0, 1.0 - err)
 ```
 
@@ -99,7 +110,7 @@ This is the one genuine build — confirmed unbuilt across the whole survey (`ek
 - **Where weights come from:** Layer-A importance. The `node_subst_cost`/`edge_subst_cost` callables read `NodeType.importance` / `EdgeType.importance` (and `FieldSpec.importance` for attribute-level substitutions), via the injected `CostWeight(grammar, TypeRef)`. So "two extra digits on a monetary amount" outweighs "a misspelled city." The grammar is the single source of truth — the cost fn just looks weights up:
 
 ```python
-CostWeight = Callable[[GraphGrammar, TypeRef], float]   # default: read *.importance
+CostWeight = Callable[[GraphGrammar, TypeRef], float]  # default: read *.importance
 # TypeRef(kind='node'|'edge'|'field', name=<type name>, field=<field or None>)
 ```
 

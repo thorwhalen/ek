@@ -70,19 +70,23 @@ Full hierarchical tree **BLOCK > PARA > TEXTLINE > WORD > SYMBOL(glyph)**, every
 
 ```python
 from tesserocr import PyTessBaseAPI, RIL, iterate_level
+
 with PyTessBaseAPI() as api:
-    api.SetImageFile('page.png'); api.Recognize()
+    api.SetImageFile("page.png")
+    api.Recognize()
     it = api.GetIterator()
     for sym in iterate_level(it, RIL.SYMBOL):
-        sym.GetUTF8Text(RIL.SYMBOL)   # 'A'
-        sym.Confidence(RIL.SYMBOL)    # 92.30  (0..100 float, uncalibrated)
-        sym.BoundingBox(RIL.SYMBOL)   # (x1, y1, x2, y2) ints
+        sym.GetUTF8Text(RIL.SYMBOL)  # 'A'
+        sym.Confidence(RIL.SYMBOL)  # 92.30  (0..100 float, uncalibrated)
+        sym.BoundingBox(RIL.SYMBOL)  # (x1, y1, x2, y2) ints
         for ch in sym.GetChoiceIterator():
-            ch.GetUTF8Text(), ch.Confidence()   # alt glyph + 0..100
+            ch.GetUTF8Text(), ch.Confidence()  # alt glyph + 0..100
 ```
 pytesseract flat table (one row per layout element at every level), verified column set:
 ```python
-import pytesseract; from pytesseract import Output
+import pytesseract
+from pytesseract import Output
+
 d = pytesseract.image_to_data(img, output_type=Output.DICT)
 # 12 keys, exact order: 'level','page_num','block_num','par_num',
 #   'line_num','word_num','left','top','width','height','conf','text'
@@ -132,8 +136,9 @@ The lowest-level public result is **per-detected-region** (word/line/phrase afte
 
 ```python
 import easyocr
-reader = easyocr.Reader(['en'])               # loads CRAFT + CRNN
-result = reader.readtext(img, detail=1, output_format='standard')
+
+reader = easyocr.Reader(["en"])  # loads CRAFT + CRNN
+result = reader.readtext(img, detail=1, output_format="standard")
 # result -> list of (bbox, text, confidence):
 # [([[189,75],[469,75],[469,165],[189,165]], '愚园路', 0.3754989504814148), ...]
 ```
@@ -141,11 +146,15 @@ result = reader.readtext(img, detail=1, output_format='standard')
 `bbox` = 4-point polygon `[[x1,y1],[x2,y2],[x3,y3],[x4,y4]]` in **TL, TR, BR, BL** order (confirmed in `utils.py`, where the box is built as `[[min_gx,min_gy],[max_gx,min_gy],[max_gx,max_gy],[min_gx,max_gy]]`). Each item is indexed `[0]=boxes, [1]=text, [2]=confidence`. Alternate shapes:
 
 ```python
-reader.readtext(img, output_format='dict')   # [{'boxes':[...], 'text':..., 'confident':<float>}, ...]
-reader.readtext(img, output_format='json')   # same keys, JSON string per line (boxes cast to int)
-reader.readtext(img, output_format='free_merge')  # merge_to_free(result, free_list)
-reader.readtext(img, detail=0)               # ['愚园路', ...]  ([item[1] for item in result])
-reader.readtext(img, paragraph=True)         # (bbox, text)  -> confidence DROPPED
+reader.readtext(
+    img, output_format="dict"
+)  # [{'boxes':[...], 'text':..., 'confident':<float>}, ...]
+reader.readtext(
+    img, output_format="json"
+)  # same keys, JSON string per line (boxes cast to int)
+reader.readtext(img, output_format="free_merge")  # merge_to_free(result, free_list)
+reader.readtext(img, detail=0)  # ['愚园路', ...]  ([item[1] for item in result])
+reader.readtext(img, paragraph=True)  # (bbox, text)  -> confidence DROPPED
 ```
 
 Note the key spelling is **`'confident'`** (not `'confidence'`); under `paragraph=True` the `'confident'` key is omitted. No per-character box/score is returned; no native hOCR/ALTO. ([easyocr.py](https://github.com/JaidedAI/EasyOCR/blob/master/easyocr/easyocr.py), [docs](https://www.jaided.ai/easyocr/documentation/))
@@ -154,13 +163,17 @@ Note the key spelling is **`'confident'`** (not `'confidence'`); under `paragrap
 **One float per region**, in `result[i][2]` (or the `'confident'` key). Scale 0.0–1.0. It is a **recognition-only** score — explicitly *not* detector confidence and unrelated to the bbox (confirmed by the maintainer in [discussion #1097](https://github.com/JaidedAI/EasyOCR/discussions/1097), who describes it as an empirical geometric mean of the character-sequence probability). Computed in [`recognition.py`](https://github.com/JaidedAI/EasyOCR/blob/master/easyocr/recognition.py):
 
 ```python
-preds_prob = F.softmax(preds, dim=2)              # per-step distribution
+preds_prob = F.softmax(preds, dim=2)  # per-step distribution
 # (ignore_idx classes are zeroed BEFORE softmax-normalization and renormalized)
-values  = preds_prob.max(axis=2)                  # per-step max prob
-indices = preds_prob.argmax(axis=2)               # per-step argmax
-max_probs = v[i != 0]                             # drop CTC blank (index 0) -> pred_max_prob
+values = preds_prob.max(axis=2)  # per-step max prob
+indices = preds_prob.argmax(axis=2)  # per-step argmax
+max_probs = v[i != 0]  # drop CTC blank (index 0) -> pred_max_prob
+
+
 def custom_mean(x):
     return x.prod() ** (2.0 / np.sqrt(len(x)))
+
+
 confidence_score = custom_mean(pred_max_prob)
 ```
 
@@ -214,14 +227,15 @@ viser: Optional[VisRes]                   # visualization handler
 
 ```python
 from rapidocr import RapidOCR
+
 engine = RapidOCR()
 result = engine("img.jpg")
 
-result.boxes        # np.ndarray (N, 4, 2): 4 corner pts per line
-result.txts         # Tuple[str]   length N
-result.scores       # Tuple[float] length N (per-line recog confidence)
+result.boxes  # np.ndarray (N, 4, 2): 4 corner pts per line
+result.txts  # Tuple[str]   length N
+result.scores  # Tuple[float] length N (per-line recog confidence)
 result.elapse_list  # [det_t, cls_t, rec_t] seconds
-result.to_json()    # [{box, text, score}, ...]
+result.to_json()  # [{box, text, score}, ...]
 result.to_markdown()
 result.vis("overlay.jpg")
 ```
@@ -274,12 +288,17 @@ Apache-2.0, fully local neural OCR + document-parsing toolkit (PaddlePaddle). As
 
 ```python
 {
-  "dt_polys":  [array([[x0,y0],...,[x3,y3]]), ...],  # raw detection quads (4 vertices)
-  "dt_scores": [0.98, ...],                          # per-box detection confidence
-  "rec_texts": ["Hello", "World", ...],              # per-line recognized strings
-  "rec_scores":[0.9985, 0.9421, ...],                # per-line recognition confidence (0-1)
-  "rec_polys": [array([[...]]), ...],                # quads kept after score filter
-  "rec_boxes": ndarray(shape=(n,4), dtype=int16),    # axis-aligned [x_min,y_min,x_max,y_max]
+    "dt_polys": [
+        array([[x0, y0], ..., [x3, y3]]),
+        ...,
+    ],  # raw detection quads (4 vertices)
+    "dt_scores": [0.98, ...],  # per-box detection confidence
+    "rec_texts": ["Hello", "World", ...],  # per-line recognized strings
+    "rec_scores": [0.9985, 0.9421, ...],  # per-line recognition confidence (0-1)
+    "rec_polys": [array([[...]]), ...],  # quads kept after score filter
+    "rec_boxes": ndarray(
+        shape=(n, 4), dtype=int16
+    ),  # axis-aligned [x_min,y_min,x_max,y_max]
 }
 ```
 Granularity is per-text-line: `rec_texts[i]` pairs with `rec_scores[i]`, `rec_polys[i]`/`rec_boxes[i]`. Exporters: `save_to_json()`, `save_to_markdown()`, `save_to_html()`, `save_to_xlsx()`, `save_to_word()`. **No native hOCR or ALTO XML.**
@@ -334,16 +353,17 @@ Fully local / on-device (CPU or GPU; edge-friendly mobile models); privacy-prese
 The Vision path (`text_from_image`) iterates `req.results()` and returns a **flat list of per-line tuples** `(text, confidence, [x, y, w, h])` (or bare strings when `detail=False`):
 ```python
 from ocrmac import ocrmac
+
 ocrmac.OCR("test.png").recognize()
 # [("GitHub: Let's build from here", 0.5, [0.16, 0.91, 0.17, 0.01]),
 #  ("github.com",                    1.0, [0.174, 0.87, 0.06, 0.01]), ...]
 ```
 The core loop (in `text_from_image`):
 ```python
-for result in req.results():            # VNRecognizedTextObservation (~ a line)
+for result in req.results():  # VNRecognizedTextObservation (~ a line)
     confidence = result.confidence()
     if confidence >= confidence_threshold:
-        bbox = result.boundingBox()     # CGRect, normalized 0..1, bottom-left origin
+        bbox = result.boundingBox()  # CGRect, normalized 0..1, bottom-left origin
         x, y = bbox.origin.x, bbox.origin.y
         w, h = bbox.size.width, bbox.size.height
         res.append((result.text(), confidence, [x, y, w, h]))
@@ -395,8 +415,9 @@ A single LaTeX `str` for the whole image. No char/word/line/region units, no geo
 ```python
 from PIL import Image
 from pix2tex.cli import LatexOCR
+
 model = LatexOCR()
-latex = model(Image.open('eq.png'))   # -> r'\frac{1}{2}\sigma^2'  (str)
+latex = model(Image.open("eq.png"))  # -> r'\frac{1}{2}\sigma^2'  (str)
 ```
 
 Internally ([`models/utils.py`](https://github.com/lukas-blecher/LaTeX-OCR/blob/main/pix2tex/models/utils.py)) generation returns **token IDs only**, which `cli.py` detokenizes via `post_process(token2str(dec, self.tokenizer)[0])`:
@@ -404,10 +425,13 @@ Internally ([`models/utils.py`](https://github.com/lukas-blecher/LaTeX-OCR/blob/
 ```python
 @torch.no_grad()
 def generate(self, x, temperature: float = 0.25):
-    return self.decoder.generate(            # x_transformers AR decoder -> token ids
-        (torch.LongTensor([self.args.bos_token]*len(x))[:, None]).to(x.device),
-        self.args.max_seq_len, eos_token=self.args.eos_token,
-        context=self.encoder(x), temperature=temperature)
+    return self.decoder.generate(  # x_transformers AR decoder -> token ids
+        (torch.LongTensor([self.args.bos_token] * len(x))[:, None]).to(x.device),
+        self.args.max_seq_len,
+        eos_token=self.args.eos_token,
+        context=self.encoder(x),
+        temperature=temperature,
+    )
 ```
 
 The [FastAPI server](https://github.com/lukas-blecher/LaTeX-OCR/blob/main/pix2tex/api/app.py) endpoints `POST /predict/` and `POST /bytes/` are both typed `-> str` — plain string, no JSON envelope, no confidence field. **Verified.**
@@ -441,10 +465,13 @@ A token-id tensor decoded to a `str`. **No geometry, no per-word/line/char segme
 
 ```python
 from transformers import TrOCRProcessor, VisionEncoderDecoderModel
-processor = TrOCRProcessor.from_pretrained('microsoft/trocr-large-handwritten')
-model = VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-large-handwritten')
-pixel_values = processor(images=image, return_tensors="pt").pixel_values  # (B,3,384,384)
-generated_ids = model.generate(pixel_values)            # torch.LongTensor (B, seq_len)
+
+processor = TrOCRProcessor.from_pretrained("microsoft/trocr-large-handwritten")
+model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-large-handwritten")
+pixel_values = processor(
+    images=image, return_tensors="pt"
+).pixel_values  # (B,3,384,384)
+generated_ids = model.generate(pixel_values)  # torch.LongTensor (B, seq_len)
 text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]  # str
 ```
 
@@ -463,8 +490,11 @@ There is **no native confidence/probability field** on the default output. Confi
 ```python
 out = model.generate(pixel_values, output_scores=True, return_dict_in_generate=True)
 transition_scores = model.compute_transition_scores(
-    out.sequences, out.scores, normalize_logits=True)   # (batch, gen_len), natural-log probs
-input_length = 1 if model.config.is_encoder_decoder else inputs.input_ids.shape[1]  # =1 here
+    out.sequences, out.scores, normalize_logits=True
+)  # (batch, gen_len), natural-log probs
+input_length = (
+    1 if model.config.is_encoder_decoder else inputs.input_ids.shape[1]
+)  # =1 here
 gen_tokens = out.sequences[:, input_length:]
 # per-token prob = np.exp(transition_scores); sequence log-prob = transition_scores.sum(axis=1)
 ```
@@ -651,7 +681,7 @@ Finest granularity is the **WORD** block — defined as "one or more ISO basic L
 
 ```python
 resp = textract.detect_document_text(Document={"Bytes": img_bytes})
-blocks = resp["Blocks"]   # flat list of Block dicts
+blocks = resp["Blocks"]  # flat list of Block dicts
 ```
 ```json
 {
@@ -673,7 +703,7 @@ Coordinates are **normalized ratios (0–1)** of page width/height. Geometry car
 Every block exposes one `Confidence` field — **Type: Float, Valid Range 0 to 100** ([`Block.Confidence`](https://docs.aws.amazon.com/textract/latest/dg/API_Block.html)). The docs define it verbatim as "the confidence score that Amazon Textract has in the accuracy of the recognized text **and** the accuracy of the geometry points around the recognized text" — i.e. a **fused text+geometry scalar**, not a pure character/text-recognition posterior. Available per-WORD, -LINE, -CELL, -KEY_VALUE_SET (separate KEY and VALUE), -SELECTION_ELEMENT, -QUERY_RESULT, -SIGNATURE, -PAGE.
 
 ```python
-conf = block["Confidence"]   # e.g. 99.51  (0–100 scale, NOT 0–1)
+conf = block["Confidence"]  # e.g. 99.51  (0–100 scale, NOT 0–1)
 ```
 **No per-character confidence, no token logprobs, no alternative hypotheses / n-best.** Textract exposes no sampling/decoding surface at all, so QE must aggregate WORD confidences (min/mean) up to line/field level yourself. AWS does not document calibration of this score; treat it as an ordinal, uncalibrated posterior.
 
@@ -740,11 +770,12 @@ GET  …/analyzeResults/{resultId}  → analyzeResult JSON
 SDK (`azure-ai-documentintelligence`):
 ```python
 poller = DocumentIntelligenceClient(...).begin_analyze_document(
-    "prebuilt-read", AnalyzeDocumentRequest(url_source=url))
-result = poller.result()              # AnalyzeResult
+    "prebuilt-read", AnalyzeDocumentRequest(url_source=url)
+)
+result = poller.result()  # AnalyzeResult
 for page in result.pages:
     for w in page.words:
-        w.content, w.confidence, w.polygon   # word.confidence is the OCR posterior
+        w.content, w.confidence, w.polygon  # word.confidence is the OCR posterior
 ```
 Geometry: every element has a `polygon` (4-vertex quad, clockwise from top-left; px for images, inches for PDF) inside page-scoped `boundingRegions`. Reading order: top-level `content`; all elements locate via char-offset `spans` (caveat: no cross-page reading order; selection marks not positioned among words). **Not supported:** hOCR and ALTO XML — no native export.
 
@@ -799,11 +830,15 @@ The lowest-level result is **per-page markdown plus figure-level geometry only**
 
 ```python
 from mistralai import Mistral
+
 client = Mistral(api_key=API_KEY)
 resp = client.ocr.process(
     model="mistral-ocr-latest",
-    document={"type": "document_url", "document_url": "https://arxiv.org/pdf/2201.04234"},
-    confidence_scores_granularity="word",   # opt-in, see §2
+    document={
+        "type": "document_url",
+        "document_url": "https://arxiv.org/pdf/2201.04234",
+    },
+    confidence_scores_granularity="word",  # opt-in, see §2
 )
 ```
 
@@ -1003,10 +1038,21 @@ Token stream -> string, optionally JSON-Schema-constrained. No glyph/char/word/l
 ```python
 resp = client.chat.completions.create(
     model="gpt-4o-2024-08-06",
-    messages=[{"role":"user","content":[
-        {"type":"text","text":"Transcribe verbatim."},
-        {"type":"image_url","image_url":{"url":"data:image/png;base64,...","detail":"high"}}]}],
-    logprobs=True, top_logprobs=5)
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Transcribe verbatim."},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "data:image/png;base64,...", "detail": "high"},
+                },
+            ],
+        }
+    ],
+    logprobs=True,
+    top_logprobs=5,
+)
 ```
 Returned: `choices[0].message.content` (string); `choices[0].logprobs.content[]` is a list of items each with `token`, `logprob`, `bytes`, and `top_logprobs[]` (each with `token`, `logprob`, `bytes`). Responses API: image part is `{"type":"input_image",...}`; text comes back in `output[].content[]`.
 
