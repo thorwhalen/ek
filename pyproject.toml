@@ -8,6 +8,8 @@ version = "0.1.9"
 description = "ek (Evaluation Kit) -- a framework for building Knowledge Evaluation systems (evaluating information-extraction outputs; OCR as the noisiest special case)"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
 keywords = [
     "evaluation",
     "information-extraction",
@@ -15,6 +17,23 @@ keywords = [
     "quality-estimation",
     "calibration",
     "benchmarking",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: General",
 ]
 authors = [{ name = "Thor Whalen" }]
 # Core stays lean and permissively licensed. Everything heavier or copyleft is an
@@ -29,13 +48,11 @@ dependencies = [
     "argcomplete",  # shell tab-completion for the CLI
 ]
 
-[project.license]
-text = "mit"
-
 [project.urls]
 Homepage = "https://github.com/thorwhalen/ek"
 Repository = "https://github.com/thorwhalen/ek"
 Documentation = "https://thorwhalen.github.io/ek"
+Issues = "https://github.com/thorwhalen/ek/issues"
 
 [project.scripts]
 ek = "ek.__main__:main"
@@ -136,11 +153,19 @@ convention = "google"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
+testpaths = ["tests", "ek"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 [tool.wads.ci]
 project_name = ""
+
+[tool.wads.ci.install]
+# Install the permissive `metrics` tier in CI. The module docstrings of
+# ek/metrics/{anls,graphs,spans,tables}.py are executable doctests that exercise
+# the real implementations, so CI needs anls_star / networkx / seqeval / apted to
+# run them at all. Everything here is permissively licensed (see the note above
+# [tool.ruff]); quarantined libraries are still never installed.
+extras = "metrics"
 
 [tool.wads.ci.commands]
 pre_test = []
