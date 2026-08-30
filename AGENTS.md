@@ -65,7 +65,7 @@ callable.
 | `ek/harness.py` | offline harness: `evaluate_store`, regression gate, baselines, IAA |
 | `ek/ocr/` | the OCR instance: ocracy bridge, capability profiles, benchmark |
 | `ek/agents/` | the **agent instance**: episodes, pass^k, cost-per-success, tool-call/trajectory metrics, judge, agent harness |
-| `ek/tools.py`, `ek/__main__.py` | CLI (`argh`, `_dispatch_funcs` SSOT) |
+| `ek/tools.py`, `ek/__main__.py` | CLI (stdlib `argparse`, `_dispatch_funcs` SSOT) |
 
 ### The agent instance (`ek/agents/`) — cost per successful task
 

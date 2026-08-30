@@ -5,7 +5,12 @@ PyPI metadata scanners (e.g. TorchCP is LGPL with a blank PyPI license field;
 surya-ocr ships non-commercial RAIL-M weights behind an "Apache-2.0" classifier).
 This gate reads a ``pip-licenses`` CSV of the *installed* closure and rejects:
 
-- GPL / AGPL (but allows LGPL -- acceptable for dynamically-linked libraries)
+- The whole GPL family -- GPL, AGPL **and LGPL**. The gate used to allow LGPL on the
+  "acceptable for a dynamically-linked library" argument, but that argument does not
+  describe a pure-Python import: a `pip install` of an LGPL package puts its source in
+  the same interpreter as ek's, and the relinking right the LGPL trades for is
+  meaningless there. ek is MIT and its closure stays permissive, so LGPL is a violation
+  like any other copyleft (this is what removing the `argh` dependency bought).
 - Any non-commercial / source-available restriction (RAIL, CC-BY-NC, BUSL, SSPL,
   **Elastic-2.0**, ...)
 
@@ -30,8 +35,18 @@ import csv
 import sys
 
 # Substrings that mark a forbidden license (matched case-insensitively).
-_GPL = ("GPL", "GNU GENERAL PUBLIC")
-_GPL_ALLOW = ("LGPL", "LESSER")  # LGPL is permitted
+# The whole GPL family, in every spelling seen in the wild. There is no LGPL escape
+# hatch (there used to be, and ek's own `argh` dependency was what fit through it).
+#
+# Two patterns, because neither alone is enough:
+#   "GPL"            catches the abbreviations -- GPL-3.0, LGPL-2.1-or-later, AGPL-3.0,
+#                    and the "(LGPL)" tail of the trove classifiers.
+#   "GENERAL PUBLIC" catches the spelled-out names, which contain no "GPL" substring at
+#                    all: "GNU Lesser General Public License v3" and "GNU Affero General
+#                    Public License v3" both sailed straight past the previous
+#                    "GNU GENERAL PUBLIC" pattern, since neither says *GNU General*.
+# Nothing permissive says "General Public", so the broad pattern costs no false positives.
+_GPL = ("GPL", "GENERAL PUBLIC")
 _NON_COMMERCIAL = (
     "NON-COMMERCIAL",
     "NONCOMMERCIAL",
@@ -89,11 +104,18 @@ _ALLOWLIST_PREFIXES: tuple[str, ...] = ("nvidia-", "nvidia_")
 
 
 def _is_violation(license_text: str) -> str:
+    """Return why ``license_text`` is forbidden, or ``""`` if it is acceptable.
+
+    >>> _is_violation("MIT")
+    ''
+    >>> _is_violation("LGPL-3.0")
+    'GPL/LGPL/AGPL copyleft'
+    """
     up = license_text.upper()
     if any(nc in up for nc in _NON_COMMERCIAL):
         return "non-commercial / source-available"
-    if any(g in up for g in _GPL) and not any(a in up for a in _GPL_ALLOW):
-        return "GPL/AGPL copyleft"
+    if any(g in up for g in _GPL):
+        return "GPL/LGPL/AGPL copyleft"
     return ""
 
 

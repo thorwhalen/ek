@@ -43,9 +43,42 @@ def test_gpl_is_still_rejected(tmp_path):
     assert cl.main(_csv(tmp_path, [("krippendorff", "GPL-3.0-or-later")])) == 1
 
 
-def test_lgpl_is_allowed():
-    assert cl._is_violation("LGPL-3.0") == ""
-    assert cl._is_violation("GNU Lesser General Public License v3") == ""
+def test_lgpl_is_rejected():
+    # The LGPL escape hatch is gone: ek is MIT and pure-Python, so the
+    # "dynamically-linked library" rationale for tolerating LGPL never applied.
+    # These are the real strings seen in the wild, not invented ones.
+    assert cl._is_violation("LGPL-3.0")  # argh's SPDX expression
+    assert cl._is_violation("GNU Lesser General Public License v3")
+    # argh's and PyGithub's actual trove classifier -- caught via "GENERAL PUBLIC".
+    assert cl._is_violation(
+        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+    )
+    assert cl._is_violation("LGPL-2.1-or-later")  # soxr's actual expression
+
+
+def test_spelled_out_gpl_family_is_rejected():
+    # Regression guard for a hole the LGPL allowance was hiding: the fully spelled-out
+    # names contain no "GPL" substring AND do not say "GNU General Public" (they say
+    # "GNU *Lesser* / *Affero* General Public"), so the old pattern pair missed them
+    # entirely -- AGPL, the most viral licence of all, included.
+    assert cl._is_violation("GNU Lesser General Public License v3")
+    assert cl._is_violation("GNU Affero General Public License v3")
+    assert cl._is_violation("GNU General Public License v2 or later")
+
+
+def test_argh_the_dependency_this_gate_used_to_let_through(tmp_path):
+    # Regression guard for the hole this gate was built with: ek's own CLI dep.
+    assert cl.main(
+        _csv(
+            tmp_path,
+            [
+                (
+                    "argh",
+                    "GNU Library or Lesser General Public License (LGPL)",
+                )
+            ],
+        )
+    ) == 1
 
 
 def test_non_commercial_and_proprietary_rejected():
