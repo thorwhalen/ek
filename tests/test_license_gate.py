@@ -95,3 +95,12 @@ def test_permissive_closure_passes(tmp_path):
         ("nvidia-cufft-cu13", "Other/Proprietary License"),  # allowlisted
     ])
     assert cl.main(path) == 0
+
+
+def test_packages_with_no_declared_license_fail_unless_audited(tmp_path):
+    # A blank License field is *unaudited*, not fine -- it is how copyleft hides.
+    assert cl.main(_csv(tmp_path, [("mystery-pkg", "UNKNOWN")])) == 1
+    # ...unless it is in the audited allowlist. ragas 0.4.x inlines the whole
+    # Apache-2.0 text into its License field with no classifier, which some
+    # pip-licenses versions render as UNKNOWN.
+    assert cl.main(_csv(tmp_path, [("ragas", "UNKNOWN")])) == 0

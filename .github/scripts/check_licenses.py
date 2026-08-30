@@ -83,6 +83,16 @@ _ALLOWLIST: set[str] = {
     # runtime the end user installs for acceleration, not a copyleft/non-commercial library ek
     # ships. A CPU-only install omits it entirely. Audited 2026-07; cleared.
     "cuda-toolkit",
+    # The agent-eval harness in ek[agents]. Audited 2026-08 (ragas 0.4.3): it declares NO
+    # `License-Expression` and NO `License ::` trove classifier, and inlines the *entire*
+    # 12,921-character Apache-2.0 text into its `License` metadata field (the packaging
+    # mistake `license = {file = "LICENSE"}` makes). Depending on its version,
+    # pip-licenses renders that as "UNKNOWN" -- the same scanner-invisible shape as
+    # agent-client-protocol above, and it is why this row started failing the gate on a
+    # closure that had not otherwise changed. The wheel ships the real thing at
+    # ragas-0.4.3.dist-info/licenses/LICENSE: Apache-2.0 (Copyright 2023 Vibrant Labs),
+    # matching what pyproject.toml already recorded for it in 2026-07. Permissive; cleared.
+    "ragas",
 }
 
 # A blank/UNKNOWN license field is not "fine", it is *unaudited* -- the terms may live in a
