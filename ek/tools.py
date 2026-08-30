@@ -1,8 +1,9 @@
 """Small, CLI-friendly functions over the ``ek`` core (the dispatch surface).
 
-These are thin, string-in/value-out wrappers designed for triple dispatch (CLI via
-``argh``, and later HTTP/UI). The single ``_dispatch_funcs`` list is the SSOT of
-what :mod:`ek.__main__` exposes, so there is no duplicated command registration.
+These are thin, string-in/value-out wrappers designed for triple dispatch (CLI
+today, HTTP/UI later). The single ``_dispatch_funcs`` list is the SSOT of what
+:mod:`ek.__main__` exposes, so there is no duplicated command registration, and
+each function's *signature* is its command-line interface.
 
 Run them from the shell::
 

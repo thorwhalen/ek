@@ -225,7 +225,7 @@ Core protocols: **Metric, Validator, Calibrator, DecisionPolicy/SelectivePolicy,
 | `ek/harness.py` | The slice-aware regression harness: stratified sampling, per-slice reporting, golden-set regression, IAA. |
 | `ek/ocr/` | The `OcrResult` shape + adapters; the optional `ek[ocr]` integration with `ocracy`. |
 | `ek/tools.py` | Shared helpers (`_helper` for same-module-only; no underscore for cross-module reuse). |
-| `ek/__main__.py` | CLI via `argh`: `_dispatch_funcs` SSOT + `dispatch_with_namespaces`. |
+| `ek/__main__.py` | CLI via stdlib `argparse`: `_dispatch_funcs` SSOT + `dispatch_with_namespaces`. Each command's signature *is* its command line (dashes for underscores, defaults become options, `*args` a repeatable positional, bool defaults switches). No third-party CLI dep -- `argh` was dropped because it is LGPL. |
 
 `ocr/` depends on the `OcrResult` shape only: `OcrResult(text; blocks=[TextBlock(text, bbox, confidence, level, language, meta)]; raw; meta)` with `confidence` normalized to `[0,1]`. This is what makes `ek` able to evaluate *any* `image -> OcrResult` callable, and what keeps `ek -> ocracy` one-directional.
 

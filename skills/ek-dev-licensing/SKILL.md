@@ -83,10 +83,11 @@ A CI gate (`pip-licenses` and/or `reuse`) MUST fail the build if anything resolv
 
 The gate is necessary because scanners alone will miss the repo-file traps above — never rely on a green scanner as proof of compliance.
 
-### Two resolved gate findings (audited decisions, #10)
+### Resolved gate findings (audited decisions, #10, #34)
 
 - **`krippendorff` was GPL-3.0** and was the *only* dep behind the (now-removed) `harness` extra. Rather than quarantine it, Krippendorff's α was **reimplemented in pure Python** in `ek/harness.py` (coincidence-matrix method; nominal/ordinal/interval/ratio; missing data) — verified to <1e-9 vs the reference package. IAA is now permissive **core**, no extra. Prefer a clean-room reimplementation over quarantine when the algorithm is small and well-specified.
 - **`nvidia-*` CUDA runtime wheels** (proprietary) are pulled transitively by the permissive `torch` (e.g. `uqlm` in `[agreement]`). They are NVIDIA's *redistributable GPU runtime* (driver-layer libs the user installs for acceleration; absent on a CPU-only install), not a library ek ships — so they are cleared by an audited **`nvidia-` name-prefix allowlist** in `check_licenses.py`, NOT by relaxing the GPL/non-commercial rules. This is the one standing prefix override; keep it justified and narrow.
+- **The LGPL escape hatch is gone (#34).** `check_licenses.py` used to carry `_GPL_ALLOW = ("LGPL", "LESSER")`, justified as "acceptable for dynamically-linked libraries" — an argument that does not describe a pure-Python import, and one that contradicted this skill's own rule that nothing copyleft is ever a default. The single dependency fitting through it was `argh` (ek's CLI dispatcher, LGPL-3.0-or-later), now replaced by stdlib `argparse` in `ek/__main__.py`. Two things fell out of the fix: the gate's GPL patterns were also **too narrow** — `"GPL"` plus `"GNU GENERAL PUBLIC"` missed every spelled-out name, because "GNU **Lesser** General Public License" and "GNU **Affero** General Public License" contain neither. The patterns are now `("GPL", "GENERAL PUBLIC")`. If you ever want to relax this, quarantine the dependency behind an opt-in extra instead.
 
 ## Runtime hints
 

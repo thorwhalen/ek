@@ -251,7 +251,7 @@ dol mall. Stores are `MutableMapping` facades, never god-classes.
   (`benchmark_ocr(corpus)` over free/local engines), everything tunable via
   kw-only args (`backends=`, `metric=`, `allow_paid=`, `slices=`, `calibrator=`).
 - Generators (`Iterable[T]`) over list-building.
-- CLI via argh (`_dispatch_funcs` SSOT + `__main__.py` `dispatch_with_namespaces`).
+- CLI via stdlib argparse (`_dispatch_funcs` SSOT + `__main__.py` `dispatch_with_namespaces`).
 - `@requires_extra("ocr")` on every function that imports ocracy.
 
 ## Quick self-audit before you commit

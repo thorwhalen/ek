@@ -44,8 +44,7 @@ dependencies = [
     "config2py",  # ~/.local/share/ek/ XDG data-folder resolution
     "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
     "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
-    "argh",       # CLI dispatch from function signatures
-    "argcomplete",  # shell tab-completion for the CLI
+    "argcomplete",  # shell tab-completion for the CLI (Apache-2.0)
 ]
 
 [project.urls]
@@ -109,6 +108,10 @@ docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 #   TorchCP (LGPL-3.0, graph/LLM conformal)  -- import-only, never vendor
 #   surya-ocr (non-commercial RAIL-M weights) -- highest accuracy, internal research only
 #   Levenshtein / python-Levenshtein (GPL)    -- replaced by rapidfuzz
+#   argh (LGPL-3.0-or-later)                  -- was ek's CLI dispatcher; a pure-Python
+#     import, so the "dynamically-linked library" rationale for tolerating LGPL never
+#     applied. Replaced by stdlib argparse in ek/__main__.py, which derives each command
+#     from its function signature exactly as argh did. The gate now rejects LGPL too.
 #   Potato (GPL-3.0), Prodigy (proprietary)   -- HITL; HTTP-only / design reference
 #   table-recognition-metric (TEDS)           -- its OWN code is Apache-2.0 but it pulls
 #     in GPL `Levenshtein` as a hard runtime dep (a scanner-invisible landmine), so it

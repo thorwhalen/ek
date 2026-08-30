@@ -267,7 +267,8 @@ level).
   `config2py.AppData("ek")` → `~/.local/share/ek/`. Stores are facades, never
   god-classes (see the `python-storage` skill).
 - New user-facing functions: add to the `_dispatch_funcs` SSOT and they surface in
-  the CLI via `argh` (`__main__.py` `dispatch_with_namespaces`).
+  the CLI automatically (`__main__.py` `dispatch_with_namespaces`, stdlib argparse):
+  the function's signature is its command line, so there is nothing else to declare.
 
 ## Checklist before you finish
 
