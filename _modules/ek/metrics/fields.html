@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.metrics.fields &mdash; ek 0.1.9 documentation</title>
+  <title>ek.metrics.fields &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,19 +111,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.metrics.fields</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Field-level metric for record / dict-shaped extractions.</span>
+<span></span><span class="sd">"""Field-level metric for record / dict-shaped extractions.</span>
 
 <span class="sd">Compares two flat records key by key into precision / recall / F1, with a wrong</span>
 <span class="sd">value counting as both a spurious prediction and a missed gold (the conventional</span>
 <span class="sd">slot-error accounting). It is dependency-free, so it ships in core for the common</span>
-<span class="sd">&quot;compare these two extracted records&quot; case; the tag-sequence span metrics</span>
+<span class="sd">"compare these two extracted records" case; the tag-sequence span metrics</span>
 <span class="sd">(``seqeval`` / ``nervaluate``, with their *explicit* match schemes) and nested</span>
 <span class="sd">metrics (ANLS*) arrive behind the ``[metrics]`` extra -- see ``misc/docs/ek_02``.</span>
 
 <span class="sd">Aggregation is micro-averaged over the corpus (sum TP/FP/FN, then divide), carried</span>
-<span class="sd">in each :class:`~ek.base.Score`&#39;s ``detail`` so :func:`~ek.facade.evaluate` does it</span>
+<span class="sd">in each :class:`~ek.base.Score`'s ``detail`` so :func:`~ek.facade.evaluate` does it</span>
 <span class="sd">correctly rather than averaging per-record F1s.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -142,12 +142,12 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_field_normalizers</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Map ``field name -&gt; resolved canonicalizer`` from each ``FieldSpec.normalizer``.</span>
+<span class="w">    </span><span class="sd">"""Map ``field name -&gt; resolved canonicalizer`` from each ``FieldSpec.normalizer``.</span>
 
 <span class="sd">    A schema can declare a per-field canonicalizer (e.g. a date or currency folder)</span>
 <span class="sd">    that must be applied to that field alone before comparison; without this the</span>
-<span class="sd">    grammar&#39;s ``normalizer`` contract is silently ignored. Field names are taken</span>
-<span class="sd">    across all node types (unique enough for a flat record).&quot;&quot;&quot;</span>
+<span class="sd">    grammar's ``normalizer`` contract is silently ignored. Field names are taken</span>
+<span class="sd">    across all node types (unique enough for a flat record)."""</span>
     <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..canonicalize</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_canonicalizer</span>
@@ -155,38 +155,38 @@
     <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">grammar</span><span class="o">.</span><span class="n">node_types</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">node_type</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;normalizer&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">"normalizer"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
                 <span class="n">out</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span> <span class="o">=</span> <span class="n">resolve_canonicalizer</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a canonicalizer to a string value (pass non-strings through unchanged).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Apply a canonicalizer to a string value (pass non-strings through unchanged)."""</span>
     <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">value</span>
 
 
 <div class="viewcode-block" id="FieldMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/fields.html#ek.FieldMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FieldMetric</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-field precision/recall/F1 for two dict records.</span>
+<span class="w">    </span><span class="sd">"""Per-field precision/recall/F1 for two dict records.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        canonicalizer: Optional ``str -&gt; str`` applied to string values before</span>
 <span class="sd">            comparison (e.g. casefold/whitespace folding).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">canonicalizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canonicalizer</span> <span class="o">=</span> <span class="n">canonicalizer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;fields&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"fields"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;FieldMetric compares Mapping records; got &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="s2">"FieldMetric compares Mapping records; got "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="c1"># Per-field normalizers (from the schema) take precedence over the</span>
         <span class="c1"># facade-level canonicalizer for the fields they name.</span>
@@ -213,17 +213,17 @@
             <span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span>
             <span class="n">recall</span><span class="o">=</span><span class="n">recall</span><span class="p">,</span>
             <span class="n">f1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;fields&quot;</span><span class="p">,</span>
-            <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tp&quot;</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span> <span class="s2">&quot;fp&quot;</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span> <span class="s2">&quot;fn&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">"fields"</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="p">{</span><span class="s2">"tp"</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span> <span class="s2">"fp"</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span> <span class="s2">"fn"</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="FieldMetric.aggregate">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/fields.html#ek.FieldMetric.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Micro-averaged F1 over the corpus (sum TP/FP/FN, then divide).&quot;&quot;&quot;</span>
-        <span class="n">tp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
-        <span class="n">fp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fp&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
-        <span class="n">fn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fn&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Micro-averaged F1 over the corpus (sum TP/FP/FN, then divide)."""</span>
+        <span class="n">tp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tp"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fp"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fn"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span> <span class="o">+</span> <span class="n">fn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">1.0</span>  <span class="c1"># nothing to extract and nothing extracted -&gt; perfect (matches per-item)</span>
         <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>

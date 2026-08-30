@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.facade &mdash; ek 0.1.9 documentation</title>
+  <title>ek.facade &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -136,11 +136,11 @@ families (ROVER, conformal gates) are injected; this facade composes whatever yo
 give it and ships sensible no-op defaults.</p></li>
 </ul>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">score</span><span class="p">(</span><span class="s2">&quot;hello wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">metric</span>
-<span class="go">&#39;cer&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">score</span><span class="p">(</span><span class="s2">&quot;hello wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;wer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">score</span><span class="p">(</span><span class="s2">"hello wrld"</span><span class="p">,</span> <span class="s2">"hello world"</span><span class="p">)</span><span class="o">.</span><span class="n">metric</span>
+<span class="go">'cer'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">score</span><span class="p">(</span><span class="s2">"hello wrld"</span><span class="p">,</span> <span class="s2">"hello world"</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"wer"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">([(</span><span class="s2">&quot;ct&quot;</span><span class="p">,</span> <span class="s2">&quot;cat&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;dg&quot;</span><span class="p">,</span> <span class="s2">&quot;dog&quot;</span><span class="p">)],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cer&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">([(</span><span class="s2">"ct"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"dg"</span><span class="p">,</span> <span class="s2">"dog"</span><span class="p">)],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"cer"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">(2, 0.333)</span>
 </pre></div>

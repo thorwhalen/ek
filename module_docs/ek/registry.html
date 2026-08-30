@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.registry &mdash; ek 0.1.9 documentation</title>
+  <title>ek.registry &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -140,12 +140,12 @@ engine/feature needs (Python packages, system binaries, credentials), and
 defers to <code class="docutils literal notranslate"><span class="pre">ocracy</span></code>’s own doctor for OCR engines when it is installed.</p></li>
 </ul>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;shout&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@register</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"shout"</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">shout</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">pred</span> <span class="o">==</span> <span class="n">gold</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;shout&quot;</span><span class="p">)(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"shout"</span><span class="p">)(</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;shout&quot;</span> <span class="ow">in</span> <span class="n">names</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">"shout"</span> <span class="ow">in</span> <span class="n">names</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">)</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -220,13 +220,13 @@ common case (everything installed) adds a single cheap import check.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;ocr&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;definitely_not_installed_pkg&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"ocr"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"definitely_not_installed_pkg"</span><span class="p">])</span>
 <span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="s2">&quot;ran&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="s2">"ran"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">run</span><span class="p">()</span>
 <span class="gp">... </span><span class="k">except</span> <span class="n">MissingExtraError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ek[ocr]&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"ek[ocr]"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 <span class="go">True</span>
 </pre></div>
 </div>

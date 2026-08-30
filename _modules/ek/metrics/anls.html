@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.metrics.anls &mdash; ek 0.1.9 documentation</title>
+  <title>ek.metrics.anls &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,7 +111,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.metrics.anls</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;ANLS / ANLS* (nested-JSON) similarity, wrapping ``anls_star``.</span>
+<span></span><span class="sd">"""ANLS / ANLS* (nested-JSON) similarity, wrapping ``anls_star``.</span>
 
 <span class="sd">ANLS (Average Normalized Levenshtein Similarity) is the DocVQA-family metric for a</span>
 <span class="sd">short answer against acceptable variants: a normalized edit similarity thresholded</span>
@@ -128,9 +128,9 @@
 <span class="sd">imported lazily, so importing ``ek`` never requires it.</span>
 
 <span class="sd">Because ``anls_star`` already returns a ``[0, 1]`` higher-is-better similarity, the</span>
-<span class="sd">wrapper is thin: it flips ``ek``&#39;s ``(pred, gold)`` argument order to the library&#39;s</span>
+<span class="sd">wrapper is thin: it flips ``ek``'s ``(pred, gold)`` argument order to the library's</span>
 <span class="sd">``(gt, pred)`` order, records the raw similarity in :attr:`~ek.base.Score.detail`,</span>
-<span class="sd">and -- for a corpus -- :meth:`AnlsMetric.aggregate` returns the *mean* ANLS (the &quot;A&quot;</span>
+<span class="sd">and -- for a corpus -- :meth:`AnlsMetric.aggregate` returns the *mean* ANLS (the "A"</span>
 <span class="sd">in ANLS: the score is already length-normalized per item, so the corpus statistic is</span>
 <span class="sd">the average of per-item similarities, unlike CER/WER which accumulate edit counts).</span>
 
@@ -139,12 +139,12 @@
 <span class="sd">Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ek.metrics.anls import AnlsMetric</span>
 <span class="sd">    &gt;&gt;&gt; m = AnlsMetric()</span>
-<span class="sd">    &gt;&gt;&gt; round(m(&quot;Hello Wrld&quot;, &quot;Hello World&quot;).value, 3)   # one-char OCR slip</span>
+<span class="sd">    &gt;&gt;&gt; round(m("Hello Wrld", "Hello World").value, 3)   # one-char OCR slip</span>
 <span class="sd">    0.909</span>
-<span class="sd">    &gt;&gt;&gt; m({&quot;name&quot;: &quot;Acme&quot;, &quot;city&quot;: &quot;Paris&quot;},</span>
-<span class="sd">    ...   {&quot;name&quot;: &quot;Acme&quot;, &quot;city&quot;: &quot;Paris&quot;}).value         # nested, exact</span>
+<span class="sd">    &gt;&gt;&gt; m({"name": "Acme", "city": "Paris"},</span>
+<span class="sd">    ...   {"name": "Acme", "city": "Paris"}).value         # nested, exact</span>
 <span class="sd">    1.0</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -157,7 +157,7 @@
 <div class="viewcode-block" id="AnlsMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/anls.html#ek.AnlsMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AnlsMetric</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;ANLS / ANLS* (nested-JSON) similarity as a :class:`~ek.base.Metric`.</span>
+<span class="w">    </span><span class="sd">"""ANLS / ANLS* (nested-JSON) similarity as a :class:`~ek.base.Metric`.</span>
 
 <span class="sd">    Handles a bare string (classic ANLS) or an arbitrarily nested</span>
 <span class="sd">    dict/list/tuple/``None`` structure (ANLS*); the backend dispatches on type.</span>
@@ -171,14 +171,14 @@
 <span class="sd">            restoring it. **Caveat:** this mutates a process-global, so it is not</span>
 <span class="sd">            thread-safe; concurrent ``AnlsMetric`` calls with different thresholds in</span>
 <span class="sd">            the same process can interfere. Defaults to ``0.5``.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;anls&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"anls"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
 
-    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;anls_star&quot;</span><span class="p">])</span>
+    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"anls_star"</span><span class="p">])</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
@@ -192,7 +192,7 @@
         <span class="n">_saved</span> <span class="o">=</span> <span class="n">_tree</span><span class="o">.</span><span class="n">THRESHOLD</span>
         <span class="n">_tree</span><span class="o">.</span><span class="n">THRESHOLD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># anls_star takes (ground_truth, prediction); ek&#39;s Metric is (pred, gold).</span>
+            <span class="c1"># anls_star takes (ground_truth, prediction); ek's Metric is (pred, gold).</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
                 <span class="n">anls_score</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">return_gt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_key_scores</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="p">)</span>
@@ -200,26 +200,26 @@
             <span class="n">_tree</span><span class="o">.</span><span class="n">THRESHOLD</span> <span class="o">=</span> <span class="n">_saved</span>
         <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
             <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;anls&quot;</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">"anls"</span><span class="p">,</span>
             <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;anls&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
-                <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span>
-                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">"anls"</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                <span class="s2">"threshold"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span>
+                <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="AnlsMetric.aggregate">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/anls.html#ek.AnlsMetric.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corpus ANLS = mean of per-item ANLS (each is already length-normalized).</span>
+<span class="w">        </span><span class="sd">"""Corpus ANLS = mean of per-item ANLS (each is already length-normalized).</span>
 
 <span class="sd">        Unlike CER/WER (which accumulate global edit counts) or field-F1 (micro-TP/</span>
 <span class="sd">        FP/FN), ANLS is defined as the *average* normalized similarity over the</span>
-<span class="sd">        evaluation set -- the &quot;A&quot; in ANLS -- so the corpus statistic is the plain</span>
+<span class="sd">        evaluation set -- the "A" in ANLS -- so the corpus statistic is the plain</span>
 <span class="sd">        mean of the per-item scores.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;anls&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))</span> <span class="k">if</span> <span class="n">vals</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span></div>
+<span class="sd">        """</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"anls"</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">))</span> <span class="k">if</span> <span class="n">vals</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"nan"</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

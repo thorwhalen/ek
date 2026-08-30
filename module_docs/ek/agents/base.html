@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents.base &mdash; ek 0.1.9 documentation</title>
+  <title>ek.agents.base &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -175,14 +175,14 @@ IE-schema-only SSOT, and the OCR instance sets the precedent that an instance’
 shapes stay out of core (core duck-types them). Nothing here is imported by <code class="docutils literal notranslate"><span class="pre">ek</span></code> core.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">book</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;book_flight&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;flight&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;flight&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">),</span>
-<span class="gp">... </span>                                       <span class="s2">&quot;seat&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;seat&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">)})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">refund</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;refund&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">book</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">"book_flight"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"flight"</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">"flight"</span><span class="p">,</span> <span class="s2">"string"</span><span class="p">),</span>
+<span class="gp">... </span>                                       <span class="s2">"seat"</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">"seat"</span><span class="p">,</span> <span class="s2">"string"</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">refund</span> <span class="o">=</span> <span class="n">ToolSpec</span><span class="p">(</span><span class="s2">"refund"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"amount"</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">"amount"</span><span class="p">,</span> <span class="s2">"number"</span><span class="p">,</span>
 <span class="gp">... </span>                                    <span class="n">importance</span><span class="o">=</span><span class="mf">20.0</span><span class="p">)},</span> <span class="n">destructive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">refund</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;refund&quot;</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">)</span>        <span class="c1"># a wrong refund amount is expensive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">"refund"</span><span class="p">,</span> <span class="s2">"amount"</span><span class="p">)</span>        <span class="c1"># a wrong refund amount is expensive</span>
 <span class="go">20.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">&quot;book_flight&quot;</span><span class="p">,</span> <span class="s2">&quot;seat&quot;</span><span class="p">)</span>     <span class="c1"># a wrong seat is not</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="s2">"book_flight"</span><span class="p">,</span> <span class="s2">"seat"</span><span class="p">)</span>     <span class="c1"># a wrong seat is not</span>
 <span class="go">1.0</span>
 </pre></div>
 </div>
@@ -380,9 +380,9 @@ a delete, a send). Drives the default weight and the safety validators.</p></li>
 <p>A trajectory is <em>linear</em> – which is why it is scored with a sequence edit distance,
 not a graph edit distance (see <a class="reference internal" href="trajectory.html#module-ek.agents.trajectory" title="ek.agents.trajectory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.trajectory</span></code></a>).</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">([</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}),</span> <span class="n">Step</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="s2">&quot;meow&quot;</span><span class="p">})])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">([</span><span class="n">Step</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}),</span> <span class="n">Step</span><span class="p">(</span><span class="s2">"answer"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="s2">"meow"</span><span class="p">})])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">t</span><span class="o">.</span><span class="n">tools</span>
-<span class="go">(2, (&#39;search&#39;, &#39;answer&#39;))</span>
+<span class="go">(2, ('search', 'answer'))</span>
 </pre></div>
 </div>
 <dl class="py property">
@@ -407,14 +407,14 @@ not a graph edit distance (see <a class="reference internal" href="trajectory.ht
 prediction arrives as a <a class="reference internal" href="#ek.agents.base.Step" title="ek.agents.base.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a>; both must compare. Progressive disclosure: the
 simple literal works, the rich object works.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">((</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}})</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">)</span>
-<span class="go">(&#39;search&#39;, {})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}))</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">((</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}))</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">({</span><span class="s2">"tool"</span><span class="p">:</span> <span class="s2">"search"</span><span class="p">,</span> <span class="s2">"args"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}})</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="s2">"search"</span><span class="p">)</span>
+<span class="go">('search', {})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -439,9 +439,9 @@ simple literal works, the rich object works.</p>
 the tool’s call weight, field cost = the argument’s importance.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">ToolSpec</span><span class="p">(</span><span class="s2">"send"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"to"</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">"to"</span><span class="p">)},</span>
 <span class="gp">... </span>                          <span class="n">destructive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="s2">"send"</span><span class="p">)</span>
 <span class="go">10.0</span>
 </pre></div>
 </div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.verifiers &mdash; ek 0.1.9 documentation</title>
+  <title>ek.qe.verifiers &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -152,11 +152,11 @@ permissive-core promise intact.</p>
 <p>A verifier emits raw evidence – a pass/fail <a class="reference internal" href="../base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a> and a
 fraction-passed score – never a calibrated probability or a decision.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">luhn_check</span><span class="p">(</span><span class="s2">&quot;79927398713&quot;</span><span class="p">)</span>          <span class="c1"># a classic Luhn-valid number</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">luhn_check</span><span class="p">(</span><span class="s2">"79927398713"</span><span class="p">)</span>          <span class="c1"># a classic Luhn-valid number</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">luhn_check</span><span class="p">(</span><span class="s2">&quot;79927398710&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">luhn_check</span><span class="p">(</span><span class="s2">"79927398710"</span><span class="p">)</span>
 <span class="go">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">isbn_check</span><span class="p">(</span><span class="s2">&quot;0-306-40615-2&quot;</span><span class="p">)</span>         <span class="c1"># ISBN-10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isbn_check</span><span class="p">(</span><span class="s2">"0-306-40615-2"</span><span class="p">)</span>         <span class="c1"># ISBN-10</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -184,10 +184,10 @@ object feeds both the score path (-&gt; calibrate) and the audit path (-&gt; rev
 Like every signal it is uncalibrated: a verifier failing is strong evidence, not
 a probability, so a <a class="reference internal" href="../base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> still runs before any gate.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VerifierSignal</span><span class="p">([</span><span class="n">checksum_validator</span><span class="p">(</span><span class="s2">&quot;luhn&quot;</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">&quot;79927398713&quot;</span><span class="p">)</span>          <span class="c1"># valid -&gt; all checks pass</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VerifierSignal</span><span class="p">([</span><span class="n">checksum_validator</span><span class="p">(</span><span class="s2">"luhn"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398713"</span><span class="p">)</span>          <span class="c1"># valid -&gt; all checks pass</span>
 <span class="go">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">&quot;79927398710&quot;</span><span class="p">)</span>          <span class="c1"># invalid -&gt; the one check fails</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398710"</span><span class="p">)</span>          <span class="c1"># invalid -&gt; the one check fails</span>
 <span class="go">0.0</span>
 </pre></div>
 </div>

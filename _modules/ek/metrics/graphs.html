@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.metrics.graphs &mdash; ek 0.1.9 documentation</title>
+  <title>ek.metrics.graphs &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,15 +111,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.metrics.graphs</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;The flagship metric: cost-weighted, type-aware distance over a typed graph.</span>
+<span></span><span class="sd">"""The flagship metric: cost-weighted, type-aware distance over a typed graph.</span>
 
 <span class="sd">No off-the-shelf library takes a typed schema + per-field/per-type cost weights and</span>
 <span class="sd">returns a weighted distance over the extracted graph -- it is *the* must-build of</span>
 <span class="sd">this project (see ``misc/docs/ek_02`` and ``misc/docs/ek_06``). The mechanism is a</span>
 <span class="sd">graph edit distance (GED) whose per-edit costs are supplied by ``ek``: relabelling</span>
 <span class="sd">a node, deleting it, or changing a field each costs an amount read from the Layer-A</span>
-<span class="sd">:class:`~ek.base.GraphGrammar` importance weights. That is how &quot;two extra digits on</span>
-<span class="sd">a monetary amount&quot; outweighs &quot;a misspelled city&quot; -- no hardcoded costs, open-closed</span>
+<span class="sd">:class:`~ek.base.GraphGrammar` importance weights. That is how "two extra digits on</span>
+<span class="sd">a monetary amount" outweighs "a misspelled city" -- no hardcoded costs, open-closed</span>
 <span class="sd">via the schema.</span>
 
 <span class="sd">GED is NP-hard; this uses ``networkx.graph_edit_distance`` with a configurable</span>
@@ -133,19 +133,19 @@
 
 <span class="sd">Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ek import GraphGrammar, NodeType, FieldSpec, TypedGraph, TypedNode</span>
-<span class="sd">    &gt;&gt;&gt; g = GraphGrammar(node_types={&quot;donation&quot;: NodeType(&quot;donation&quot;, fields={</span>
-<span class="sd">    ...     &quot;amount&quot;: FieldSpec(&quot;amount&quot;, &quot;number&quot;, importance=10.0),</span>
-<span class="sd">    ...     &quot;city&quot;: FieldSpec(&quot;city&quot;, &quot;string&quot;, importance=1.0)})})</span>
-<span class="sd">    &gt;&gt;&gt; gold = TypedGraph([TypedNode(&quot;d1&quot;, &quot;donation&quot;, {&quot;amount&quot;: &quot;100&quot;, &quot;city&quot;: &quot;Paris&quot;})])</span>
+<span class="sd">    &gt;&gt;&gt; g = GraphGrammar(node_types={"donation": NodeType("donation", fields={</span>
+<span class="sd">    ...     "amount": FieldSpec("amount", "number", importance=10.0),</span>
+<span class="sd">    ...     "city": FieldSpec("city", "string", importance=1.0)})})</span>
+<span class="sd">    &gt;&gt;&gt; gold = TypedGraph([TypedNode("d1", "donation", {"amount": "100", "city": "Paris"})])</span>
 <span class="sd">    &gt;&gt;&gt; # a wrong amount costs far more than a wrong city, per the schema weights:</span>
-<span class="sd">    &gt;&gt;&gt; wrong_amount = TypedGraph([TypedNode(&quot;d1&quot;, &quot;donation&quot;, {&quot;amount&quot;: &quot;900&quot;, &quot;city&quot;: &quot;Paris&quot;})])</span>
-<span class="sd">    &gt;&gt;&gt; wrong_city = TypedGraph([TypedNode(&quot;d1&quot;, &quot;donation&quot;, {&quot;amount&quot;: &quot;100&quot;, &quot;city&quot;: &quot;Lyon&quot;})])</span>
+<span class="sd">    &gt;&gt;&gt; wrong_amount = TypedGraph([TypedNode("d1", "donation", {"amount": "900", "city": "Paris"})])</span>
+<span class="sd">    &gt;&gt;&gt; wrong_city = TypedGraph([TypedNode("d1", "donation", {"amount": "100", "city": "Lyon"})])</span>
 <span class="sd">    &gt;&gt;&gt; m = TypedGraphMetric(grammar=g)</span>
-<span class="sd">    &gt;&gt;&gt; m(wrong_amount, gold).detail[&quot;raw_distance&quot;]</span>
+<span class="sd">    &gt;&gt;&gt; m(wrong_amount, gold).detail["raw_distance"]</span>
 <span class="sd">    10.0</span>
-<span class="sd">    &gt;&gt;&gt; m(wrong_city, gold).detail[&quot;raw_distance&quot;]</span>
+<span class="sd">    &gt;&gt;&gt; m(wrong_city, gold).detail["raw_distance"]</span>
 <span class="sd">    1.0</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -169,7 +169,7 @@
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedNode">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TypedNode</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A node in a typed graph: an id, a node-type tag, and its field values.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A node in a typed graph: an id, a node-type tag, and its field values."""</span>
 
     <span class="n">node_id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span>
@@ -181,11 +181,11 @@
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedEdge">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TypedEdge</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A directed, typed relation between two node ids.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A directed, typed relation between two node ids."""</span>
 
     <span class="n">src</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">edge_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+    <span class="n">edge_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span></div>
 
 
 
@@ -193,7 +193,7 @@
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedGraph">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TypedGraph</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A typed graph: typed nodes plus directed typed edges between them.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A typed graph: typed nodes plus directed typed edges between them."""</span>
 
     <span class="n">nodes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TypedNode</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TypedEdge</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
@@ -201,7 +201,7 @@
 <div class="viewcode-block" id="TypedGraph.to_networkx">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedGraph.to_networkx">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_networkx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a ``networkx.DiGraph`` carrying type/fields as node/edge attrs.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Build a ``networkx.DiGraph`` carrying type/fields as node/edge attrs."""</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
 
         <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
@@ -215,33 +215,33 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_cost_resolvers</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">],</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CostWeight</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return ``(node_cost, edge_cost, field_cost)`` closures over schema/weights.</span>
+<span class="w">    </span><span class="sd">"""Return ``(node_cost, edge_cost, field_cost)`` closures over schema/weights.</span>
 
 <span class="sd">    With neither a grammar nor a weights callable, all costs are ``1.0`` (a plain</span>
 <span class="sd">    structural GED). A ``weights`` :data:`~ek.base.CostWeight` overrides the schema.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">grammar</span> <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">GraphGrammar</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">node_cost</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">&quot;node&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">edge_cost</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">&quot;edge&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">"edge"</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">field_cost</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">weights</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">TypeRef</span><span class="p">(</span><span class="s2">"field"</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">field_cost</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">node_cost</span><span class="p">,</span> <span class="n">edge_cost</span><span class="p">,</span> <span class="n">field_cost</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_graph_field_norms</span><span class="p">(</span><span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;``(node-type, field) -&gt; resolved canonicalizer`` from each ``FieldSpec.normalizer``.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""``(node-type, field) -&gt; resolved canonicalizer`` from each ``FieldSpec.normalizer``."""</span>
     <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..canonicalize</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_canonicalizer</span>
@@ -249,34 +249,34 @@
     <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">tname</span><span class="p">,</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">grammar</span><span class="o">.</span><span class="n">node_types</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">node_type</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;normalizer&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="s2">"normalizer"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
                 <span class="n">out</span><span class="p">[(</span><span class="n">tname</span><span class="p">,</span> <span class="n">fname</span><span class="p">)]</span> <span class="o">=</span> <span class="n">resolve_canonicalizer</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply a canonicalizer to a string value (pass non-strings/sentinels through).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Apply a canonicalizer to a string value (pass non-strings/sentinels through)."""</span>
     <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="k">else</span> <span class="n">value</span>
 
 
 <div class="viewcode-block" id="TypedGraphMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedGraphMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TypedGraphMetric</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost-weighted, type-aware typed-graph edit distance as a :class:`~ek.base.Metric`.</span>
+<span class="w">    </span><span class="sd">"""Cost-weighted, type-aware typed-graph edit distance as a :class:`~ek.base.Metric`.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        grammar: Layer-A :class:`~ek.base.GraphGrammar` supplying cost weights (may</span>
 <span class="sd">            also be passed per-call to ``__call__``).</span>
 <span class="sd">        weights: Optional :data:`~ek.base.CostWeight` overriding the schema weights.</span>
 <span class="sd">        canonicalizer: Optional ``str -&gt; str`` applied to field values before the</span>
-<span class="sd">            equality check (the facade passes ``normalize=`` through here); a schema&#39;s</span>
+<span class="sd">            equality check (the facade passes ``normalize=`` through here); a schema's</span>
 <span class="sd">            per-field ``FieldSpec.normalizer`` takes precedence for the fields it names.</span>
 <span class="sd">        timeout: Seconds budget for the (NP-hard) GED search; on timeout the best</span>
 <span class="sd">            cost found so far is used (an approximation). Default 10.0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;graph&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"graph"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -304,7 +304,7 @@
             <span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># pragma: no cover - exercised only without networkx</span>
             <span class="k">raise</span> <span class="n">MissingExtraError</span><span class="p">(</span>
-                <span class="s2">&quot;TypedGraphMetric needs networkx -- install it with:  pip install ek[metrics]&quot;</span>
+                <span class="s2">"TypedGraphMetric needs networkx -- install it with:  pip install ek[metrics]"</span>
             <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">exc</span>
 
         <span class="n">active_grammar</span> <span class="o">=</span> <span class="n">grammar</span> <span class="k">if</span> <span class="n">grammar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar</span>
@@ -317,14 +317,14 @@
             <span class="k">return</span> <span class="n">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">va</span><span class="p">)</span> <span class="o">==</span> <span class="n">_apply</span><span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">vb</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">node_mass</span><span class="p">(</span><span class="n">attrs</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-            <span class="n">t</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">node_cost</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">field_cost</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">])</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">node_cost</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">field_cost</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">[</span><span class="s2">"fields"</span><span class="p">])</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">node_subst</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-            <span class="n">ta</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
+            <span class="n">ta</span><span class="p">,</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s2">"type"</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ta</span> <span class="o">!=</span> <span class="n">tb</span><span class="p">:</span>  <span class="c1"># incompatible types: a full relabel (delete + insert)</span>
                 <span class="k">return</span> <span class="n">node_mass</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="n">node_mass</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-            <span class="n">fa</span><span class="p">,</span> <span class="n">fb</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span>
+            <span class="n">fa</span><span class="p">,</span> <span class="n">fb</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s2">"fields"</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s2">"fields"</span><span class="p">]</span>
             <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
                 <span class="n">field_cost</span><span class="p">(</span><span class="n">ta</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">fa</span><span class="p">)</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span>
@@ -334,41 +334,41 @@
         <span class="k">def</span><span class="w"> </span><span class="nf">edge_subst</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="mf">0.0</span>
-                <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
-                <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">)</span> <span class="o">==</span> <span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">)</span>
+                <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)))</span>
             <span class="p">)</span>
 
         <span class="n">gp</span><span class="p">,</span> <span class="n">gg</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">to_networkx</span><span class="p">(),</span> <span class="n">gold</span><span class="o">.</span><span class="n">to_networkx</span><span class="p">()</span>
 
         <span class="n">denom</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">sum</span><span class="p">(</span><span class="n">node_mass</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">gg</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
-            <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">gg</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+            <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">gg</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">gg</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
             <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">node_mass</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">gp</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
-            <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">gp</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+            <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">edge_cost</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">gp</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">denom</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># both graphs empty -&gt; identical</span>
             <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
                 <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+                <span class="n">metric</span><span class="o">=</span><span class="s2">"graph"</span><span class="p">,</span>
                 <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
-                    <span class="s2">&quot;raw_distance&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;denom&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                    <span class="s2">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-                    <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                    <span class="s2">&quot;exact&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">"raw_distance"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">"denom"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                    <span class="s2">"similarity"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                    <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">"exact"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
 
         <span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(),</span> <span class="n">gg</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_nodes</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_nodes</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;TypedGraphMetric: </span><span class="si">{</span><span class="n">n_nodes</span><span class="si">}</span><span class="s2"> nodes exceeds max_nodes=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nodes</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="s2">&quot;Graph edit distance is NP-hard; raise max_nodes only if you accept the &quot;</span>
-                <span class="s2">&quot;cost, or pre-reduce the graphs.&quot;</span>
+                <span class="sa">f</span><span class="s2">"TypedGraphMetric: </span><span class="si">{</span><span class="n">n_nodes</span><span class="si">}</span><span class="s2"> nodes exceeds max_nodes=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nodes</span><span class="si">}</span><span class="s2">. "</span>
+                <span class="s2">"Graph edit distance is NP-hard; raise max_nodes only if you accept the "</span>
+                <span class="s2">"cost, or pre-reduce the graphs."</span>
             <span class="p">)</span>
 
-        <span class="c1"># Time the (budgeted) NP-hard search so the result&#39;s exactness is recorded:</span>
+        <span class="c1"># Time the (budgeted) NP-hard search so the result's exactness is recorded:</span>
         <span class="c1"># a run that consumes its whole timeout was truncated to a best-so-far bound</span>
         <span class="c1"># and is only approximate (otherwise the score is wall-clock dependent and the</span>
         <span class="c1"># approximation is invisible).</span>
@@ -380,8 +380,8 @@
             <span class="n">node_del_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">node_mass</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
             <span class="n">node_ins_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">node_mass</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
             <span class="n">edge_subst_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">edge_subst</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span>
-            <span class="n">edge_del_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
-            <span class="n">edge_ins_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+            <span class="n">edge_del_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
+            <span class="n">edge_ins_cost</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">edge_cost</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"type"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
             <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span>
@@ -392,23 +392,23 @@
         <span class="n">normalized</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">raw</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
             <span class="n">value</span><span class="o">=</span><span class="n">normalized</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">"graph"</span><span class="p">,</span>
             <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;raw_distance&quot;</span><span class="p">:</span> <span class="n">raw</span><span class="p">,</span>
-                <span class="s2">&quot;denom&quot;</span><span class="p">:</span> <span class="n">denom</span><span class="p">,</span>
-                <span class="s2">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">normalized</span><span class="p">,</span>
-                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                <span class="s2">&quot;exact&quot;</span><span class="p">:</span> <span class="n">exact</span><span class="p">,</span>
-                <span class="s2">&quot;timeout_s&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="s2">"raw_distance"</span><span class="p">:</span> <span class="n">raw</span><span class="p">,</span>
+                <span class="s2">"denom"</span><span class="p">:</span> <span class="n">denom</span><span class="p">,</span>
+                <span class="s2">"similarity"</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">normalized</span><span class="p">,</span>
+                <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">"exact"</span><span class="p">:</span> <span class="n">exact</span><span class="p">,</span>
+                <span class="s2">"timeout_s"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="TypedGraphMetric.aggregate">
 <a class="viewcode-back" href="../../../module_docs/ek/metrics/graphs.html#ek.TypedGraphMetric.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corpus normalized distance = total raw distance / total max-distance.&quot;&quot;&quot;</span>
-        <span class="n">total_raw</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;raw_distance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
-        <span class="n">total_denom</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;denom&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""Corpus normalized distance = total raw distance / total max-distance."""</span>
+        <span class="n">total_raw</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"raw_distance"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">total_denom</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"denom"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">total_raw</span> <span class="o">/</span> <span class="n">total_denom</span><span class="p">)</span> <span class="k">if</span> <span class="n">total_denom</span> <span class="k">else</span> <span class="mf">0.0</span></div>
 </div>
 

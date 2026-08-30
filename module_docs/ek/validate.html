@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.validate &mdash; ek 0.1.9 documentation</title>
+  <title>ek.validate &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -187,12 +187,12 @@ from “post-hoc validation”), so it lives on the extraction side
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.validate</span><span class="w"> </span><span class="kn">import</span> <span class="n">validation_pipeline</span><span class="p">,</span> <span class="n">lexicon_corrector</span><span class="p">,</span> <span class="n">stop_on_correction</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Severity</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fix</span> <span class="o">=</span> <span class="n">validation_pipeline</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">lexicon_corrector</span><span class="p">([</span><span class="s2">&quot;France&quot;</span><span class="p">,</span> <span class="s2">&quot;Germany&quot;</span><span class="p">,</span> <span class="s2">&quot;Spain&quot;</span><span class="p">]),</span>
+<span class="gp">... </span>    <span class="n">lexicon_corrector</span><span class="p">([</span><span class="s2">"France"</span><span class="p">,</span> <span class="s2">"Germany"</span><span class="p">,</span> <span class="s2">"Spain"</span><span class="p">]),</span>
 <span class="gp">... </span>    <span class="n">stop_when</span><span class="o">=</span><span class="n">stop_on_correction</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s2">&quot;Frnace&quot;</span><span class="p">)</span>               <span class="c1"># one transposition from a closed enum</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">fix</span><span class="p">(</span><span class="s2">"Frnace"</span><span class="p">)</span>               <span class="c1"># one transposition from a closed enum</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">value</span>
-<span class="go">&#39;France&#39;</span>
+<span class="go">'France'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">corrected</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">findings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">CORRECT</span>

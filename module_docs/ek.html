@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek &mdash; ek 0.1.9 documentation</title>
+  <title>ek &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../_static/documentation_options.js?v=bafade30"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -344,9 +344,9 @@ validate, and decide accept/flag/block with no gold answer.</p></li>
 so the simple path Just Works and every layer stays replaceable (open-closed).</p>
 <dl>
 <dt>Quickstart:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">ek</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">ek</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="s2">&quot;hello wrld&quot;</span><span class="p">,</span> <span class="s2">&quot;hello world&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1"># CER by default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">ek</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="s2">"hello wrld"</span><span class="p">,</span> <span class="s2">"hello world"</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c1"># CER by default</span>
 <span class="go">0.091</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ek</span><span class="o">.</span><span class="n">evaluate</span><span class="p">([(</span><span class="s2">&quot;ct&quot;</span><span class="p">,</span> <span class="s2">&quot;cat&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;dg&quot;</span><span class="p">,</span> <span class="s2">&quot;dog&quot;</span><span class="p">)],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">n</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ek</span><span class="o">.</span><span class="n">evaluate</span><span class="p">([(</span><span class="s2">"ct"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"dg"</span><span class="p">,</span> <span class="s2">"dog"</span><span class="p">)],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"cer"</span><span class="p">)</span><span class="o">.</span><span class="n">n</span>
 <span class="go">2</span>
 </pre></div>
 </div>
@@ -367,7 +367,7 @@ free intrinsic confidence first. Called on a collection of hypotheses, it runs
 <a class="reference internal" href="ek/base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> before any gate reads it.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">AgreementSignal</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">sig</span><span class="p">([</span><span class="s2">&quot;the cat sat&quot;</span><span class="p">,</span> <span class="s2">&quot;the cat sit&quot;</span><span class="p">,</span> <span class="s2">&quot;the bat sat&quot;</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">sig</span><span class="p">([</span><span class="s2">"the cat sat"</span><span class="p">,</span> <span class="s2">"the cat sit"</span><span class="p">,</span> <span class="s2">"the bat sat"</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">0.778</span>
 </pre></div>
 </div>
@@ -758,7 +758,7 @@ per-unit confidences (already probabilities in <code class="docutils literal not
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IntrinsicConfidenceSignal</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">)([</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IntrinsicConfidenceSignal</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="s2">"min"</span><span class="p">)([</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
 <span class="go">0.4</span>
 </pre></div>
 </div>
@@ -1308,10 +1308,10 @@ object feeds both the score path (-&gt; calibrate) and the audit path (-&gt; rev
 Like every signal it is uncalibrated: a verifier failing is strong evidence, not
 a probability, so a <a class="reference internal" href="ek/base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> still runs before any gate.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VerifierSignal</span><span class="p">([</span><span class="n">checksum_validator</span><span class="p">(</span><span class="s2">&quot;luhn&quot;</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">&quot;79927398713&quot;</span><span class="p">)</span>          <span class="c1"># valid -&gt; all checks pass</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VerifierSignal</span><span class="p">([</span><span class="n">checksum_validator</span><span class="p">(</span><span class="s2">"luhn"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398713"</span><span class="p">)</span>          <span class="c1"># valid -&gt; all checks pass</span>
 <span class="go">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">&quot;79927398710&quot;</span><span class="p">)</span>          <span class="c1"># invalid -&gt; the one check fails</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398710"</span><span class="p">)</span>          <span class="c1"># invalid -&gt; the one check fails</span>
 <span class="go">0.0</span>
 </pre></div>
 </div>
@@ -1402,7 +1402,7 @@ Example: deserialize=pickle.loads</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">DataProcessor</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s2">&quot;user123&quot;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="o">=</span><span class="s2">"user123"</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">user_id</span> <span class="o">=</span> <span class="n">user_id</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">memory_cache</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># In-memory cache</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span> <span class="o">=</span> <span class="p">{}</span>   <span class="c1"># Track function calls for demo</span>
@@ -1410,62 +1410,62 @@ Example: deserialize=pickle.loads</p></li>
 <span class="gp">... </span>    <span class="c1"># 1. Basic property caching (like functools.cached_property)</span>
 <span class="gp">... </span>    <span class="nd">@cache_this</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">basic_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;Cached in instance.__dict__ by default&#39;&#39;&#39;</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">&#39;basic_property&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basic_property&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;computed_value_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">&#39;basic_property&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">'''Cached in instance.__dict__ by default'''</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">'basic_property'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'basic_property'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"computed_value_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">'basic_property'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># 2. Property with custom cache and key</span>
-<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">&#39;memory_cache&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;custom_prop_key&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">'memory_cache'</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">'custom_prop_key'</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">custom_cached_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;Cached in instance.memory_cache with custom key&#39;&#39;&#39;</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">&#39;custom_cached_property&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;custom_cached_property&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;custom_value_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">&#39;custom_cached_property&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">'''Cached in instance.memory_cache with custom key'''</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">'custom_cached_property'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'custom_cached_property'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"custom_value_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="s1">'custom_cached_property'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># 3. Method caching with argument-based keys</span>
-<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">&#39;memory_cache&#39;</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">compute_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">):</span>
-<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;Cached based on arguments (x, y, mode)&#39;&#39;&#39;</span>
-<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;compute_result&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">'memory_cache'</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">compute_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">'fast'</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">'''Cached based on arguments (x, y, mode)'''</span>
+<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'compute_result'</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;fast&#39;</span> <span class="k">else</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">'fast'</span> <span class="k">else</span> <span class="mi">3</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># 4. Method caching with ignored parameters</span>
-<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">&#39;memory_cache&#39;</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;debug&#39;</span><span class="p">})</span>
-<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;Cache ignores verbose and debug parameters&#39;&#39;&#39;</span>
-<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;process_data&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">algorithm</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">'memory_cache'</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">{</span><span class="s1">'verbose'</span><span class="p">,</span> <span class="s1">'debug'</span><span class="p">})</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">'default'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">'''Cache ignores verbose and debug parameters'''</span>
+<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'process_data'</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">algorithm</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="gp">... </span>        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">&#39;default&#39;</span> <span class="k">else</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Processing </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s1">'default'</span> <span class="k">else</span> <span class="mi">3</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># 5. Instance-specific cache factory</span>
-<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">{</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s1">_cache&#39;</span><span class="p">:</span> <span class="p">{}}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s1">_cache&#39;</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">{</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s1">_cache'</span><span class="p">:</span> <span class="p">{}}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user_id</span><span class="si">}</span><span class="s1">_cache'</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">user_specific_computation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;Each instance gets its own cache based on user_id&#39;&#39;&#39;</span>
-<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;user_specific_computation&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">'''Each instance gets its own cache based on user_id'''</span>
+<span class="gp">... </span>        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'user_specific_computation'</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">value</span> <span class="o">**</span> <span class="mi">2</span>
 </pre></div>
 </div>
 <p>Now let’s test all the features:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="s2">&quot;alice&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="s2">"alice"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Test basic property caching</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result1</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">basic_property</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">basic_property</span>  <span class="c1"># Should use cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="s2">&quot;computed_value_1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">&#39;basic_property&#39;</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="c1"># Cached in instance dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="s2">"computed_value_1"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">'basic_property'</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="c1"># Cached in instance dict</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Test custom cache and key</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result1</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">custom_cached_property</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">custom_cached_property</span>  <span class="c1"># Should use cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="s2">&quot;custom_value_1&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">&#39;custom_prop_key&#39;</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="n">memory_cache</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="s2">"custom_value_1"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s1">'custom_prop_key'</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="n">memory_cache</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Test method caching with arguments</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result1</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;fast&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;fast&#39;</span><span class="p">)</span>  <span class="c1"># Should use cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result3</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;slow&#39;</span><span class="p">)</span>  <span class="c1"># Different args, new computation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result1</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'fast'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'fast'</span><span class="p">)</span>  <span class="c1"># Should use cache</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result3</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">compute_result</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">'slow'</span><span class="p">)</span>  <span class="c1"># Different args, new computation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="mi">24</span>  <span class="c1"># 3 * 4 * 2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result3</span> <span class="o">==</span> <span class="mi">36</span>  <span class="c1"># 3 * 4 * 3</span>
 <span class="gp">&gt;&gt;&gt;</span>
@@ -1482,7 +1482,7 @@ Example: deserialize=pickle.loads</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result1</span> <span class="o">==</span> <span class="n">result2</span> <span class="o">==</span> <span class="mi">25</span>  <span class="c1"># 5 ** 2</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Different instance should have separate cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">processor2</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="s2">&quot;bob&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">processor2</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="s2">"bob"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result3</span> <span class="o">=</span> <span class="n">processor2</span><span class="o">.</span><span class="n">user_specific_computation</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># Fresh computation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">result3</span> <span class="o">==</span> <span class="mi">25</span>
 </pre></div>
@@ -1492,18 +1492,18 @@ Example: deserialize=pickle.loads</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">SameAsCachedProperty</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@cache_this</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In SameAsCachedProperty.foo...&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">"In SameAsCachedProperty.foo..."</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">42</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">SameAsCachedProperty</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="c1"># the cache is empty</span>
 <span class="go">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># when we access foo, it&#39;s computed and returned...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># when we access foo, it's computed and returned...</span>
 <span class="go">In SameAsCachedProperty.foo...</span>
 <span class="go">42</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="c1"># ... but also cached</span>
-<span class="go">{&#39;foo&#39;: 42}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># so that the next time we access foo, it&#39;s returned from the cache.</span>
+<span class="go">{'foo': 42}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># so that the next time we access foo, it's returned from the cache.</span>
 <span class="go">42</span>
 </pre></div>
 </div>
@@ -1512,7 +1512,7 @@ every time it’s accessed:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">NoCache</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In NoCache.foo...&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">"In NoCache.foo..."</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">42</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">NoCache</span><span class="p">()</span>
@@ -1530,7 +1530,7 @@ every time it’s accessed:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">CacheWithExternalMapping</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">external_cache</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In CacheWithExternalMapping.foo...&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">"In CacheWithExternalMapping.foo..."</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">42</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">CacheWithExternalMapping</span><span class="p">()</span>
@@ -1540,7 +1540,7 @@ every time it’s accessed:</p>
 <span class="go">In CacheWithExternalMapping.foo...</span>
 <span class="go">42</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">external_cache</span>
-<span class="go">{&#39;foo&#39;: 42}</span>
+<span class="go">{'foo': 42}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>
 <span class="go">42</span>
 </pre></div>
@@ -1551,9 +1551,9 @@ every time it’s accessed:</p>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">my_cache</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">&#39;my_cache&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;key_for_foo&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nd">@cache_this</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="s1">'my_cache'</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">'key_for_foo'</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In WithCacheInInstanceAttribute.foo...&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">"In WithCacheInInstanceAttribute.foo..."</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">42</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">WithCacheInInstanceAttribute</span><span class="p">()</span>
@@ -1563,7 +1563,7 @@ every time it’s accessed:</p>
 <span class="go">In WithCacheInInstanceAttribute.foo...</span>
 <span class="go">42</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">my_cache</span>
-<span class="go">{&#39;key_for_foo&#39;: 42}</span>
+<span class="go">{'key_for_foo': 42}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>
 <span class="go">42</span>
 </pre></div>
@@ -1596,29 +1596,29 @@ how the caches are being used.</p>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">LoggedCache</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;cache&#39;</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'cache'</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: setting </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"In </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: setting </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: getting value of </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"In </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: getting value of </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">CacheA</span><span class="p">(</span><span class="n">LoggedCache</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;CacheA&#39;</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'CacheA'</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">CacheB</span><span class="p">(</span><span class="n">LoggedCache</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;CacheB&#39;</span>
+<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s1">'CacheB'</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cache_with_pickle</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">cache_this</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">cache</span><span class="o">=</span><span class="s1">&#39;cache&#39;</span><span class="p">,</span>  <span class="c1"># the cache can be found on the instance attribute `cache`</span>
-<span class="gp">... </span>    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">.pkl&quot;</span><span class="p">,</span>  <span class="c1"># the key is the method name with a &#39;.pkl&#39; extension</span>
+<span class="gp">... </span>    <span class="n">cache</span><span class="o">=</span><span class="s1">'cache'</span><span class="p">,</span>  <span class="c1"># the cache can be found on the instance attribute `cache`</span>
+<span class="gp">... </span>    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">.pkl"</span><span class="p">,</span>  <span class="c1"># the key is the method name with a '.pkl' extension</span>
 <span class="gp">... </span>    <span class="n">pre_cache</span><span class="o">=</span><span class="n">CacheB</span><span class="p">(),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
@@ -1631,7 +1631,7 @@ how the caches are being used.</p>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="nd">@cache_with_pickle</span>
 <span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;In PickleCached.foo...&quot;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">"In PickleCached.foo..."</span><span class="p">)</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">42</span>
 <span class="gp">...</span>
 </pre></div>
@@ -1645,7 +1645,7 @@ how the caches are being used.</p>
 <span class="go">In CacheA: getting value of foo.pkl</span>
 <span class="go">In CacheA: getting value of foo.pkl</span>
 <span class="go">In PickleCached.foo...</span>
-<span class="go">In CacheA: setting foo.pkl to b&#39;\x80\x04K*.&#39;</span>
+<span class="go">In CacheA: setting foo.pkl to b'\x80\x04K*.'</span>
 <span class="go">42</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">foo</span>
 <span class="go">In CacheA: getting value of foo.pkl</span>
@@ -1655,21 +1655,21 @@ how the caches are being used.</p>
 </div>
 <p>As usual, it’s because the cache now holds something that has to do with <cite>foo</cite>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">cache</span><span class="p">)</span>
-<span class="go">[&#39;foo.pkl&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># == [&#39;foo.pkl&#39;]</span>
+<span class="go">['foo.pkl']</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># == ['foo.pkl']</span>
 </pre></div>
 </div>
 <p>The value of <cite>‘foo.pkl’</cite> is indeed <cite>42</cite>:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s1">&#39;foo.pkl&#39;</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="s1">'foo.pkl'</span><span class="p">]</span>
 <span class="go">In CacheA: getting value of foo.pkl</span>
 <span class="go">42</span>
 </pre></div>
 </div>
 <p>But note that the actual way it’s stored in the <cite>_backend_store</cite> is as pickle bytes:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">_backend_store</span><span class="p">[</span><span class="s1">&#39;foo.pkl&#39;</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span><span class="o">.</span><span class="n">_backend_store</span><span class="p">[</span><span class="s1">'foo.pkl'</span><span class="p">]</span>
 <span class="go">In CacheA: getting value of foo.pkl</span>
-<span class="go">b&#39;\x80\x04K*.&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># == b&#39;\x80\x04K*.&#39;</span>
+<span class="go">b'\x80\x04K*.'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># == b'\x80\x04K*.'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2042,12 +2042,12 @@ prefer <a class="reference internal" href="#ek.cache_this" title="ek.cache_this"
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="p">;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@persistent_cache</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;runs&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@persistent_cache</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">"runs"</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s2">"answer"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="n">calls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;answer&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">{</span><span class="s2">"answer"</span><span class="p">:</span> <span class="mi">42</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compute</span><span class="p">(),</span> <span class="n">compute</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">calls</span><span class="p">)</span>
-<span class="go">({&#39;answer&#39;: 42}, {&#39;answer&#39;: 42}, 1)</span>
+<span class="go">({'answer': 42}, {'answer': 42}, 1)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2126,13 +2126,13 @@ common case (everything installed) adds a single cheap import check.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;ocr&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;definitely_not_installed_pkg&quot;</span><span class="p">])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"ocr"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"definitely_not_installed_pkg"</span><span class="p">])</span>
 <span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="s2">&quot;ran&quot;</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="s2">"ran"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">run</span><span class="p">()</span>
 <span class="gp">... </span><span class="k">except</span> <span class="n">MissingExtraError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ek[ocr]&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">"ek[ocr]"</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 <span class="go">True</span>
 </pre></div>
 </div>

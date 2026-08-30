@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.ocr.benchmark &mdash; ek 0.1.9 documentation</title>
+  <title>ek.ocr.benchmark &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -132,16 +132,16 @@ credentials.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="p">;</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gold</span> <span class="o">=</span> <span class="p">{</span>
-<span class="gp">... </span>    <span class="s2">&quot;d1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;ignored&quot;</span><span class="p">,</span> <span class="s2">&quot;reference_text&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;slice&quot;</span><span class="p">:</span> <span class="s2">&quot;easy&quot;</span><span class="p">},</span>
-<span class="gp">... </span>    <span class="s2">&quot;d2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;ignored&quot;</span><span class="p">,</span> <span class="s2">&quot;reference_text&quot;</span><span class="p">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span> <span class="s2">&quot;slice&quot;</span><span class="p">:</span> <span class="s2">&quot;easy&quot;</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="s2">"d1"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"image"</span><span class="p">:</span> <span class="s2">"ignored"</span><span class="p">,</span> <span class="s2">"reference_text"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"slice"</span><span class="p">:</span> <span class="s2">"easy"</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="s2">"d2"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"image"</span><span class="p">:</span> <span class="s2">"ignored"</span><span class="p">,</span> <span class="s2">"reference_text"</span><span class="p">:</span> <span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"slice"</span><span class="p">:</span> <span class="s2">"easy"</span><span class="p">},</span>
 <span class="gp">... </span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># a stub engine that always reads &quot;cat&quot; (perfect for d1, wrong for d2):</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">})()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">evaluate_ocr</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">gold</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cer&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># a stub engine that always reads "cat" (perfect for d1, wrong for d2):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="s2">"R"</span><span class="p">,</span> <span class="p">(),</span> <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">})()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">evaluate_ocr</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">gold</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"cer"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">n</span>
 <span class="go">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">)</span>
-<span class="go">[&#39;easy&#39;]</span>
+<span class="go">['easy']</span>
 </pre></div>
 </div>
 <dl class="py function">

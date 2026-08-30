@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents.cost &mdash; ek 0.1.9 documentation</title>
+  <title>ek.agents.cost &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -237,12 +237,12 @@ and latency are still reported.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">per_million</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="p">[</span><span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<span class="gp">... </span>       <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="p">[</span><span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">"a"</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>       <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">"b"</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;success_rate&quot;</span><span class="p">],</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">"success_rate"</span><span class="p">],</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"cost_per_success"</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">(0.5, 2.0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">)[</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>      <span class="c1"># no rates -&gt; no dollars invented</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">)[</span><span class="s2">"cost_per_success"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>      <span class="c1"># no rates -&gt; no dollars invented</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -283,9 +283,9 @@ import the <code class="docutils literal notranslate"><span class="pre">litellm<
 and the SDK drags a large transitive tree in just to look up a rate.</p>
 <p>Entries lacking token rates (embeddings, unpriced models) are skipped.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">({</span><span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;input_cost_per_token&quot;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="s2">&quot;output_cost_per_token&quot;</span><span class="p">:</span> <span class="mf">2e-6</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;m&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">({</span><span class="s2">"m"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"input_cost_per_token"</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="s2">"output_cost_per_token"</span><span class="p">:</span> <span class="mf">2e-6</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="p">[</span><span class="s2">"m"</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 <span class="go">2e-06</span>
 </pre></div>
 </div>

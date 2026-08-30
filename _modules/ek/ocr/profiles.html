@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.ocr.profiles &mdash; ek 0.1.9 documentation</title>
+  <title>ek.ocr.profiles &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,15 +111,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.ocr.profiles</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Per-engine OCR capability profiles (what QE signal each engine actually emits).</span>
+<span></span><span class="sd">"""Per-engine OCR capability profiles (what QE signal each engine actually emits).</span>
 
 <span class="sd">Distilled from the 15-engine inventory in ``misc/docs/ek_01``. These describe what</span>
 <span class="sd">an engine *claims* to surface; ``ek`` exists in part to verify such claims</span>
 <span class="sd">empirically, so treat them as defaults/priors, not ground truth. The fields that</span>
 <span class="sd">matter for evaluation:</span>
 
-<span class="sd">- ``confidence_grain`` -- finest confidence granularity emitted: ``&quot;symbol&quot;`` &gt;</span>
-<span class="sd">  ``&quot;word&quot;`` &gt; ``&quot;line&quot;`` &gt; ``&quot;none&quot;``. Genuine per-symbol confidence exists only</span>
+<span class="sd">- ``confidence_grain`` -- finest confidence granularity emitted: ``"symbol"`` &gt;</span>
+<span class="sd">  ``"word"`` &gt; ``"line"`` &gt; ``"none"``. Genuine per-symbol confidence exists only</span>
 <span class="sd">  in Google Cloud Vision and Tesseract; many VLMs emit nothing usable.</span>
 <span class="sd">- ``has_real_provenance`` -- whether bounding boxes are real geometry (vs</span>
 <span class="sd">  model-guessed pixels from Claude/OpenAI, or char-offset only from Mistral).</span>
@@ -128,15 +128,15 @@
 <span class="sd">- ``tables`` -- whether the engine emits scoreable table cell structure.</span>
 
 <span class="sd">Example:</span>
-<span class="sd">    &gt;&gt;&gt; profile(&quot;tesseract&quot;)[&quot;confidence_grain&quot;]</span>
-<span class="sd">    &#39;symbol&#39;</span>
-<span class="sd">    &gt;&gt;&gt; profile(&quot;claude-vision&quot;)[&quot;has_real_provenance&quot;]</span>
+<span class="sd">    &gt;&gt;&gt; profile("tesseract")["confidence_grain"]</span>
+<span class="sd">    'symbol'</span>
+<span class="sd">    &gt;&gt;&gt; profile("claude-vision")["has_real_provenance"]</span>
 <span class="sd">    False</span>
-<span class="sd">    &gt;&gt;&gt; profile(&quot;google_vision&quot;)[&quot;confidence_grain&quot;]   # underscore form also accepted</span>
-<span class="sd">    &#39;symbol&#39;</span>
-<span class="sd">    &gt;&gt;&gt; profile(&quot;totally-unknown-engine&quot;)[&quot;confidence_grain&quot;]</span>
-<span class="sd">    &#39;unknown&#39;</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &gt;&gt;&gt; profile("google_vision")["confidence_grain"]   # underscore form also accepted</span>
+<span class="sd">    'symbol'</span>
+<span class="sd">    &gt;&gt;&gt; profile("totally-unknown-engine")["confidence_grain"]</span>
+<span class="sd">    'unknown'</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -145,52 +145,52 @@
     <span class="n">confidence_grain</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">has_real_provenance</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">calibrated</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">tables</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;confidence_grain&quot;</span><span class="p">:</span> <span class="n">confidence_grain</span><span class="p">,</span>
-        <span class="s2">&quot;has_real_provenance&quot;</span><span class="p">:</span> <span class="n">has_real_provenance</span><span class="p">,</span>
-        <span class="s2">&quot;calibrated&quot;</span><span class="p">:</span> <span class="n">calibrated</span><span class="p">,</span>
-        <span class="s2">&quot;tables&quot;</span><span class="p">:</span> <span class="n">tables</span><span class="p">,</span>
+        <span class="s2">"confidence_grain"</span><span class="p">:</span> <span class="n">confidence_grain</span><span class="p">,</span>
+        <span class="s2">"has_real_provenance"</span><span class="p">:</span> <span class="n">has_real_provenance</span><span class="p">,</span>
+        <span class="s2">"calibrated"</span><span class="p">:</span> <span class="n">calibrated</span><span class="p">,</span>
+        <span class="s2">"tables"</span><span class="p">:</span> <span class="n">tables</span><span class="p">,</span>
     <span class="p">}</span>
 
 
-<span class="c1">#: Engine id -&gt; capability profile. Keys are ``ocracy``&#39;s canonical (hyphenated)</span>
+<span class="c1">#: Engine id -&gt; capability profile. Keys are ``ocracy``'s canonical (hyphenated)</span>
 <span class="c1">#: backend ids; :func:`profile` also accepts underscore variants.</span>
 <span class="n">ENGINE_PROFILES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;tesseract&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;symbol&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;google-vision&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;symbol&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;aws-textract&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s2">&quot;azure-document-intelligence&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s2">&quot;mathpix&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># the lone calibrated emitter</span>
-    <span class="s2">&quot;paddleocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s2">&quot;easyocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;rapidocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;ocrmac&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;doctr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;ocr-space&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;gpt-4o-vision&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># model-guessed geometry</span>
-    <span class="s2">&quot;claude-vision&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># emits no confidence/geometry</span>
-    <span class="s2">&quot;mistral-ocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># char-offset only, no real bbox</span>
-    <span class="s2">&quot;pix2tex-latex-ocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;trocr&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s2">&quot;trocr-handwritten&quot;</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"tesseract"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"symbol"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"google-vision"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"symbol"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"aws-textract"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"azure-document-intelligence"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"mathpix"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># the lone calibrated emitter</span>
+    <span class="s2">"paddleocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"line"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="s2">"easyocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"line"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"rapidocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"line"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"ocrmac"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"line"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"doctr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"word"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"ocr-space"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"gpt-4o-vision"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># model-guessed geometry</span>
+    <span class="s2">"claude-vision"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># emits no confidence/geometry</span>
+    <span class="s2">"mistral-ocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>  <span class="c1"># char-offset only, no real bbox</span>
+    <span class="s2">"pix2tex-latex-ocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"trocr"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="s2">"trocr-handwritten"</span><span class="p">:</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
 <span class="p">}</span>
 
 <span class="c1">#: Returned for any engine not in the table.</span>
-<span class="n">DEFAULT_PROFILE</span> <span class="o">=</span> <span class="n">_p</span><span class="p">(</span><span class="s2">&quot;unknown&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">DEFAULT_PROFILE</span> <span class="o">=</span> <span class="n">_p</span><span class="p">(</span><span class="s2">"unknown"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-<span class="c1"># Index by a normalized key so both &quot;google-vision&quot; and &quot;google_vision&quot; resolve.</span>
-<span class="n">_NORMALIZED</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ENGINE_PROFILES</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="c1"># Index by a normalized key so both "google-vision" and "google_vision" resolve.</span>
+<span class="n">_NORMALIZED</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ENGINE_PROFILES</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
 
 <div class="viewcode-block" id="profile">
 <a class="viewcode-back" href="../../../module_docs/ek/ocr/profiles.html#ek.ocr.profile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">profile</span><span class="p">(</span><span class="n">engine</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Capability profile for an engine id (a safe default if unknown).</span>
+<span class="w">    </span><span class="sd">"""Capability profile for an engine id (a safe default if unknown).</span>
 
-<span class="sd">    Accepts ``ocracy``&#39;s canonical hyphenated ids and their underscore variants.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    Accepts ``ocracy``'s canonical hyphenated ids and their underscore variants.</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">ENGINE_PROFILES</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ENGINE_PROFILES</span><span class="p">[</span><span class="n">engine</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_NORMALIZED</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">),</span> <span class="n">DEFAULT_PROFILE</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_NORMALIZED</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">),</span> <span class="n">DEFAULT_PROFILE</span><span class="p">)</span></div>
 
 </pre></div>
 

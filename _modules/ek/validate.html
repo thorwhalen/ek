@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.validate &mdash; ek 0.1.9 documentation</title>
+  <title>ek.validate &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,7 +111,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.validate</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Reference-free post-extraction validation &amp; correction (issue #7).</span>
+<span></span><span class="sd">"""Reference-free post-extraction validation &amp; correction (issue #7).</span>
 
 <span class="sd">A layered, **cheapest -&gt; most-expensive** pipeline with an explicit</span>
 <span class="sd">**FLAG-vs-CORRECT** distinction (``misc/docs/ek_04``). Every method estimates</span>
@@ -132,7 +132,7 @@
 <span class="sd">  resolution (L2); free invention is reserved for the gated L5 neural corrector.</span>
 
 <span class="sd">Both share one callable shape -- ``(value, *, spec) -&gt; Iterable[Finding]`` -- so</span>
-<span class="sd">:func:`validation_pipeline` composes them uniformly. A CORRECT finding&#39;s suggestion</span>
+<span class="sd">:func:`validation_pipeline` composes them uniformly. A CORRECT finding's suggestion</span>
 <span class="sd">is applied to the value *before the next layer runs* (the noisy-channel chain: a</span>
 <span class="sd">cheap deterministic fix short-circuits the expensive layers), and an injectable</span>
 <span class="sd">``stop_when`` policy ends the pass early (e.g. once a value is corrected or clean).</span>
@@ -150,27 +150,27 @@
 <span class="sd">- **L5 neural/LLM correction** (CORRECT, gated): :func:`llm_corrector` takes an</span>
 <span class="sd">  injected ``(str) -&gt; Optional[str]`` correction call; it is the only layer that</span>
 <span class="sd">  invents content, so it fires only on already-flagged values (``only_flagged``),</span>
-<span class="sd">  reads the pipeline&#39;s findings, and keeps the original for audit.</span>
+<span class="sd">  reads the pipeline's findings, and keeps the original for audit.</span>
 <span class="sd">- **L4 constrained generation** is a *generation*-time concern (it constrains a</span>
-<span class="sd">  generative extractor, not post-hoc output -- ek_04 separates &quot;constrain-on-generate&quot;</span>
-<span class="sd">  from &quot;post-hoc validation&quot;), so it lives on the extraction side</span>
+<span class="sd">  generative extractor, not post-hoc output -- ek_04 separates "constrain-on-generate"</span>
+<span class="sd">  from "post-hoc validation"), so it lives on the extraction side</span>
 <span class="sd">  (``ek[constrained]``: ``outlines``/XGrammar/``instructor``), not in this pipeline.</span>
 
 <span class="sd">Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ek.validate import validation_pipeline, lexicon_corrector, stop_on_correction</span>
 <span class="sd">    &gt;&gt;&gt; from ek.base import Severity</span>
 <span class="sd">    &gt;&gt;&gt; fix = validation_pipeline(</span>
-<span class="sd">    ...     lexicon_corrector([&quot;France&quot;, &quot;Germany&quot;, &quot;Spain&quot;]),</span>
+<span class="sd">    ...     lexicon_corrector(["France", "Germany", "Spain"]),</span>
 <span class="sd">    ...     stop_when=stop_on_correction,</span>
 <span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; r = fix(&quot;Frnace&quot;)               # one transposition from a closed enum</span>
+<span class="sd">    &gt;&gt;&gt; r = fix("Frnace")               # one transposition from a closed enum</span>
 <span class="sd">    &gt;&gt;&gt; r.value</span>
-<span class="sd">    &#39;France&#39;</span>
+<span class="sd">    'France'</span>
 <span class="sd">    &gt;&gt;&gt; r.corrected</span>
 <span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; r.findings[0].severity is Severity.CORRECT</span>
 <span class="sd">    True</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -205,11 +205,11 @@
 
 <span class="c1">#: Default minimum similarity (``rapidfuzz`` ratio in [0, 1]) for a closed-set lexicon</span>
 <span class="c1">#: match to be auto-applied as a correction rather than flagged. 0.8 catches typical</span>
-<span class="c1">#: single-edit and transposition typos (&quot;Frnace&quot;-&gt;&quot;France&quot; ~0.83) while the wide gap</span>
+<span class="c1">#: single-edit and transposition typos ("Frnace"-&gt;"France" ~0.83) while the wide gap</span>
 <span class="c1">#: to an unrelated word (~0.3) keeps false corrections rare.</span>
 <span class="n">DEFAULT_LEXICON_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.8</span>
 
-<span class="c1">#: Benford&#39;s law expected first-significant-digit frequencies, ``P(d)=log10(1+1/d)``.</span>
+<span class="c1">#: Benford's law expected first-significant-digit frequencies, ``P(d)=log10(1+1/d)``.</span>
 <span class="n">BENFORD_EXPECTED</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)}</span>
 
 <span class="c1">#: Default max absolute per-digit deviation from Benford before a field is flagged.</span>
@@ -223,12 +223,12 @@
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.Corrector">[docs]</a>
 <span class="nd">@runtime_checkable</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Corrector</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :class:`~ek.base.Validator` that may also CORRECT.</span>
+<span class="w">    </span><span class="sd">"""A :class:`~ek.base.Validator` that may also CORRECT.</span>
 
 <span class="sd">    Same callable shape as a Validator, but it can emit a ``severity=CORRECT``</span>
 <span class="sd">    :class:`~ek.base.Finding` whose ``suggestion`` is the proposed replacement value.</span>
 <span class="sd">    The ``layer`` attribute names its place on the cheap-&gt;expensive spine.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span>
 
@@ -242,11 +242,11 @@
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.ValidationResult">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ValidationResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The outcome of running a value through a :func:`validation_pipeline`.</span>
+<span class="w">    </span><span class="sd">"""The outcome of running a value through a :func:`validation_pipeline`.</span>
 
 <span class="sd">    ``value`` is the final value after any applied corrections; ``original`` is the</span>
 <span class="sd">    input; ``findings`` is the full audit trail (FLAG and CORRECT), in layer order.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">original</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>
@@ -254,17 +254,17 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">corrected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether any correction changed the value.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Whether any correction changed the value."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">flagged</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether any layer raised a FLAG (something a human should look at).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Whether any layer raised a FLAG (something a human should look at)."""</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">findings</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;No findings at all -- the value passed every layer untouched.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""No findings at all -- the value passed every layer untouched."""</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">findings</span></div>
 
 
@@ -281,7 +281,7 @@
 <div class="viewcode-block" id="stop_on_correction">
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.stop_on_correction">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">stop_on_correction</span><span class="p">(</span><span class="n">findings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Finding</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stop policy: end the pass as soon as any layer proposes a correction.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stop policy: end the pass as soon as any layer proposes a correction."""</span>
     <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">CORRECT</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">findings</span><span class="p">)</span></div>
 
 
@@ -289,7 +289,7 @@
 <div class="viewcode-block" id="stop_on_flag">
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.stop_on_flag">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">stop_on_flag</span><span class="p">(</span><span class="n">findings</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Finding</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stop policy: end the pass at the first FLAG (fail fast).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Stop policy: end the pass at the first FLAG (fail fast)."""</span>
     <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">severity</span> <span class="ow">is</span> <span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">findings</span><span class="p">)</span></div>
 
 
@@ -301,7 +301,7 @@
     <span class="n">apply_corrections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">stop_when</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Finding</span><span class="p">]],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">_never_stop</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ValidationResult</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compose validators/correctors into a cheapest -&gt; most-expensive pipeline.</span>
+<span class="w">    </span><span class="sd">"""Compose validators/correctors into a cheapest -&gt; most-expensive pipeline.</span>
 
 <span class="sd">    ``layers`` run in the given order (the order encodes the cost spine). Each layer</span>
 <span class="sd">    is a ``(value, *, spec) -&gt; Iterable[Finding]`` callable. When ``apply_corrections``</span>
@@ -310,7 +310,7 @@
 <span class="sd">    layers then see (the noisy-channel chain). ``stop_when`` is an injectable</span>
 <span class="sd">    early-exit policy over the findings accumulated so far (see</span>
 <span class="sd">    :func:`stop_on_correction` / :func:`stop_on_flag`); the default runs every layer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">layers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValidationResult</span><span class="p">:</span>
@@ -320,7 +320,7 @@
             <span class="c1"># A layer that sets ``wants_findings = True`` (e.g. a gated L5 corrector</span>
             <span class="c1"># that should fire only on already-flagged values) receives the findings</span>
             <span class="c1"># accumulated by the cheaper layers before it.</span>
-            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">&quot;wants_findings&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="s2">"wants_findings"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
                 <span class="n">layer_findings</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
                     <span class="n">layer</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span> <span class="n">findings</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">collected</span><span class="p">))</span>
                 <span class="p">)</span>
@@ -346,7 +346,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_field_name</span><span class="p">(</span><span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldSpec</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">field_name</span> <span class="ow">or</span> <span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">field_name</span> <span class="ow">or</span> <span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -357,14 +357,14 @@
 <div class="viewcode-block" id="canonicalize_corrector">
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.canonicalize_corrector">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">canonicalize_corrector</span><span class="p">(</span>
-    <span class="n">normalize</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;canonicalize&quot;</span>
+    <span class="n">normalize</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"canonicalize"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Corrector</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;L0: fold a value to canonical form, emitting a CORRECT finding when it changes.</span>
+<span class="w">    </span><span class="sd">"""L0: fold a value to canonical form, emitting a CORRECT finding when it changes.</span>
 
 <span class="sd">    ``normalize`` is anything :func:`ek.canonicalize.resolve_canonicalizer` accepts</span>
 <span class="sd">    (a registered name, a callable, a step list). The narrowest, safest corrector --</span>
 <span class="sd">    run it first so later layers compare canonical forms.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.canonicalize</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_canonicalizer</span>
 
     <span class="n">canon</span> <span class="o">=</span> <span class="n">resolve_canonicalizer</span><span class="p">(</span><span class="n">normalize</span><span class="p">)</span>
@@ -379,7 +379,7 @@
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">CORRECT</span><span class="p">,</span>
                 <span class="n">suggestion</span><span class="o">=</span><span class="n">folded</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;canonicalized </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">folded</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"canonicalized </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">folded</span><span class="si">!r}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="n">correct</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>
@@ -399,11 +399,11 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_LEXICON_THRESHOLD</span><span class="p">,</span>
     <span class="n">scorer</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lexicon&quot;</span><span class="p">,</span>
+    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"lexicon"</span><span class="p">,</span>
     <span class="n">flag_unmatched</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Corrector</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;L2: resolve a value against a **closed** vocabulary by fuzzy match (``rapidfuzz``).</span>
+<span class="w">    </span><span class="sd">"""L2: resolve a value against a **closed** vocabulary by fuzzy match (``rapidfuzz``).</span>
 
 <span class="sd">    The safest corrector in the stack when the candidate set is closed (country codes,</span>
 <span class="sd">    SKUs, enums): an exact member passes untouched; a single close match</span>
@@ -416,7 +416,7 @@
 <span class="sd">        threshold: Minimum ``rapidfuzz`` similarity in ``[0, 1]`` to auto-correct.</span>
 <span class="sd">        scorer: A ``rapidfuzz`` scorer (default ``fuzz.ratio``).</span>
 <span class="sd">        flag_unmatched: FLAG a value with no close match (default ``True``).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">vocab</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vocabulary</span><span class="p">)</span>
     <span class="n">vocab_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
 
@@ -436,14 +436,14 @@
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">CORRECT</span><span class="p">,</span>
                 <span class="n">suggestion</span><span class="o">=</span><span class="n">match</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">match</span><span class="si">!r}</span><span class="s2"> (lexicon match </span><span class="si">{</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">match</span><span class="si">!r}</span><span class="s2"> (lexicon match </span><span class="si">{</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">flag_unmatched</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">Finding</span><span class="p">(</span>
                 <span class="n">field</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> not in vocabulary (nearest </span><span class="si">{</span><span class="n">match</span><span class="si">!r}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> not in vocabulary (nearest </span><span class="si">{</span><span class="n">match</span><span class="si">!r}</span><span class="s2"> @ </span><span class="si">{</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="n">correct</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>
@@ -463,12 +463,12 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">fields</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cross_field&quot;</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cross_field"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;FLAG a record when ``predicate(record)`` is False (a general cross-field check).</span>
+<span class="w">    </span><span class="sd">"""FLAG a record when ``predicate(record)`` is False (a general cross-field check).</span>
 
 <span class="sd">    Skips silently when ``predicate`` raises on a partial record (a missing field is</span>
-<span class="sd">    not itself a cross-field violation).&quot;&quot;&quot;</span>
+<span class="sd">    not itself a cross-field violation)."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -477,7 +477,7 @@
             <span class="k">return</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
             <span class="k">yield</span> <span class="n">Finding</span><span class="p">(</span>
-                <span class="n">field</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">),</span>
+                <span class="n">field</span><span class="o">=</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">),</span>
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
                 <span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span>
@@ -490,14 +490,14 @@
 <div class="viewcode-block" id="ordering_validator">
 <a class="viewcode-back" href="../../module_docs/ek/validate.html#ek.ordering_validator">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ordering_validator</span><span class="p">(</span>
-    <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cross_field&quot;</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cross_field"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;FLAG a record whose comparable values at ``keys`` are not ascending.</span>
+<span class="w">    </span><span class="sd">"""FLAG a record whose comparable values at ``keys`` are not ascending.</span>
 
 <span class="sd">    The canonical date/sequence check (``start &lt;= end``, issue before due). Only the</span>
 <span class="sd">    keys actually present and mutually comparable are checked, so it is safe on</span>
 <span class="sd">    partial records.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]:</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">record</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">record</span><span class="p">]</span>
@@ -507,12 +507,12 @@
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="k">return</span>  <span class="c1"># values not mutually comparable -&gt; not an ordering violation</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
-            <span class="n">rel</span> <span class="o">=</span> <span class="s2">&quot;strictly ascending&quot;</span> <span class="k">if</span> <span class="n">strict</span> <span class="k">else</span> <span class="s2">&quot;ascending&quot;</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="s2">"strictly ascending"</span> <span class="k">if</span> <span class="n">strict</span> <span class="k">else</span> <span class="s2">"ascending"</span>
             <span class="k">yield</span> <span class="n">Finding</span><span class="p">(</span>
-                <span class="n">field</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span>
+                <span class="n">field</span><span class="o">=</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys</span><span class="p">),</span>
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;values at </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="si">}</span><span class="s2"> are not </span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"values at </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="si">}</span><span class="s2"> are not </span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">validate</span></div>
@@ -525,7 +525,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_leading_digit</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;First significant decimal digit of ``|x|`` (1..9), or ``None`` if not usable.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""First significant decimal digit of ``|x|`` (1..9), or ``None`` if not usable."""</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
@@ -544,12 +544,12 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">benford_findings</span><span class="p">(</span>
     <span class="n">numbers</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_BENFORD_TOL</span><span class="p">,</span>
     <span class="n">min_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_BENFORD_MIN_N</span><span class="p">,</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;anomaly&quot;</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"anomaly"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;FLAG a numeric field whose first-digit distribution deviates from Benford&#39;s law.</span>
+<span class="w">    </span><span class="sd">"""FLAG a numeric field whose first-digit distribution deviates from Benford's law.</span>
 
 <span class="sd">    A reference-free anomaly check for naturally-occurring magnitudes (amounts,</span>
 <span class="sd">    populations, counts): the first significant digit should follow</span>
@@ -558,7 +558,7 @@
 <span class="sd">    routes a field to review, never auto-edits, and can false-positive on legitimately</span>
 <span class="sd">    bounded/skewed fields. Skipped (returns ``[]``) below ``min_n`` usable values,</span>
 <span class="sd">    since the law is asymptotic.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">firsts</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_leading_digit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">)</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">firsts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_n</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
@@ -572,8 +572,8 @@
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
                 <span class="n">message</span><span class="o">=</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;first-digit distribution deviates from Benford&#39;s law &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;(max deviation </span><span class="si">{</span><span class="n">worst</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">tol</span><span class="si">}</span><span class="s2">) over </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> values&quot;</span>
+                    <span class="sa">f</span><span class="s2">"first-digit distribution deviates from Benford's law "</span>
+                    <span class="sa">f</span><span class="s2">"(max deviation </span><span class="si">{</span><span class="n">worst</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">tol</span><span class="si">}</span><span class="s2">) over </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> values"</span>
                 <span class="p">),</span>
             <span class="p">)</span>
         <span class="p">]</span>
@@ -596,13 +596,13 @@
     <span class="n">apply_corrections</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">stop_when</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Finding</span><span class="p">]],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">_never_stop</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValidationResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run one value through a validation/correction pipeline (progressive disclosure).</span>
+<span class="w">    </span><span class="sd">"""Run one value through a validation/correction pipeline (progressive disclosure).</span>
 
 <span class="sd">    The simple call ``validate(v, layers=[...])`` Just Works; tune the correction</span>
 <span class="sd">    behaviour with ``apply_corrections``/``stop_when``. Compose ``layers`` from the</span>
 <span class="sd">    factories in this module (``canonicalize_corrector``, ``lexicon_corrector``, the</span>
 <span class="sd">    re-exported verifier validators) in cheapest-first order.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">pipe</span> <span class="o">=</span> <span class="n">validation_pipeline</span><span class="p">(</span>
         <span class="o">*</span><span class="n">layers</span><span class="p">,</span> <span class="n">apply_corrections</span><span class="o">=</span><span class="n">apply_corrections</span><span class="p">,</span> <span class="n">stop_when</span><span class="o">=</span><span class="n">stop_when</span>
     <span class="p">)</span>
@@ -642,16 +642,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">zscore_anomaly_findings</span><span class="p">(</span>
     <span class="n">numbers</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_ZSCORE_THRESHOLD</span><span class="p">,</span>
     <span class="n">min_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_BENFORD_MIN_N</span><span class="p">,</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;anomaly&quot;</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"anomaly"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;FLAG numeric values that are robust-z-score outliers (median + MAD based).</span>
+<span class="w">    </span><span class="sd">"""FLAG numeric values that are robust-z-score outliers (median + MAD based).</span>
 
 <span class="sd">    A reference-free, **dependency-free** anomaly check that complements</span>
 <span class="sd">    :func:`benford_findings` (which checks the leading-digit *distribution*; this</span>
-<span class="sd">    checks individual *magnitudes*). For a numeric column it computes each value&#39;s</span>
+<span class="sd">    checks individual *magnitudes*). For a numeric column it computes each value's</span>
 <span class="sd">    **modified z-score** -- ``0.6745 * (x - median) / MAD`` -- which is robust to the</span>
 <span class="sd">    very outliers it is looking for, and FLAGs those whose absolute score exceeds</span>
 <span class="sd">    ``threshold``. One FLAG per outlying value (carrying its index); **FLAG-only** --</span>
@@ -662,7 +662,7 @@
 <span class="sd">    caught; a *truly* constant column (no spread at all) yields no findings. For</span>
 <span class="sd">    *multivariate* outliers, plug an isolation forest via ``pyod`` (already in</span>
 <span class="sd">    ``ek[validation]``) as a custom validator.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">_as_float</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">numbers</span><span class="p">)]</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_n</span><span class="p">:</span>
@@ -691,8 +691,8 @@
                     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                     <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
                     <span class="n">message</span><span class="o">=</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;value </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> at index </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> is a robust-z outlier &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;(|z|=</span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">)&quot;</span>
+                        <span class="sa">f</span><span class="s2">"value </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> at index </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> is a robust-z outlier "</span>
+                        <span class="sa">f</span><span class="s2">"(|z|=</span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">)"</span>
                     <span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -712,10 +712,10 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">higher_is_worse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lm_prior&quot;</span><span class="p">,</span>
+    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"lm_prior"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;L3: FLAG a value whose language-model surprisal crosses ``threshold``.</span>
+<span class="w">    </span><span class="sd">"""L3: FLAG a value whose language-model surprisal crosses ``threshold``.</span>
 
 <span class="sd">    ``scorer`` is an **injected** ``(str) -&gt; float`` returning a surprisal /</span>
 <span class="sd">    perplexity / negative-log-likelihood (dependency injection: bring your own</span>
@@ -725,10 +725,10 @@
 <span class="sd">    ``higher_is_worse=False`` if your scorer returns a probability (higher = better).</span>
 
 <span class="sd">    Recipe (masked-LM pseudo-log-likelihood): wrap ``minicons`` --</span>
-<span class="sd">    ``from minicons import scorer; m = scorer.MaskedLMScorer(&quot;bert-base-uncased&quot;, &quot;cpu&quot;)``</span>
+<span class="sd">    ``from minicons import scorer; m = scorer.MaskedLMScorer("bert-base-uncased", "cpu")``</span>
 <span class="sd">    -- and pass ``scorer=lambda s: -m.sequence_score([s])[0]`` (surprisal = negative</span>
 <span class="sd">    PLL). ``minicons`` is MIT; install your own LM backend (it pulls torch).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FieldSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Finding</span><span class="p">]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
@@ -736,12 +736,12 @@
         <span class="n">score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scorer</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="n">anomalous</span> <span class="o">=</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">threshold</span> <span class="k">if</span> <span class="n">higher_is_worse</span> <span class="k">else</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="n">threshold</span>
         <span class="k">if</span> <span class="n">anomalous</span><span class="p">:</span>
-            <span class="n">rel</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span> <span class="k">if</span> <span class="n">higher_is_worse</span> <span class="k">else</span> <span class="s2">&quot;&lt;&quot;</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="s2">"&gt;"</span> <span class="k">if</span> <span class="n">higher_is_worse</span> <span class="k">else</span> <span class="s2">"&lt;"</span>
             <span class="k">yield</span> <span class="n">Finding</span><span class="p">(</span>
                 <span class="n">field</span><span class="o">=</span><span class="n">_field_name</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">spec</span><span class="p">),</span>
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">FLAG</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;language-model surprisal </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"language-model surprisal </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="n">validate</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>
@@ -760,25 +760,25 @@
     <span class="n">correct_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">only_flagged</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;llm_correct&quot;</span><span class="p">,</span>
+    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">layer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"llm_correct"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Corrector</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;L5: a **gated** neural/LLM corrector -- the only layer that invents content.</span>
+<span class="w">    </span><span class="sd">"""L5: a **gated** neural/LLM corrector -- the only layer that invents content.</span>
 
 <span class="sd">    ``correct_fn`` is an **injected** ``(value) -&gt; Optional[str]`` (bring your own</span>
 <span class="sd">    LLM/seq2seq call; return a corrected string, or ``None`` to leave the value</span>
 <span class="sd">    unchanged). It is the most expensive and stochastic layer, so by default</span>
 <span class="sd">    (``only_flagged``) it fires **only on a value that a cheaper layer already</span>
 <span class="sd">    FLAGged** -- gate it to the residual, never let it silently rewrite clean fields</span>
-<span class="sd">    (this layer reads the pipeline&#39;s accumulated findings via ``wants_findings``).</span>
+<span class="sd">    (this layer reads the pipeline's accumulated findings via ``wants_findings``).</span>
 <span class="sd">    Emits a CORRECT finding; the pipeline applies the rewrite and keeps the original</span>
 <span class="sd">    for audit. Always verify its output downstream -- it can make text worse.</span>
 
 <span class="sd">    Recipe (Anthropic): ``correct_fn=lambda v: client.messages.create(model=...,</span>
-<span class="sd">    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt(v)}]).content[0].text.strip()`` with</span>
+<span class="sd">    messages=[{"role": "user", "content": prompt(v)}]).content[0].text.strip()`` with</span>
 <span class="sd">    ``client = anthropic.Anthropic()`` (MIT). Constrain/verify the result and keep an</span>
 <span class="sd">    audit trail.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">correct</span><span class="p">(</span>
         <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
@@ -797,7 +797,7 @@
                 <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
                 <span class="n">severity</span><span class="o">=</span><span class="n">Severity</span><span class="o">.</span><span class="n">CORRECT</span><span class="p">,</span>
                 <span class="n">suggestion</span><span class="o">=</span><span class="n">proposed</span><span class="p">,</span>
-                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;LLM correction </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">proposed</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="sa">f</span><span class="s2">"LLM correction </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">proposed</span><span class="si">!r}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="n">correct</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>

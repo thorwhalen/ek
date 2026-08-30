@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents.judge &mdash; ek 0.1.9 documentation</title>
+  <title>ek.agents.judge &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -158,9 +158,9 @@ mean is not statistically sound. Until per-signal-family calibration lands, eith
 as the <em>only</em> signal, or calibrate it separately and pass the calibrated value.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ek</span></code> never imports an LLM SDK: <code class="docutils literal notranslate"><span class="pre">judge</span></code> is an <strong>injected callable</strong>.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stub</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">output</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="mf">0.9</span> <span class="k">if</span> <span class="s2">&quot;meow&quot;</span> <span class="ow">in</span> <span class="n">output</span> <span class="k">else</span> <span class="mf">0.1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">JudgeSignal</span><span class="p">(</span><span class="n">stub</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;Is the answer helpful?&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="p">(</span><span class="s2">&quot;the cat says meow&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stub</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">output</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="mf">0.9</span> <span class="k">if</span> <span class="s2">"meow"</span> <span class="ow">in</span> <span class="n">output</span> <span class="k">else</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">JudgeSignal</span><span class="p">(</span><span class="n">stub</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">"Is the answer helpful?"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="p">(</span><span class="s2">"the cat says meow"</span><span class="p">)</span>
 <span class="go">0.9</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span><span class="o">.</span><span class="n">cost_tier</span>                       <span class="c1"># the most expensive signal family</span>
 <span class="go">5</span>
@@ -247,8 +247,8 @@ conventional thresholds (alpha &gt;= 0.8 good, 0.67-0.8 tentative, below that un
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">judge_validation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;verdict&quot;</span><span class="p">]</span>
-<span class="go">(1.0, &#39;good&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">"alpha"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"verdict"</span><span class="p">]</span>
+<span class="go">(1.0, 'good')</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -273,8 +273,8 @@ judge is known to be order-invariant).</p></li>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_wins</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="mf">1.0</span>     <span class="c1"># a maximally position-biased judge</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_judge</span><span class="p">(</span><span class="n">first_wins</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">)</span>              <span class="c1"># swapping exposes it as a tie</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_wins</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">""</span><span class="p">:</span> <span class="mf">1.0</span>     <span class="c1"># a maximally position-biased judge</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_judge</span><span class="p">(</span><span class="n">first_wins</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">)</span>              <span class="c1"># swapping exposes it as a tie</span>
 <span class="go">0.5</span>
 </pre></div>
 </div>

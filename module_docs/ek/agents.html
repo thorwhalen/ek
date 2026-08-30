@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents &mdash; ek 0.1.9 documentation</title>
+  <title>ek.agents &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -234,7 +234,7 @@ tool-call scoring; the ROVER agreement seam is self-consistency; the IAA helpers
 judge; and the whole <code class="docutils literal notranslate"><span class="pre">signal</span> <span class="pre">-&gt;</span> <span class="pre">calibrate</span> <span class="pre">-&gt;</span> <span class="pre">validate</span> <span class="pre">-&gt;</span> <span class="pre">decide</span></code> cascade is the confidence gate.</p>
 <dl>
 <dt>Quickstart:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">run_suite</span><span class="p">,</span> <span class="n">as_agent</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">TaskSpec</span><span class="p">(</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;hi&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">&quot;HI&quot;</span><span class="p">),</span> <span class="n">TaskSpec</span><span class="p">(</span><span class="s2">&quot;t2&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;yo&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">&quot;YO&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">TaskSpec</span><span class="p">(</span><span class="s2">"t1"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">"hi"</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">"HI"</span><span class="p">),</span> <span class="n">TaskSpec</span><span class="p">(</span><span class="s2">"t2"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">"yo"</span><span class="p">,</span> <span class="n">gold</span><span class="o">=</span><span class="s2">"YO"</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">run_suite</span><span class="p">(</span><span class="n">as_agent</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">upper</span><span class="p">),</span> <span class="n">tasks</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report</span><span class="o">.</span><span class="n">success_rate</span>
 <span class="go">1.0</span>
@@ -593,9 +593,9 @@ a delete, a send). Drives the default weight and the safety validators.</p></li>
 <p>A trajectory is <em>linear</em> – which is why it is scored with a sequence edit distance,
 not a graph edit distance (see <a class="reference internal" href="agents/trajectory.html#module-ek.agents.trajectory" title="ek.agents.trajectory"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.agents.trajectory</span></code></a>).</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">([</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}),</span> <span class="n">Step</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="s2">&quot;meow&quot;</span><span class="p">})])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Trajectory</span><span class="p">([</span><span class="n">Step</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}),</span> <span class="n">Step</span><span class="p">(</span><span class="s2">"answer"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="s2">"meow"</span><span class="p">})])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">t</span><span class="o">.</span><span class="n">tools</span>
-<span class="go">(2, (&#39;search&#39;, &#39;answer&#39;))</span>
+<span class="go">(2, ('search', 'answer'))</span>
 </pre></div>
 </div>
 <dl class="py property">
@@ -682,8 +682,8 @@ an underpowered experiment, and the result says so (<code class="docutils litera
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskSpec</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">as_agent</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="p">(</span><span class="n">TaskSpec</span><span class="p">(</span><span class="s2">&quot;t1&quot;</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;hi&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">output</span>
-<span class="go">&#39;HI&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="p">(</span><span class="n">TaskSpec</span><span class="p">(</span><span class="s2">"t1"</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="s2">"hi"</span><span class="p">))</span><span class="o">.</span><span class="n">output</span>
+<span class="go">'HI'</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -696,14 +696,14 @@ an underpowered experiment, and the result says so (<code class="docutils litera
 prediction arrives as a <a class="reference internal" href="#ek.agents.Step" title="ek.agents.Step"><code class="xref py py-class docutils literal notranslate"><span class="pre">Step</span></code></a>; both must compare. Progressive disclosure: the
 simple literal works, the rich object works.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">((</span><span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}))</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">({</span><span class="s2">&quot;tool&quot;</span><span class="p">:</span> <span class="s2">&quot;search&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">}})</span>
-<span class="go">(&#39;search&#39;, {&#39;q&#39;: &#39;cat&#39;})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="s2">&quot;search&quot;</span><span class="p">)</span>
-<span class="go">(&#39;search&#39;, {})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="n">Step</span><span class="p">(</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}))</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">((</span><span class="s2">"search"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}))</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">({</span><span class="s2">"tool"</span><span class="p">:</span> <span class="s2">"search"</span><span class="p">,</span> <span class="s2">"args"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"cat"</span><span class="p">}})</span>
+<span class="go">('search', {'q': 'cat'})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">as_call</span><span class="p">(</span><span class="s2">"search"</span><span class="p">)</span>
+<span class="go">('search', {})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -729,7 +729,7 @@ simple literal works, the rich object works.</p>
 <p>Understands the OpenAI (<code class="docutils literal notranslate"><span class="pre">prompt_tokens</span></code> / <code class="docutils literal notranslate"><span class="pre">completion_tokens</span></code>) and Anthropic
 (<code class="docutils literal notranslate"><span class="pre">input_tokens</span></code> / <code class="docutils literal notranslate"><span class="pre">output_tokens</span></code> / <code class="docutils literal notranslate"><span class="pre">cache_read_input_tokens</span></code>) spellings.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cost_from_usage</span><span class="p">({</span><span class="s2">&quot;prompt_tokens&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;completion_tokens&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">cost_from_usage</span><span class="p">({</span><span class="s2">"prompt_tokens"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">"completion_tokens"</span><span class="p">:</span> <span class="mi">20</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">input_tokens</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">output_tokens</span>
 <span class="go">(100, 20)</span>
 </pre></div>
@@ -764,12 +764,12 @@ and latency are still reported.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.agents.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">per_million</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="p">[</span><span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-<span class="gp">... </span>       <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eps</span> <span class="o">=</span> <span class="p">[</span><span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">"a"</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>       <span class="n">Episode</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="s2">"b"</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="n">Cost</span><span class="p">(</span><span class="n">input_tokens</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">),</span> <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;success_rate&quot;</span><span class="p">],</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">"success_rate"</span><span class="p">],</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"cost_per_success"</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">(0.5, 2.0)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">)[</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>      <span class="c1"># no rates -&gt; no dollars invented</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cost_report</span><span class="p">(</span><span class="n">eps</span><span class="p">)[</span><span class="s2">"cost_per_success"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>      <span class="c1"># no rates -&gt; no dollars invented</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -862,8 +862,8 @@ conventional thresholds (alpha &gt;= 0.8 good, 0.67-0.8 tentative, below that un
 </dl>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">judge_validation</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;verdict&quot;</span><span class="p">]</span>
-<span class="go">(1.0, &#39;good&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s2">"alpha"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"verdict"</span><span class="p">]</span>
+<span class="go">(1.0, 'good')</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -884,9 +884,9 @@ import the <code class="docutils literal notranslate"><span class="pre">litellm<
 and the SDK drags a large transitive tree in just to look up a rate.</p>
 <p>Entries lacking token rates (embeddings, unpriced models) are skipped.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">({</span><span class="s2">&quot;m&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;input_cost_per_token&quot;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="s2">&quot;output_cost_per_token&quot;</span><span class="p">:</span> <span class="mf">2e-6</span><span class="p">}})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="p">[</span><span class="s2">&quot;m&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">load_prices</span><span class="p">({</span><span class="s2">"m"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"input_cost_per_token"</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="s2">"output_cost_per_token"</span><span class="p">:</span> <span class="mf">2e-6</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="p">[</span><span class="s2">"m"</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 <span class="go">2e-06</span>
 </pre></div>
 </div>
@@ -907,8 +907,8 @@ common cases (distinct calls, repeats, reorderings); a full min-cost bipartite m
 worth a dependency here.</p>
 <p>Returns <code class="docutils literal notranslate"><span class="pre">(pairs,</span> <span class="pre">unmatched_pred,</span> <span class="pre">unmatched_gold)</span></code>, <code class="docutils literal notranslate"><span class="pre">pairs</span></code> being <code class="docutils literal notranslate"><span class="pre">(pred_call,</span> <span class="pre">gold_call)</span></code>.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span><span class="p">,</span> <span class="n">up</span><span class="p">,</span> <span class="n">ug</span> <span class="o">=</span> <span class="n">match_calls</span><span class="p">([(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">}),</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">})],</span>
-<span class="gp">... </span>                            <span class="p">[(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">}),</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;q&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">})])</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairs</span><span class="p">,</span> <span class="n">up</span><span class="p">,</span> <span class="n">ug</span> <span class="o">=</span> <span class="n">match_calls</span><span class="p">([(</span><span class="s2">"s"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"b"</span><span class="p">}),</span> <span class="p">(</span><span class="s2">"s"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"a"</span><span class="p">})],</span>
+<span class="gp">... </span>                            <span class="p">[(</span><span class="s2">"s"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"a"</span><span class="p">}),</span> <span class="p">(</span><span class="s2">"s"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"b"</span><span class="p">})])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">),</span> <span class="n">up</span><span class="p">,</span> <span class="n">ug</span>          <span class="c1"># order-insensitive within a tool name</span>
 <span class="go">(2, [], [])</span>
 </pre></div>
@@ -970,8 +970,8 @@ judge is known to be order-invariant).</p></li>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_wins</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="mf">1.0</span>     <span class="c1"># a maximally position-biased judge</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_judge</span><span class="p">(</span><span class="n">first_wins</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">)</span>              <span class="c1"># swapping exposes it as a tie</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_wins</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">criteria</span><span class="o">=</span><span class="s2">""</span><span class="p">:</span> <span class="mf">1.0</span>     <span class="c1"># a maximally position-biased judge</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_judge</span><span class="p">(</span><span class="n">first_wins</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">)</span>              <span class="c1"># swapping exposes it as a tie</span>
 <span class="go">0.5</span>
 </pre></div>
 </div>
@@ -1056,7 +1056,7 @@ which case <code class="docutils literal notranslate"><span class="pre">pass^k</
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">reliability</span><span class="p">({</span><span class="s2">&quot;t1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="s2">&quot;t2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]},</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">reliability</span><span class="p">({</span><span class="s2">"t1"</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="s2">"t2"</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">]},</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">n_tasks</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">k</span>
 <span class="go">(2, 2)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>      <span class="c1"># t1: C(2,2)/C(3,2)=1/3 ; t2: 1.0</span>
@@ -1129,9 +1129,9 @@ report – because reliability without cost is only half the answer.</p>
 the tool’s call weight, field cost = the argument’s importance.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FieldSpec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">ToolSpec</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">)},</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">tool_grammar</span><span class="p">(</span><span class="n">ToolSpec</span><span class="p">(</span><span class="s2">"send"</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">"to"</span><span class="p">:</span> <span class="n">FieldSpec</span><span class="p">(</span><span class="s2">"to"</span><span class="p">)},</span>
 <span class="gp">... </span>                          <span class="n">destructive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="s2">&quot;send&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">node_cost</span><span class="p">(</span><span class="s2">"send"</span><span class="p">)</span>
 <span class="go">10.0</span>
 </pre></div>
 </div>

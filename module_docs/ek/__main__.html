@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.__main__ &mdash; ek 0.1.9 documentation</title>
+  <title>ek.__main__ &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -51,8 +51,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../ek.html">ek</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ek.__main__</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ek.__main__.add_command"><code class="docutils literal notranslate"><span class="pre">add_command()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.__main__.call_with"><code class="docutils literal notranslate"><span class="pre">call_with()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.__main__.dispatch_with_namespaces"><code class="docutils literal notranslate"><span class="pre">dispatch_with_namespaces()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ek.__main__.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.__main__.make_parser"><code class="docutils literal notranslate"><span class="pre">make_parser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ek.__main__.print_result"><code class="docutils literal notranslate"><span class="pre">print_result()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="agents.html">ek.agents</a></li>
@@ -120,20 +124,52 @@
   <section id="module-ek.__main__">
 <span id="ek-main"></span><h1>ek.__main__<a class="headerlink" href="#module-ek.__main__" title="Link to this heading"></a></h1>
 <p>Command-line entry point for <code class="docutils literal notranslate"><span class="pre">ek</span></code> (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">ek</span></code> / the <code class="docutils literal notranslate"><span class="pre">ek</span></code> script).</p>
-<p>Commands come from <code class="xref py py-data docutils literal notranslate"><span class="pre">ek.tools._dispatch_funcs</span></code> (the SSOT), dispatched with
-<code class="docutils literal notranslate"><span class="pre">argh</span></code> – which reads each function’s signature to build its flags – and
-optionally completed with <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code>. The <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">PYTHON_ARGCOMPLETE_OK</span></code> marker
-on line 1 enables shell tab-completion (after the user activates it).</p>
+<p>Commands come from <code class="xref py py-data docutils literal notranslate"><span class="pre">ek.tools._dispatch_funcs</span></code> (the SSOT). A function’s
+<em>signature</em> is its command-line interface, so there is no duplicated command
+registration and no argument declarations to keep in sync with the code:</p>
+<p>Underscores become dashes (<code class="docutils literal notranslate"><span class="pre">pass_k</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">pass-k</span></code>); a command’s docstring is
+its <code class="docutils literal notranslate"><span class="pre">--help</span></code> text. Return values are printed: a list/tuple/iterator one item
+per line, anything else on a single line.</p>
+<p>This is built on <code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code> from the standard library, so ek’s core carries
+no CLI dependency at all. It replaces <code class="docutils literal notranslate"><span class="pre">argh</span></code>, which is LGPL-3.0-or-later –
+ek is MIT and its licence gate (<code class="docutils literal notranslate"><span class="pre">.github/scripts/check_licenses.py</span></code>) now
+rejects the whole GPL family, LGPL included.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">PYTHON_ARGCOMPLETE_OK</span></code> marker on line 1 enables shell tab-completion
+via <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code> (after the user activates it).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.__main__.add_command">
+<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">add_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subparsers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#add_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.add_command" title="Link to this definition"></a></dt>
+<dd><p>Register <code class="docutils literal notranslate"><span class="pre">func</span></code> as a subcommand, deriving its arguments from its signature.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.__main__.call_with">
+<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">call_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#call_with"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.call_with" title="Link to this definition"></a></dt>
+<dd><p>Call <code class="docutils literal notranslate"><span class="pre">func</span></code> with the parsed <code class="docutils literal notranslate"><span class="pre">namespace</span></code>, honouring <code class="docutils literal notranslate"><span class="pre">*args</span></code> and kwonly.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ek.__main__.dispatch_with_namespaces">
-<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">dispatch_with_namespaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#dispatch_with_namespaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.dispatch_with_namespaces" title="Link to this definition"></a></dt>
-<dd><p>Build an <code class="docutils literal notranslate"><span class="pre">argh</span></code> parser from top-level and namespaced functions and dispatch.</p>
+<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">dispatch_with_namespaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#dispatch_with_namespaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.dispatch_with_namespaces" title="Link to this definition"></a></dt>
+<dd><p>Build a parser from top-level and namespaced functions and dispatch <code class="docutils literal notranslate"><span class="pre">argv</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ek.__main__.main">
 <span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.main" title="Link to this definition"></a></dt>
 <dd><p>Entry point registered as the <code class="docutils literal notranslate"><span class="pre">ek</span></code> console script.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.__main__.make_parser">
+<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">make_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">parser_kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#make_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.make_parser" title="Link to this definition"></a></dt>
+<dd><p>Build the <code class="docutils literal notranslate"><span class="pre">ek</span></code> parser from top-level functions and namespaced groups.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.__main__.print_result">
+<span class="sig-prename descclassname"><span class="pre">ek.__main__.</span></span><span class="sig-name descname"><span class="pre">print_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ek/__main__.html#print_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.__main__.print_result" title="Link to this definition"></a></dt>
+<dd><p>Print a command’s return value: a sequence one item per line, else one line.</p>
 </dd></dl>
 
 </section>

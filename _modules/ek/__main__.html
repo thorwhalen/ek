@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.__main__ &mdash; ek 0.1.9 documentation</title>
+  <title>ek.__main__ &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -112,52 +112,306 @@
              
   <h1>Source code for ek.__main__</h1><div class="highlight"><pre>
 <span></span><span class="c1"># PYTHON_ARGCOMPLETE_OK</span>
-<span class="sd">&quot;&quot;&quot;Command-line entry point for ``ek`` (``python -m ek`` / the ``ek`` script).</span>
+<span class="sd">"""Command-line entry point for ``ek`` (``python -m ek`` / the ``ek`` script).</span>
 
-<span class="sd">Commands come from :data:`ek.tools._dispatch_funcs` (the SSOT), dispatched with</span>
-<span class="sd">``argh`` -- which reads each function&#39;s signature to build its flags -- and</span>
-<span class="sd">optionally completed with ``argcomplete``. The ``# PYTHON_ARGCOMPLETE_OK`` marker</span>
-<span class="sd">on line 1 enables shell tab-completion (after the user activates it).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Commands come from :data:`ek.tools._dispatch_funcs` (the SSOT). A function's</span>
+<span class="sd">*signature* is its command-line interface, so there is no duplicated command</span>
+<span class="sd">registration and no argument declarations to keep in sync with the code:</span>
+
+<span class="sd">===============================  =========================================</span>
+<span class="sd">Python parameter                 Command-line form</span>
+<span class="sd">===============================  =========================================</span>
+<span class="sd">``f(x)``                         positional ``x``</span>
+<span class="sd">``f(*xs)``                       repeatable positional ``[xs ...]``</span>
+<span class="sd">``f(x, /)`` / ``f(x=1, /)``       positional ``x`` (never an option)</span>
+<span class="sd">``f(*, x=None)`` / ``f(x=None)`` option ``-x``/``--x`` (default in --help)</span>
+<span class="sd">``f(*, x)``                      *required* option ``-x``/``--x``</span>
+<span class="sd">``f(*, flag=False)``             switch ``--flag``</span>
+<span class="sd">``f(*, flag=True)``              switch ``--no-flag`` (``--flag`` still ok)</span>
+<span class="sd">===============================  =========================================</span>
+
+<span class="sd">Underscores become dashes (``pass_k`` -&gt; ``pass-k``); a command's docstring is</span>
+<span class="sd">its ``--help`` text. Return values are printed: a list/tuple/iterator one item</span>
+<span class="sd">per line, anything else on a single line.</span>
+
+<span class="sd">This is built on :mod:`argparse` from the standard library, so ek's core carries</span>
+<span class="sd">no CLI dependency at all. It replaces ``argh``, which is LGPL-3.0-or-later --</span>
+<span class="sd">ek is MIT and its licence gate (``.github/scripts/check_licenses.py``) now</span>
+<span class="sd">rejects the whole GPL family, LGPL included.</span>
+
+<span class="sd">The ``# PYTHON_ARGCOMPLETE_OK`` marker on line 1 enables shell tab-completion</span>
+<span class="sd">via ``argcomplete`` (after the user activates it).</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1">#: Where the parser stashes the function a parsed command line resolved to.</span>
+<span class="n">_FUNC_DEST</span> <span class="o">=</span> <span class="s2">"_ek_command_func"</span>
+
+<span class="c1">#: Where it stashes the parser whose usage to show when no command was given.</span>
+<span class="n">_PARSER_DEST</span> <span class="o">=</span> <span class="s2">"_ek_command_parser"</span>
+
+<span class="n">_EMPTY</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span>
+
+<span class="c1">#: Short flags that are never auto-assigned to a parameter (argparse owns ``-h``).</span>
+<span class="n">_RESERVED_SHORT_FLAGS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="s2">"h"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_cli_name</span><span class="p">(</span><span class="n">python_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Command/argument name as it is spelled on the command line.</span>
+
+<span class="sd">    &gt;&gt;&gt; _cli_name('pass_k')</span>
+<span class="sd">    'pass-k'</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">python_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"_"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_help_for_default</span><span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The help column: a default rendered with ``repr``, ``None`` as ``'-'``.</span>
+
+<span class="sd">    &gt;&gt;&gt; _help_for_default(1), _help_for_default(None), _help_for_default(True)</span>
+<span class="sd">    ('1', '-', 'True')</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="s2">"-"</span> <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_summary</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""First docstring paragraph, as one line, safe to hand to argparse.</span>
+
+<span class="sd">    argparse ``%``-formats help strings, so a literal ``%`` (``"90%-reliable"``)</span>
+<span class="sd">    must be escaped or it is read as a format spec.</span>
+<span class="sd">    """</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+    <span class="n">first_paragraph</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">first_paragraph</span><span class="o">.</span><span class="n">split</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"%"</span><span class="p">,</span> <span class="s2">"</span><span class="si">%%</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_positional</span><span class="p">(</span><span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Add ``param`` as a positional argument (``*args`` becomes ``[name ...]``).</span>
+
+<span class="sd">    A positional-only parameter *with* a default stays positional (it has no keyword</span>
+<span class="sd">    spelling) but becomes optional, so omitting it falls back to the default.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"nargs"</span><span class="p">:</span> <span class="s2">"*"</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_EMPTY</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"nargs"</span><span class="p">:</span> <span class="s2">"?"</span><span class="p">,</span> <span class="s2">"default"</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="n">_cli_name</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">_help_for_default</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">default</span><span class="p">)</span> <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_EMPTY</span> <span class="k">else</span> <span class="s2">"-"</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_short_flags</span><span class="p">(</span><span class="n">option_params</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Map option name -&gt; short flag, for the initials that are *unambiguous*.</span>
+
+<span class="sd">    An initial claimed by two parameters gives a short flag to neither -- the same</span>
+<span class="sd">    rule ``argh`` used. Handing it to whichever was declared first would make the</span>
+<span class="sd">    command line depend on parameter *order*, so reordering a signature could</span>
+<span class="sd">    silently move ``-c`` from one option to another.</span>
+
+<span class="sd">    &gt;&gt;&gt; from inspect import Parameter as P</span>
+<span class="sd">    &gt;&gt;&gt; kw = P.KEYWORD_ONLY</span>
+<span class="sd">    &gt;&gt;&gt; params = [P('cost', kw, default=1), P('count', kw, default=2)]</span>
+<span class="sd">    &gt;&gt;&gt; _short_flags(params)</span>
+<span class="sd">    {}</span>
+<span class="sd">    &gt;&gt;&gt; _short_flags([P('name', kw, default=None)])</span>
+<span class="sd">    {'name': '-n'}</span>
+<span class="sd">    """</span>
+    <span class="n">claims</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">option_params</span><span class="p">:</span>
+        <span class="n">claims</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="sa">f</span><span class="s2">"-</span><span class="si">{</span><span class="n">initial</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">initial</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="n">claims</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">initial</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_RESERVED_SHORT_FLAGS</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_add_option</span><span class="p">(</span>
+    <span class="n">parser</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">,</span>
+    <span class="n">param</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">,</span>
+    <span class="n">short_flags</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Add ``param`` as an option, with a short flag when its initial is unambiguous."""</span>
+    <span class="n">long_name</span> <span class="o">=</span> <span class="n">_cli_name</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">short</span> <span class="o">:=</span> <span class="n">short_flags</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">short</span><span class="p">)</span>
+    <span class="n">flags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--</span><span class="si">{</span><span class="n">long_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">default</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span>
+    <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">_EMPTY</span><span class="p">:</span>
+        <span class="c1"># A keyword-only parameter with no default: argh spelled this as a *required*</span>
+        <span class="c1"># option, and so do we -- a caller must be able to pass it by name.</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="o">*</span><span class="n">flags</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"required"</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">flags</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">"store_true"</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="n">_help_for_default</span><span class="p">(</span><span class="n">default</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Without this a default-True switch could never be turned off.</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"--no-</span><span class="si">{</span><span class="n">long_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">dest</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">action</span><span class="o">=</span><span class="s2">"store_false"</span><span class="p">,</span>
+                <span class="n">help</span><span class="o">=</span><span class="sa">f</span><span class="s2">"unset --</span><span class="si">{</span><span class="n">long_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># No ``type=``: commands take strings and do their own coercion, so a</span>
+        <span class="c1"># command's Python signature stays the SSOT of what it accepts.</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">flags</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">_help_for_default</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_option</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether ``param`` maps to an option rather than a positional argument.</span>
+
+<span class="sd">    A parameter with a default is an option; so is a keyword-only parameter even</span>
+<span class="sd">    without one (it becomes a *required* option), since there is no positional</span>
+<span class="sd">    spelling that could reach it. A positional-only parameter is never an option,</span>
+<span class="sd">    even with a default, for the mirror-image reason.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">POSITIONAL_ONLY</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_EMPTY</span> <span class="ow">or</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">KEYWORD_ONLY</span>
+
+
+<div class="viewcode-block" id="add_command">
+<a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.add_command">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_command</span><span class="p">(</span><span class="n">subparsers</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Register ``func`` as a subcommand, deriving its arguments from its signature."""</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+        <span class="n">_cli_name</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="n">_summary</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawDescriptionHelpFormatter</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">param</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">param</span><span class="o">.</span><span class="n">VAR_KEYWORD</span>  <span class="c1"># ``**kwargs`` has no CLI spelling</span>
+    <span class="p">]</span>
+    <span class="n">short_flags</span> <span class="o">=</span> <span class="n">_short_flags</span><span class="p">(</span><span class="n">param</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span> <span class="k">if</span> <span class="n">_is_option</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_is_option</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+            <span class="n">_add_option</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">short_flags</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_add_positional</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">_FUNC_DEST</span><span class="p">:</span> <span class="n">func</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+
+
+<div class="viewcode-block" id="make_parser">
+<a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.make_parser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_parser</span><span class="p">(</span>
+    <span class="n">functions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">namespaced_funcs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">parser_kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Build the ``ek`` parser from top-level functions and namespaced groups."""</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="o">**</span><span class="n">parser_kwargs</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">_FUNC_DEST</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">_PARSER_DEST</span><span class="p">:</span> <span class="n">parser</span><span class="p">})</span>
+    <span class="n">subparsers</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">functions</span><span class="p">:</span>
+        <span class="n">add_command</span><span class="p">(</span><span class="n">subparsers</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">funcs</span> <span class="ow">in</span> <span class="p">(</span><span class="n">namespaced_funcs</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="n">_cli_name</span><span class="p">(</span><span class="n">namespace</span><span class="p">))</span>
+        <span class="n">group_subparsers</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">:</span>
+            <span class="n">add_command</span><span class="p">(</span><span class="n">group_subparsers</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">_FUNC_DEST</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">_PARSER_DEST</span><span class="p">:</span> <span class="n">group</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+
+
+<div class="viewcode-block" id="call_with">
+<a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.call_with">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">call_with</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Call ``func`` with the parsed ``namespace``, honouring ``*args`` and kwonly."""</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+    <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="p">())</span>
+        <span class="k">elif</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">POSITIONAL_ONLY</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># cannot be passed by keyword, default or not</span>
+        <span class="k">elif</span> <span class="n">_is_option</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">or</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">KEYWORD_ONLY</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="print_result">
+<a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.print_result">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_result</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Print a command's return value: a sequence one item per line, else one line."""</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isgenerator</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="dispatch_with_namespaces">
 <a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.dispatch_with_namespaces">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dispatch_with_namespaces</span><span class="p">(</span>
-    <span class="n">functions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">namespaced_funcs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">functions</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">],</span>
+    <span class="n">namespaced_funcs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Callable</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">argv</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an ``argh`` parser from top-level and namespaced functions and dispatch.&quot;&quot;&quot;</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">argh</span>
-
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argh</span><span class="o">.</span><span class="n">ArghParser</span><span class="p">()</span>
-    <span class="n">argh</span><span class="o">.</span><span class="n">add_commands</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">functions</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">funcs</span> <span class="ow">in</span> <span class="p">(</span><span class="n">namespaced_funcs</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">argh</span><span class="o">.</span><span class="n">add_commands</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">funcs</span><span class="p">),</span> <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Build a parser from top-level and namespaced functions and dispatch ``argv``."""</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">make_parser</span><span class="p">(</span><span class="n">functions</span><span class="p">,</span> <span class="n">namespaced_funcs</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>  <span class="c1"># tab completion is best-effort</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">argcomplete</span>
 
         <span class="n">argcomplete</span><span class="o">.</span><span class="n">autocomplete</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">pass</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">dispatch</span><span class="p">()</span></div>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="kc">None</span> <span class="k">if</span> <span class="n">argv</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">argv</span><span class="p">))</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">_FUNC_DEST</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># no (sub)command given -- same as ``argh``: show usage, exit 0</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">_PARSER_DEST</span><span class="p">,</span> <span class="n">parser</span><span class="p">)</span><span class="o">.</span><span class="n">print_usage</span><span class="p">()</span>
+        <span class="k">return</span>
+    <span class="n">print_result</span><span class="p">(</span><span class="n">call_with</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">namespace</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../module_docs/ek/__main__.html#ek.__main__.main">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entry point registered as the ``ek`` console script.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Entry point registered as the ``ek`` console script."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">tools</span>
 
     <span class="n">dispatch_with_namespaces</span><span class="p">(</span><span class="n">tools</span><span class="o">.</span><span class="n">_dispatch_funcs</span><span class="p">)</span></div>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 

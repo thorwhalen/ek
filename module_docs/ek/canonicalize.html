@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.canonicalize &mdash; ek 0.1.9 documentation</title>
+  <title>ek.canonicalize &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -142,17 +142,17 @@ steps with a stable <code class="docutils literal notranslate"><span class="pre"
 namespace, so a schema can name a per-field normalizer (via
 <code class="xref py py-attr docutils literal notranslate"><span class="pre">normalizer</span></code>) and third parties can add their own.</p>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span> <span class="o">=</span> <span class="n">Canonicalizer</span><span class="p">([</span><span class="s2">&quot;nfc&quot;</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">,</span> <span class="s2">&quot;collapse_whitespace&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span><span class="p">(</span><span class="s2">&quot;  Héllo   WORLD &quot;</span><span class="p">)</span>
-<span class="go">&#39;héllo world&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span> <span class="o">=</span> <span class="n">Canonicalizer</span><span class="p">([</span><span class="s2">"nfc"</span><span class="p">,</span> <span class="s2">"lower"</span><span class="p">,</span> <span class="s2">"collapse_whitespace"</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span><span class="p">(</span><span class="s2">"  Héllo   WORLD "</span><span class="p">)</span>
+<span class="go">'héllo world'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">canon</span><span class="o">.</span><span class="n">version</span>  <span class="c1"># stable hash of the step names</span>
-<span class="go">&#39;nfc+lower+collapse_whitespace&#39;</span>
+<span class="go">'nfc+lower+collapse_whitespace'</span>
 </pre></div>
 </div>
 <p>Always audit before folding a non-Latin script – <a class="reference internal" href="#ek.canonicalize.mark_class_count" title="ek.canonicalize.mark_class_count"><code class="xref py py-func docutils literal notranslate"><span class="pre">mark_class_count()</span></code></a> reports
 how many combining marks a string carries, the signal that aggressive folding
 would destroy meaning:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mark_class_count</span><span class="p">(</span><span class="s2">&quot;e</span><span class="se">\u0301</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># &#39;e&#39; + combining acute</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mark_class_count</span><span class="p">(</span><span class="s2">"e</span><span class="se">\u0301</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># 'e' + combining acute</span>
 <span class="go">1</span>
 </pre></div>
 </div>

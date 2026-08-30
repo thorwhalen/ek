@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.harness &mdash; ek 0.1.9 documentation</title>
+  <title>ek.harness &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,14 +111,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.harness</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;The offline evaluation harness: run a predictor over gold, gate regressions.</span>
+<span></span><span class="sd">"""The offline evaluation harness: run a predictor over gold, gate regressions.</span>
 
 <span class="sd">Reference-based benchmarking (Need #1) is only useful if it is *repeatable* and</span>
-<span class="sd">*regression-safe*: a &quot;better&quot; system must not silently get worse on some slice. The</span>
+<span class="sd">*regression-safe*: a "better" system must not silently get worse on some slice. The</span>
 <span class="sd">harness adds that discipline on top of :func:`ek.score`/:func:`ek.evaluate`:</span>
 
 <span class="sd">- :func:`evaluate_store` -- run any ``input -&gt; prediction`` predictor over a gold</span>
-<span class="sd">  store (a dict or a ``ek`` gold store), scored per slice (grouped by each record&#39;s</span>
+<span class="sd">  store (a dict or a ``ek`` gold store), scored per slice (grouped by each record's</span>
 <span class="sd">  slice label), with results persisted. (The OCR benchmark in :mod:`ek.ocr` is the</span>
 <span class="sd">  OCR-specific specialization of this.)</span>
 <span class="sd">- :func:`save_baseline` / :func:`regression_gate` -- freeze a baseline and fail when</span>
@@ -130,7 +130,7 @@
 
 <span class="sd">See ``misc/docs/ek_02`` for the harness design (canonicalizer versioning, slicing,</span>
 <span class="sd">IAA conventions, golden-set CI).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -143,8 +143,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.stores</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_store</span>
 
 <span class="c1"># Last-resort fallback only: metrics whose Score.value is an ERROR/distance.</span>
-<span class="c1"># The authoritative source is each Score&#39;s detail[&#39;higher_is_better&#39;].</span>
-<span class="n">_LOWER_IS_BETTER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cer&quot;</span><span class="p">,</span> <span class="s2">&quot;wer&quot;</span><span class="p">,</span> <span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;typed_graph&quot;</span><span class="p">}</span>
+<span class="c1"># The authoritative source is each Score's detail['higher_is_better'].</span>
+<span class="n">_LOWER_IS_BETTER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"cer"</span><span class="p">,</span> <span class="s2">"wer"</span><span class="p">,</span> <span class="s2">"graph"</span><span class="p">,</span> <span class="s2">"typed_graph"</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_higher_is_better</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -152,11 +152,11 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_direction_from_report</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve higher-is-better from the report&#39;s own Scores (authoritative; every</span>
-<span class="sd">    metric stamps ``detail[&#39;higher_is_better&#39;]``), falling back to the metric-name set</span>
-<span class="sd">    only when no Score carries the flag -- so custom/unlisted metrics gate correctly.&quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;scores&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">():</span>
-        <span class="n">flag</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;detail&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;higher_is_better&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Resolve higher-is-better from the report's own Scores (authoritative; every</span>
+<span class="sd">    metric stamps ``detail['higher_is_better']``), falling back to the metric-name set</span>
+<span class="sd">    only when no Score carries the flag -- so custom/unlisted metrics gate correctly."""</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">():</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">"detail"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"higher_is_better"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">flag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_higher_is_better</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
@@ -177,14 +177,14 @@
     <span class="n">grammar</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">normalize</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">weights</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">input_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
-    <span class="n">reference_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;reference&quot;</span><span class="p">,</span>
-    <span class="n">slice_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;slice&quot;</span><span class="p">,</span>
+    <span class="n">input_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"input"</span><span class="p">,</span>
+    <span class="n">reference_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"reference"</span><span class="p">,</span>
+    <span class="n">slice_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"slice"</span><span class="p">,</span>
     <span class="n">persist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">run_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run ``predict`` over a gold store and score it per slice.</span>
+<span class="w">    </span><span class="sd">"""Run ``predict`` over a gold store and score it per slice.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        predict: ``input -&gt; prediction`` callable (the system under test).</span>
@@ -196,9 +196,9 @@
 <span class="sd">        persist/run_id/rootdir: persist the run to the ``results``/``runs`` stores.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A :class:`~ek.base.Report`; ``detail[&#39;per_item&#39;]`` maps each key to its</span>
+<span class="sd">        A :class:`~ek.base.Report`; ``detail['per_item']`` maps each key to its</span>
 <span class="sd">        prediction, reference, slice, and score.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gold</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span>
     <span class="n">cases</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">per_item</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
@@ -208,34 +208,34 @@
         <span class="n">slice_label</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">slice_key</span><span class="p">)</span>
         <span class="n">cases</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">prediction</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">slice_label</span><span class="p">))</span>
         <span class="n">per_item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;prediction&quot;</span><span class="p">:</span> <span class="n">prediction</span><span class="p">,</span>
-            <span class="s2">&quot;reference&quot;</span><span class="p">:</span> <span class="n">reference</span><span class="p">,</span>
-            <span class="s2">&quot;slice&quot;</span><span class="p">:</span> <span class="n">slice_label</span><span class="p">,</span>
+            <span class="s2">"prediction"</span><span class="p">:</span> <span class="n">prediction</span><span class="p">,</span>
+            <span class="s2">"reference"</span><span class="p">:</span> <span class="n">reference</span><span class="p">,</span>
+            <span class="s2">"slice"</span><span class="p">:</span> <span class="n">slice_label</span><span class="p">,</span>
         <span class="p">}</span>
 
     <span class="n">report</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span>
         <span class="n">cases</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">grammar</span><span class="o">=</span><span class="n">grammar</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">sc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">per_item</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">scores</span><span class="p">):</span>
-        <span class="n">per_item</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">&quot;per_item&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">per_item</span>
+        <span class="n">per_item</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"score"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">report</span><span class="o">.</span><span class="n">detail</span><span class="p">[</span><span class="s2">"per_item"</span><span class="p">]</span> <span class="o">=</span> <span class="n">per_item</span>
 
     <span class="k">if</span> <span class="n">persist</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">run_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
 
-            <span class="n">run_id</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;run-%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%S&quot;</span><span class="p">)</span>
+            <span class="n">run_id</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"run-%Y%m</span><span class="si">%d</span><span class="s2">T%H%M%S"</span><span class="p">)</span>
         <span class="n">summary</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
-            <span class="s2">&quot;aggregate&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
-            <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-            <span class="s2">&quot;per_slice&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">,</span>
+            <span class="s2">"metric"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
+            <span class="s2">"aggregate"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
+            <span class="s2">"n"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+            <span class="s2">"per_slice"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">json_store</span><span class="p">(</span><span class="s2">"results"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="o">**</span><span class="n">summary</span><span class="p">,</span>
-            <span class="s2">&quot;per_item&quot;</span><span class="p">:</span> <span class="n">per_item</span><span class="p">,</span>
+            <span class="s2">"per_item"</span><span class="p">:</span> <span class="n">per_item</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;runs&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span>
+        <span class="n">json_store</span><span class="p">(</span><span class="s2">"runs"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">run_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary</span>
     <span class="k">return</span> <span class="n">report</span></div>
 
 
@@ -248,14 +248,14 @@
 <div class="viewcode-block" id="save_baseline">
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.save_baseline">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">save_baseline</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Freeze a report&#39;s aggregate + per-slice scores as a named baseline.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Freeze a report's aggregate + per-slice scores as a named baseline."""</span>
     <span class="n">record</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
-        <span class="s2">&quot;aggregate&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
-        <span class="s2">&quot;per_slice&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">),</span>
-        <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
+        <span class="s2">"metric"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span>
+        <span class="s2">"aggregate"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
+        <span class="s2">"per_slice"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">),</span>
+        <span class="s2">"n"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;baselines&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span>
+    <span class="n">json_store</span><span class="p">(</span><span class="s2">"baselines"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span>
     <span class="k">return</span> <span class="n">record</span></div>
 
 
@@ -263,8 +263,8 @@
 <div class="viewcode-block" id="load_baseline">
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.load_baseline">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_baseline</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a named baseline (or ``None`` if it does not exist).&quot;&quot;&quot;</span>
-    <span class="n">store</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="s2">&quot;baselines&quot;</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Load a named baseline (or ``None`` if it does not exist)."""</span>
+    <span class="n">store</span> <span class="o">=</span> <span class="n">json_store</span><span class="p">(</span><span class="s2">"baselines"</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">store</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">store</span> <span class="k">else</span> <span class="kc">None</span></div>
 
 
@@ -273,7 +273,7 @@
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.GateResult">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">GateResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Outcome of a :func:`regression_gate` check.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Outcome of a :func:`regression_gate` check."""</span>
 
     <span class="n">passed</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span>
@@ -308,7 +308,7 @@
     <span class="n">higher_is_better</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">rootdir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GateResult</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fail if ``report`` regresses beyond ``tolerance`` vs a baseline, per slice.</span>
+<span class="w">    </span><span class="sd">"""Fail if ``report`` regresses beyond ``tolerance`` vs a baseline, per slice.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        report: The current :class:`~ek.base.Report`.</span>
@@ -321,7 +321,7 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A :class:`GateResult` (falsy if any regression was found).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">base</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">load_baseline</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="n">rootdir</span><span class="o">=</span><span class="n">rootdir</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">baseline</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
@@ -343,29 +343,29 @@
             <span class="n">aggregate_current</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="n">base_metric</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">base_metric</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"metric"</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">base_metric</span> <span class="ow">and</span> <span class="n">base_metric</span> <span class="o">!=</span> <span class="n">metric</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;baseline metric </span><span class="si">{</span><span class="n">base_metric</span><span class="si">!r}</span><span class="s2"> != report metric </span><span class="si">{</span><span class="n">metric</span><span class="si">!r}</span><span class="s2">; refusing &quot;</span>
-            <span class="s2">&quot;to compare incomparable scores (re-baseline against the new metric).&quot;</span>
+            <span class="sa">f</span><span class="s2">"baseline metric </span><span class="si">{</span><span class="n">base_metric</span><span class="si">!r}</span><span class="s2"> != report metric </span><span class="si">{</span><span class="n">metric</span><span class="si">!r}</span><span class="s2">; refusing "</span>
+            <span class="s2">"to compare incomparable scores (re-baseline against the new metric)."</span>
         <span class="p">)</span>
 
     <span class="n">regressions</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">_is_regression</span><span class="p">(</span>
-        <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aggregate&quot;</span><span class="p">),</span> <span class="n">higher_is_better</span><span class="o">=</span><span class="n">hib</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tolerance</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aggregate"</span><span class="p">),</span> <span class="n">higher_is_better</span><span class="o">=</span><span class="n">hib</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tolerance</span>
     <span class="p">):</span>
-        <span class="n">regressions</span><span class="p">[</span><span class="s2">&quot;__aggregate__&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
-            <span class="s2">&quot;baseline&quot;</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aggregate&quot;</span><span class="p">),</span>
+        <span class="n">regressions</span><span class="p">[</span><span class="s2">"__aggregate__"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"current"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
+            <span class="s2">"baseline"</span><span class="p">:</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aggregate"</span><span class="p">),</span>
         <span class="p">}</span>
-    <span class="n">base_slices</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;per_slice&quot;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">base_slices</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"per_slice"</span><span class="p">,</span> <span class="p">{})</span>
     <span class="k">for</span> <span class="n">slice_label</span><span class="p">,</span> <span class="n">cur</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">slice_label</span> <span class="ow">in</span> <span class="n">base_slices</span> <span class="ow">and</span> <span class="n">_is_regression</span><span class="p">(</span>
             <span class="n">cur</span><span class="p">,</span> <span class="n">base_slices</span><span class="p">[</span><span class="n">slice_label</span><span class="p">],</span> <span class="n">higher_is_better</span><span class="o">=</span><span class="n">hib</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tolerance</span>
         <span class="p">):</span>
             <span class="n">regressions</span><span class="p">[</span><span class="n">slice_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="n">cur</span><span class="p">,</span>
-                <span class="s2">&quot;baseline&quot;</span><span class="p">:</span> <span class="n">base_slices</span><span class="p">[</span><span class="n">slice_label</span><span class="p">],</span>
+                <span class="s2">"current"</span><span class="p">:</span> <span class="n">cur</span><span class="p">,</span>
+                <span class="s2">"baseline"</span><span class="p">:</span> <span class="n">base_slices</span><span class="p">[</span><span class="n">slice_label</span><span class="p">],</span>
             <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">GateResult</span><span class="p">(</span>
@@ -374,7 +374,7 @@
         <span class="n">higher_is_better</span><span class="o">=</span><span class="n">hib</span><span class="p">,</span>
         <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
         <span class="n">aggregate_current</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">aggregate</span><span class="p">,</span>
-        <span class="n">aggregate_baseline</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aggregate&quot;</span><span class="p">),</span>
+        <span class="n">aggregate_baseline</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"aggregate"</span><span class="p">),</span>
         <span class="n">regressions</span><span class="o">=</span><span class="n">regressions</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -388,9 +388,9 @@
 <div class="viewcode-block" id="percent_agreement">
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.percent_agreement">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">percent_agreement</span><span class="p">(</span><span class="n">rater_a</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">rater_b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raw fraction of items two raters labelled identically.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Raw fraction of items two raters labelled identically."""</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_b</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;raters must label the same number of items&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"raters must label the same number of items"</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">rater_a</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">1.0</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rater_a</span><span class="p">,</span> <span class="n">rater_b</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_a</span><span class="p">)</span></div>
@@ -400,14 +400,14 @@
 <div class="viewcode-block" id="cohen_kappa">
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.cohen_kappa">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cohen_kappa</span><span class="p">(</span><span class="n">rater_a</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">rater_b</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cohen&#39;s kappa for two raters on nominal labels (chance-corrected agreement).</span>
+<span class="w">    </span><span class="sd">"""Cohen's kappa for two raters on nominal labels (chance-corrected agreement).</span>
 
 <span class="sd">    Use only for exactly two raters, nominal labels, complete data; prefer</span>
 <span class="sd">    :func:`krippendorff_alpha` for the general case (missing data, any measurement</span>
 <span class="sd">    level).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_b</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;raters must label the same number of items&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"raters must label the same number of items"</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rater_a</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">1.0</span>
@@ -423,31 +423,31 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_missing</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a cell is unlabelled (``None`` or a float ``NaN``).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Whether a cell is unlabelled (``None`` or a float ``NaN``)."""</span>
     <span class="k">return</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_difference_metric</span><span class="p">(</span>
     <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">n_v</span><span class="p">:</span> <span class="n">Mapping</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The squared difference function ``delta^2(c, k)`` for a measurement level.</span>
+<span class="w">    </span><span class="sd">"""The squared difference function ``delta^2(c, k)`` for a measurement level.</span>
 
 <span class="sd">    ``nominal`` (categorical), ``interval`` (numeric distance), ``ratio`` (relative</span>
 <span class="sd">    distance with a true zero), and ``ordinal`` (rank distance via the cumulative</span>
-<span class="sd">    marginal counts ``n_v``, Krippendorff&#39;s ordinal metric).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;nominal&quot;</span><span class="p">:</span>
+<span class="sd">    marginal counts ``n_v``, Krippendorff's ordinal metric).</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"nominal"</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="mf">1.0</span>
-    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"interval"</span><span class="p">:</span>
         <span class="k">return</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
-    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;ratio&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"ratio"</span><span class="p">:</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">ratio</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
             <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="o">/</span> <span class="n">s</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 
         <span class="k">return</span> <span class="n">ratio</span>
-    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;ordinal&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">"ordinal"</span><span class="p">:</span>
         <span class="n">ordered</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">ordinal</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
@@ -456,19 +456,19 @@
             <span class="k">return</span> <span class="p">(</span><span class="n">between</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_v</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">n_v</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 
         <span class="k">return</span> <span class="n">ordinal</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown level </span><span class="si">{</span><span class="n">level</span><span class="si">!r}</span><span class="s2">; use nominal/ordinal/interval/ratio&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown level </span><span class="si">{</span><span class="n">level</span><span class="si">!r}</span><span class="s2">; use nominal/ordinal/interval/ratio"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="krippendorff_alpha">
 <a class="viewcode-back" href="../../module_docs/ek/harness.html#ek.krippendorff_alpha">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">krippendorff_alpha</span><span class="p">(</span>
-    <span class="n">reliability_data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nominal&quot;</span>
+    <span class="n">reliability_data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"nominal"</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Krippendorff&#39;s alpha -- the general inter-annotator agreement coefficient.</span>
+<span class="w">    </span><span class="sd">"""Krippendorff's alpha -- the general inter-annotator agreement coefficient.</span>
 
 <span class="sd">    Pure-Python (no dependency, permissive core): any number of raters, any</span>
-<span class="sd">    measurement ``level`` (``&quot;nominal&quot;``, ``&quot;ordinal&quot;``, ``&quot;interval&quot;``, ``&quot;ratio&quot;``),</span>
-<span class="sd">    and missing data (use ``None`` or ``float(&#39;nan&#39;)`` for an unlabelled cell).</span>
+<span class="sd">    measurement ``level`` (``"nominal"``, ``"ordinal"``, ``"interval"``, ``"ratio"``),</span>
+<span class="sd">    and missing data (use ``None`` or ``float('nan')`` for an unlabelled cell).</span>
 <span class="sd">    ``reliability_data`` is one row per rater, one column per item. Alpha is ``1.0``</span>
 <span class="sd">    for perfect agreement, ``0.0`` at chance, and goes negative for systematic</span>
 <span class="sd">    disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):</span>
@@ -478,11 +478,11 @@
 <span class="sd">        &gt;&gt;&gt; data = [[1, 1, 1, 1], [1, 1, 1, 1]]   # two raters, perfect agreement</span>
 <span class="sd">        &gt;&gt;&gt; krippendorff_alpha(data)</span>
 <span class="sd">        1.0</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">raters</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reliability_data</span><span class="p">]</span>
     <span class="n">n_units</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raters</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="c1"># Per-unit value lists; only units rated by &gt;= 2 raters are &quot;pairable&quot;.</span>
+    <span class="c1"># Per-unit value lists; only units rated by &gt;= 2 raters are "pairable".</span>
     <span class="n">units</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_units</span><span class="p">):</span>
         <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raters</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_missing</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">u</span><span class="p">])]</span>

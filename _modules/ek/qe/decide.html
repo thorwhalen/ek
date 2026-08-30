@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.qe.decide &mdash; ek 0.1.9 documentation</title>
+  <title>ek.qe.decide &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,11 +111,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.qe.decide</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Selective prediction: turn a calibrated probability into accept / flag / block.</span>
+<span></span><span class="sd">"""Selective prediction: turn a calibrated probability into accept / flag / block.</span>
 
 <span class="sd">Calibration makes a score *mean* something; a **decision policy** turns it into an</span>
 <span class="sd">action with a guarantee (``misc/docs/ek_03`` §3-4). This is the formal home of</span>
-<span class="sd">&quot;accept / flag / block&quot; -- a selective predictor that abstains (routes to a human)</span>
+<span class="sd">"accept / flag / block" -- a selective predictor that abstains (routes to a human)</span>
 <span class="sd">rather than emit a low-confidence answer. Every policy here reads **only calibrated</span>
 <span class="sd">probabilities** (Hard Rule 1): a raw score must already have passed through a</span>
 <span class="sd">:class:`~ek.base.Calibrator`.</span>
@@ -146,7 +146,7 @@
 <span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; gate(0.5) is Decision.FLAG</span>
 <span class="sd">    True</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -169,11 +169,11 @@
     <span class="k">return</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="k">else</span> <span class="n">x</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_finite</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;confidence&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce to float and fail fast on a non-finite (NaN/inf) gate input.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_finite</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">what</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"confidence"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Coerce to float and fail fast on a non-finite (NaN/inf) gate input."""</span>
     <span class="n">p</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> must be finite, got </span><span class="si">{</span><span class="n">p</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> must be finite, got </span><span class="si">{</span><span class="n">p</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">p</span>
 
 
@@ -186,7 +186,7 @@
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.CostSensitiveGate">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CostSensitiveGate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept/flag/block from the cost ratio ``rho = c_FN / c_FP`` on calibrated ``p``.</span>
+<span class="w">    </span><span class="sd">"""Accept/flag/block from the cost ratio ``rho = c_FN / c_FP`` on calibrated ``p``.</span>
 
 <span class="sd">    Accept when the expected cost of accepting is below that of routing to a human.</span>
 <span class="sd">    Accepting risks an undetected error: cost ``(1 - p) * c_FN``. Flagging a value</span>
@@ -204,7 +204,7 @@
 <span class="sd">            than ``flag`` (default ``0`` -&gt; never block on probability alone; a</span>
 <span class="sd">            failed verifier is what forces a block, upstream).</span>
 <span class="sd">        accept_threshold: Override the derived accept threshold explicitly.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">block_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -212,7 +212,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tau</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The accept threshold on calibrated probability (derived from ``rho``).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The accept threshold on calibrated probability (derived from ``rho``)."""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accept_threshold</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_clip01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
@@ -235,15 +235,15 @@
 <div class="viewcode-block" id="split_conformal_quantile">
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.split_conformal_quantile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">split_conformal_quantile</span><span class="p">(</span><span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The split-conformal threshold: the ``ceil((n+1)(1-alpha)) / n`` empirical quantile.</span>
+<span class="w">    </span><span class="sd">"""The split-conformal threshold: the ``ceil((n+1)(1-alpha)) / n`` empirical quantile.</span>
 
 <span class="sd">    ``scores`` are nonconformity scores on an exchangeable calibration set. Returns</span>
 <span class="sd">    ``+inf`` when ``n`` is too small to guarantee ``1 - alpha`` (so nothing is</span>
 <span class="sd">    flagged -- the honest behaviour at that sample size), and ``-inf`` at the</span>
 <span class="sd">    ``alpha -&gt; 1`` limit (flag everything).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;alpha must be in [0, 1], got </span><span class="si">{</span><span class="n">alpha</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"alpha must be in [0, 1], got </span><span class="si">{</span><span class="n">alpha</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -261,7 +261,7 @@
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConformalGate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split-conformal accept/flag with a finite-sample **marginal** guarantee.</span>
+<span class="w">    </span><span class="sd">"""Split-conformal accept/flag with a finite-sample **marginal** guarantee.</span>
 
 <span class="sd">    Fit on ``(calibrated_prob, correct)``: the nonconformity scores of the *correct*</span>
 <span class="sd">    calibration items set a threshold ``q`` such that, among truly-correct test items</span>
@@ -272,7 +272,7 @@
 <span class="sd">        alpha: Target false-flag rate on correct items (e.g. ``0.1``).</span>
 <span class="sd">        nonconformity: Maps calibrated confidence -&gt; nonconformity (default</span>
 <span class="sd">            ``1 - confidence``: low confidence is nonconforming).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_ALPHA</span>
     <span class="n">nonconformity</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span>
@@ -281,12 +281,12 @@
 
 <div class="viewcode-block" id="ConformalGate.fit">
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;ConformalGate&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit ``q`` from the nonconformity scores of the *correct* calibration items.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"ConformalGate"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fit ``q`` from the nonconformity scores of the *correct* calibration items.</span>
 
 <span class="sd">        Non-finite confidences are dropped (a single ``NaN`` would otherwise sort to</span>
 <span class="sd">        the end and corrupt the quantile, silently breaking the coverage guarantee).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cal</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">correct</span><span class="p">)</span>
@@ -299,7 +299,7 @@
 <div class="viewcode-block" id="ConformalGate.p_value">
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.ConformalGate.p_value">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">p_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confidence</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Per-instance conformal p-value (small = atypical of correct items).&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Per-instance conformal p-value (small = atypical of correct items)."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cal</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">1.0</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonconformity</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">confidence</span><span class="p">))</span>
@@ -319,11 +319,11 @@
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.GroupConformalGate">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">GroupConformalGate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mondrian (class-conditional) conformal: one :class:`ConformalGate` per group.</span>
+<span class="w">    </span><span class="sd">"""Mondrian (class-conditional) conformal: one :class:`ConformalGate` per group.</span>
 
 <span class="sd">    Restores approximate per-field-type validity by calibrating separately per group</span>
 <span class="sd">    key (e.g. ``NodeType``/``FieldSpec``), with a pooled fallback for unseen groups.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_ALPHA</span>
     <span class="n">nonconformity</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span>
@@ -332,7 +332,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;GroupConformalGate&quot;</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"GroupConformalGate"</span><span class="p">:</span>
         <span class="n">buckets</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">correct</span><span class="p">,</span> <span class="n">groups</span><span class="p">):</span>
             <span class="n">buckets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">([],</span> <span class="p">[]))</span>
@@ -364,7 +364,7 @@
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.RiskControlGate">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">RiskControlGate</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conformal Risk Control: accept ``p &gt;= lambda`` bounding the accepted-error rate.</span>
+<span class="w">    </span><span class="sd">"""Conformal Risk Control: accept ``p &gt;= lambda`` bounding the accepted-error rate.</span>
 
 <span class="sd">    Picks the *smallest* threshold ``lambda`` (the most coverage) whose finite-sample</span>
 <span class="sd">    risk bound is at or below ``target``. The controlled quantity is</span>
@@ -375,10 +375,10 @@
 <span class="sd">        target: Upper bound on the accepted-error rate (e.g. ``0.05``).</span>
 <span class="sd">        loss: ``correct -&gt; loss`` in ``[0, loss_bound]``; default ``0`` if correct</span>
 <span class="sd">            else ``1``. Any monotone loss bounded by ``loss_bound`` works.</span>
-<span class="sd">        loss_bound: The loss&#39;s upper bound ``B`` -- the CRC finite-sample slack is</span>
-<span class="sd">            ``+B/(n+1)``. Must match ``loss``&#39;s range or the guarantee is invalid;</span>
+<span class="sd">        loss_bound: The loss's upper bound ``B`` -- the CRC finite-sample slack is</span>
+<span class="sd">            ``+B/(n+1)``. Must match ``loss``'s range or the guarantee is invalid;</span>
 <span class="sd">            keep the default ``1.0`` for the 0/1 loss.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">target</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_RISK_TARGET</span>
     <span class="n">loss</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bool</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">correct</span><span class="p">:</span> <span class="mf">0.0</span> <span class="k">if</span> <span class="n">correct</span> <span class="k">else</span> <span class="mf">1.0</span>
@@ -387,8 +387,8 @@
 
 <div class="viewcode-block" id="RiskControlGate.fit">
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.RiskControlGate.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RiskControlGate&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the smallest accept threshold whose risk bound is &lt;= ``target``.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">correct</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">"RiskControlGate"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Find the smallest accept threshold whose risk bound is &lt;= ``target``."""</span>
         <span class="n">pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">),</span> <span class="n">correct</span><span class="p">))</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -424,12 +424,12 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">thresholds</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The risk-coverage trade-off: ``{threshold, coverage, selective_risk}`` per point.</span>
+<span class="w">    </span><span class="sd">"""The risk-coverage trade-off: ``{threshold, coverage, selective_risk}`` per point.</span>
 
 <span class="sd">    Coverage is the fraction auto-accepted at each threshold; selective risk is the</span>
 <span class="sd">    error rate *among the accepted*. Lower-left is better; pick the operating point</span>
 <span class="sd">    against a target risk or coverage.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">),</span> <span class="n">correct</span><span class="p">))</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -444,7 +444,7 @@
         <span class="n">accepted</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">pairs</span> <span class="k">if</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="n">tau</span><span class="p">]</span>
         <span class="n">cov</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">accepted</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
         <span class="n">risk</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">accepted</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">accepted</span><span class="p">))</span> <span class="k">if</span> <span class="n">accepted</span> <span class="k">else</span> <span class="mf">0.0</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="s2">&quot;coverage&quot;</span><span class="p">:</span> <span class="n">cov</span><span class="p">,</span> <span class="s2">&quot;selective_risk&quot;</span><span class="p">:</span> <span class="n">risk</span><span class="p">})</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"threshold"</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="s2">"coverage"</span><span class="p">:</span> <span class="n">cov</span><span class="p">,</span> <span class="s2">"selective_risk"</span><span class="p">:</span> <span class="n">risk</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
 
@@ -456,28 +456,28 @@
 
 <div class="viewcode-block" id="crepes_mondrian_gate">
 <a class="viewcode-back" href="../../../module_docs/ek/qe/decide.html#ek.crepes_mondrian_gate">[docs]</a>
-<span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">&quot;calibration&quot;</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;crepes&quot;</span><span class="p">])</span>
+<span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"calibration"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"crepes"</span><span class="p">])</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">crepes_mondrian_gate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Mondrian (class-conditional) conformal gate backed by ``crepes`` (``ek[calibration]``).</span>
+<span class="w">    </span><span class="sd">"""A Mondrian (class-conditional) conformal gate backed by ``crepes`` (``ek[calibration]``).</span>
 
 <span class="sd">    The pure-Python :class:`GroupConformalGate` is the dependency-free default; use</span>
 <span class="sd">    this for parity with a crepes/sklearn conformal stack (full CDFs, normalised</span>
 <span class="sd">    variants). Raises an actionable install hint if ``crepes`` is absent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">crepes</span>  <span class="c1"># noqa: F401  (presence checked by @requires_extra)</span>
 
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-        <span class="s2">&quot;crepes-backed Mondrian conformal is a thin wrapper to add when a crepes &quot;</span>
-        <span class="s2">&quot;stack is in use; the pure-Python GroupConformalGate is the default.&quot;</span>
+        <span class="s2">"crepes-backed Mondrian conformal is a thin wrapper to add when a crepes "</span>
+        <span class="s2">"stack is in use; the pure-Python GroupConformalGate is the default."</span>
     <span class="p">)</span></div>
 
 
 
 <span class="c1"># Register the built-in policies so they resolve by name (open-closed).</span>
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;cost_sensitive&quot;</span><span class="p">,</span> <span class="n">CostSensitiveGate</span><span class="p">)</span>
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;conformal&quot;</span><span class="p">,</span> <span class="n">ConformalGate</span><span class="p">)</span>
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;risk_control&quot;</span><span class="p">,</span> <span class="n">RiskControlGate</span><span class="p">)</span>
-<span class="n">register</span><span class="p">(</span><span class="s2">&quot;policies&quot;</span><span class="p">,</span> <span class="s2">&quot;group_conformal&quot;</span><span class="p">,</span> <span class="n">GroupConformalGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"policies"</span><span class="p">,</span> <span class="s2">"cost_sensitive"</span><span class="p">,</span> <span class="n">CostSensitiveGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"policies"</span><span class="p">,</span> <span class="s2">"conformal"</span><span class="p">,</span> <span class="n">ConformalGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"policies"</span><span class="p">,</span> <span class="s2">"risk_control"</span><span class="p">,</span> <span class="n">RiskControlGate</span><span class="p">)</span>
+<span class="n">register</span><span class="p">(</span><span class="s2">"policies"</span><span class="p">,</span> <span class="s2">"group_conformal"</span><span class="p">,</span> <span class="n">GroupConformalGate</span><span class="p">)</span>
 </pre></div>
 
            </div>

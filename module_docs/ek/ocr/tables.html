@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.ocr.tables &mdash; ek 0.1.9 documentation</title>
+  <title>ek.ocr.tables &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -146,27 +146,27 @@ on any <code class="docutils literal notranslate"><span class="pre">image</span>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.metrics.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">R</span><span class="p">:</span>  <span class="c1"># a minimal OcrResult-shaped object carrying a 2-D grid in .raw</span>
-<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;tables&quot;</span><span class="p">:</span> <span class="p">[[[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">]]]}</span>
+<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"tables"</span><span class="p">:</span> <span class="p">[[[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">]]]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">table_from_ocr</span><span class="p">(</span><span class="n">R</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[[</span><span class="n">c</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">rows</span><span class="p">]</span>
-<span class="go">[[&#39;a&#39;, &#39;b&#39;], [&#39;c&#39;, &#39;d&#39;]]</span>
+<span class="go">[['a', 'b'], ['c', 'd']]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">has_table_structure</span><span class="p">(</span><span class="n">R</span><span class="p">())</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Empty</span><span class="p">:</span>  <span class="c1"># no table anywhere in the result</span>
-<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;just prose&quot;</span><span class="p">}</span>
+<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"text"</span><span class="p">:</span> <span class="s2">"just prose"</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">table_from_ocr</span><span class="p">(</span><span class="n">Empty</span><span class="p">())</span> <span class="ow">is</span> <span class="kc">None</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 <dl>
 <dt>A registered third-party engine parser, used by name:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">ek.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;table_parsers&quot;</span><span class="p">,</span> <span class="s2">&quot;demo&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@register</span><span class="p">(</span><span class="s2">"table_parsers"</span><span class="p">,</span> <span class="s2">"demo"</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">def</span><span class="w"> </span><span class="nf">_demo</span><span class="p">(</span><span class="n">raw</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cells&quot;</span><span class="p">)</span>  <span class="c1"># this engine stores a grid under raw[&#39;cells&#39;]</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cells"</span><span class="p">)</span>  <span class="c1"># this engine stores a grid under raw['cells']</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">D</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cells&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;x&quot;</span><span class="p">]]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">table_from_ocr</span><span class="p">(</span><span class="n">D</span><span class="p">(),</span> <span class="n">parser</span><span class="o">=</span><span class="s2">&quot;demo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
-<span class="go">&#39;x&#39;</span>
+<span class="gp">... </span>    <span class="n">raw</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"cells"</span><span class="p">:</span> <span class="p">[[</span><span class="s2">"x"</span><span class="p">]]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table_from_ocr</span><span class="p">(</span><span class="n">D</span><span class="p">(),</span> <span class="n">parser</span><span class="o">=</span><span class="s2">"demo"</span><span class="p">)</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+<span class="go">'x'</span>
 </pre></div>
 </div>
 </dd>

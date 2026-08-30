@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.agents.metrics &mdash; ek 0.1.9 documentation</title>
+  <title>ek.agents.metrics &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -111,11 +111,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for ek.agents.metrics</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Task-success and cost-per-successful-task: the two metrics that drive the whole thing.</span>
+<span></span><span class="sd">"""Task-success and cost-per-successful-task: the two metrics that drive the whole thing.</span>
 
 <span class="sd">Two reference-based metrics over an :class:`~ek.agents.base.Episode`, both of which fit</span>
 <span class="sd">:func:`ek.evaluate` exactly because their corpus aggregate is a **ratio of two sums**, never a</span>
-<span class="sd">mean of per-item scores -- the same discipline that makes ``ek``&#39;s WER accumulate globally and</span>
+<span class="sd">mean of per-item scores -- the same discipline that makes ``ek``'s WER accumulate globally and</span>
 <span class="sd">its F1 micro-average (``misc/docs/ek_08``, ``misc/docs/ek_11``):</span>
 
 <span class="sd">- :class:`TaskSuccessMetric` -- grade the **final state**, not the surface text. The oracle is</span>
@@ -127,21 +127,21 @@
 <span class="sd">  that scores accuracy *without* cost lets an agent chase tiny gains with unbounded API calls,</span>
 <span class="sd">  so this metric is the point, not a nicety.</span>
 
-<span class="sd">**A safety property, not a nicety:** the checker must run somewhere the agent&#39;s trajectory</span>
+<span class="sd">**A safety property, not a nicety:** the checker must run somewhere the agent's trajectory</span>
 <span class="sd">cannot reach. An audited agent-benchmark red-team produced a ~10-line ``conftest.py`` that</span>
-<span class="sd">pytest auto-loads and that rewrote *every* test outcome to &quot;passed&quot; -- scoring near-perfect</span>
+<span class="sd">pytest auto-loads and that rewrote *every* test outcome to "passed" -- scoring near-perfect</span>
 <span class="sd">without solving a single task. Verifier isolation is a security boundary.</span>
 
 <span class="sd">Example:</span>
 <span class="sd">    &gt;&gt;&gt; from ek.agents.base import Cost, Episode</span>
 <span class="sd">    &gt;&gt;&gt; from ek.agents.cost import per_million</span>
-<span class="sd">    &gt;&gt;&gt; ep = Episode(task_id=&quot;t1&quot;, output=&quot;42&quot;, cost=Cost(input_tokens=1_000_000))</span>
-<span class="sd">    &gt;&gt;&gt; TaskSuccessMetric()(ep, &quot;42&quot;).value</span>
+<span class="sd">    &gt;&gt;&gt; ep = Episode(task_id="t1", output="42", cost=Cost(input_tokens=1_000_000))</span>
+<span class="sd">    &gt;&gt;&gt; TaskSuccessMetric()(ep, "42").value</span>
 <span class="sd">    1.0</span>
 <span class="sd">    &gt;&gt;&gt; m = CostPerSuccessMetric(price=per_million(2.0, 6.0))</span>
-<span class="sd">    &gt;&gt;&gt; round(m(ep, &quot;42&quot;).value, 4)          # this episode&#39;s dollars</span>
+<span class="sd">    &gt;&gt;&gt; round(m(ep, "42").value, 4)          # this episode's dollars</span>
 <span class="sd">    2.0</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -159,11 +159,11 @@
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.Checker">[docs]</a>
 <span class="nd">@runtime_checkable</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Checker</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The success oracle: did this episode leave the world in the required state?</span>
+<span class="w">    </span><span class="sd">"""The success oracle: did this episode leave the world in the required state?</span>
 
 <span class="sd">    Injected, never owned by ``ek`` -- a real suite plugs in a database-state comparison, a</span>
 <span class="sd">    hidden-test runner, or a programmatic predicate. It must run **isolated** from the agent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span></div>
 
@@ -176,16 +176,16 @@
 
 <div class="viewcode-block" id="output_match">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.output_match">[docs]</a>
-<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">"checkers"</span><span class="p">,</span> <span class="s2">"output"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">output_match</span><span class="p">(</span><span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonicalized exact match on the final answer (the GAIA-style oracle).</span>
+<span class="w">    </span><span class="sd">"""Canonicalized exact match on the final answer (the GAIA-style oracle).</span>
 
 <span class="sd">    The weakest useful oracle, and the default only because it needs nothing. Prefer a</span>
 <span class="sd">    state-based or executable checker whenever the task has one.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">canon</span> <span class="o">=</span> <span class="n">default_canonicalizer</span><span class="p">()</span>
-    <span class="n">pred</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="n">episode</span><span class="p">)</span>
-    <span class="n">expected</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="n">gold</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"output"</span><span class="p">,</span> <span class="n">episode</span><span class="p">)</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"output"</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="n">gold</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">canon</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span> <span class="o">==</span> <span class="n">canon</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pred</span> <span class="o">==</span> <span class="n">expected</span></div>
@@ -194,25 +194,25 @@
 
 <div class="viewcode-block" id="final_state_match">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.final_state_match">[docs]</a>
-<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="s2">&quot;final_state&quot;</span><span class="p">)</span>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">"checkers"</span><span class="p">,</span> <span class="s2">"final_state"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">final_state_match</span><span class="p">(</span><span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare the episode&#39;s **final state** with the goal state (the tau-bench oracle).&quot;&quot;&quot;</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">&quot;final_state&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">expected</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;final_state&quot;</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="n">gold</span>
+<span class="w">    </span><span class="sd">"""Compare the episode's **final state** with the goal state (the tau-bench oracle)."""</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"final_state"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">expected</span> <span class="o">=</span> <span class="n">gold</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"final_state"</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="n">gold</span>
     <span class="k">return</span> <span class="n">state</span> <span class="o">==</span> <span class="n">expected</span></div>
 
 
 
 <div class="viewcode-block" id="recorded_success">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.recorded_success">[docs]</a>
-<span class="nd">@register</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="s2">&quot;recorded&quot;</span><span class="p">)</span>
+<span class="nd">@register</span><span class="p">(</span><span class="s2">"checkers"</span><span class="p">,</span> <span class="s2">"recorded"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">recorded_success</span><span class="p">(</span><span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trust a ``success`` already recorded on the episode (e.g. by an external harness).&quot;&quot;&quot;</span>
-    <span class="n">success</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Trust a ``success`` already recorded on the episode (e.g. by an external harness)."""</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"success"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">success</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;checker &#39;recorded&#39;: episode carries no success verdict; grade it with a real &quot;</span>
-            <span class="s2">&quot;checker (see ek.agents.Checker) or use check=&#39;output&#39;/&#39;final_state&#39;.&quot;</span>
+            <span class="s2">"checker 'recorded': episode carries no success verdict; grade it with a real "</span>
+            <span class="s2">"checker (see ek.agents.Checker) or use check='output'/'final_state'."</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">success</span><span class="p">)</span></div>
 
@@ -226,37 +226,37 @@
 <div class="viewcode-block" id="TaskSuccessMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.TaskSuccessMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">TaskSuccessMetric</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Did the episode complete the task? (``1.0``/``0.0``; aggregate = success rate).</span>
+<span class="w">    </span><span class="sd">"""Did the episode complete the task? (``1.0``/``0.0``; aggregate = success rate).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        check: A :class:`Checker` -- a registered name (``&quot;output&quot;``, ``&quot;final_state&quot;``,</span>
-<span class="sd">            ``&quot;recorded&quot;``) or any ``(episode, gold) -&gt; bool`` callable. Defaults to</span>
-<span class="sd">            ``&quot;output&quot;``; **inject a state-based or executable oracle for a real suite.**</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        check: A :class:`Checker` -- a registered name (``"output"``, ``"final_state"``,</span>
+<span class="sd">            ``"recorded"``) or any ``(episode, gold) -&gt; bool`` callable. Defaults to</span>
+<span class="sd">            ``"output"``; **inject a state-based or executable oracle for a real suite.**</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;task_success&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"task_success"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s2">"checkers"</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"output"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">pred</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">grammar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">GraphGrammar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
         <span class="n">ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">))</span>
-        <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span> <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-        <span class="n">cost</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"success"</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span> <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="n">cost</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="s2">"cost"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">detail</span><span class="p">[</span><span class="s2">&quot;total_tokens&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span><span class="o">.</span><span class="n">total_tokens</span>
-            <span class="n">detail</span><span class="p">[</span><span class="s2">&quot;latency_s&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span><span class="o">.</span><span class="n">latency_s</span>
-        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;task_success&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span>
+            <span class="n">detail</span><span class="p">[</span><span class="s2">"total_tokens"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span><span class="o">.</span><span class="n">total_tokens</span>
+            <span class="n">detail</span><span class="p">[</span><span class="s2">"latency_s"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span><span class="o">.</span><span class="n">latency_s</span>
+        <span class="k">return</span> <span class="n">Score</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"task_success"</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TaskSuccessMetric.aggregate">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.TaskSuccessMetric.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The success **rate** over the corpus.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The success **rate** over the corpus."""</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
             <span class="k">return</span> <span class="mf">0.0</span>
-        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"success"</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span></div>
 </div>
 
 
@@ -264,21 +264,21 @@
 <div class="viewcode-block" id="CostPerSuccessMetric">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.CostPerSuccessMetric">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CostPerSuccessMetric</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost-of-Pass: dollars per **successfully completed** task (**lower is better**).</span>
+<span class="w">    </span><span class="sd">"""Cost-of-Pass: dollars per **successfully completed** task (**lower is better**).</span>
 
-<span class="sd">    The per-episode ``Score.value`` is that episode&#39;s dollar cost -- the real number is the</span>
+<span class="sd">    The per-episode ``Score.value`` is that episode's dollar cost -- the real number is the</span>
 <span class="sd">    corpus ``aggregate``, ``sum(dollars) / sum(successes)``, which is ``inf`` when nothing</span>
-<span class="sd">    succeeded (infeasibility is the honest answer; a per-token metric reporting &quot;$0.003/call&quot;</span>
+<span class="sd">    succeeded (infeasibility is the honest answer; a per-token metric reporting "$0.003/call"</span>
 <span class="sd">    for an agent that never succeeds is actively misleading).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        check: The success oracle (as in :class:`TaskSuccessMetric`).</span>
 <span class="sd">        price: A :class:`~ek.agents.cost.ModelPrice` applied to every episode, or ``None`` to</span>
-<span class="sd">            resolve each episode&#39;s model against ``prices``.</span>
+<span class="sd">            resolve each episode's model against ``prices``.</span>
 <span class="sd">        prices: A ``{model: ModelPrice}`` catalog (see :func:`ek.agents.load_prices`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;cost_per_success&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"cost_per_success"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -287,7 +287,7 @@
         <span class="n">price</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ModelPrice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">prices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelPrice</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;checkers&quot;</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s2">"checkers"</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"output"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="o">=</span> <span class="n">prices</span>
 
@@ -296,55 +296,55 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Score</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">Episode</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;CostPerSuccessMetric scores an Episode (it needs the episode&#39;s Cost); got &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="s2">"CostPerSuccessMetric scores an Episode (it needs the episode's Cost); got "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Resolving this metric *by name* leaves it with no rates, and the failure would</span>
-            <span class="c1"># otherwise surface as a baffling &quot;no price for model &#39;&#39;&quot;. Say the real thing.</span>
+            <span class="c1"># otherwise surface as a baffling "no price for model ''". Say the real thing.</span>
             <span class="k">raise</span> <span class="n">UnknownModelPrice</span><span class="p">(</span>
-                <span class="s2">&quot;cost_per_success needs token rates, so it cannot be used by name alone. &quot;</span>
-                <span class="s2">&quot;Construct it and pass it as the metric:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;    from ek.agents import CostPerSuccessMetric, per_million</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;    m = CostPerSuccessMetric(price=per_million(3.0, 15.0))</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;    ek.evaluate(cases, metric=m)</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;(or pass prices={model: ModelPrice(...)} / ek.agents.load_prices(...)).&quot;</span>
+                <span class="s2">"cost_per_success needs token rates, so it cannot be used by name alone. "</span>
+                <span class="s2">"Construct it and pass it as the metric:</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"    from ek.agents import CostPerSuccessMetric, per_million</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"    m = CostPerSuccessMetric(price=per_million(3.0, 15.0))</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"    ek.evaluate(cases, metric=m)</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"(or pass prices={model: ModelPrice(...)} / ek.agents.load_prices(...))."</span>
             <span class="p">)</span>
         <span class="n">ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">))</span>
         <span class="n">money</span> <span class="o">=</span> <span class="n">episode_dollars</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">prices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prices</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Score</span><span class="p">(</span>
             <span class="n">value</span><span class="o">=</span><span class="n">money</span><span class="p">,</span>
-            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;cost_per_success&quot;</span><span class="p">,</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">"cost_per_success"</span><span class="p">,</span>
             <span class="n">detail</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;dollars&quot;</span><span class="p">:</span> <span class="n">money</span><span class="p">,</span>
-                <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span>
+                <span class="s2">"dollars"</span><span class="p">:</span> <span class="n">money</span><span class="p">,</span>
+                <span class="s2">"success"</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span>
                 <span class="c1"># Without this stamp the regression gate would read cost_per_success as</span>
                 <span class="c1"># higher-is-better and wave a cost regression straight through.</span>
-                <span class="s2">&quot;higher_is_better&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="CostPerSuccessMetric.aggregate">
 <a class="viewcode-back" href="../../../module_docs/ek/agents/metrics.html#ek.agents.CostPerSuccessMetric.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scores</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Score</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;``sum(dollars) / sum(successes)`` -- a ratio of two sums, never a mean of ratios.&quot;&quot;&quot;</span>
-        <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dollars&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
-        <span class="n">n_success</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">"""``sum(dollars) / sum(successes)`` -- a ratio of two sums, never a mean of ratios."""</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"dollars"</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+        <span class="n">n_success</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">detail</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"success"</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">cost_of_pass</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">n_success</span><span class="p">)</span></div>
 </div>
 
 
 
-<span class="c1"># Register default-configured instances so `score(..., metric=&quot;tool_call&quot;)` Just Works;</span>
+<span class="c1"># Register default-configured instances so `score(..., metric="tool_call")` Just Works;</span>
 <span class="c1"># pass a constructed instance when you need non-default configuration.</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_register_defaults</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.toolcalls</span><span class="w"> </span><span class="kn">import</span> <span class="n">ToolCallMetric</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.trajectory</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrajectoryMetric</span>
 
-    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;task_success&quot;</span><span class="p">,</span> <span class="n">TaskSuccessMetric</span><span class="p">())</span>
-    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;cost_per_success&quot;</span><span class="p">,</span> <span class="n">CostPerSuccessMetric</span><span class="p">())</span>
-    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;tool_call&quot;</span><span class="p">,</span> <span class="n">ToolCallMetric</span><span class="p">())</span>
-    <span class="n">register</span><span class="p">(</span><span class="s2">&quot;metrics&quot;</span><span class="p">,</span> <span class="s2">&quot;trajectory&quot;</span><span class="p">,</span> <span class="n">TrajectoryMetric</span><span class="p">())</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"task_success"</span><span class="p">,</span> <span class="n">TaskSuccessMetric</span><span class="p">())</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"cost_per_success"</span><span class="p">,</span> <span class="n">CostPerSuccessMetric</span><span class="p">())</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"tool_call"</span><span class="p">,</span> <span class="n">ToolCallMetric</span><span class="p">())</span>
+    <span class="n">register</span><span class="p">(</span><span class="s2">"metrics"</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">,</span> <span class="n">TrajectoryMetric</span><span class="p">())</span>
 
 
 <span class="n">_register_defaults</span><span class="p">()</span>

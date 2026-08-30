@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ek.tools &mdash; ek 0.1.9 documentation</title>
+  <title>ek.tools &mdash; ek 0.1.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8618f531"></script>
+      <script src="../../_static/documentation_options.js?v=bafade30"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -127,11 +127,12 @@
   <section id="module-ek.tools">
 <span id="ek-tools"></span><h1>ek.tools<a class="headerlink" href="#module-ek.tools" title="Link to this heading"></a></h1>
 <p>Small, CLI-friendly functions over the <code class="docutils literal notranslate"><span class="pre">ek</span></code> core (the dispatch surface).</p>
-<p>These are thin, string-in/value-out wrappers designed for triple dispatch (CLI via
-<code class="docutils literal notranslate"><span class="pre">argh</span></code>, and later HTTP/UI). The single <code class="docutils literal notranslate"><span class="pre">_dispatch_funcs</span></code> list is the SSOT of
-what <a class="reference internal" href="__main__.html#module-ek.__main__" title="ek.__main__"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.__main__</span></code></a> exposes, so there is no duplicated command registration.</p>
+<p>These are thin, string-in/value-out wrappers designed for triple dispatch (CLI
+today, HTTP/UI later). The single <code class="docutils literal notranslate"><span class="pre">_dispatch_funcs</span></code> list is the SSOT of what
+<a class="reference internal" href="__main__.html#module-ek.__main__" title="ek.__main__"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.__main__</span></code></a> exposes, so there is no duplicated command registration, and
+each function’s <em>signature</em> is its command-line interface.</p>
 <p>Run them from the shell:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">cer</span> <span class="s2">&quot;hello wrld&quot;</span> <span class="s2">&quot;hello world&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">cer</span> <span class="s2">"hello wrld"</span> <span class="s2">"hello world"</span>
 <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">where</span>
 <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">check</span> <span class="n">tesseract</span>
 </pre></div>
@@ -182,7 +183,7 @@ what <a class="reference internal" href="__main__.html#module-ek.__main__" title
 <span class="sig-prename descclassname"><span class="pre">ek.tools.</span></span><span class="sig-name descname"><span class="pre">rover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">hypotheses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/ek/tools.html#rover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.tools.rover" title="Link to this definition"></a></dt>
 <dd><p>ROVER-fuse 2+ transcriptions into a consensus + mean agreement (reference-free).</p>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">rover</span> <span class="s2">&quot;the cat sat&quot;</span> <span class="s2">&quot;the cat sit&quot;</span> <span class="s2">&quot;the bat sat&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ek</span> <span class="n">rover</span> <span class="s2">"the cat sat"</span> <span class="s2">"the cat sit"</span> <span class="s2">"the bat sat"</span>
 </pre></div>
 </div>
 </dd></dl>
