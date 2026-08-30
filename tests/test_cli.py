@@ -6,6 +6,7 @@ same function signatures with nothing but the standard library, so the mapping r
 need tests of their own -- there is no upstream to trust for them any more.
 """
 
+import argparse
 import subprocess
 import sys
 
@@ -248,3 +249,83 @@ def test_the_cli_does_not_import_argh():
     )
     proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
     assert proc.returncode == 0, proc.stderr
+
+
+# --- signature shapes argh handled that the replacement must keep handling -----------
+
+
+def test_positional_only_parameters_stay_positional():
+    # A positional-only parameter cannot be passed by keyword, so a default must not
+    # promote it to an option -- doing so made `call_with` raise TypeError.
+    def posonly(alpha=1, /):
+        """Doc."""
+        return f"alpha={alpha}"
+
+    parser = make_parser([posonly])
+    for argv, expected in ((["posonly"], "alpha=1"), (["posonly", "7"], "alpha=7")):
+        namespace = parser.parse_args(argv)
+        assert call_with(posonly, namespace) == expected
+
+
+def test_keyword_only_without_a_default_is_a_required_option():
+    # argh spelled this `-m MUST`; a positional would be unreachable by name.
+    def kwonly(*, must):
+        """Doc."""
+        return f"must={must}"
+
+    parser = make_parser([kwonly])
+    assert call_with(kwonly, parser.parse_args(["kwonly", "--must", "X"])) == "must=X"
+    assert call_with(kwonly, parser.parse_args(["kwonly", "-m", "Y"])) == "must=Y"
+    with pytest.raises(SystemExit):  # required: omitting it is an error
+        parser.parse_args(["kwonly"])
+
+
+def test_a_contested_initial_gives_neither_option_a_short_flag():
+    # argh's rule, and the reason for it: first-declared-wins would make the command
+    # line depend on parameter *order*, so reordering a signature would silently move
+    # `-c` from one option to another.
+    def two_c(*, cost=1, count=2):
+        """Doc."""
+        return f"{cost}|{count}"
+
+    parser = make_parser([two_c])
+    assert call_with(two_c, parser.parse_args(["two-c", "--cost", "9"])) == "9|2"
+    with pytest.raises(SystemExit):
+        parser.parse_args(["two-c", "-c", "9"])
+
+
+# --- the real ek CLI's short flags are part of its published surface ----------------
+
+#: Every short flag ek's shipping commands had under argh. Pinned so that editing a
+#: signature cannot silently move or drop one.
+EK_SHORT_FLAGS = {
+    "cer": {"-n"},
+    "wer": {"-n"},
+    "rover": {"-c"},
+    "pass-k": {"-k"},
+    "cost-per-success": {"-a"},
+    "where": set(),
+    "check": set(),
+    "engines": set(),
+    "version": set(),
+}
+
+
+def test_the_real_commands_short_flags_are_unchanged():
+    from ek import tools
+
+    parser = make_parser(tools._dispatch_funcs)
+    subparsers = next(
+        action
+        for action in parser._actions
+        if isinstance(action, argparse._SubParsersAction)
+    )
+    assert set(subparsers.choices) == set(EK_SHORT_FLAGS), "command set changed"
+    for command, expected in EK_SHORT_FLAGS.items():
+        found = {
+            flag
+            for action in subparsers.choices[command]._actions
+            for flag in action.option_strings
+            if len(flag) == 2 and flag != "-h"
+        }
+        assert found == expected, f"{command}: short flags moved {found} != {expected}"

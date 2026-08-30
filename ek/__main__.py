@@ -10,7 +10,9 @@ Python parameter                 Command-line form
 ===============================  =========================================
 ``f(x)``                         positional ``x``
 ``f(*xs)``                       repeatable positional ``[xs ...]``
+``f(x, /)`` / ``f(x=1, /)``       positional ``x`` (never an option)
 ``f(*, x=None)`` / ``f(x=None)`` option ``-x``/``--x`` (default in --help)
+``f(*, x)``                      *required* option ``-x``/``--x``
 ``f(*, flag=False)``             switch ``--flag``
 ``f(*, flag=True)``              switch ``--no-flag`` (``--flag`` still ok)
 ===============================  =========================================
@@ -76,25 +78,69 @@ def _summary(func: Callable) -> str:
 
 
 def _add_positional(parser: argparse.ArgumentParser, param: inspect.Parameter) -> None:
-    """Add ``param`` as a positional argument (``*args`` becomes ``[name ...]``)."""
-    nargs = {"nargs": "*"} if param.kind is param.VAR_POSITIONAL else {}
-    parser.add_argument(param.name, metavar=_cli_name(param.name), help="-", **nargs)
+    """Add ``param`` as a positional argument (``*args`` becomes ``[name ...]``).
+
+    A positional-only parameter *with* a default stays positional (it has no keyword
+    spelling) but becomes optional, so omitting it falls back to the default.
+    """
+    if param.kind is param.VAR_POSITIONAL:
+        extra = {"nargs": "*"}
+    elif param.default is not _EMPTY:
+        extra = {"nargs": "?", "default": param.default}
+    else:
+        extra = {}
+    parser.add_argument(
+        param.name,
+        metavar=_cli_name(param.name),
+        help=_help_for_default(param.default) if param.default is not _EMPTY else "-",
+        **extra,
+    )
+
+
+def _short_flags(option_params: Iterable[inspect.Parameter]) -> dict:
+    """Map option name -> short flag, for the initials that are *unambiguous*.
+
+    An initial claimed by two parameters gives a short flag to neither -- the same
+    rule ``argh`` used. Handing it to whichever was declared first would make the
+    command line depend on parameter *order*, so reordering a signature could
+    silently move ``-c`` from one option to another.
+
+    >>> from inspect import Parameter as P
+    >>> kw = P.KEYWORD_ONLY
+    >>> params = [P('cost', kw, default=1), P('count', kw, default=2)]
+    >>> _short_flags(params)
+    {}
+    >>> _short_flags([P('name', kw, default=None)])
+    {'name': '-n'}
+    """
+    claims: dict = {}
+    for param in option_params:
+        claims.setdefault(param.name[0], []).append(param.name)
+    return {
+        names[0]: f"-{initial}"
+        for initial, names in claims.items()
+        if len(names) == 1 and initial not in _RESERVED_SHORT_FLAGS
+    }
 
 
 def _add_option(
     parser: argparse.ArgumentParser,
     param: inspect.Parameter,
-    taken_short_flags: set,
+    short_flags: Mapping[str, str],
 ) -> None:
-    """Add ``param`` as an option, with a short flag when its initial is free."""
+    """Add ``param`` as an option, with a short flag when its initial is unambiguous."""
     long_name = _cli_name(param.name)
     flags = []
-    if (initial := param.name[0]) not in taken_short_flags:
-        taken_short_flags.add(initial)
-        flags.append(f"-{initial}")
+    if (short := short_flags.get(param.name)) is not None:
+        flags.append(short)
     flags.append(f"--{long_name}")
 
     default = param.default
+    if default is _EMPTY:
+        # A keyword-only parameter with no default: argh spelled this as a *required*
+        # option, and so do we -- a caller must be able to pass it by name.
+        parser.add_argument(*flags, dest=param.name, required=True, help="required")
+        return
     if isinstance(default, bool):
         parser.add_argument(
             *flags,
@@ -120,8 +166,16 @@ def _add_option(
 
 
 def _is_option(param: inspect.Parameter) -> bool:
-    """Whether ``param`` maps to an option rather than a positional argument."""
-    return param.default is not _EMPTY
+    """Whether ``param`` maps to an option rather than a positional argument.
+
+    A parameter with a default is an option; so is a keyword-only parameter even
+    without one (it becomes a *required* option), since there is no positional
+    spelling that could reach it. A positional-only parameter is never an option,
+    even with a default, for the mirror-image reason.
+    """
+    if param.kind is param.POSITIONAL_ONLY:
+        return False
+    return param.default is not _EMPTY or param.kind is param.KEYWORD_ONLY
 
 
 def add_command(subparsers: Any, func: Callable) -> argparse.ArgumentParser:
@@ -132,12 +186,15 @@ def add_command(subparsers: Any, func: Callable) -> argparse.ArgumentParser:
         description=inspect.getdoc(func) or "",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    taken_short_flags = set(_RESERVED_SHORT_FLAGS)
-    for param in inspect.signature(func).parameters.values():
-        if param.kind is param.VAR_KEYWORD:
-            continue  # ``**kwargs`` has no command-line spelling
+    params = [
+        param
+        for param in inspect.signature(func).parameters.values()
+        if param.kind is not param.VAR_KEYWORD  # ``**kwargs`` has no CLI spelling
+    ]
+    short_flags = _short_flags(param for param in params if _is_option(param))
+    for param in params:
         if _is_option(param):
-            _add_option(parser, param, taken_short_flags)
+            _add_option(parser, param, short_flags)
         else:
             _add_positional(parser, param)
     parser.set_defaults(**{_FUNC_DEST: func})
@@ -174,6 +231,8 @@ def call_with(func: Callable, namespace: argparse.Namespace) -> Any:
         value = parsed.get(name, param.default)
         if param.kind is param.VAR_POSITIONAL:
             args.extend(value or ())
+        elif param.kind is param.POSITIONAL_ONLY:
+            args.append(value)  # cannot be passed by keyword, default or not
         elif _is_option(param) or param.kind is param.KEYWORD_ONLY:
             kwargs[name] = value
         else:

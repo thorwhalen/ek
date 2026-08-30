@@ -104,3 +104,50 @@ def test_packages_with_no_declared_license_fail_unless_audited(tmp_path):
     # Apache-2.0 text into its License field with no classifier, which some
     # pip-licenses versions render as UNKNOWN.
     assert cl.main(_csv(tmp_path, [("ragas", "UNKNOWN")])) == 0
+
+
+def test_mpl_and_epl_full_text_are_not_read_as_gpl():
+    # MPL-2.0 and EPL-2.0 both name the GPL family in their "Secondary Licenses"
+    # clause. A package that inlines the full licence text into its `License` field
+    # (the `license = {file = "LICENSE"}` packaging mistake -- ragas does exactly
+    # this with Apache-2.0) would otherwise be failed by the broad "GENERAL PUBLIC"
+    # pattern for a licence ek accepts.
+    mpl = (
+        "Mozilla Public License Version 2.0 ... 3.3. Distribution of a Larger Work ... "
+        'under the terms of a Secondary License: the GNU General Public License, '
+        "Version 2.0, the GNU Lesser General Public License, Version 2.1, the GNU "
+        "Affero General Public License, Version 3.0 ..."
+    )
+    epl = (
+        "Eclipse Public License - v 2.0 ... Secondary License means either the GNU "
+        "General Public License, Version 2.0, or any later versions ..."
+    )
+    assert cl._is_violation(mpl) == ""
+    assert cl._is_violation(epl) == ""
+    # short declarations of the same licences were always fine, and still are
+    assert cl._is_violation("MPL-2.0") == ""
+    assert cl._is_violation("MPL-2.0 AND MIT") == ""  # tqdm's actual expression
+    # and the clearance is title-gated, not a hole: real copyleft still fails
+    assert cl._is_violation("GNU General Public License v3") != ""
+
+
+def test_unknown_clearance_does_not_also_clear_copyleft(tmp_path):
+    # `ragas` is cleared for a *blank* licence field only. If it ever starts
+    # declaring copyleft, the gate must still fail -- an audited-unknown row is not
+    # a blanket exemption from every rule.
+    assert cl.main(_csv(tmp_path, [("ragas", "UNKNOWN")])) == 0
+    assert cl.main(_csv(tmp_path, [("ragas", "AGPL-3.0")])) == 1
+    assert cl.main(_csv(tmp_path, [("zss", "GPL-3.0-or-later")])) == 1
+    # the strong override (NVIDIA runtime wheels, cuda-toolkit) still bypasses all rules
+    assert cl.main(_csv(tmp_path, [("cuda-toolkit", "Other/Proprietary License")])) == 0
+
+
+def test_the_gate_scripts_doctests_run():
+    # .github/scripts/ is outside pytest's testpaths, so --doctest-modules never
+    # reaches check_licenses.py. Run its doctests from inside the suite instead, so
+    # the examples in _is_violation stay executable rather than decorative.
+    import doctest
+
+    results = doctest.testmod(cl, verbose=False)
+    assert results.attempted > 0, "no doctests found in check_licenses.py"
+    assert results.failed == 0
