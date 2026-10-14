@@ -252,6 +252,45 @@ def _base_confidence(estimate: Any, raw_signals: dict) -> Optional[float]:
     return base
 
 
+def _resolve_calibrator(calibrator):
+    """Normalize ``calibrator``: a ``Mapping[str, Calibrator]`` becomes a
+    :class:`~ek.qe.calibrate.SignalFamilyCalibrator` (per-signal-family mode)."""
+    if isinstance(calibrator, Mapping):
+        from .qe.calibrate import SignalFamilyCalibrator
+
+        return SignalFamilyCalibrator(calibrators=dict(calibrator))
+    return calibrator
+
+
+def _is_family_calibrator(calibrator) -> bool:
+    from .qe.calibrate import SignalFamilyCalibrator
+
+    return isinstance(calibrator, SignalFamilyCalibrator)
+
+
+def _calibrated_confidence(calibrator, estimate: Any, raw_signals: dict, group: Any):
+    """``(calibrated, did_calibrate, per_family)`` for one field.
+
+    With a single calibrator, the field's own confidence (else the mean of its raw
+    signals) is calibrated, as before, and ``per_family`` is ``None``. With a
+    :class:`~ek.qe.calibrate.SignalFamilyCalibrator`, each raw signal is calibrated by
+    its own family's calibrator and the results are fused by its ``combine`` rule; a
+    field that carries its own ``confidence`` is calibrated as the ``"confidence"``
+    family instead (an upstream confidence still takes precedence over signals).
+    """
+    if not _is_family_calibrator(calibrator):
+        calibrated, did = _calibrate(
+            calibrator, _base_confidence(estimate, raw_signals), group
+        )
+        return calibrated, did, None
+    own = getattr(estimate, "confidence", None)
+    families = {"confidence": own} if own is not None else dict(raw_signals)
+    if not families:
+        return None, False, None
+    per_family = calibrator.calibrate_signals(families, group=group)
+    return calibrator.combine(per_family), True, per_family
+
+
 def _agreement_score(hypotheses: list, **rover_kwargs) -> float:
     """Mean ROVER agreement over a list of hypotheses (the AgreementSignal score)."""
     from .qe.rover import AgreementSignal
@@ -305,7 +344,15 @@ def estimate_quality(
             becomes a ``raw_signals["agreement"]`` entry (the flagship online signal).
         signals: Explicit :class:`~ek.base.Signal` callables ``target -> float |
             Mapping`` producing further raw signals.
-        calibrator: A :class:`~ek.base.Calibrator` mapping raw score -> probability.
+        calibrator: A :class:`~ek.base.Calibrator` mapping raw score -> probability,
+            applied to the field's confidence (else the mean of its raw signals).
+            When the signals are *heterogeneous* (e.g. an LLM-judge score next to a
+            logprob), pass a ``Mapping[str, Calibrator]`` keyed by signal name (a
+            ``"*"`` entry is the fallback) or a
+            :class:`~ek.qe.calibrate.SignalFamilyCalibrator`: each signal family is
+            then calibrated on its own and the calibrated probabilities are fused by
+            its ``combine`` rule (mean by default). The per-family values are
+            reported in ``provenance["calibrated_signals"]``.
             **Calibration is non-optional before gating** (Hard Rule 1): passing a
             ``policy`` with no calibrator and ``assume_calibrated`` false **raises** --
             a raw, uncalibrated score must never reach a DecisionPolicy.
@@ -327,6 +374,7 @@ def estimate_quality(
             "is already calibrated."
         )
 
+    calibrator = _resolve_calibrator(calibrator)
     sources = list(sources)
     signals = list(signals)
     # A bare callable in `sources` is almost certainly a Signal passed to the wrong
@@ -363,11 +411,14 @@ def estimate_quality(
     findings = list(getattr(extraction, "findings", ()) or ())
     _run_validators(_flat_validators(validators), value, None, findings, failures)
 
-    base = _base_confidence(extraction, raw_signals)
-    calibrated, did_calibrate = _calibrate(calibrator, base, None)
+    calibrated, did_calibrate, per_family = _calibrated_confidence(
+        calibrator, extraction, raw_signals, None
+    )
     decision = _decide(policy, calibrated, None)
 
     provenance = {"n_signals": len(raw_signals), "calibrated": did_calibrate}
+    if per_family is not None:
+        provenance["calibrated_signals"] = per_family
     if failures:
         provenance["failures"] = failures
     return QualityReport(
@@ -400,6 +451,7 @@ def _estimate_annotated(
     confidences: list = []
     failures: list = []
     any_calibrated = False
+    calibrated_signals: dict = {}
     worst: Optional[Decision] = None
 
     # At the extraction level there is no single primary text, so the provided
@@ -420,9 +472,12 @@ def _estimate_annotated(
             _field_validators(validators, path), fe.value, spec, findings, failures
         )
 
-        base = _base_confidence(fe, raw_signals)
         group = path.node_type
-        calibrated, did_calibrate = _calibrate(calibrator, base, group)
+        calibrated, did_calibrate, per_family = _calibrated_confidence(
+            calibrator, fe, raw_signals, group
+        )
+        if per_family is not None:
+            calibrated_signals[path] = per_family
         any_calibrated = any_calibrated or did_calibrate
         decision = _decide(policy, calibrated, group)
         # A hard verifier failure forces at least a flag even if confidence is high.
@@ -450,6 +505,8 @@ def _estimate_annotated(
             worst = decision
 
     provenance = {"n_fields": len(per_field), "calibrated": any_calibrated}
+    if calibrated_signals:
+        provenance["calibrated_signals"] = calibrated_signals
     if failures:
         provenance["failures"] = failures
     return QualityReport(

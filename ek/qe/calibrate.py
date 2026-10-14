@@ -22,6 +22,11 @@ library-backed equivalents behind the ``ek[calibration]`` extra. Measure calibra
 with :func:`expected_calibration_error` (+ a reliability curve). For per-field-type
 validity, wrap per group with :class:`GroupCalibrator` (Mondrian / class-conditional)
 -- distribution-free *conditional* coverage is otherwise impossible (Hard Rule 2).
+When the raw signals are *heterogeneous* (a judge score next to a logprob next to a
+ROVER agreement), calibrate each signal family on its own with
+:class:`SignalFamilyCalibrator` and fuse the calibrated probabilities with a
+documented combiner (:func:`mean_probability` by default, :func:`min_probability`
+for a conservative gate), rather than calibrating the mean of incomparable scores.
 
 Calibrate at the **granularity of the decision** (gate on fields -> calibrate a
 "field-correct?" target), and persist the fit (:func:`save_calibrator`); calibration
@@ -42,7 +47,8 @@ from __future__ import annotations
 
 import bisect
 import math
-from collections.abc import Sequence
+import inspect
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Callable, List, Optional
 
@@ -361,6 +367,168 @@ class GroupCalibrator:
 
 
 # ---------------------------------------------------------------------------
+# Per-signal-family calibration (heterogeneous signals)
+# ---------------------------------------------------------------------------
+
+
+def mean_probability(probs: Mapping[str, float]) -> float:
+    """Fuse calibrated per-family probabilities by their mean (the default combiner).
+
+    Each family's calibrated value estimates the *same* event ("this field is
+    correct"), so the mean is a defensible, assumption-light pooling rule.
+
+    >>> mean_probability({"judge": 0.9, "logprob": 0.7})
+    0.8
+    """
+    if not probs:
+        raise ValueError("mean_probability: no calibrated probabilities to combine")
+    return sum(probs.values()) / len(probs)
+
+
+def min_probability(probs: Mapping[str, float]) -> float:
+    """Fuse calibrated per-family probabilities by their minimum (conservative).
+
+    Use when any one family flagging a problem should be enough to lower the gate.
+
+    >>> min_probability({"judge": 0.9, "logprob": 0.7})
+    0.7
+    """
+    if not probs:
+        raise ValueError("min_probability: no calibrated probabilities to combine")
+    return min(probs.values())
+
+
+#: Registered combiners: ``name -> (Mapping[str, float] -> float)``. A learned stacker
+#: is any callable with the same shape (pass it as ``combine=``).
+_COMBINERS = {"mean": mean_probability, "min": min_probability}
+for _k, _fn in _COMBINERS.items():
+    register("combiners", _k, _fn)
+
+
+def _apply_calibrator(cal: Any, raw: float, group: Any) -> float:
+    """Apply ``cal`` to ``raw``, passing ``group`` only to a Mondrian-aware one."""
+    if group is not None:
+        try:
+            accepts_group = "group" in inspect.signature(cal).parameters
+        except (TypeError, ValueError):
+            accepts_group = False
+        if accepts_group:
+            return cal(raw, group=group)
+    return cal(raw)
+
+
+@dataclass
+class SignalFamilyCalibrator:
+    """One calibrator per signal family, fused by a documented combination rule.
+
+    Averaging heterogeneous raw signals (an LLM-judge score, a token logprob, a ROVER
+    agreement) and calibrating the mean discards exactly what a calibrator needs:
+    each family has its own scale, reliability and direction of miscalibration. This
+    calibrates every signal *by name* with its own calibrator, then fuses the
+    calibrated probabilities with ``combine``.
+
+    Pass it (or simply a ``Mapping[str, Calibrator]``) as
+    ``estimate_quality(..., calibrator=...)``.
+
+    Args:
+        calibrators: ``signal name -> Calibrator``. A ``"*"`` entry is the fallback
+            for any signal without its own entry. A signal with neither is refused
+            (``ValueError``) rather than silently dropped or passed through raw
+            (Hard Rule 1).
+        combine: ``Mapping[str, float] -> float`` fusing the calibrated values;
+            :func:`mean_probability` (default) or :func:`min_probability`, or any
+            callable of that shape (e.g. a learned stacker).
+        factory: Zero-arg callable producing a fresh calibrator, used by :meth:`fit`.
+
+    Example:
+        >>> rows = [{"judge": j, "logprob": l} for j, l in
+        ...         [(0.9, -0.1), (0.8, -0.2), (0.85, -2.0), (0.3, -0.1), (0.2, -2.5), (0.7, -1.8)]]
+        >>> correct = [True, True, False, True, False, False]
+        >>> cal = SignalFamilyCalibrator().fit(rows, correct)
+        >>> sorted(cal.calibrators)
+        ['judge', 'logprob']
+        >>> 0.0 <= cal({"judge": 0.9, "logprob": -0.1}) <= 1.0
+        True
+    """
+
+    calibrators: dict = field(default_factory=dict)
+    combine: Callable[[Mapping[str, float]], float] = mean_probability
+    factory: Callable[[], Any] = PlattCalibrator
+    kind: str = "signal_family"
+
+    def fit(
+        self, signals: Sequence[Mapping[str, float]], correct: Sequence[bool]
+    ) -> "SignalFamilyCalibrator":
+        """Fit one calibrator per signal name over the rows where that signal appears."""
+        if len(signals) != len(correct):
+            raise ValueError(
+                f"fit: {len(signals)} signal rows but {len(correct)} labels"
+            )
+        buckets: dict = {}
+        for row, c in zip(signals, correct):
+            for name, raw in row.items():
+                buckets.setdefault(name, ([], []))
+                buckets[name][0].append(raw)
+                buckets[name][1].append(c)
+        self.calibrators = {
+            name: self.factory().fit(ss, cc) for name, (ss, cc) in buckets.items()
+        }
+        return self
+
+    def _calibrator_for(self, name: str) -> Any:
+        cal = self.calibrators.get(name, self.calibrators.get("*"))
+        if cal is None:
+            raise ValueError(
+                f"SignalFamilyCalibrator: no calibrator for signal {name!r} (have "
+                f"{sorted(self.calibrators)}). Add one for it, or a '*' fallback -- "
+                "an uncalibrated signal must not be fused (Hard Rule 1)."
+            )
+        return cal
+
+    def calibrate_signals(
+        self, raw_signals: Mapping[str, float], *, group: Any = None
+    ) -> dict:
+        """``{name: calibrated probability}`` for each raw signal (before fusion)."""
+        return {
+            name: _apply_calibrator(self._calibrator_for(name), raw, group)
+            for name, raw in raw_signals.items()
+        }
+
+    def __call__(self, raw_signals: Mapping[str, float], *, group: Any = None) -> float:
+        """Calibrate each signal family, then fuse with ``combine``."""
+        return self.combine(self.calibrate_signals(raw_signals, group=group))
+
+    def to_dict(self) -> dict:
+        """Serialize every family's calibrator and the (registered) combiner's name."""
+        names = [k for k, fn in _COMBINERS.items() if fn is self.combine]
+        if not names:
+            raise ValueError(
+                "SignalFamilyCalibrator.to_dict: only a registered combiner "
+                f"({sorted(_COMBINERS)}) can be persisted; got {self.combine!r}"
+            )
+        return {
+            "kind": self.kind,
+            "calibrators": {n: c.to_dict() for n, c in self.calibrators.items()},
+            "combine": names[0],
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "SignalFamilyCalibrator":
+        combine = d.get("combine", "mean")
+        if combine not in _COMBINERS:
+            raise ValueError(
+                f"unknown combiner {combine!r}; known: {sorted(_COMBINERS)}"
+            )
+        return cls(
+            calibrators={
+                n: _calibrator_from_record(rec)
+                for n, rec in (d.get("calibrators") or {}).items()
+            },
+            combine=_COMBINERS[combine],
+        )
+
+
+# ---------------------------------------------------------------------------
 # Calibration measurement
 # ---------------------------------------------------------------------------
 
@@ -491,6 +659,7 @@ _CALIBRATORS = {
     "isotonic": IsotonicCalibrator,
     "temperature": TemperatureCalibrator,
     "group": GroupCalibrator,
+    "signal_family": SignalFamilyCalibrator,
 }
 for _k, _cls in _CALIBRATORS.items():
     register("calibrators", _k, _cls)
