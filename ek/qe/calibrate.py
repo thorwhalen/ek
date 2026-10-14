@@ -430,6 +430,19 @@ class SignalFamilyCalibrator:
     Pass it (or simply a ``Mapping[str, Calibrator]``) as
     ``estimate_quality(..., calibrator=...)``.
 
+    **The fused value must itself be calibrated before it is gated.** Fusing
+    calibrated probabilities (by mean, min, ...) does not yield a calibrated
+    probability: agreeing families make the mean under-confident, a weak family
+    drags it toward the base rate. So :meth:`fit` also learns a second-stage
+    ``fusion`` calibrator on ``combine``'s output, and ``__call__`` applies it.
+    Without a ``fusion`` calibrator (e.g. a hand-built mapping),
+    :func:`ek.estimate_quality` refuses to gate a value fused from two or more
+    families unless told ``assume_calibrated=True`` (Hard Rule 1). A value from a
+    single family is that family's calibrated probability and gates as is.
+
+    A field's own upstream ``confidence`` is just one more family here, named
+    ``"confidence"``: include it in the training rows under that name.
+
     Args:
         calibrators: ``signal name -> Calibrator``. A ``"*"`` entry is the fallback
             for any signal without its own entry. A signal with neither is refused
@@ -439,6 +452,8 @@ class SignalFamilyCalibrator:
             :func:`mean_probability` (default) or :func:`min_probability`, or any
             callable of that shape (e.g. a learned stacker).
         factory: Zero-arg callable producing a fresh calibrator, used by :meth:`fit`.
+        fusion: Second-stage calibrator applied to ``combine``'s output (learned by
+            :meth:`fit`); ``None`` leaves the fused value uncalibrated.
 
     Example:
         >>> rows = [{"judge": j, "logprob": l} for j, l in
@@ -454,25 +469,56 @@ class SignalFamilyCalibrator:
     calibrators: dict = field(default_factory=dict)
     combine: Callable[[Mapping[str, float]], float] = mean_probability
     factory: Callable[[], Any] = PlattCalibrator
+    fusion: Any = None
     kind: str = "signal_family"
 
     def fit(
         self, signals: Sequence[Mapping[str, float]], correct: Sequence[bool]
     ) -> "SignalFamilyCalibrator":
-        """Fit one calibrator per signal name over the rows where that signal appears."""
+        """Fit one calibrator per signal name, then the ``fusion`` calibrator.
+
+        Each family is fit over the rows where it appears with a finite value. A
+        family with fewer than two such rows, or only one label class, cannot be
+        calibrated and is refused (``ValueError``) rather than turned into a
+        constant that would then dilute the fusion.
+        """
         if len(signals) != len(correct):
             raise ValueError(
                 f"fit: {len(signals)} signal rows but {len(correct)} labels"
             )
+        if not signals:
+            raise ValueError("fit: no labelled rows to fit on")
         buckets: dict = {}
         for row, c in zip(signals, correct):
             for name, raw in row.items():
-                buckets.setdefault(name, ([], []))
-                buckets[name][0].append(raw)
-                buckets[name][1].append(c)
+                buckets.setdefault(name, [])
+                buckets[name].append((raw, c))
+        unfittable = []
+        for name, pairs in buckets.items():
+            finite = _finite_pairs([s for s, _ in pairs], [c for _, c in pairs])
+            if len(finite) < 2 or len({bool(c) for _, c in finite}) < 2:
+                unfittable.append(name)
+        if unfittable:
+            raise ValueError(
+                f"fit: cannot calibrate signal(s) {sorted(unfittable)}: each needs at "
+                "least two finite scores covering both outcomes (correct and not). "
+                "Drop them or label more rows."
+            )
         self.calibrators = {
-            name: self.factory().fit(ss, cc) for name, (ss, cc) in buckets.items()
+            name: self.factory().fit([s for s, _ in pairs], [c for _, c in pairs])
+            for name, pairs in buckets.items()
         }
+        # The fusion stage only ever sees values fused from 2+ families (a single
+        # family bypasses it), so it is learned on exactly those rows. Too few of
+        # them leaves it unset, and estimate_quality then refuses to gate them.
+        fused, labels = [], []
+        for row, c in zip(signals, correct):
+            finite = {n: v for n, v in row.items() if math.isfinite(float(v))}
+            if len(finite) >= 2:
+                fused.append(self.combine(self.calibrate_signals(finite)))
+                labels.append(c)
+        fittable = len(fused) >= 2 and len({bool(c) for c in labels}) == 2
+        self.fusion = self.factory().fit(fused, labels) if fittable else None
         return self
 
     def _calibrator_for(self, name: str) -> Any:
@@ -494,9 +540,20 @@ class SignalFamilyCalibrator:
             for name, raw in raw_signals.items()
         }
 
+    def fuse(self, calibrated: Mapping[str, float]) -> float:
+        """Fuse per-family calibrated probabilities: ``combine``, then ``fusion``.
+
+        A single family's value is returned as is: it is already calibrated, and
+        ``fusion`` was learned on fused values.
+        """
+        if len(calibrated) == 1:
+            return next(iter(calibrated.values()))
+        fused = self.combine(calibrated)
+        return self.fusion(fused) if self.fusion is not None else fused
+
     def __call__(self, raw_signals: Mapping[str, float], *, group: Any = None) -> float:
-        """Calibrate each signal family, then fuse with ``combine``."""
-        return self.combine(self.calibrate_signals(raw_signals, group=group))
+        """Calibrate each signal family, then :meth:`fuse` them."""
+        return self.fuse(self.calibrate_signals(raw_signals, group=group))
 
     def to_dict(self) -> dict:
         """Serialize every family's calibrator and the (registered) combiner's name."""
@@ -510,6 +567,7 @@ class SignalFamilyCalibrator:
             "kind": self.kind,
             "calibrators": {n: c.to_dict() for n, c in self.calibrators.items()},
             "combine": names[0],
+            "fusion": self.fusion.to_dict() if self.fusion is not None else None,
         }
 
     @classmethod
@@ -525,6 +583,7 @@ class SignalFamilyCalibrator:
                 for n, rec in (d.get("calibrators") or {}).items()
             },
             combine=_COMBINERS[combine],
+            fusion=_calibrator_from_record(d["fusion"]) if d.get("fusion") else None,
         )
 
 
