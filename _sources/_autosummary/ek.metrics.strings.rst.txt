@@ -1,0 +1,12 @@
+ek.metrics.strings
+==================
+
+.. automodule:: ek.metrics.strings
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      StringMetric
+   

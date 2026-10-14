@@ -1,0 +1,64 @@
+ek.qe
+=====
+
+.. automodule:: ek.qe
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      rover
+      geo_mean
+      length_normalized
+      min_prob
+      mean_prob
+      mean_probability
+      min_probability
+      expected_calibration_error
+      reliability_curve
+      save_calibrator
+      load_calibrator
+      sklearn_calibrator
+      risk_coverage_curve
+      split_conformal_quantile
+      checksum_validator
+      regex_validator
+      range_validator
+      enum_validator
+      schema_validator
+      totals_consistent
+      luhn_check
+      iban_check
+      isbn_check
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RoverConsensus
+      RoverSlot
+      AgreementSignal
+      VerifierSignal
+      LogprobSignal
+      IntrinsicConfidenceSignal
+      PlattCalibrator
+      IsotonicCalibrator
+      TemperatureCalibrator
+      GroupCalibrator
+      SignalFamilyCalibrator
+      CostSensitiveGate
+      ConformalGate
+      GroupConformalGate
+      RiskControlGate
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   calibrate
+   decide
+   signals
+   verifiers

@@ -1,0 +1,21 @@
+ek.metrics.graphs
+=================
+
+.. automodule:: ek.metrics.graphs
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_MAX_NODES
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TypedEdge
+      TypedGraph
+      TypedGraphMetric
+      TypedNode
+   

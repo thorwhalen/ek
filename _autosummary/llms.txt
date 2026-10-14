@@ -1,0 +1,46 @@
+# ek
+
+> ek (Evaluation Kit) -- a framework for building Knowledge Evaluation systems (evaluating information-extraction outputs; OCR as the noisiest special case)
+
+
+## Pages in this subsection
+
+- [ek](ek.html.md): &#96;ek&#96; – a framework for building Knowledge Evaluation systems.
+- [ek.ocr](ek.ocr.html.md): OCR evaluation – &#96;ek&#96;’s first concrete instance, built on &#96;ocracy&#96;.
+- [ek.ocr.benchmark](ek.ocr.benchmark.html.md): End-to-end OCR offline benchmark: run a fleet over gold, score, persist.
+- [ek.ocr.bridge](ek.ocr.bridge.html.md): The &#96;ocracy&#96; bridge: turn the OCR fleet into an &#96;image -&gt; OcrResult&#96; callable.
+- [ek.ocr.profiles](ek.ocr.profiles.html.md): Per-engine OCR capability profiles (what QE signal each engine actually emits).
+- [ek.ocr.tables](ek.ocr.tables.html.md): Recover a normalized table from an &#96;OcrResult&#96; so ek’s table metrics can score it.
+- [ek.agents](ek.agents.html.md): &#96;ek.agents&#96; – evaluating AI agents and assistants, in cost per successful task.
+- [ek.agents.base](ek.agents.base.html.md): Agent-evaluation data shapes: the episode (Layer B) and the task/tool grammar (Layer A).
+- [ek.agents.bridge](ek.agents.bridge.html.md): One-way adapters: turn whatever your agent already emits into an &#96;ek&#96; &#96;Episode&#96;.
+- [ek.agents.cost](ek.agents.cost.html.md): The cost model and the price SSOT: dollars per successfully completed task.
+- [ek.agents.harness](ek.agents.harness.html.md): The agent task-suite harness: k trials, per-slice cuts, and a gate that survives noise.
+- [ek.agents.judge](ek.agents.judge.html.md): LLM-as-judge: a reference-free &#96;Signal&#96;, a reference-based
+- [ek.agents.metrics](ek.agents.metrics.html.md): Task-success and cost-per-successful-task: the two metrics that drive the whole thing.
+- [ek.agents.toolcalls](ek.agents.toolcalls.html.md): Tool-call correctness: BFCL-style AST matching over a &#42;multiset&#42; of calls.
+- [ek.agents.trajectory](ek.agents.trajectory.html.md): Trajectory (process) evaluation: a cost-weighted &#42;&#42;sequence&#42;&#42; edit distance over steps.
+- [ek.metrics](ek.metrics.html.md): Reference-based (offline) metrics: the &#96;score()&#96; side of &#96;ek&#96;.
+- [ek.metrics.anls](ek.metrics.anls.html.md): ANLS / ANLS&#92;&#42; (nested-JSON) similarity, wrapping &#96;anls_star&#96;.
+- [ek.metrics.fields](ek.metrics.fields.html.md): Field-level metric for record / dict-shaped extractions.
+- [ek.metrics.graphs](ek.metrics.graphs.html.md): The flagship metric: cost-weighted, type-aware distance over a typed graph.
+- [ek.metrics.spans](ek.metrics.spans.html.md): Span / slot precision-recall-F1 over two backends that legitimately disagree.
+- [ek.metrics.strings](ek.metrics.strings.html.md): String metrics: Character/Word Error Rate (CER/WER).
+- [ek.metrics.tables](ek.metrics.tables.html.md): Table-structure metrics: TEDS / TEDS-Struct and GriTS (structure-only toggle).
+- [ek.canonicalize](ek.canonicalize.html.md): Versioned, composable canonicalization applied &#42;before&#42; scoring.
+- [ek.qe](ek.qe.html.md): Reference-free quality estimation: the &#96;estimate_quality()&#96; side of &#96;ek&#96;.
+- [ek.qe.calibrate](ek.qe.calibrate.html.md): Calibration: make a raw score &#42;mean&#42; a probability (the non-optional stage).
+- [ek.qe.decide](ek.qe.decide.html.md): Selective prediction: turn a calibrated probability into accept / flag / block.
+- [ek.qe.signals](ek.qe.signals.html.md): Intrinsic confidence signals: token logprobs and per-unit posteriors (cost tier 2).
+- [ek.qe.verifiers](ek.qe.verifiers.html.md): Deterministic verifier signals – the cheapest, first-to-run QE layer.
+- [ek.base](ek.base.html.md): Foundational data structures and strategy protocols for &#96;ek&#96;.
+- [ek.facade](ek.facade.html.md): The two top-level facades: &#96;score()&#96; (offline) and &#96;estimate_quality()&#96; (online).
+- [ek.harness](ek.harness.html.md): The offline evaluation harness: run a predictor over gold, gate regressions.
+- [ek.registry](ek.registry.html.md): Strategy registry, optional-dependency guarding, and requirement checks.
+- [ek.stores](ek.stores.html.md): Local-file persistence for &#96;ek&#96;, as plain &#96;MutableMapping&#96; stores.
+- [ek.tools](ek.tools.html.md): Small, CLI-friendly functions over the &#96;ek&#96; core (the dispatch surface).
+- [ek.validate](ek.validate.html.md): Reference-free post-extraction validation &amp; correction (issue #7).
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

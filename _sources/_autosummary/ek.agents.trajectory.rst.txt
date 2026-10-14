@@ -1,0 +1,18 @@
+ek.agents.trajectory
+====================
+
+.. automodule:: ek.agents.trajectory
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SCHEMES
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TrajectoryMetric
+   

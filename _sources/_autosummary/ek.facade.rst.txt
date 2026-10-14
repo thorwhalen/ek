@@ -1,0 +1,14 @@
+ek.facade
+=========
+
+.. automodule:: ek.facade
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      estimate_quality
+      evaluate
+      score
+   

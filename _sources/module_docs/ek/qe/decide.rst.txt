@@ -1,4 +1,0 @@
-ek.qe.decide
-============
-.. automodule:: ek.qe.decide
-   :members:

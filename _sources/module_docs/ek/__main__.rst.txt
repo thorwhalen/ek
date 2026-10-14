@@ -1,4 +1,0 @@
-ek.__main__
-===========
-.. automodule:: ek.__main__
-   :members:

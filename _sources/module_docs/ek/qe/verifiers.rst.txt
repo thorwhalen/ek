@@ -1,4 +1,0 @@
-ek.qe.verifiers
-===============
-.. automodule:: ek.qe.verifiers
-   :members:

@@ -1,0 +1,36 @@
+ek.metrics
+==========
+
+.. automodule:: ek.metrics
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      StringMetric
+      FieldMetric
+      TypedGraphMetric
+      TypedGraph
+      TypedNode
+      TypedEdge
+      AnlsMetric
+      SpanF1Metric
+      MatchScheme
+      TedsMetric
+      GritsMetric
+      Table
+      Cell
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   anls
+   fields
+   graphs
+   spans
+   strings
+   tables

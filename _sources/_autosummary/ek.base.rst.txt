@@ -1,0 +1,46 @@
+ek.base
+=======
+
+.. automodule:: ek.base
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Normalizer
+      ConfidenceSource
+      CostWeight
+      OcrBackend
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      default_cost_weight
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AnnotatedExtraction
+      Calibrator
+      Decision
+      DecisionPolicy
+      EdgeType
+      FieldEstimate
+      FieldSpec
+      Finding
+      GraphGrammar
+      Metric
+      NodePath
+      NodeType
+      Provenance
+      QualityReport
+      Report
+      Score
+      Severity
+      Signal
+      TypeRef
+      Validator
+   

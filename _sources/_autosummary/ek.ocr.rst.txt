@@ -1,0 +1,30 @@
+ek.ocr
+======
+
+.. automodule:: ek.ocr
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ocracy_backend
+      read_text
+      evaluate_ocr
+      add_gold_item
+      profile
+      table_from_ocr
+      has_table_structure
+      resolve_table_parser
+      engine_yields_tables
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   benchmark
+   bridge
+   profiles
+   tables

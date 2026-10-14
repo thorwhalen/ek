@@ -1,0 +1,87 @@
+ek.agents
+=========
+
+.. automodule:: ek.agents
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      tool_grammar
+      suite_grammar
+      as_call
+      is_episode
+      match_calls
+      output_match
+      final_state_match
+      recorded_success
+      pass_at_k
+      pass_hat_k
+      reliability
+      wilson_interval
+      bootstrap_ci
+      newcombe_difference
+      difference_upper_bound
+      per_million
+      dollars
+      episode_dollars
+      cost_of_pass
+      cost_report
+      load_prices
+      price_of
+      judge_validation
+      pairwise_judge
+      run_suite
+      save_agent_baseline
+      load_agent_baseline
+      agent_regression_gate
+      as_agent
+      trajectory_from_messages
+      episode_from_messages
+      cost_from_usage
+      from_inspect_sample
+      from_deepeval_test_case
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TaskSpec
+      ToolSpec
+      Episode
+      Trajectory
+      Step
+      Cost
+      RunProvenance
+      TaskSuccessMetric
+      CostPerSuccessMetric
+      ToolCallMetric
+      TrajectoryMetric
+      JudgeMetric
+      Checker
+      ReliabilityReport
+      ModelPrice
+      JudgeSignal
+      AgentGateResult
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      UnknownModelPrice
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   bridge
+   cost
+   harness
+   judge
+   metrics
+   toolcalls
+   trajectory

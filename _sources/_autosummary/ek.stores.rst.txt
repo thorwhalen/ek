@@ -1,0 +1,29 @@
+ek.stores
+=========
+
+.. automodule:: ek.stores
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      cache_this
+      KINDS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      app_folder
+      data_dir
+      json_store
+      mall
+      persistent_cache
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Mall
+   

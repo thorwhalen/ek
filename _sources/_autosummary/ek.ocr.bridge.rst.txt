@@ -1,0 +1,13 @@
+ek.ocr.bridge
+=============
+
+.. automodule:: ek.ocr.bridge
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ocracy_backend
+      read_text
+   

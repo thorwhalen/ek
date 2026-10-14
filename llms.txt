@@ -1,0 +1,54 @@
+# ek
+
+> ek (Evaluation Kit) -- a framework for building Knowledge Evaluation systems (evaluating information-extraction outputs; OCR as the noisiest special case)
+
+
+## Pages
+
+- [ek](index.html.md): &#42;&#42;ek (Evaluation Kit) — a framework for building Knowledge Evaluation systems&#42;&#42;,
+- [API reference](api.html.md): | &#96;ek&#96;   | &#96;ek&#96; -- a framework for building Knowledge Evaluation systems.   |
+- [ek](_autosummary/ek.html.md): &#96;ek&#96; – a framework for building Knowledge Evaluation systems.
+- [ek.ocr](_autosummary/ek.ocr.html.md): OCR evaluation – &#96;ek&#96;’s first concrete instance, built on &#96;ocracy&#96;.
+- [ek.ocr.benchmark](_autosummary/ek.ocr.benchmark.html.md): End-to-end OCR offline benchmark: run a fleet over gold, score, persist.
+- [ek.ocr.bridge](_autosummary/ek.ocr.bridge.html.md): The &#96;ocracy&#96; bridge: turn the OCR fleet into an &#96;image -&gt; OcrResult&#96; callable.
+- [ek.ocr.profiles](_autosummary/ek.ocr.profiles.html.md): Per-engine OCR capability profiles (what QE signal each engine actually emits).
+- [ek.ocr.tables](_autosummary/ek.ocr.tables.html.md): Recover a normalized table from an &#96;OcrResult&#96; so ek’s table metrics can score it.
+- [ek.agents](_autosummary/ek.agents.html.md): &#96;ek.agents&#96; – evaluating AI agents and assistants, in cost per successful task.
+- [ek.agents.base](_autosummary/ek.agents.base.html.md): Agent-evaluation data shapes: the episode (Layer B) and the task/tool grammar (Layer A).
+- [ek.agents.bridge](_autosummary/ek.agents.bridge.html.md): One-way adapters: turn whatever your agent already emits into an &#96;ek&#96; &#96;Episode&#96;.
+- [ek.agents.cost](_autosummary/ek.agents.cost.html.md): The cost model and the price SSOT: dollars per successfully completed task.
+- [ek.agents.harness](_autosummary/ek.agents.harness.html.md): The agent task-suite harness: k trials, per-slice cuts, and a gate that survives noise.
+- [ek.agents.judge](_autosummary/ek.agents.judge.html.md): LLM-as-judge: a reference-free &#96;Signal&#96;, a reference-based
+- [ek.agents.metrics](_autosummary/ek.agents.metrics.html.md): Task-success and cost-per-successful-task: the two metrics that drive the whole thing.
+- [ek.agents.toolcalls](_autosummary/ek.agents.toolcalls.html.md): Tool-call correctness: BFCL-style AST matching over a &#42;multiset&#42; of calls.
+- [ek.agents.trajectory](_autosummary/ek.agents.trajectory.html.md): Trajectory (process) evaluation: a cost-weighted &#42;&#42;sequence&#42;&#42; edit distance over steps.
+- [ek.metrics](_autosummary/ek.metrics.html.md): Reference-based (offline) metrics: the &#96;score()&#96; side of &#96;ek&#96;.
+- [ek.metrics.anls](_autosummary/ek.metrics.anls.html.md): ANLS / ANLS&#92;&#42; (nested-JSON) similarity, wrapping &#96;anls_star&#96;.
+- [ek.metrics.fields](_autosummary/ek.metrics.fields.html.md): Field-level metric for record / dict-shaped extractions.
+- [ek.metrics.graphs](_autosummary/ek.metrics.graphs.html.md): The flagship metric: cost-weighted, type-aware distance over a typed graph.
+- [ek.metrics.spans](_autosummary/ek.metrics.spans.html.md): Span / slot precision-recall-F1 over two backends that legitimately disagree.
+- [ek.metrics.strings](_autosummary/ek.metrics.strings.html.md): String metrics: Character/Word Error Rate (CER/WER).
+- [ek.metrics.tables](_autosummary/ek.metrics.tables.html.md): Table-structure metrics: TEDS / TEDS-Struct and GriTS (structure-only toggle).
+- [ek.canonicalize](_autosummary/ek.canonicalize.html.md): Versioned, composable canonicalization applied &#42;before&#42; scoring.
+- [ek.qe](_autosummary/ek.qe.html.md): Reference-free quality estimation: the &#96;estimate_quality()&#96; side of &#96;ek&#96;.
+- [ek.qe.calibrate](_autosummary/ek.qe.calibrate.html.md): Calibration: make a raw score &#42;mean&#42; a probability (the non-optional stage).
+- [ek.qe.decide](_autosummary/ek.qe.decide.html.md): Selective prediction: turn a calibrated probability into accept / flag / block.
+- [ek.qe.signals](_autosummary/ek.qe.signals.html.md): Intrinsic confidence signals: token logprobs and per-unit posteriors (cost tier 2).
+- [ek.qe.verifiers](_autosummary/ek.qe.verifiers.html.md): Deterministic verifier signals – the cheapest, first-to-run QE layer.
+- [ek.base](_autosummary/ek.base.html.md): Foundational data structures and strategy protocols for &#96;ek&#96;.
+- [ek.facade](_autosummary/ek.facade.html.md): The two top-level facades: &#96;score()&#96; (offline) and &#96;estimate_quality()&#96; (online).
+- [ek.harness](_autosummary/ek.harness.html.md): The offline evaluation harness: run a predictor over gold, gate regressions.
+- [ek.registry](_autosummary/ek.registry.html.md): Strategy registry, optional-dependency guarding, and requirement checks.
+- [ek.stores](_autosummary/ek.stores.html.md): Local-file persistence for &#96;ek&#96;, as plain &#96;MutableMapping&#96; stores.
+- [ek.tools](_autosummary/ek.tools.html.md): Small, CLI-friendly functions over the &#96;ek&#96; core (the dispatch surface).
+- [ek.validate](_autosummary/ek.validate.html.md): Reference-free post-extraction validation &amp; correction (issue #7).
+- [For AI agents](ai-agents.html.md): &#96;ek&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-14 03:58 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [ek.md](ek.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

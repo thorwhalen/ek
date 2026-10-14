@@ -1,0 +1,6 @@
+html[data-theme="light"] {
+  --pst-color-primary: #006d6b;
+}
+html[data-theme="dark"] {
+  --pst-color-primary: #1ed1cd;
+}

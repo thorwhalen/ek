@@ -1,0 +1,23 @@
+ek.registry
+===========
+
+.. automodule:: ek.registry
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_requirements
+      get
+      names
+      register
+      requires_extra
+      resolve
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      MissingExtraError
+   

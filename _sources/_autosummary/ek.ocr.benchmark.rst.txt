@@ -1,0 +1,13 @@
+ek.ocr.benchmark
+================
+
+.. automodule:: ek.ocr.benchmark
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_gold_item
+      evaluate_ocr
+   

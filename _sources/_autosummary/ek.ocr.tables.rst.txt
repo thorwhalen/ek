@@ -1,0 +1,21 @@
+ek.ocr.tables
+=============
+
+.. automodule:: ek.ocr.tables
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TABLE_PARSERS_NAMESPACE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      engine_yields_tables
+      has_table_structure
+      resolve_table_parser
+      table_from_ocr
+   

@@ -1,4 +1,0 @@
-ek.canonicalize
-===============
-.. automodule:: ek.canonicalize
-   :members:

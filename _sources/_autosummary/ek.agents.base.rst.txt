@@ -1,0 +1,34 @@
+ek.agents.base
+==============
+
+.. automodule:: ek.agents.base
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_TASK_VALUE
+      DESTRUCTIVE_WEIGHT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      as_call
+      is_episode
+      suite_grammar
+      tool_grammar
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cost
+      Episode
+      RunProvenance
+      Step
+      TaskSpec
+      ToolSpec
+      Trajectory
+   

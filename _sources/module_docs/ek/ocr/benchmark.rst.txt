@@ -1,4 +1,0 @@
-ek.ocr.benchmark
-================
-.. automodule:: ek.ocr.benchmark
-   :members:

@@ -1,0 +1,35 @@
+ek.qe.calibrate
+===============
+
+.. automodule:: ek.qe.calibrate
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_N_BINS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      expected_calibration_error
+      load_calibrator
+      mean_probability
+      min_probability
+      netcal_ece
+      reliability_curve
+      save_calibrator
+      sklearn_calibrator
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GroupCalibrator
+      IsotonicCalibrator
+      PlattCalibrator
+      SignalFamilyCalibrator
+      TemperatureCalibrator
+   

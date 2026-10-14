@@ -1,4 +1,0 @@
-ek.metrics.graphs
-=================
-.. automodule:: ek.metrics.graphs
-   :members:

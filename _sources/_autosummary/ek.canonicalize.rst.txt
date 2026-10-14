@@ -1,0 +1,26 @@
+ek.canonicalize
+===============
+
+.. automodule:: ek.canonicalize
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      collapse_whitespace
+      default_canonicalizer
+      lower
+      mark_class_count
+      nfc
+      nfkc
+      resolve_canonicalizer
+      strip
+      strip_punctuation
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Canonicalizer
+   

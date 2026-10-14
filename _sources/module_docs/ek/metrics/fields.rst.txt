@@ -1,4 +1,0 @@
-ek.metrics.fields
-=================
-.. automodule:: ek.metrics.fields
-   :members:

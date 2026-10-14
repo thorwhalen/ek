@@ -1,4 +1,0 @@
-ek.metrics
-==========
-.. automodule:: ek.metrics
-   :members:

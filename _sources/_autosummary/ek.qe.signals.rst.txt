@@ -1,0 +1,29 @@
+ek.qe.signals
+=============
+
+.. automodule:: ek.qe.signals
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_LENGTH_ALPHA
+      DEFAULT_PROB_FLOOR
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      geo_mean
+      length_normalized
+      mean_prob
+      min_prob
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      IntrinsicConfidenceSignal
+      LogprobSignal
+   

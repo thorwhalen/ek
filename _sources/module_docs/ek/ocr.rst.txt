@@ -1,4 +1,0 @@
-ek.ocr
-======
-.. automodule:: ek.ocr
-   :members:

@@ -1,4 +1,0 @@
-ek.agents.trajectory
-====================
-.. automodule:: ek.agents.trajectory
-   :members:

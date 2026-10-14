@@ -1,4 +1,0 @@
-ek.agents.metrics
-=================
-.. automodule:: ek.agents.metrics
-   :members:

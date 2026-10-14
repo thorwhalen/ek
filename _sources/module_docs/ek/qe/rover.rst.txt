@@ -1,4 +1,0 @@
-ek.qe.rover
-===========
-.. automodule:: ek.qe.rover
-   :members:

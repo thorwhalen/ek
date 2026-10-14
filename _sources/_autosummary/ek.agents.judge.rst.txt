@@ -1,0 +1,27 @@
+ek.agents.judge
+===============
+
+.. automodule:: ek.agents.judge
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      JUDGE_COST_TIER
+      ALPHA_GOOD
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      judge_validation
+      pairwise_judge
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JudgeMetric
+      JudgeSignal
+   

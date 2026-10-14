@@ -1,4 +1,0 @@
-ek.agents.bridge
-================
-.. automodule:: ek.agents.bridge
-   :members:

@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="alternate" type="text/markdown" href="ek.qe.html.md">
+<link rel="describedby" href="../llms.txt" type="text/markdown">
+<link rel="alternate" type="text/markdown" href="ek.qe.html.md">
+<link rel="describedby" href="llms.txt">
+    <title>ek.qe &#8212; ek</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=6dc7e26d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=fd10adb8"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_autosummary/ek.qe';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ek.qe.calibrate" href="ek.qe.calibrate.html" />
+    <link rel="prev" title="ek.canonicalize" href="ek.canonicalize.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.11" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ek</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/ek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/ek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="ek.html">ek</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="ek.ocr.html">ek.ocr</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="ek.ocr.benchmark.html">ek.ocr.benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.ocr.bridge.html">ek.ocr.bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.ocr.profiles.html">ek.ocr.profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.ocr.tables.html">ek.ocr.tables</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ek.agents.html">ek.agents</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.base.html">ek.agents.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.bridge.html">ek.agents.bridge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.cost.html">ek.agents.cost</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.harness.html">ek.agents.harness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.judge.html">ek.agents.judge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.metrics.html">ek.agents.metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.toolcalls.html">ek.agents.toolcalls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.trajectory.html">ek.agents.trajectory</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="ek.metrics.html">ek.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.anls.html">ek.metrics.anls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.fields.html">ek.metrics.fields</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.graphs.html">ek.metrics.graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.spans.html">ek.metrics.spans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.strings.html">ek.metrics.strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.metrics.tables.html">ek.metrics.tables</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.canonicalize.html">ek.canonicalize</a></li>
+<li class="toctree-l2 current active has-children"><a aria-current="page" class="current reference internal" href="#">ek.qe</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="ek.qe.calibrate.html">ek.qe.calibrate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.qe.decide.html">ek.qe.decide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.qe.signals.html">ek.qe.signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.qe.verifiers.html">ek.qe.verifiers</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.base.html">ek.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.facade.html">ek.facade</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.harness.html">ek.harness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.registry.html">ek.registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.stores.html">ek.stores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.tools.html">ek.tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ek.validate.html">ek.validate</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="ek.html" class="nav-link">ek</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ek.qe</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-ek.qe">
+<span id="ek-qe"></span><h1>ek.qe<a class="headerlink" href="#module-ek.qe" title="Link to this heading">#</a></h1>
+<p>Reference-free quality estimation: the <code class="docutils literal notranslate"><span class="pre">estimate_quality()</span></code> side of <code class="docutils literal notranslate"><span class="pre">ek</span></code>.</p>
+<p>This package implements the online (no-gold) half of evaluation as the strict
+pipeline <code class="docutils literal notranslate"><span class="pre">signal</span> <span class="pre">-&gt;</span> <span class="pre">calibrate</span> <span class="pre">-&gt;</span> <span class="pre">validate</span> <span class="pre">-&gt;</span> <span class="pre">decide</span></code> (<code class="docutils literal notranslate"><span class="pre">misc/docs/ek_03</span></code>):</p>
+<ul>
+<li><p><strong>signals</strong> (cheapest first): the deterministic <a class="reference internal" href="ek.qe.verifiers.html#ek.qe.verifiers.VerifierSignal" title="ek.qe.verifiers.VerifierSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">VerifierSignal</span></code></a>
+(schema/checksum/cross-field, cost tier 1, runs always), free intrinsic
+<a class="reference internal" href="ek.qe.signals.html#ek.qe.signals.IntrinsicConfidenceSignal" title="ek.qe.signals.IntrinsicConfidenceSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntrinsicConfidenceSignal</span></code></a> / <a class="reference internal" href="ek.qe.signals.html#ek.qe.signals.LogprobSignal" title="ek.qe.signals.LogprobSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a></p>
+<blockquote>
+<div><p>(tier 2), and the flagship ROVER <a class="reference internal" href="#ek.qe.AgreementSignal" title="ek.qe.rover.AgreementSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a> multi-engine
+vote (tier 3);</p>
+</div></blockquote>
+</li>
+<li><p><strong>calibrate</strong> – <a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a> (default) / isotonic /
+temperature, with Mondrian grouping and ECE diagnostics: *non-optional before any
+gate*;</p></li>
+<li><p><strong>decide</strong> – <a class="reference internal" href="ek.qe.decide.html#ek.qe.decide.CostSensitiveGate" title="ek.qe.decide.CostSensitiveGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">CostSensitiveGate</span></code></a> (default),
+<a class="reference internal" href="ek.qe.decide.html#ek.qe.decide.ConformalGate" title="ek.qe.decide.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a>, and <a class="reference internal" href="ek.qe.decide.html#ek.qe.decide.RiskControlGate" title="ek.qe.decide.RiskControlGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a>,</p>
+<blockquote>
+<div><p>reading only calibrated probabilities.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>Everything is pure-Python and dependency-free by default; the <code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code>
+(netcal/sklearn/MAPIE/crepes) and <code class="docutils literal notranslate"><span class="pre">ek[agreement]</span></code> (uqlm) extras supply
+library-backed equivalents, imported lazily so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ek</span></code> stays light.</p>
+<p>Importing this package registers the built-in strategies (signals, aggregators,
+checks, calibrators, policies) by name in <a class="reference internal" href="ek.registry.html#module-ek.registry" title="ek.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ek.registry</span></code></a>.</p>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.rover" title="ek.qe.rover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rover</span></code></a>(hypotheses, *[, use_confidence, ...])</p></td>
+<td><p>Align N hypotheses, vote per slot, and emit consensus + per-position agreement.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.geo_mean" title="ek.qe.geo_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geo_mean</span></code></a>(logps)</p></td>
+<td><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.length_normalized" title="ek.qe.length_normalized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">length_normalized</span></code></a>(logps, *[, alpha])</p></td>
+<td><p>Length-normalised score <code class="docutils literal notranslate"><span class="pre">exp(Σ</span> <span class="pre">log</span> <span class="pre">p</span> <span class="pre">/</span> <span class="pre">T**alpha)</span></code> (tunable length penalty).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.min_prob" title="ek.qe.min_prob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_prob</span></code></a>(logps)</p></td>
+<td><p>Weakest-token probability <code class="docutils literal notranslate"><span class="pre">exp(min</span> <span class="pre">log</span> <span class="pre">p)</span></code> -- catches one bad character.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.mean_prob" title="ek.qe.mean_prob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_prob</span></code></a>(logps)</p></td>
+<td><p>Arithmetic mean of token probabilities <code class="docutils literal notranslate"><span class="pre">mean(exp(log</span> <span class="pre">p))</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.mean_probability" title="ek.qe.mean_probability"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_probability</span></code></a>(probs)</p></td>
+<td><p>Fuse calibrated per-family probabilities by their mean (the default combiner).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.min_probability" title="ek.qe.min_probability"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_probability</span></code></a>(probs)</p></td>
+<td><p>Fuse calibrated per-family probabilities by their minimum (conservative).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.expected_calibration_error" title="ek.qe.expected_calibration_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expected_calibration_error</span></code></a>(probs, correct, *)</p></td>
+<td><p>Expected Calibration Error: weighted mean gap between confidence and accuracy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.reliability_curve" title="ek.qe.reliability_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reliability_curve</span></code></a>(probs, correct, *[, n_bins])</p></td>
+<td><p>Per-bin <code class="docutils literal notranslate"><span class="pre">{confidence,</span> <span class="pre">accuracy,</span> <span class="pre">count}</span></code> for a reliability diagram.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.save_calibrator" title="ek.qe.save_calibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_calibrator</span></code></a>(calibrator, name, *[, rootdir])</p></td>
+<td><p>Persist a fitted calibrator's parameters to the <code class="docutils literal notranslate"><span class="pre">calibrators</span></code> store.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.load_calibrator" title="ek.qe.load_calibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_calibrator</span></code></a>(name, *[, rootdir])</p></td>
+<td><p>Reconstruct a persisted calibrator by name (dispatched on its <code class="docutils literal notranslate"><span class="pre">kind</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.sklearn_calibrator" title="ek.qe.sklearn_calibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn_calibrator</span></code></a>([method])</p></td>
+<td><p>A calibrator backed by scikit-learn (<code class="docutils literal notranslate"><span class="pre">method='sigmoid'</span></code> Platt or <code class="docutils literal notranslate"><span class="pre">'isotonic'</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.risk_coverage_curve" title="ek.qe.risk_coverage_curve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">risk_coverage_curve</span></code></a>(probs, correct, *[, ...])</p></td>
+<td><p>The risk-coverage trade-off: <code class="docutils literal notranslate"><span class="pre">{threshold,</span> <span class="pre">coverage,</span> <span class="pre">selective_risk}</span></code> per point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.split_conformal_quantile" title="ek.qe.split_conformal_quantile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">split_conformal_quantile</span></code></a>(scores, alpha)</p></td>
+<td><p>The split-conformal threshold: the <code class="docutils literal notranslate"><span class="pre">ceil((n+1)(1-alpha))</span> <span class="pre">/</span> <span class="pre">n</span></code> empirical quantile.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.checksum_validator" title="ek.qe.checksum_validator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checksum_validator</span></code></a>([kind, field_name, layer])</p></td>
+<td><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value failing a named checksum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.regex_validator" title="ek.qe.regex_validator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regex_validator</span></code></a>(pattern, *[, field_name, layer])</p></td>
+<td><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value not fully matching <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.range_validator" title="ek.qe.range_validator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range_validator</span></code></a>(lo, hi, *[, field_name, layer])</p></td>
+<td><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a number outside <code class="docutils literal notranslate"><span class="pre">[lo,</span> <span class="pre">hi]</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.enum_validator" title="ek.qe.enum_validator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum_validator</span></code></a>(members, *[, field_name, layer])</p></td>
+<td><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value not in an allowed set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.schema_validator" title="ek.qe.schema_validator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">schema_validator</span></code></a>(value, *[, spec])</p></td>
+<td><p>A spec-driven <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a>: type and <code class="docutils literal notranslate"><span class="pre">domain</span></code> checks from a FieldSpec.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.totals_consistent" title="ek.qe.totals_consistent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">totals_consistent</span></code></a>(record, *, total_key, ...)</p></td>
+<td><p>Flag when <code class="docutils literal notranslate"><span class="pre">record[total_key]</span></code> does not equal the sum of <code class="docutils literal notranslate"><span class="pre">item_keys</span></code> (±tol).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.luhn_check" title="ek.qe.luhn_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">luhn_check</span></code></a>(number)</p></td>
+<td><p>Luhn (mod-10) checksum: credit cards, IMEIs, some national IDs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.iban_check" title="ek.qe.iban_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iban_check</span></code></a>(iban)</p></td>
+<td><p>IBAN validity via the ISO 13616 / ISO 7064 mod-97 rule (must equal 1).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.isbn_check" title="ek.qe.isbn_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isbn_check</span></code></a>(value)</p></td>
+<td><p>Validate an ISBN-10 or ISBN-13 by length (digits/hyphens/spaces ignored).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.RoverConsensus" title="ek.qe.RoverConsensus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a>([tokens, slots, agreement, ...])</p></td>
+<td><p>The result of a ROVER pass over N hypotheses.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.RoverSlot" title="ek.qe.RoverSlot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RoverSlot</span></code></a>([entries, winner, score, vote_share])</p></td>
+<td><p>One branch point of the transition network: each engine's token (or NULL).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.AgreementSignal" title="ek.qe.AgreementSignal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a>([cost_tier, use_confidence, ...])</p></td>
+<td><p>ROVER multi-engine agreement as a reference-free <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.VerifierSignal" title="ek.qe.VerifierSignal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VerifierSignal</span></code></a>([validators, cost_tier])</p></td>
+<td><p>Deterministic verifier evidence as a reference-free <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.LogprobSignal" title="ek.qe.LogprobSignal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a>([aggregator, alpha, cost_tier])</p></td>
+<td><p>Aggregate token log-probabilities into one field score (a <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.IntrinsicConfidenceSignal" title="ek.qe.IntrinsicConfidenceSignal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntrinsicConfidenceSignal</span></code></a>([pool, cost_tier])</p></td>
+<td><p>Aggregate an extractor's per-unit confidences into a field score.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.PlattCalibrator" title="ek.qe.PlattCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a>([a, b, max_iter, kind])</p></td>
+<td><p>Platt scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(a</span> <span class="pre">*</span> <span class="pre">score</span> <span class="pre">+</span> <span class="pre">b)</span></code>, fit by Newton/IRLS on labels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.IsotonicCalibrator" title="ek.qe.IsotonicCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a>([x, y, kind])</p></td>
+<td><p>Isotonic (monotonic non-decreasing) calibration via pool-adjacent-violators.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.TemperatureCalibrator" title="ek.qe.TemperatureCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a>([T, kind, t_min, ...])</p></td>
+<td><p>Temperature scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(logit</span> <span class="pre">/</span> <span class="pre">T)</span></code> with one <code class="docutils literal notranslate"><span class="pre">T</span></code> fit on a holdout.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.GroupCalibrator" title="ek.qe.GroupCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a>([factory, by_group, pooled, ...])</p></td>
+<td><p>Per-group (Mondrian) calibration: one calibrator per <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.SignalFamilyCalibrator" title="ek.qe.SignalFamilyCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignalFamilyCalibrator</span></code></a>([calibrators, ...])</p></td>
+<td><p>One calibrator per signal family, fused by a documented combination rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.CostSensitiveGate" title="ek.qe.CostSensitiveGate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CostSensitiveGate</span></code></a>([rho, block_threshold, ...])</p></td>
+<td><p>Accept/flag/block from the cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on calibrated <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.ConformalGate" title="ek.qe.ConformalGate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConformalGate</span></code></a>([alpha, nonconformity, q, _cal])</p></td>
+<td><p>Split-conformal accept/flag with a finite-sample <strong>marginal</strong> guarantee.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.qe.GroupConformalGate" title="ek.qe.GroupConformalGate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a>([alpha, nonconformity, ...])</p></td>
+<td><p>Mondrian (class-conditional) conformal: one <a class="reference internal" href="#ek.qe.ConformalGate" title="ek.qe.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a> per group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.qe.RiskControlGate" title="ek.qe.RiskControlGate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a>([target, loss, loss_bound, lam])</p></td>
+<td><p>Conformal Risk Control: accept <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">lambda</span></code> bounding the accepted-error rate.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.AgreementSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">AgreementSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_conf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/rover.html#AgreementSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.AgreementSignal" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>ROVER multi-engine agreement as a reference-free <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p>
+<p>Cost tier 3 (<code class="docutils literal notranslate"><span class="pre">N</span></code> engine runs): try the deterministic verifier layer and any
+free intrinsic confidence first. Called on a collection of hypotheses, it runs
+<a class="reference internal" href="#ek.qe.rover" title="ek.qe.rover"><code class="xref py py-func docutils literal notranslate"><span class="pre">rover()</span></code></a> and returns the mean per-position agreement as the raw signal –
+<em>uncalibrated</em>, like every signal, so it must pass through a
+<a class="reference internal" href="ek.base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> before any gate reads it.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">AgreementSignal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">sig</span><span class="p">([</span><span class="s2">"the cat sat"</span><span class="p">,</span> <span class="s2">"the cat sit"</span><span class="p">,</span> <span class="s2">"the bat sat"</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">0.778</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.ConformalGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">ConformalGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonconformity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">ConformalGate.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#ConformalGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.ConformalGate" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Split-conformal accept/flag with a finite-sample <strong>marginal</strong> guarantee.</p>
+<p>Fit on <code class="docutils literal notranslate"><span class="pre">(calibrated_prob,</span> <span class="pre">correct)</span></code>: the nonconformity scores of the <em>correct</em>
+calibration items set a threshold <code class="docutils literal notranslate"><span class="pre">q</span></code> such that, among truly-correct test items
+exchangeable with them, at most <code class="docutils literal notranslate"><span class="pre">alpha</span></code> are flagged. The guarantee is
+<em>marginal</em>, not per-field-type – use <a class="reference internal" href="#ek.qe.GroupConformalGate" title="ek.qe.GroupConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a> for that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Target false-flag rate on correct items (e.g. <code class="docutils literal notranslate"><span class="pre">0.1</span></code>).</p></li>
+<li><p><strong>nonconformity</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Maps calibrated confidence -&gt; nonconformity (default
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">confidence</span></code>: low confidence is nonconforming).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.ConformalGate.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#ConformalGate.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.ConformalGate.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">q</span></code> from the nonconformity scores of the <em>correct</em> calibration items.</p>
+<p>Non-finite confidences are dropped (a single <code class="docutils literal notranslate"><span class="pre">NaN</span></code> would otherwise sort to
+the end and corrupt the quantile, silently breaking the coverage guarantee).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.decide.html#ek.qe.decide.ConformalGate" title="ek.qe.decide.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.ConformalGate.p_value">
+<span class="sig-name descname"><span class="pre">p_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">confidence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#ConformalGate.p_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.ConformalGate.p_value" title="Link to this definition">#</a></dt>
+<dd><p>Per-instance conformal p-value (small = atypical of correct items).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.CostSensitiveGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">CostSensitiveGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accept_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#CostSensitiveGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.CostSensitiveGate" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Accept/flag/block from the cost ratio <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> on calibrated <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p>Accept when the expected cost of accepting is below that of routing to a human.
+Accepting risks an undetected error: cost <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span></code>. Flagging a value
+that was actually <em>correct</em> wastes a review: cost <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code> (the false-positive
+cost is incurred only with probability <code class="docutils literal notranslate"><span class="pre">p</span></code>, not unconditionally). So accept iff
+<code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">p)</span> <span class="pre">*</span> <span class="pre">c_FN</span> <span class="pre">&lt;=</span> <span class="pre">p</span> <span class="pre">*</span> <span class="pre">c_FP</span></code>, i.e. the Bayes-optimal threshold
+<code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">(c_FN</span> <span class="pre">+</span> <span class="pre">c_FP)</span> <span class="pre">=</span> <span class="pre">rho</span> <span class="pre">/</span> <span class="pre">(1</span> <span class="pre">+</span> <span class="pre">rho)</span></code>. A larger <code class="docutils literal notranslate"><span class="pre">rho</span></code> (misses much
+costlier than reviews) raises the bar to auto-accept (<code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">-&gt;</span> <span class="pre">1</span></code> as
+<code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">-&gt;</span> <span class="pre">inf</span></code>); <code class="docutils literal notranslate"><span class="pre">rho</span> <span class="pre">=</span> <span class="pre">1</span></code> gives the symmetric <code class="docutils literal notranslate"><span class="pre">tau</span> <span class="pre">=</span> <span class="pre">0.5</span></code>.
+<code class="docutils literal notranslate"><span class="pre">block_threshold</span></code> adds an optional hard-fail band at the bottom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Cost ratio <code class="docutils literal notranslate"><span class="pre">c_FN</span> <span class="pre">/</span> <span class="pre">c_FP</span></code> (&gt;= 0). The single lever; no magic numbers.</p></li>
+<li><p><strong>block_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Calibrated probability at or below which to <code class="docutils literal notranslate"><span class="pre">block</span></code> rather
+than <code class="docutils literal notranslate"><span class="pre">flag</span></code> (default <code class="docutils literal notranslate"><span class="pre">0</span></code> -&gt; never block on probability alone; a
+failed verifier is what forces a block, upstream).</p></li>
+<li><p><strong>accept_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – Override the derived accept threshold explicitly.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.CostSensitiveGate.tau">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">tau</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#ek.qe.CostSensitiveGate.tau" title="Link to this definition">#</a></dt>
+<dd><p>The accept threshold on calibrated probability (derived from <code class="docutils literal notranslate"><span class="pre">rho</span></code>).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.GroupCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">GroupCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'group'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Per-group (Mondrian) calibration: one calibrator per <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>.</p>
+<p>Distribution-free <em>conditional</em> (per-field-type) coverage is impossible
+in general (Barber et al. 2019); calibrating separately per group restores it
+approximately. <code class="docutils literal notranslate"><span class="pre">fit</span></code> takes a parallel <code class="docutils literal notranslate"><span class="pre">groups</span></code> sequence; <code class="docutils literal notranslate"><span class="pre">__call__</span></code> routes
+by group key, falling back to a pooled calibrator for unseen groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>factory</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Zero-arg callable producing a fresh per-group calibrator (default
+<a class="reference internal" href="#ek.qe.PlattCalibrator" title="ek.qe.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a>).</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.GroupCalibrator.factory">
+<span class="sig-name descname"><span class="pre">factory</span></span><a class="headerlink" href="#ek.qe.GroupCalibrator.factory" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.GroupCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit one calibrator per distinct group key, plus a pooled fallback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.GroupCalibrator" title="ek.qe.calibrate.GroupCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.GroupCalibrator.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupCalibrator.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Serialize each per-group calibrator (keyed by stringified group) plus the
+pooled fallback, so a fitted Mondrian calibrator round-trips like the others.
+Group keys are stringified (they are <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code> names).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.GroupConformalGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">GroupConformalGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonconformity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">GroupConformalGate.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#GroupConformalGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.GroupConformalGate" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Mondrian (class-conditional) conformal: one <a class="reference internal" href="#ek.qe.ConformalGate" title="ek.qe.ConformalGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConformalGate</span></code></a> per group.</p>
+<p>Restores approximate per-field-type validity by calibrating separately per group
+key (e.g. <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>), with a pooled fallback for unseen groups.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.IntrinsicConfidenceSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">IntrinsicConfidenceSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#IntrinsicConfidenceSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.IntrinsicConfidenceSignal" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Aggregate an extractor’s per-unit confidences into a field score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pool</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code> (weakest unit), <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;geo_mean&quot;</span></code> over the
+per-unit confidences (already probabilities in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>).</p></li>
+<li><p><strong>cost_tier</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">2</span></code> – free (the posteriors are emitted at inference).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IntrinsicConfidenceSignal</span><span class="p">(</span><span class="n">pool</span><span class="o">=</span><span class="s2">"min"</span><span class="p">)([</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span>
+<span class="go">0.4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.IsotonicCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">IsotonicCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'isotonic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#IsotonicCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.IsotonicCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Isotonic (monotonic non-decreasing) calibration via pool-adjacent-violators.</p>
+<p>More flexible than Platt; needs more calibration data and can overfit small
+sets. Predicts by linear interpolation between fitted points, clipped at the
+ends.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.IsotonicCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#IsotonicCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.IsotonicCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the monotonic step function to <code class="docutils literal notranslate"><span class="pre">(score,</span> <span class="pre">correct)</span></code> pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.IsotonicCalibrator" title="ek.qe.calibrate.IsotonicCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.LogprobSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">LogprobSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">geo_mean&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#LogprobSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.LogprobSignal" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Aggregate token log-probabilities into one field score (a <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aggregator</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A logprob aggregator (name registered under <code class="docutils literal notranslate"><span class="pre">aggregators</span></code> or a
+callable). Defaults to <a class="reference internal" href="#ek.qe.geo_mean" title="ek.qe.geo_mean"><code class="xref py py-func docutils literal notranslate"><span class="pre">geo_mean()</span></code></a>.</p></li>
+<li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Length penalty passed to <a class="reference internal" href="#ek.qe.length_normalized" title="ek.qe.length_normalized"><code class="xref py py-func docutils literal notranslate"><span class="pre">length_normalized()</span></code></a> only.</p></li>
+<li><p><strong>cost_tier</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">2</span></code> – free intrinsic signal (already computed at inference).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.LogprobSignal.aggregator">
+<span class="sig-name descname"><span class="pre">aggregator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ek.qe.LogprobSignal.aggregator" title="Link to this definition">#</a></dt>
+<dd><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.PlattCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">PlattCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'platt'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#PlattCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.PlattCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Platt scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(a</span> <span class="pre">*</span> <span class="pre">score</span> <span class="pre">+</span> <span class="pre">b)</span></code>, fit by Newton/IRLS on labels.</p>
+<p>The default calibrator: works on any scalar (aggregated confidence/logprob), no
+logits required. Uses Platt’s target smoothing so it does not overfit small
+calibration sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_iter</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Newton iterations (converges in a handful for a 2-parameter model).</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.PlattCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#PlattCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.PlattCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span></code> to maximise the likelihood of <code class="docutils literal notranslate"><span class="pre">correct</span></code> given <code class="docutils literal notranslate"><span class="pre">scores</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.RiskControlGate">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">RiskControlGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">RiskControlGate.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#RiskControlGate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.RiskControlGate" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Conformal Risk Control: accept <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">&gt;=</span> <span class="pre">lambda</span></code> bounding the accepted-error rate.</p>
+<p>Picks the <em>smallest</em> threshold <code class="docutils literal notranslate"><span class="pre">lambda</span></code> (the most coverage) whose finite-sample
+risk bound is at or below <code class="docutils literal notranslate"><span class="pre">target</span></code>. The controlled quantity is
+<code class="docutils literal notranslate"><span class="pre">E[</span> <span class="pre">loss(item)</span> <span class="pre">*</span> <span class="pre">1(accepted)</span> <span class="pre">]</span></code> – with the default 0/1 loss, the population
+rate of accepted-yet-wrong items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Upper bound on the accepted-error rate (e.g. <code class="docutils literal notranslate"><span class="pre">0.05</span></code>).</p></li>
+<li><p><strong>loss</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – <code class="docutils literal notranslate"><span class="pre">correct</span> <span class="pre">-&gt;</span> <span class="pre">loss</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">loss_bound]</span></code>; default <code class="docutils literal notranslate"><span class="pre">0</span></code> if correct
+else <code class="docutils literal notranslate"><span class="pre">1</span></code>. Any monotone loss bounded by <code class="docutils literal notranslate"><span class="pre">loss_bound</span></code> works.</p></li>
+<li><p><strong>loss_bound</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – The loss’s upper bound <code class="docutils literal notranslate"><span class="pre">B</span></code> – the CRC finite-sample slack is
+<code class="docutils literal notranslate"><span class="pre">+B/(n+1)</span></code>. Must match <code class="docutils literal notranslate"><span class="pre">loss</span></code>’s range or the guarantee is invalid;
+keep the default <code class="docutils literal notranslate"><span class="pre">1.0</span></code> for the 0/1 loss.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.RiskControlGate.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#RiskControlGate.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.RiskControlGate.fit" title="Link to this definition">#</a></dt>
+<dd><p>Find the smallest accept threshold whose risk bound is &lt;= <code class="docutils literal notranslate"><span class="pre">target</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.decide.html#ek.qe.decide.RiskControlGate" title="ek.qe.decide.RiskControlGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.RoverConsensus">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">RoverConsensus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agreement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_engines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/rover.html#RoverConsensus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.RoverConsensus" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The result of a ROVER pass over N hypotheses.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.RoverConsensus.mean_agreement">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">mean_agreement</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><a class="headerlink" href="#ek.qe.RoverConsensus.mean_agreement" title="Link to this definition">#</a></dt>
+<dd><p>Mean per-position agreement over consensus tokens, a reference-free
+confidence in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>: <code class="docutils literal notranslate"><span class="pre">1.0</span></code> means every engine agreed at every emitted
+position; lower means at least one engine dissented.</p>
+<p>An <strong>empty</strong> consensus (no token survived voting – NULL won every slot) means
+the engines agreed on <em>nothing</em>, so this returns <code class="docutils literal notranslate"><span class="pre">0.0</span></code> when 2+ engines were
+fused, NOT a misleading <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (which would feed a maximal raw confidence to
+the calibrator/gate). A single engine – or none – is vacuously <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ek.qe.RoverConsensus.text">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">text</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></span><a class="headerlink" href="#ek.qe.RoverConsensus.text" title="Link to this definition">#</a></dt>
+<dd><p>The consensus transcription (space-joined winning tokens).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.RoverSlot">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">RoverSlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winner</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vote_share</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/rover.html#RoverSlot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.RoverSlot" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One branch point of the transition network: each engine’s token (or NULL).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">SignalFamilyCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">mean_probability&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'signal_family'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One calibrator per signal family, fused by a documented combination rule.</p>
+<p>Averaging heterogeneous raw signals (an LLM-judge score, a token logprob, a ROVER
+agreement) and calibrating the mean discards exactly what a calibrator needs:
+each family has its own scale, reliability and direction of miscalibration. This
+calibrates every signal <em>by name</em> with its own calibrator, then fuses the
+calibrated probabilities with <code class="docutils literal notranslate"><span class="pre">combine</span></code>.</p>
+<p>Pass it (or simply a <code class="docutils literal notranslate"><span class="pre">Mapping[str,</span> <span class="pre">Calibrator]</span></code>) as
+<code class="docutils literal notranslate"><span class="pre">estimate_quality(...,</span> <span class="pre">calibrator=...)</span></code>.</p>
+<p><strong>The fused value must itself be calibrated before it is gated.</strong> Fusing
+calibrated probabilities (by mean, min, …) does not yield a calibrated
+probability: agreeing families make the mean under-confident, a weak family
+drags it toward the base rate. So <a class="reference internal" href="#ek.qe.SignalFamilyCalibrator.fit" title="ek.qe.SignalFamilyCalibrator.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> also learns a second-stage
+<code class="docutils literal notranslate"><span class="pre">fusion</span></code> calibrator on <code class="docutils literal notranslate"><span class="pre">combine</span></code>’s output, and <code class="docutils literal notranslate"><span class="pre">__call__</span></code> applies it.
+Without a <code class="docutils literal notranslate"><span class="pre">fusion</span></code> calibrator (e.g. a hand-built mapping),
+<a class="reference internal" href="ek.html#ek.estimate_quality" title="ek.estimate_quality"><code class="xref py py-func docutils literal notranslate"><span class="pre">ek.estimate_quality()</span></code></a> refuses to gate a value fused from two or more
+families unless told <code class="docutils literal notranslate"><span class="pre">assume_calibrated=True</span></code> (Hard Rule 1). A value from a
+single family is that family’s calibrated probability and gates as is.</p>
+<p>A field’s own upstream <code class="docutils literal notranslate"><span class="pre">confidence</span></code> is just one more family here, named
+<code class="docutils literal notranslate"><span class="pre">&quot;confidence&quot;</span></code>: include it in the training rows under that name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calibrators</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">signal</span> <span class="pre">name</span> <span class="pre">-&gt;</span> <span class="pre">Calibrator</span></code>. A <code class="docutils literal notranslate"><span class="pre">&quot;*&quot;</span></code> entry is the fallback
+for any signal without its own entry. A signal with neither is refused
+(<code class="docutils literal notranslate"><span class="pre">ValueError</span></code>) rather than silently dropped or passed through raw
+(Hard Rule 1).</p></li>
+<li><p><strong>combine</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]], <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span>) – <code class="docutils literal notranslate"><span class="pre">Mapping[str,</span> <span class="pre">float]</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> fusing the calibrated values;
+<a class="reference internal" href="#ek.qe.mean_probability" title="ek.qe.mean_probability"><code class="xref py py-func docutils literal notranslate"><span class="pre">mean_probability()</span></code></a> (default) or <a class="reference internal" href="#ek.qe.min_probability" title="ek.qe.min_probability"><code class="xref py py-func docutils literal notranslate"><span class="pre">min_probability()</span></code></a>, or any
+callable of that shape (e.g. a learned stacker).</p></li>
+<li><p><strong>factory</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Zero-arg callable producing a fresh calibrator, used by <a class="reference internal" href="#ek.qe.SignalFamilyCalibrator.fit" title="ek.qe.SignalFamilyCalibrator.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p></li>
+<li><p><strong>fusion</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Second-stage calibrator applied to <code class="docutils literal notranslate"><span class="pre">combine</span></code>’s output (learned by
+<a class="reference internal" href="#ek.qe.SignalFamilyCalibrator.fit" title="ek.qe.SignalFamilyCalibrator.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>); <code class="docutils literal notranslate"><span class="pre">None</span></code> leaves the fused value uncalibrated.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"judge"</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="n">l</span><span class="p">}</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span>
+<span class="gp">... </span>        <span class="p">[(</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">correct</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cal</span> <span class="o">=</span> <span class="n">SignalFamilyCalibrator</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">correct</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">cal</span><span class="o">.</span><span class="n">calibrators</span><span class="p">)</span>
+<span class="go">['judge', 'logprob']</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">cal</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">})</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.calibrate_signals">
+<span class="sig-name descname"><span class="pre">calibrate_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_signals</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator.calibrate_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.calibrate_signals" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">calibrated</span> <span class="pre">probability}</span></code> for each raw signal (before fusion).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.combine">
+<span class="sig-name descname"><span class="pre">combine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.combine" title="Link to this definition">#</a></dt>
+<dd><p>Fuse calibrated per-family probabilities by their mean (the default combiner).</p>
+<p>Each family’s calibrated value estimates the <em>same</em> event (“this field is
+correct”), so the mean is a defensible, assumption-light pooling rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.factory">
+<span class="sig-name descname"><span class="pre">factory</span></span><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.factory" title="Link to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.PlattCalibrator" title="ek.qe.calibrate.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit one calibrator per signal name, then the <code class="docutils literal notranslate"><span class="pre">fusion</span></code> calibrator.</p>
+<p>Each family is fit over the rows where it appears with a finite value. A
+family with fewer than two such rows, or only one label class, cannot be
+calibrated and is refused (<code class="docutils literal notranslate"><span class="pre">ValueError</span></code>) rather than turned into a
+constant that would then dilute the fusion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.SignalFamilyCalibrator" title="ek.qe.calibrate.SignalFamilyCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignalFamilyCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.fuse">
+<span class="sig-name descname"><span class="pre">fuse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrated</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator.fuse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.fuse" title="Link to this definition">#</a></dt>
+<dd><p>Fuse per-family calibrated probabilities: <code class="docutils literal notranslate"><span class="pre">combine</span></code>, then <code class="docutils literal notranslate"><span class="pre">fusion</span></code>.</p>
+<p>A single family’s value is returned as is: it is already calibrated, and
+<code class="docutils literal notranslate"><span class="pre">fusion</span></code> was learned on fused values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.SignalFamilyCalibrator.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.SignalFamilyCalibrator.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Serialize every family’s calibrator and the (registered) combiner’s name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">TemperatureCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'temperature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#TemperatureCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.TemperatureCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Temperature scaling: <code class="docutils literal notranslate"><span class="pre">sigmoid(logit</span> <span class="pre">/</span> <span class="pre">T)</span></code> with one <code class="docutils literal notranslate"><span class="pre">T</span></code> fit on a holdout.</p>
+<p>Use <strong>only when you have logits</strong>: <code class="docutils literal notranslate"><span class="pre">__call__</span></code> expects a <em>logit</em>, not a
+probability. <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> softens overconfidence; the argmax is unchanged.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#TemperatureCalibrator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.TemperatureCalibrator.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit <code class="docutils literal notranslate"><span class="pre">T</span></code> by minimising NLL with a bounded 1-D search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.qe.calibrate.html#ek.qe.calibrate.TemperatureCalibrator" title="ek.qe.calibrate.TemperatureCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ek.qe.TemperatureCalibrator.t_min">
+<span class="sig-name descname"><span class="pre">t_min</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.05</span></span><a class="headerlink" href="#ek.qe.TemperatureCalibrator.t_min" title="Link to this definition">#</a></dt>
+<dd><p>Golden-section search bounds and iteration count (config, not magic numbers).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ek.qe.VerifierSignal">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">VerifierSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#VerifierSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.VerifierSignal" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Deterministic verifier evidence as a reference-free <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a>.</p>
+<p>Cost tier 1 – the free, first-to-run layer. Runs a list of
+<a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> s on a value and returns the <strong>fraction that passed</strong>
+in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> as the raw signal (<code class="docutils literal notranslate"><span class="pre">1.0</span></code> = every check passed). It also exposes
+the <a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a> s it produced via <a class="reference internal" href="#ek.qe.VerifierSignal.findings" title="ek.qe.VerifierSignal.findings"><code class="xref py py-meth docutils literal notranslate"><span class="pre">findings()</span></code></a>, so the same
+object feeds both the score path (-&gt; calibrate) and the audit path (-&gt; review).
+Like every signal it is uncalibrated: a verifier failing is strong evidence, not
+a probability, so a <a class="reference internal" href="ek.base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> still runs before any gate.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">VerifierSignal</span><span class="p">([</span><span class="n">checksum_validator</span><span class="p">(</span><span class="s2">"luhn"</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398713"</span><span class="p">)</span>          <span class="c1"># valid -&gt; all checks pass</span>
+<span class="go">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">(</span><span class="s2">"79927398710"</span><span class="p">)</span>          <span class="c1"># invalid -&gt; the one check fails</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ek.qe.VerifierSignal.findings">
+<span class="sig-name descname"><span class="pre">findings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#VerifierSignal.findings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.VerifierSignal.findings" title="Link to this definition">#</a></dt>
+<dd><p>All findings the validators produce for <code class="docutils literal notranslate"><span class="pre">value</span></code> (empty == all clear).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.checksum_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">checksum_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'luhn'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'checksum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#checksum_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.checksum_validator" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value failing a named checksum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.enum_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">enum_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">members</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'enum'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#enum_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.enum_validator" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value not in an allowed set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.expected_calibration_error">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">expected_calibration_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#expected_calibration_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.expected_calibration_error" title="Link to this definition">#</a></dt>
+<dd><p>Expected Calibration Error: weighted mean gap between confidence and accuracy.</p>
+<p>Bins predictions by confidence into <code class="docutils literal notranslate"><span class="pre">n_bins</span></code> equal-width bins and averages
+<code class="docutils literal notranslate"><span class="pre">|mean_confidence</span> <span class="pre">-</span> <span class="pre">accuracy|</span></code> weighted by bin population. <code class="docutils literal notranslate"><span class="pre">0</span></code> is perfect.
+Non-finite probs are skipped; out-of-range probs are clamped into <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.geo_mean">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">geo_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#geo_mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.geo_mean" title="Link to this definition">#</a></dt>
+<dd><p>Geometric mean of token probabilities, <code class="docutils literal notranslate"><span class="pre">exp(mean</span> <span class="pre">log</span> <span class="pre">p)</span></code> (perplexity-inverse).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.iban_check">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">iban_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iban</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#iban_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.iban_check" title="Link to this definition">#</a></dt>
+<dd><p>IBAN validity via the ISO 13616 / ISO 7064 mod-97 rule (must equal 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.isbn_check">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">isbn_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#isbn_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.isbn_check" title="Link to this definition">#</a></dt>
+<dd><p>Validate an ISBN-10 or ISBN-13 by length (digits/hyphens/spaces ignored).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.length_normalized">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">length_normalized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#length_normalized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.length_normalized" title="Link to this definition">#</a></dt>
+<dd><p>Length-normalised score <code class="docutils literal notranslate"><span class="pre">exp(Σ</span> <span class="pre">log</span> <span class="pre">p</span> <span class="pre">/</span> <span class="pre">T**alpha)</span></code> (tunable length penalty).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.load_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">load_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#load_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.load_calibrator" title="Link to this definition">#</a></dt>
+<dd><p>Reconstruct a persisted calibrator by name (dispatched on its <code class="docutils literal notranslate"><span class="pre">kind</span></code>).</p>
+<p>Validates the stored record so a malformed or unknown <code class="docutils literal notranslate"><span class="pre">kind</span></code> fails with an
+actionable error rather than a raw <code class="docutils literal notranslate"><span class="pre">KeyError</span></code> or a load-then-crash-later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.luhn_check">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">luhn_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#luhn_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.luhn_check" title="Link to this definition">#</a></dt>
+<dd><p>Luhn (mod-10) checksum: credit cards, IMEIs, some national IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.mean_prob">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">mean_prob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#mean_prob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.mean_prob" title="Link to this definition">#</a></dt>
+<dd><p>Arithmetic mean of token probabilities <code class="docutils literal notranslate"><span class="pre">mean(exp(log</span> <span class="pre">p))</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.mean_probability">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">mean_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#mean_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.mean_probability" title="Link to this definition">#</a></dt>
+<dd><p>Fuse calibrated per-family probabilities by their mean (the default combiner).</p>
+<p>Each family’s calibrated value estimates the <em>same</em> event (“this field is
+correct”), so the mean is a defensible, assumption-light pooling rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.min_prob">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">min_prob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/signals.html#min_prob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.min_prob" title="Link to this definition">#</a></dt>
+<dd><p>Weakest-token probability <code class="docutils literal notranslate"><span class="pre">exp(min</span> <span class="pre">log</span> <span class="pre">p)</span></code> – catches one bad character.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.min_probability">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">min_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#min_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.min_probability" title="Link to this definition">#</a></dt>
+<dd><p>Fuse calibrated per-family probabilities by their minimum (conservative).</p>
+<p>Use when any one family flagging a problem should be enough to lower the gate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">min_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.7</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.range_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">range_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'range'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#range_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.range_validator" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a number outside <code class="docutils literal notranslate"><span class="pre">[lo,</span> <span class="pre">hi]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.regex_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">regex_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'format'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#regex_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.regex_validator" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a> that flags a value not fully matching <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/constants.html#Ellipsis" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.reliability_curve">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">reliability_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#reliability_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.reliability_curve" title="Link to this definition">#</a></dt>
+<dd><p>Per-bin <code class="docutils literal notranslate"><span class="pre">{confidence,</span> <span class="pre">accuracy,</span> <span class="pre">count}</span></code> for a reliability diagram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.risk_coverage_curve">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">risk_coverage_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#risk_coverage_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.risk_coverage_curve" title="Link to this definition">#</a></dt>
+<dd><p>The risk-coverage trade-off: <code class="docutils literal notranslate"><span class="pre">{threshold,</span> <span class="pre">coverage,</span> <span class="pre">selective_risk}</span></code> per point.</p>
+<p>Coverage is the fraction auto-accepted at each threshold; selective risk is the
+error rate <em>among the accepted</em>. Lower-left is better; pick the operating point
+against a target risk or coverage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.rover">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">rover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypotheses</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conf_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">null_conf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/rover.html#rover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.rover" title="Link to this definition">#</a></dt>
+<dd><p>Align N hypotheses, vote per slot, and emit consensus + per-position agreement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hypotheses</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – The recognizer/extractor outputs to fuse. Each may be a string,
+an <code class="docutils literal notranslate"><span class="pre">OcrResult</span></code>-shaped object (<code class="docutils literal notranslate"><span class="pre">.text</span></code>/<code class="docutils literal notranslate"><span class="pre">.mean_confidence</span></code>), a list of
+token strings, or a list of <code class="docutils literal notranslate"><span class="pre">(token,</span> <span class="pre">confidence)</span></code> pairs.</p></li>
+<li><p><strong>use_confidence</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Blend confidence into the vote (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or vote purely by
+frequency (<code class="docutils literal notranslate"><span class="pre">False</span></code>, which forces <code class="docutils literal notranslate"><span class="pre">conf_weight</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>).</p></li>
+<li><p><strong>conf_weight</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Weight on average confidence vs vote frequency in the slot score
+(Fiscus’s <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code>); <code class="docutils literal notranslate"><span class="pre">0</span></code> is frequency-only, <code class="docutils literal notranslate"><span class="pre">1</span></code> is
+confidence-only. Ignored when <code class="docutils literal notranslate"><span class="pre">use_confidence</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>null_conf</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Confidence credited to a NULL vote (an engine that produced no
+token at a slot) – the lever for how readily a deletion wins.</p></li>
+<li><p><strong>tokenize</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]]]</span>) – Optional <code class="docutils literal notranslate"><span class="pre">hypothesis</span> <span class="pre">-&gt;</span> <span class="pre">[(token,</span> <span class="pre">confidence),</span> <span class="pre">...]</span></code> override; by
+default <code class="xref py py-func docutils literal notranslate"><span class="pre">_as_units()</span></code> handles strings/OcrResults/token lists.</p></li>
+<li><p><strong>max_tokens</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Reject any hypothesis longer than this (the aligner is
+<code class="docutils literal notranslate"><span class="pre">O(N*l*L*L')</span></code>; an unbounded input is a quadratic time/memory DoS).
+<code class="docutils literal notranslate"><span class="pre">None</span></code> disables the guard.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#ek.qe.RoverConsensus" title="ek.qe.rover.RoverConsensus"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="#ek.qe.RoverConsensus" title="ek.qe.RoverConsensus"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a> with the consensus <code class="docutils literal notranslate"><span class="pre">tokens</span></code>/<code class="docutils literal notranslate"><span class="pre">text</span></code>, the per-slot
+breakdown, and the per-consensus-token <code class="docutils literal notranslate"><span class="pre">agreement</span></code> usable as a raw signal.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.save_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">save_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#save_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.save_calibrator" title="Link to this definition">#</a></dt>
+<dd><p>Persist a fitted calibrator’s parameters to the <code class="docutils literal notranslate"><span class="pre">calibrators</span></code> store.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.schema_validator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">schema_validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#schema_validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.schema_validator" title="Link to this definition">#</a></dt>
+<dd><p>A spec-driven <a class="reference internal" href="ek.base.html#ek.base.Validator" title="ek.base.Validator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Validator</span></code></a>: type and <code class="docutils literal notranslate"><span class="pre">domain</span></code> checks from a FieldSpec.</p>
+<p>Reads the <a class="reference internal" href="ek.base.html#ek.base.FieldSpec" title="ek.base.FieldSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">FieldSpec</span></code></a> <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">domain</span></code> – a <code class="docutils literal notranslate"><span class="pre">(lo,</span> <span class="pre">hi)</span></code>
+numeric range, an enum tuple, or a regex string – and applies the matching
+check. With no spec it is a no-op, so it composes safely in any validator list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.sklearn_calibrator">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">sklearn_calibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sigmoid'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#sklearn_calibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.sklearn_calibrator" title="Link to this definition">#</a></dt>
+<dd><p>A calibrator backed by scikit-learn (<code class="docutils literal notranslate"><span class="pre">method='sigmoid'</span></code> Platt or <code class="docutils literal notranslate"><span class="pre">'isotonic'</span></code>).</p>
+<p>Behind <code class="docutils literal notranslate"><span class="pre">ek[calibration]</span></code>. Returns an object satisfying the
+<a class="reference internal" href="ek.base.html#ek.base.Calibrator" title="ek.base.Calibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Calibrator</span></code></a> protocol that wraps sklearn’s calibration. The
+pure-Python <a class="reference internal" href="#ek.qe.PlattCalibrator" title="ek.qe.PlattCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a>/<a class="reference internal" href="#ek.qe.IsotonicCalibrator" title="ek.qe.IsotonicCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a> are the
+dependency-free defaults; use this for parity with an sklearn-centric stack.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.split_conformal_quantile">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">split_conformal_quantile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/decide.html#split_conformal_quantile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.split_conformal_quantile" title="Link to this definition">#</a></dt>
+<dd><p>The split-conformal threshold: the <code class="docutils literal notranslate"><span class="pre">ceil((n+1)(1-alpha))</span> <span class="pre">/</span> <span class="pre">n</span></code> empirical quantile.</p>
+<p><code class="docutils literal notranslate"><span class="pre">scores</span></code> are nonconformity scores on an exchangeable calibration set. Returns
+<code class="docutils literal notranslate"><span class="pre">+inf</span></code> when <code class="docutils literal notranslate"><span class="pre">n</span></code> is too small to guarantee <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">alpha</span></code> (so nothing is
+flagged – the honest behaviour at that sample size), and <code class="docutils literal notranslate"><span class="pre">-inf</span></code> at the
+<code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">-&gt;</span> <span class="pre">1</span></code> limit (flag everything).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.qe.totals_consistent">
+<span class="sig-prename descclassname"><span class="pre">ek.qe.</span></span><span class="sig-name descname"><span class="pre">totals_consistent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cross_field'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/verifiers.html#totals_consistent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.totals_consistent" title="Link to this definition">#</a></dt>
+<dd><p>Flag when <code class="docutils literal notranslate"><span class="pre">record[total_key]</span></code> does not equal the sum of <code class="docutils literal notranslate"><span class="pre">item_keys</span></code> (±tol).</p>
+<p>The canonical cross-field check (invoice total = Σ line items). Skipped (rather
+than raising or flagging) when the total or <em>all</em> item keys are absent or
+non-numeric, so it is safe on partial records.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterable</span></code></a>[<a class="reference internal" href="ek.base.html#ek.base.Finding" title="ek.base.Finding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Finding</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Modules</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="ek.qe.calibrate.html#module-ek.qe.calibrate" title="ek.qe.calibrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrate</span></code></a></p></td>
+<td><p>Calibration: make a raw score <em>mean</em> a probability (the non-optional stage).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ek.qe.decide.html#module-ek.qe.decide" title="ek.qe.decide"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decide</span></code></a></p></td>
+<td><p>Selective prediction: turn a calibrated probability into accept / flag / block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ek.qe.signals.html#module-ek.qe.signals" title="ek.qe.signals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signals</span></code></a></p></td>
+<td><p>Intrinsic confidence signals: token logprobs and per-unit posteriors (cost tier 2).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ek.qe.verifiers.html#module-ek.qe.verifiers" title="ek.qe.verifiers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verifiers</span></code></a></p></td>
+<td><p>Deterministic verifier signals -- the cheapest, first-to-run QE layer.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ek.canonicalize.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ek.canonicalize</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ek.qe.calibrate.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ek.qe.calibrate</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.AgreementSignal"><code class="docutils literal notranslate"><span class="pre">AgreementSignal</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.ConformalGate"><code class="docutils literal notranslate"><span class="pre">ConformalGate</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.ConformalGate.fit"><code class="docutils literal notranslate"><span class="pre">ConformalGate.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.ConformalGate.p_value"><code class="docutils literal notranslate"><span class="pre">ConformalGate.p_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.CostSensitiveGate"><code class="docutils literal notranslate"><span class="pre">CostSensitiveGate</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.CostSensitiveGate.tau"><code class="docutils literal notranslate"><span class="pre">CostSensitiveGate.tau</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.GroupCalibrator"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.GroupCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.factory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.GroupCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.GroupCalibrator.to_dict"><code class="docutils literal notranslate"><span class="pre">GroupCalibrator.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.GroupConformalGate"><code class="docutils literal notranslate"><span class="pre">GroupConformalGate</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.IntrinsicConfidenceSignal"><code class="docutils literal notranslate"><span class="pre">IntrinsicConfidenceSignal</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.IsotonicCalibrator"><code class="docutils literal notranslate"><span class="pre">IsotonicCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.IsotonicCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">IsotonicCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.LogprobSignal"><code class="docutils literal notranslate"><span class="pre">LogprobSignal</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.LogprobSignal.aggregator"><code class="docutils literal notranslate"><span class="pre">LogprobSignal.aggregator()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.PlattCalibrator"><code class="docutils literal notranslate"><span class="pre">PlattCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.PlattCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">PlattCalibrator.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RiskControlGate"><code class="docutils literal notranslate"><span class="pre">RiskControlGate</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RiskControlGate.fit"><code class="docutils literal notranslate"><span class="pre">RiskControlGate.fit()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RoverConsensus"><code class="docutils literal notranslate"><span class="pre">RoverConsensus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RoverConsensus.mean_agreement"><code class="docutils literal notranslate"><span class="pre">RoverConsensus.mean_agreement</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RoverConsensus.text"><code class="docutils literal notranslate"><span class="pre">RoverConsensus.text</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.RoverSlot"><code class="docutils literal notranslate"><span class="pre">RoverSlot</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.calibrate_signals"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.calibrate_signals()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.combine"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.combine()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.factory"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.factory</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.fuse"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.fuse()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.SignalFamilyCalibrator.to_dict"><code class="docutils literal notranslate"><span class="pre">SignalFamilyCalibrator.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.TemperatureCalibrator"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.TemperatureCalibrator.fit"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.fit()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.TemperatureCalibrator.t_min"><code class="docutils literal notranslate"><span class="pre">TemperatureCalibrator.t_min</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.VerifierSignal"><code class="docutils literal notranslate"><span class="pre">VerifierSignal</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.VerifierSignal.findings"><code class="docutils literal notranslate"><span class="pre">VerifierSignal.findings()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.checksum_validator"><code class="docutils literal notranslate"><span class="pre">checksum_validator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.enum_validator"><code class="docutils literal notranslate"><span class="pre">enum_validator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.expected_calibration_error"><code class="docutils literal notranslate"><span class="pre">expected_calibration_error()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.geo_mean"><code class="docutils literal notranslate"><span class="pre">geo_mean()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.iban_check"><code class="docutils literal notranslate"><span class="pre">iban_check()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.isbn_check"><code class="docutils literal notranslate"><span class="pre">isbn_check()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.length_normalized"><code class="docutils literal notranslate"><span class="pre">length_normalized()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.load_calibrator"><code class="docutils literal notranslate"><span class="pre">load_calibrator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.luhn_check"><code class="docutils literal notranslate"><span class="pre">luhn_check()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.mean_prob"><code class="docutils literal notranslate"><span class="pre">mean_prob()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.mean_probability"><code class="docutils literal notranslate"><span class="pre">mean_probability()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.min_prob"><code class="docutils literal notranslate"><span class="pre">min_prob()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.min_probability"><code class="docutils literal notranslate"><span class="pre">min_probability()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.range_validator"><code class="docutils literal notranslate"><span class="pre">range_validator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.regex_validator"><code class="docutils literal notranslate"><span class="pre">regex_validator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.reliability_curve"><code class="docutils literal notranslate"><span class="pre">reliability_curve()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.risk_coverage_curve"><code class="docutils literal notranslate"><span class="pre">risk_coverage_curve()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.rover"><code class="docutils literal notranslate"><span class="pre">rover()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.save_calibrator"><code class="docutils literal notranslate"><span class="pre">save_calibrator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.schema_validator"><code class="docutils literal notranslate"><span class="pre">schema_validator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.sklearn_calibrator"><code class="docutils literal notranslate"><span class="pre">sklearn_calibrator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.split_conformal_quantile"><code class="docutils literal notranslate"><span class="pre">split_conformal_quantile()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.qe.totals_consistent"><code class="docutils literal notranslate"><span class="pre">totals_consistent()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/_autosummary/ek.qe.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

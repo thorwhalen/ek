@@ -1,4 +1,0 @@
-ek.qe.calibrate
-===============
-.. automodule:: ek.qe.calibrate
-   :members:

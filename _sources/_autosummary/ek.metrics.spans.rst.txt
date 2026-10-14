@@ -1,0 +1,13 @@
+ek.metrics.spans
+================
+
+.. automodule:: ek.metrics.spans
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MatchScheme
+      SpanF1Metric
+   

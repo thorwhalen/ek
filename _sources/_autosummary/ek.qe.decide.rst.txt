@@ -1,0 +1,30 @@
+ek.qe.decide
+============
+
+.. automodule:: ek.qe.decide
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_ALPHA
+      DEFAULT_RISK_TARGET
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      crepes_mondrian_gate
+      risk_coverage_curve
+      split_conformal_quantile
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConformalGate
+      CostSensitiveGate
+      GroupConformalGate
+      RiskControlGate
+   

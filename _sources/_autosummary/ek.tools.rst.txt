@@ -1,0 +1,20 @@
+ek.tools
+========
+
+.. automodule:: ek.tools
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cer
+      check
+      cost_per_success
+      engines
+      pass_k
+      rover
+      version
+      wer
+      where
+   

@@ -1,4 +1,0 @@
-ek.ocr.tables
-=============
-.. automodule:: ek.ocr.tables
-   :members:

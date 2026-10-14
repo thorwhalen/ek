@@ -1,0 +1,147 @@
+﻿ek
+==
+
+.. automodule:: ek
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      score
+      evaluate
+      estimate_quality
+      evaluate_store
+      save_baseline
+      load_baseline
+      regression_gate
+      cohen_kappa
+      percent_agreement
+      krippendorff_alpha
+      default_cost_weight
+      default_canonicalizer
+      table_from_ocr
+      has_table_structure
+      resolve_table_parser
+      engine_yields_tables
+      rover
+      expected_calibration_error
+      reliability_curve
+      save_calibrator
+      load_calibrator
+      mean_probability
+      min_probability
+      risk_coverage_curve
+      split_conformal_quantile
+      checksum_validator
+      regex_validator
+      range_validator
+      enum_validator
+      schema_validator
+      totals_consistent
+      luhn_check
+      iban_check
+      isbn_check
+      validation_pipeline
+      canonicalize_corrector
+      lexicon_corrector
+      cross_field_validator
+      ordering_validator
+      benford_findings
+      zscore_anomaly_findings
+      lm_surprisal_validator
+      llm_corrector
+      stop_on_correction
+      stop_on_flag
+      register
+      get
+      resolve
+      names
+      requires_extra
+      check_requirements
+      json_store
+      mall
+      app_folder
+      persistent_cache
+      cache_this
+      run_suite
+      pass_at_k
+      pass_hat_k
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GateResult
+      GraphGrammar
+      FieldSpec
+      NodeType
+      EdgeType
+      TypeRef
+      AnnotatedExtraction
+      FieldEstimate
+      NodePath
+      Provenance
+      Finding
+      Decision
+      Severity
+      Score
+      Report
+      QualityReport
+      Metric
+      Validator
+      Calibrator
+      DecisionPolicy
+      Signal
+      Canonicalizer
+      StringMetric
+      FieldMetric
+      TypedGraphMetric
+      TypedGraph
+      TypedNode
+      TypedEdge
+      AnlsMetric
+      SpanF1Metric
+      MatchScheme
+      TedsMetric
+      GritsMetric
+      Table
+      Cell
+      RoverConsensus
+      AgreementSignal
+      VerifierSignal
+      LogprobSignal
+      IntrinsicConfidenceSignal
+      PlattCalibrator
+      IsotonicCalibrator
+      TemperatureCalibrator
+      GroupCalibrator
+      SignalFamilyCalibrator
+      CostSensitiveGate
+      ConformalGate
+      GroupConformalGate
+      RiskControlGate
+      ValidationResult
+      Corrector
+      Episode
+      TaskSpec
+      ToolSpec
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   ocr
+   agents
+   metrics
+   canonicalize
+   qe
+   base
+   facade
+   harness
+   registry
+   stores
+   tools
+   validate

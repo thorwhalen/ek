@@ -1,4 +1,0 @@
-ek.stores
-=========
-.. automodule:: ek.stores
-   :members:

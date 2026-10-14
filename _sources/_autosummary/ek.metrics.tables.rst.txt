@@ -1,0 +1,15 @@
+ek.metrics.tables
+=================
+
+.. automodule:: ek.metrics.tables
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cell
+      GritsMetric
+      Table
+      TedsMetric
+   

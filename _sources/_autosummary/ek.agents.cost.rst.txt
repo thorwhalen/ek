@@ -1,0 +1,37 @@
+ek.agents.cost
+==============
+
+.. automodule:: ek.agents.cost
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DEFAULT_CACHE_DISCOUNT
+      DEFAULT_BATCH_DISCOUNT
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cost_of_pass
+      cost_report
+      dollars
+      episode_dollars
+      load_prices
+      per_million
+      price_of
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ModelPrice
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      UnknownModelPrice
+   

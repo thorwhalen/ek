@@ -1,0 +1,19 @@
+ek.ocr.profiles
+===============
+
+.. automodule:: ek.ocr.profiles
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ENGINE_PROFILES
+      DEFAULT_PROFILE
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      profile
+   

@@ -1,0 +1,41 @@
+ek.validate
+===========
+
+.. automodule:: ek.validate
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Layer
+      DEFAULT_LEXICON_THRESHOLD
+      BENFORD_EXPECTED
+      DEFAULT_BENFORD_TOL
+      DEFAULT_BENFORD_MIN_N
+      DEFAULT_ZSCORE_THRESHOLD
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      benford_findings
+      canonicalize_corrector
+      cross_field_validator
+      lexicon_corrector
+      llm_corrector
+      lm_surprisal_validator
+      ordering_validator
+      stop_on_correction
+      stop_on_flag
+      validate
+      validation_pipeline
+      zscore_anomaly_findings
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Corrector
+      ValidationResult
+   

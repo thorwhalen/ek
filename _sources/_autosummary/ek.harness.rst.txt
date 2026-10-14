@@ -1,0 +1,24 @@
+ek.harness
+==========
+
+.. automodule:: ek.harness
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      cohen_kappa
+      evaluate_store
+      krippendorff_alpha
+      load_baseline
+      percent_agreement
+      regression_gate
+      save_baseline
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GateResult
+   
