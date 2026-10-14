@@ -23,11 +23,12 @@ Three seams, deliberately kept apart (they are not interchangeable):
 any :class:`~ek.base.DecisionPolicy` reads it -- :func:`ek.estimate_quality` already refuses to
 gate an uncalibrated signal, and a judge is no exception (-> ``misc/docs/ek_03``).
 
-**Known facade limitation, stated plainly:** :func:`ek.estimate_quality` currently averages *all*
-raw signals into one confidence and calibrates that single mean. Mixing a judge score with, say,
-a logprob -- different scales, different reliabilities -- and fitting one calibrator over the
-mean is not statistically sound. Until per-signal-family calibration lands, either run the judge
-as the *only* signal, or calibrate it separately and pass the calibrated value.
+**Calibrate a judge per signal family.** With a single calibrator, :func:`ek.estimate_quality`
+averages *all* raw signals into one confidence and calibrates that mean. Mixing a judge score with,
+say, a logprob -- different scales, different reliabilities -- that way is not statistically sound.
+Pass ``calibrator={"judge": judge_cal, "logprob": logprob_cal}`` (or a
+:class:`~ek.qe.calibrate.SignalFamilyCalibrator`, which can ``fit`` one calibrator per signal from
+labelled rows) so each family is calibrated on its own before the calibrated probabilities are fused.
 
 ``ek`` never imports an LLM SDK: ``judge`` is an **injected callable**.
 

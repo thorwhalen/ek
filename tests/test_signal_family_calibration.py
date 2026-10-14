@@ -1,0 +1,396 @@
+"""Per-signal-family calibration in estimate_quality() (#29).
+
+Heterogeneous raw signals (a judge score, a logprob) must each be calibrated by
+their own calibrator before being fused, not averaged raw and calibrated once.
+"""
+
+import pytest
+
+from ek.base import (
+    AnnotatedExtraction,
+    FieldEstimate,
+    FieldSpec,
+    GraphGrammar,
+    NodePath,
+    NodeType,
+)
+from ek.facade import estimate_quality
+from ek.qe.calibrate import (
+    GroupCalibrator,
+    PlattCalibrator,
+    SignalFamilyCalibrator,
+    load_calibrator,
+    mean_probability,
+    min_probability,
+    save_calibrator,
+)
+from ek.qe.decide import CostSensitiveGate
+
+
+def _invoice_grammar():
+    return GraphGrammar(
+        node_types={
+            "invoice": NodeType(
+                "invoice",
+                fields={
+                    "card": FieldSpec("card", "string"),
+                    "amount": FieldSpec("amount", "number", domain=(0.0, 1000.0)),
+                },
+            )
+        }
+    )
+
+
+def _const(p):
+    """A 'calibrator' that ignores its input and returns ``p`` (to trace routing)."""
+    return lambda raw: p
+
+
+def _judge(_target):
+    return 0.9
+
+
+_judge.name = "judge"
+
+
+def _logprob(_target):
+    return -0.2
+
+
+_logprob.name = "logprob"
+
+
+def test_mapping_calibrates_each_family_then_fuses_by_mean():
+    report = estimate_quality(
+        "answer",
+        signals=[_judge, _logprob],
+        calibrator={"judge": _const(0.8), "logprob": _const(0.4)},
+    )
+    assert report.provenance["calibrated_signals"] == {"judge": 0.8, "logprob": 0.4}
+    assert report.calibrated_confidence == pytest.approx(0.6)
+    # an unfused combination is not a calibrated probability: say so
+    assert report.provenance["calibrated"] is False
+    # the raw signals are still reported untouched
+    assert report.raw_signals == {"judge": 0.9, "logprob": -0.2}
+
+
+def test_each_family_sees_only_its_own_raw_value():
+    seen = {}
+
+    def recording(name):
+        def cal(raw):
+            seen[name] = raw
+            return 0.5
+
+        return cal
+
+    estimate_quality(
+        "x",
+        signals=[_judge, _logprob],
+        calibrator={"judge": recording("judge"), "logprob": recording("logprob")},
+    )
+    assert seen == {"judge": 0.9, "logprob": -0.2}
+
+
+def test_min_combiner_is_conservative():
+    cal = SignalFamilyCalibrator(
+        calibrators={"judge": _const(0.8), "logprob": _const(0.4)},
+        combine=min_probability,
+    )
+    report = estimate_quality("x", signals=[_judge, _logprob], calibrator=cal)
+    assert report.calibrated_confidence == 0.4
+
+
+def test_star_entry_is_the_fallback():
+    report = estimate_quality(
+        "x",
+        signals=[_judge, _logprob],
+        calibrator={"judge": _const(1.0), "*": _const(0.0)},
+    )
+    assert report.provenance["calibrated_signals"] == {"judge": 1.0, "logprob": 0.0}
+
+
+def test_uncovered_signal_is_refused_not_dropped():
+    with pytest.raises(ValueError, match="logprob"):
+        estimate_quality(
+            "x", signals=[_judge, _logprob], calibrator={"judge": _const(0.8)}
+        )
+
+
+def test_gating_an_unfused_multi_family_value_is_refused():
+    # A mean of calibrated probabilities is not itself calibrated (Hard Rule 1).
+    with pytest.raises(ValueError, match="fusion calibrator"):
+        estimate_quality(
+            "x",
+            signals=[_judge, _logprob],
+            calibrator={"judge": _const(0.9), "logprob": _const(0.1)},
+            policy=CostSensitiveGate(rho=9.0),
+        )
+
+
+def test_assume_calibrated_lets_an_unfused_value_through():
+    report = estimate_quality(
+        "x",
+        signals=[_judge, _logprob],
+        calibrator={"judge": _const(0.9), "logprob": _const(0.1)},
+        policy=CostSensitiveGate(rho=9.0),  # tau = 0.9
+        assume_calibrated=True,
+    )
+    assert report.calibrated_confidence == pytest.approx(0.5)
+    assert report.decision.value != "accept"
+
+
+def test_a_single_family_gates_without_fusion():
+    report = estimate_quality(
+        "x",
+        signals=[_judge],
+        calibrator={"judge": _const(0.95)},
+        policy=CostSensitiveGate(rho=9.0),  # tau = 0.9
+    )
+    assert report.calibrated_confidence == 0.95
+    assert report.decision.value == "accept"
+
+
+def test_single_family_and_fused_values_report_calibrated():
+    one = estimate_quality("x", signals=[_judge], calibrator={"judge": _const(0.7)})
+    assert one.provenance["calibrated"] is True
+    cal = SignalFamilyCalibrator(
+        calibrators={"judge": _const(0.8), "logprob": _const(0.4)}, fusion=lambda f: f
+    )
+    two = estimate_quality("x", signals=[_judge, _logprob], calibrator=cal)
+    assert two.provenance["calibrated"] is True
+
+
+def test_fusion_calibrator_is_applied_after_combine():
+    cal = SignalFamilyCalibrator(
+        calibrators={"judge": _const(0.8), "logprob": _const(0.4)},
+        fusion=lambda fused: fused / 2,
+    )
+    report = estimate_quality(
+        "x",
+        signals=[_judge, _logprob],
+        calibrator=cal,
+        policy=CostSensitiveGate(rho=1.0),
+    )
+    assert report.calibrated_confidence == pytest.approx(0.3)  # mean 0.6, then halved
+
+
+def test_annotated_gating_is_refused_without_fusion_too():
+    ext = AnnotatedExtraction(
+        grammar=_invoice_grammar(),
+        estimates={
+            NodePath("inv1", "invoice", "card"): FieldEstimate(
+                value="ok", raw_signals={"judge": 0.9, "logprob": -0.1}
+            )
+        },
+    )
+    with pytest.raises(ValueError, match="fusion calibrator"):
+        estimate_quality(
+            ext,
+            calibrator={"judge": _const(0.9), "logprob": _const(0.5)},
+            policy=CostSensitiveGate(rho=1.0),
+        )
+
+
+def test_own_confidence_is_one_more_family():
+    fe = FieldEstimate(value="x", confidence=0.7, raw_signals={"judge": 0.2})
+    report = estimate_quality(
+        fe, calibrator={"confidence": _const(0.66), "judge": _const(0.0)}
+    )
+    # fused with the signals, not an override that hides them
+    assert report.provenance["calibrated_signals"] == {"judge": 0.0, "confidence": 0.66}
+    assert report.calibrated_confidence == pytest.approx(0.33)
+
+
+def test_own_confidence_without_a_calibrator_is_refused():
+    fe = FieldEstimate(value="x", confidence=0.7, raw_signals={"judge": 0.2})
+    with pytest.raises(ValueError, match="confidence"):
+        estimate_quality(fe, calibrator={"judge": _const(0.5)})
+
+
+def test_no_signals_means_no_confidence():
+    report = estimate_quality("x", calibrator={"judge": _const(0.8)})
+    assert report.calibrated_confidence is None
+    assert report.provenance["calibrated"] is False
+
+
+def test_single_calibrator_behaviour_unchanged():
+    report = estimate_quality(
+        "x", signals=[_judge, _logprob], calibrator=lambda raw: raw
+    )
+    # one calibrator over the mean of raw signals, as before
+    assert report.calibrated_confidence == pytest.approx((0.9 - 0.2) / 2)
+    assert "calibrated_signals" not in report.provenance
+
+
+def test_annotated_extraction_per_field_family_calibration():
+    grammar = _invoice_grammar()
+    card = NodePath("inv1", "invoice", "card")
+    amount = NodePath("inv1", "invoice", "amount")
+    ext = AnnotatedExtraction(
+        grammar=grammar,
+        estimates={
+            card: FieldEstimate(
+                value="ok", raw_signals={"judge": 0.9, "logprob": -0.1}
+            ),
+            amount: FieldEstimate(value="42", raw_signals={"judge": 0.3}),
+        },
+    )
+    report = estimate_quality(
+        ext, calibrator={"judge": lambda r: r, "logprob": _const(0.5)}
+    )
+    assert report.per_field[card].confidence == pytest.approx(0.7)
+    assert report.per_field[amount].confidence == pytest.approx(0.3)
+    assert report.provenance["calibrated_signals"][card] == {
+        "judge": 0.9,
+        "logprob": 0.5,
+    }
+    assert report.calibrated_confidence == pytest.approx(0.3)
+
+
+def test_group_aware_family_calibrator_receives_the_node_type():
+    groups = []
+
+    def mondrian(raw, *, group=None):
+        groups.append(group)
+        return 0.5
+
+    ext = AnnotatedExtraction(
+        grammar=_invoice_grammar(),
+        estimates={
+            NodePath("inv1", "invoice", "card"): FieldEstimate(
+                value="ok", raw_signals={"judge": 0.9}
+            )
+        },
+    )
+    estimate_quality(ext, calibrator={"judge": mondrian})
+    assert groups == ["invoice"]
+
+
+# --- fitting and persistence ------------------------------------------------
+
+_ROWS = [
+    {"judge": 0.9, "logprob": -0.1},
+    {"judge": 0.8, "logprob": -0.2},
+    {"judge": 0.85, "logprob": -2.0},
+    {"judge": 0.3, "logprob": -0.1},
+    {"judge": 0.2, "logprob": -2.5},
+    {"judge": 0.7, "logprob": -1.8},
+    {"judge": 0.95},  # a row missing a family only trains the families it has
+]
+_CORRECT = [True, True, False, True, False, False, True]
+
+
+def test_fit_one_calibrator_per_family():
+    cal = SignalFamilyCalibrator().fit(_ROWS, _CORRECT)
+    assert set(cal.calibrators) == {"judge", "logprob"}
+    assert all(isinstance(c, PlattCalibrator) for c in cal.calibrators.values())
+    p = cal({"judge": 0.9, "logprob": -0.1})
+    assert 0.0 <= p <= 1.0
+
+
+def test_fit_learns_a_fusion_calibrator():
+    cal = SignalFamilyCalibrator().fit(_ROWS, _CORRECT)
+    assert cal.fusion is not None
+    x = {"judge": 0.9, "logprob": -0.1}
+    per_family = cal.calibrate_signals(x)
+    assert cal(x) == pytest.approx(cal.fusion(mean_probability(per_family)))
+    # a single family bypasses fusion: it is already calibrated
+    assert cal({"judge": 0.9}) == pytest.approx(cal.calibrators["judge"](0.9))
+
+
+def test_fit_leaves_fusion_unset_without_multi_family_rows():
+    rows = [{"judge": 0.9}, {"judge": 0.1}, {"logprob": -0.1}, {"logprob": -3.0}]
+    cal = SignalFamilyCalibrator().fit(rows, [True, False, True, False])
+    assert cal.fusion is None
+
+
+def test_fitted_fusion_is_better_calibrated_than_the_raw_mean():
+    import random
+
+    from ek.qe.calibrate import expected_calibration_error
+
+    rng = random.Random(0)
+    rows, correct = [], []
+    for _ in range(3000):
+        c = rng.random() < 0.6
+        rows.append(
+            {
+                "judge": min(1.0, max(0.0, (0.8 if c else 0.4) + rng.gauss(0, 0.15))),
+                "logprob": (-0.3 if c else -1.5) + rng.gauss(0, 0.5),
+            }
+        )
+        correct.append(c)
+    fitted = SignalFamilyCalibrator().fit(rows[:2000], correct[:2000])
+    unfused = SignalFamilyCalibrator(calibrators=fitted.calibrators)
+    test_rows, test_y = rows[2000:], correct[2000:]
+    ece_fused = expected_calibration_error([fitted(r) for r in test_rows], test_y)
+    ece_mean = expected_calibration_error([unfused(r) for r in test_rows], test_y)
+    assert ece_fused < ece_mean
+
+
+@pytest.mark.parametrize(
+    "rows, correct",
+    [
+        ([{"judge": 0.9}, {"judge": 0.8}], [True, True]),  # one class
+        ([{"judge": 0.9}, {"judge": float("nan")}], [True, False]),  # one finite row
+        ([{"judge": float("inf")}, {"judge": float("nan")}], [True, False]),
+    ],
+)
+def test_fit_refuses_an_uncalibratable_family(rows, correct):
+    with pytest.raises(ValueError, match="cannot calibrate"):
+        SignalFamilyCalibrator().fit(rows, correct)
+
+
+def test_fit_refuses_no_rows():
+    with pytest.raises(ValueError, match="no labelled rows"):
+        SignalFamilyCalibrator().fit([], [])
+
+
+def test_fit_rejects_mismatched_lengths():
+    with pytest.raises(ValueError, match="labels"):
+        SignalFamilyCalibrator().fit(_ROWS, _CORRECT[:-1])
+
+
+def test_round_trip_through_the_store(tmp_path):
+    cal = SignalFamilyCalibrator(combine=min_probability).fit(_ROWS, _CORRECT)
+    save_calibrator(cal, "agent_qe", rootdir=str(tmp_path))
+    loaded = load_calibrator("agent_qe", rootdir=str(tmp_path))
+    assert isinstance(loaded, SignalFamilyCalibrator)
+    assert loaded.combine is min_probability
+    assert loaded.fusion is not None
+    x = {"judge": 0.6, "logprob": -1.0}
+    assert loaded(x) == pytest.approx(cal(x))
+
+
+def test_round_trip_with_nested_group_calibrator():
+    gc = GroupCalibrator().fit(
+        [0.9, 0.2, 0.8, 0.1], [True, False, True, False], groups=["a", "a", "b", "b"]
+    )
+    cal = SignalFamilyCalibrator(calibrators={"judge": gc})
+    loaded = SignalFamilyCalibrator.from_dict(cal.to_dict())
+    assert isinstance(loaded.calibrators["judge"], GroupCalibrator)
+
+
+def test_custom_combiner_works_but_cannot_be_persisted():
+    stacker = lambda probs: max(probs.values())  # noqa: E731
+    cal = SignalFamilyCalibrator(
+        calibrators={"judge": _const(0.2), "logprob": _const(0.9)}, combine=stacker
+    )
+    assert cal({"judge": 0.0, "logprob": 0.0}) == 0.9
+    with pytest.raises(ValueError, match="registered combiner"):
+        cal.to_dict()
+
+
+def test_combiners_reject_empty_input():
+    with pytest.raises(ValueError):
+        mean_probability({})
+    with pytest.raises(ValueError):
+        min_probability({})
+
+
+def test_exported_from_top_level():
+    import ek
+
+    assert ek.SignalFamilyCalibrator is SignalFamilyCalibrator
+    assert ek.mean_probability is mean_probability
