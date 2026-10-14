@@ -68,7 +68,8 @@ def test_mapping_calibrates_each_family_then_fuses_by_mean():
     )
     assert report.provenance["calibrated_signals"] == {"judge": 0.8, "logprob": 0.4}
     assert report.calibrated_confidence == pytest.approx(0.6)
-    assert report.provenance["calibrated"] is True
+    # an unfused combination is not a calibrated probability: say so
+    assert report.provenance["calibrated"] is False
     # the raw signals are still reported untouched
     assert report.raw_signals == {"judge": 0.9, "logprob": -0.2}
 
@@ -148,6 +149,16 @@ def test_a_single_family_gates_without_fusion():
     )
     assert report.calibrated_confidence == 0.95
     assert report.decision.value == "accept"
+
+
+def test_single_family_and_fused_values_report_calibrated():
+    one = estimate_quality("x", signals=[_judge], calibrator={"judge": _const(0.7)})
+    assert one.provenance["calibrated"] is True
+    cal = SignalFamilyCalibrator(
+        calibrators={"judge": _const(0.8), "logprob": _const(0.4)}, fusion=lambda f: f
+    )
+    two = estimate_quality("x", signals=[_judge, _logprob], calibrator=cal)
+    assert two.provenance["calibrated"] is True
 
 
 def test_fusion_calibrator_is_applied_after_combine():

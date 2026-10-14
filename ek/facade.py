@@ -304,7 +304,10 @@ def _calibrated_confidence(
             "SignalFamilyCalibrator on labelled rows (it learns one), set its "
             "`fusion`, or pass assume_calibrated=True."
         )
-    return calibrator.fuse(per_family), True, per_family
+    # An unfused combination of 2+ families is not a calibrated probability, so
+    # provenance must not say "calibrated" about it.
+    fused_calibrated = len(per_family) == 1 or calibrator.fusion is not None
+    return calibrator.fuse(per_family), fused_calibrated, per_family
 
 
 def _agreement_score(hypotheses: list, **rover_kwargs) -> float:
@@ -382,7 +385,9 @@ def estimate_quality(
             the *calibrated* confidence.
         agreement: Auto-run ROVER over ``sources`` when any are given (default true).
         assume_calibrated: Treat the incoming confidence as already calibrated
-            (silences the uncalibrated-gating warning).
+            (silences the uncalibrated-gating warning). With a per-family
+            calibrator it also waives the check that a value fused from two or more
+            families went through a learned ``fusion`` calibrator.
     """
     if policy is not None and calibrator is None and not assume_calibrated:
         raise ValueError(
