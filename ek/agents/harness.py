@@ -12,7 +12,7 @@ that hides inside the tolerance band.
 
 :func:`agent_regression_gate` instead tests the **difference** ``current - baseline`` with both
 runs' uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound
-on ``pass^k``), failing only when the upper bound of that change is confidently negative. Two
+on ``pass^k``, each SE from the per-task sample SD), failing only when the upper bound of that change is confidently negative. Two
 tempting shortcuts are **both wrong**, and this module has shipped and fixed each of them:
 comparing our interval to the baseline's *point* (the baseline is itself noisy, so one flake
 against a lucky baseline reads as a regression), and asking whether two 95% intervals *overlap*
@@ -56,10 +56,11 @@ from ..stores import json_store
 from .base import Episode, RunProvenance, TaskSpec, suite_grammar
 from .cost import ModelPrice, cost_of_pass, cost_report, episode_dollars
 from .reliability import (
+    DEFAULT_Z,
     ReliabilityReport,
     _se_from_ci,
     bootstrap_ci,
-    difference_upper_bound,
+    mean_standard_error,
     newcombe_difference,
     reliability,
 )
@@ -313,6 +314,9 @@ def _summary(report: ReliabilityReport) -> dict:
         "pass_at_k": _json_num(report.pass_at_k),
         "pass_hat_k": _json_num(report.pass_hat_k),
         "pass_hat_k_ci": [_json_num(v) for v in report.pass_hat_k_ci],
+        # The per-task SD (with n_tasks) gives pass^k's SE directly; the gate prefers it to
+        # back-deriving an SE from the bootstrap CI (biased near p = 1, zero for a perfect run).
+        "pass_hat_k_sd": _json_num(report.pass_hat_k_sd),
         "stochastic": report.stochastic,
         "per_slice": report.per_slice,
         "cost_per_success": _json_num(report.cost.get("cost_per_success")),
@@ -496,32 +500,33 @@ def agent_regression_gate(
         )
 
     # pass^k is a mean of per-task estimators, not a raw proportion, so Newcombe does not apply
-    # -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty.
+    # -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty. Each
+    # run's SE is sd / sqrt(n_tasks) over the per-task estimators, with an Agresti--Coull-style
+    # floor so a perfect (zero-spread) run never claims certainty.
     #
     # At k == 1 this arm is worse than useless and is SKIPPED. With one trial per task
     # pass^1 = C(c,1)/C(n,1) = c/n, which is *identically* the success rate -- so it would
-    # re-test the very statistic the Newcombe arm above already tested, using a strictly less
-    # well-calibrated method (an SE back-derived from a bootstrap percentile interval). It
-    # contributes no power, only false alarms.
+    # re-test the very statistic the Newcombe arm above already tested, with a second test --
+    # it contributes no power, only a second chance at a false alarm.
     if report.k > 1 and base_hat is not None and report.pass_hat_k is not None:
-        base_ci = base.get("pass_hat_k_ci") or (base_hat, base_hat)
-        hi = difference_upper_bound(
-            report.pass_hat_k, report.pass_hat_k_ci, base_hat, base_ci
-        )
-        # A zero-width baseline CI (a *perfect* baseline: every task passed every trial) would
-        # contribute zero uncertainty and silently reduce this back to the interval-vs-POINT
-        # test this module exists to avoid -- and a perfect baseline is not rare. Floor the
-        # baseline's SE with the current run's rather than pretend it is certain.
-        if _se_from_ci(base_ci) in (None, 0.0) and _se_from_ci(report.pass_hat_k_ci):
-            hi = difference_upper_bound(
-                report.pass_hat_k, report.pass_hat_k_ci, base_hat, report.pass_hat_k_ci
+        cur_se = _pass_hat_k_se(_summary(report))
+        base_se = _pass_hat_k_se(base)
+        # Only a LEGACY baseline (no persisted per-task SD) can still report a zero SE: a
+        # perfect run has a zero-width bootstrap CI, which would contribute no uncertainty and
+        # silently reduce this back to the interval-vs-POINT test this module exists to avoid.
+        # Floor it with the current run's SE rather than pretend the baseline is certain.
+        if not base_se and cur_se:
+            base_se = cur_se
+        if cur_se is not None and base_se is not None:
+            hi = (report.pass_hat_k - base_hat) + DEFAULT_Z * math.sqrt(
+                cur_se**2 + base_se**2
             )
-        if hi is not None and hi < -tolerance:
-            reasons.append(
-                f"pass^{report.k} regressed: {report.pass_hat_k:.3f} vs baseline "
-                f"{base_hat:.3f}; the interval for the change tops out at {hi:+.3f} "
-                f"(tolerance {tolerance})"
-            )
+            if hi < -tolerance:
+                reasons.append(
+                    f"pass^{report.k} regressed: {report.pass_hat_k:.3f} vs baseline "
+                    f"{base_hat:.3f}; the interval for the change tops out at {hi:+.3f} "
+                    f"(tolerance {tolerance})"
+                )
     # Cost: fail only if we are CONFIDENT it rose (our low above the baseline's high).
     cost_ceiling = _upper(base, "cost_ci", base_cost)
     if (
@@ -596,6 +601,22 @@ def _validate_baseline(base: Mapping) -> None:
             "agent_regression_gate: malformed baseline -- it carries neither 'n_success' nor "
             "'success_rate', so the success check would be silently skipped. Re-baseline."
         )
+
+
+def _pass_hat_k_se(record: Mapping) -> Optional[float]:
+    """SE of a summary's ``pass_hat_k``: from the per-task SD when persisted, else from its CI.
+
+    The SD route (``sd / sqrt(n_tasks)`` with an Agresti--Coull-style floor, see
+    :func:`~ek.agents.reliability.mean_standard_error`) is exact for a mean of per-task
+    estimators and never zero. Summaries written before ``pass_hat_k_sd`` existed fall back to
+    the old recovery from the bootstrap CI (``width / (2 z)``), which the caller floors.
+    """
+    point = record.get("pass_hat_k")
+    if point is None:
+        return None
+    if "pass_hat_k_sd" in record and record.get("n_tasks"):
+        return mean_standard_error(point, record["pass_hat_k_sd"], record["n_tasks"])
+    return _se_from_ci(record.get("pass_hat_k_ci") or (point, point))
 
 
 def _lower(base: Mapping, ci_key: str, point: Any) -> Any:
