@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-20T15:23:35Z",
+  "built_at": "2026-10-20T15:28:59Z",
   "package": {
     "name": "ek",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "display_name": "ek",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "4d706df73fe693a1a56fed963746282f84a9e9c0",
-    "short_commit": "4d706df",
+    "commit": "51e0be4b3f996835e09099a13f80efc0f7ea0cce",
+    "short_commit": "51e0be4",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/ek",
-    "commit_url": "https://github.com/thorwhalen/ek/commit/4d706df73fe693a1a56fed963746282f84a9e9c0",
+    "commit_url": "https://github.com/thorwhalen/ek/commit/51e0be4b3f996835e09099a13f80efc0f7ea0cce",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/ek",
-    "sha": "4d706df73fe693a1a56fed963746282f84a9e9c0",
+    "sha": "51e0be4b3f996835e09099a13f80efc0f7ea0cce",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "39447622662",
-    "run_url": "https://github.com/thorwhalen/ek/actions/runs/39447622662",
+    "run_id": "39448454576",
+    "run_url": "https://github.com/thorwhalen/ek/actions/runs/39448454576",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -56,20 +56,20 @@
   },
   "site": {
     "modules_documented": 36,
-    "objects_documented": 643
+    "objects_documented": 645
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.14",
+    "latest": "0.1.15",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout 4d706df73fe693a1a56fed963746282f84a9e9c0\npip install \"epythet==0.2.21\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout 51e0be4b3f996835e09099a13f80efc0f7ea0cce\npip install \"epythet==0.2.21\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.1.13) is behind the latest release on PyPI (0.1.14): `pip install ek` gives newer code than these docs describe."
+      "The documented version (0.1.14) is behind the latest release on PyPI (0.1.15): `pip install ek` gives newer code than these docs describe."
     ]
   }
 }

@@ -62,6 +62,7 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`bootstrap_ci`](#ek.agents.bootstrap_ci)(values, statistic, \*[, ...])         | Percentile bootstrap CI for any `statistic` over `values` (deterministic by seed).                                                                                       |
 | [`newcombe_difference`](#ek.agents.newcombe_difference)(successes_a, n_a, ...[, z])    | Newcombe score interval for the **difference** of two proportions `p_a - p_b`.                                                                                           |
 | [`difference_upper_bound`](#ek.agents.difference_upper_bound)(value_a, ci_a, ...[, z])    | Upper bound of `a - b` for two statistics known only through their CIs.                                                                                                  |
+| [`mean_standard_error`](#ek.agents.mean_standard_error)(mean, sd, n, \*[, z, bounds])  | Standard error of a mean of `n` per-unit values in `bounds`, floored near the bounds.                                                                                    |
 | [`per_million`](#ek.agents.per_million)(input, output, \*[, ...])              | Build a [`ModelPrice`](#ek.agents.ModelPrice) from the human-facing **USD per 1M tokens** figures.                                                 |
 | [`dollars`](#ek.agents.dollars)(cost, price, \*[, prices, batch])          | Monetary cost of one [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) tally, in USD.                                                            |
 | [`episode_dollars`](#ek.agents.episode_dollars)(episode, \*[, prices, price, ...]) | Monetary cost of one episode (0.0 if it carries no [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost)).                                           |
@@ -347,7 +348,7 @@ legacy one (`single_turn_ascore(SingleTurnSample)`; deprecated since Ragas 0.4).
 0.5
 ```
 
-### *class* ek.agents.ReliabilityReport(k=1, n_tasks=0, n_trials=0, n_success=0, success_rate=0.0, success_ci=(0.0, 1.0), pass_at_k=None, pass_hat_k=None, pass_hat_k_ci=(0.0, 1.0), stochastic=True, per_task=dict(), per_slice=dict(), cost=dict(), detail=dict())
+### *class* ek.agents.ReliabilityReport(k=1, n_tasks=0, n_trials=0, n_success=0, success_rate=0.0, success_ci=(0.0, 1.0), pass_at_k=None, pass_hat_k=None, pass_hat_k_ci=(0.0, 1.0), pass_hat_k_sd=None, stochastic=True, per_task=dict(), per_slice=dict(), cost=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -355,6 +356,14 @@ Corpus-level reliability over a k-trial run, with per-task and per-slice cuts.
 
 `success_rate` is micro (over all trials); `pass_at_k`/`pass_hat_k` are averaged
 over *tasks* (each task’s own unbiased estimator), never over trials.
+
+#### pass_hat_k_se(, z=1.96)
+
+SE of `pass_hat_k`: `sd / sqrt(n_tasks)` with the boundary floor
+([`mean_standard_error()`](#ek.agents.mean_standard_error)); `None` if `pass^k` could not be measured.
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### *class* ek.agents.RunProvenance(seed=None, temperature=None, model='', simulator='', suite_version='', scaffold='')
 
@@ -748,6 +757,11 @@ Used for `pass^k` (a mean of per-task estimators, not a raw proportion), where a
 interval does not apply but the same principle does: test the **difference**, combining both
 runs’ uncertainty, rather than asking whether two intervals happen to overlap.
 
+Back-deriving an SE from a CI is the *fallback*: it under-estimates near p = 1 (a truncated
+percentile interval) and reads a zero-width CI as certainty. When the per-task SD is known,
+prefer [`mean_standard_error()`](#ek.agents.mean_standard_error) (the regression gate does, for any summary that persists
+`pass_hat_k_sd`).
+
 * **Return type:**
   [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
@@ -948,6 +962,40 @@ Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, go
 
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
+
+### ek.agents.mean_standard_error(mean, sd, n, , z=1.96, bounds=(0.0, 1.0))
+
+Standard error of a mean of `n` per-unit values in `bounds`, floored near the bounds.
+
+The plain `sd / sqrt(n)` is the right SE for a mean of independent per-task estimators
+(`pass^k` is exactly that) – but it collapses to **zero** when every task scored the same,
+which is common at the boundary (a *perfect* baseline: every task passed every trial). A
+zero SE claims certainty and turns a two-sample test back into interval-vs-point.
+
+The floor is Agresti–Coull’s trick generalised to bounded values: add `z**2 / 2`
+pseudo-units at *each* bound, and take the SE of the augmented mean. For 0/1 values this is
+(up to the sample-variance `n - 1`) the Agresti–Coull SE `sqrt(p~(1-p~)/(n+z**2))`. With
+well-spread per-task values it is within a few percent of `sd / sqrt(n)`; it binds where the
+spread is small – near the bounds, or when every task scores about the same – which is
+conservative there. The result is `max(plain, floor)`. It is a normal (`z`) SE with no
+small-sample t-correction, so with fewer than ~20 tasks it is somewhat optimistic.
+
+Returns `None` when there is nothing to estimate from (`n <= 0` or no `mean`). A
+missing `sd` (fewer than two units) contributes nothing; the floor still applies.
+
+### Example
+
+```pycon
+>>> round(mean_standard_error(0.5, 0.3, 100), 4)        # interior: ~ sd/sqrt(n) = 0.03
+0.0304
+>>> mean_standard_error(1.0, 0.0, 60) > 0               # perfect: never zero
+True
+>>> round(mean_standard_error(1.0, 0.0, 60), 4)         # ~ Agresti-Coull for 60/60
+0.0215
+```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### ek.agents.newcombe_difference(successes_a, n_a, successes_b, n_b, , z=1.96)
 

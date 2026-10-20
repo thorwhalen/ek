@@ -23,6 +23,7 @@ ek.agents
       bootstrap_ci
       newcombe_difference
       difference_upper_bound
+      mean_standard_error
       per_million
       dollars
       episode_dollars

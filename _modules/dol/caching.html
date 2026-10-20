@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=8d02545a"></script>
+    <script src="../../_static/documentation_options.js?v=468bc497"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.13" />
+  <meta name="docsearch:version" content="0.1.14" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -796,17 +796,7 @@ window.runMermaid = runMermaid;</script>
 <span class="n">KeyType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">KT</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">MethodName</span><span class="p">],</span> <span class="n">KT</span><span class="p">]]</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">identity</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Identity function that returns its input unchanged.</span>
-
-<span class="sd">    &gt;&gt;&gt; identity(42)</span>
-<span class="sd">    42</span>
-<span class="sd">    &gt;&gt;&gt; identity("hello")</span>
-<span class="sd">    'hello'</span>
-<span class="sd">    &gt;&gt;&gt; identity([1, 2, 3])</span>
-<span class="sd">    [1, 2, 3]</span>
-<span class="sd">    """</span>
-    <span class="k">return</span> <span class="n">x</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">identity_func</span> <span class="k">as</span> <span class="n">identity</span>  <span class="c1"># the one definition (#70)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">KeyStrategy</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
@@ -3327,11 +3317,7 @@ window.runMermaid = runMermaid;</script>
     <span class="p">)</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">HashableMixin</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Mixin making instances hashable by identity (``id(self)``)."""</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashableMixin</span>  <span class="c1"># the one definition (#70)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">HashableDict</span><span class="p">(</span><span class="n">HashableMixin</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>

@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=8d02545a"></script>
+    <script src="../../../_static/documentation_options.js?v=468bc497"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.13" />
+  <meta name="docsearch:version" content="0.1.14" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -726,7 +726,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="sd">:func:`agent_regression_gate` instead tests the **difference** ``current - baseline`` with both</span>
 <span class="sd">runs' uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound</span>
-<span class="sd">on ``pass^k``), failing only when the upper bound of that change is confidently negative. Two</span>
+<span class="sd">on ``pass^k``, each SE from the per-task sample SD), failing only when the upper bound of that change is confidently negative. Two</span>
 <span class="sd">tempting shortcuts are **both wrong**, and this module has shipped and fixed each of them:</span>
 <span class="sd">comparing our interval to the baseline's *point* (the baseline is itself noisy, so one flake</span>
 <span class="sd">against a lucky baseline reads as a regression), and asking whether two 95% intervals *overlap*</span>
@@ -770,10 +770,11 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">RunProvenance</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">suite_grammar</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.cost</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelPrice</span><span class="p">,</span> <span class="n">cost_of_pass</span><span class="p">,</span> <span class="n">cost_report</span><span class="p">,</span> <span class="n">episode_dollars</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.reliability</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_Z</span><span class="p">,</span>
     <span class="n">ReliabilityReport</span><span class="p">,</span>
     <span class="n">_se_from_ci</span><span class="p">,</span>
     <span class="n">bootstrap_ci</span><span class="p">,</span>
-    <span class="n">difference_upper_bound</span><span class="p">,</span>
+    <span class="n">mean_standard_error</span><span class="p">,</span>
     <span class="n">newcombe_difference</span><span class="p">,</span>
     <span class="n">reliability</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1030,6 +1031,9 @@ window.runMermaid = runMermaid;</script>
         <span class="s2">"pass_at_k"</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_at_k</span><span class="p">),</span>
         <span class="s2">"pass_hat_k"</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">),</span>
         <span class="s2">"pass_hat_k_ci"</span><span class="p">:</span> <span class="p">[</span><span class="n">_json_num</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">],</span>
+        <span class="c1"># The per-task SD (with n_tasks) gives pass^k's SE directly; the gate prefers it to</span>
+        <span class="c1"># back-deriving an SE from the bootstrap CI (biased near p = 1, zero for a perfect run).</span>
+        <span class="s2">"pass_hat_k_sd"</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_sd</span><span class="p">),</span>
         <span class="s2">"stochastic"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">stochastic</span><span class="p">,</span>
         <span class="s2">"per_slice"</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">per_slice</span><span class="p">,</span>
         <span class="s2">"cost_per_success"</span><span class="p">:</span> <span class="n">_json_num</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">cost</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cost_per_success"</span><span class="p">)),</span>
@@ -1224,32 +1228,40 @@ window.runMermaid = runMermaid;</script>
         <span class="p">)</span>
 
     <span class="c1"># pass^k is a mean of per-task estimators, not a raw proportion, so Newcombe does not apply</span>
-    <span class="c1"># -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty.</span>
+    <span class="c1"># -- but the same principle does: bound the DIFFERENCE using both runs' uncertainty. Each</span>
+    <span class="c1"># run's SE is sd / sqrt(n_tasks) over the per-task estimators, with an Agresti--Coull-style</span>
+    <span class="c1"># floor so a perfect (zero-spread) run never claims certainty.</span>
     <span class="c1">#</span>
     <span class="c1"># At k == 1 this arm is worse than useless and is SKIPPED. With one trial per task</span>
     <span class="c1"># pass^1 = C(c,1)/C(n,1) = c/n, which is *identically* the success rate -- so it would</span>
-    <span class="c1"># re-test the very statistic the Newcombe arm above already tested, using a strictly less</span>
-    <span class="c1"># well-calibrated method (an SE back-derived from a bootstrap percentile interval). It</span>
-    <span class="c1"># contributes no power, only false alarms.</span>
+    <span class="c1"># re-test the very statistic the Newcombe arm above already tested, with a second test --</span>
+    <span class="c1"># it contributes no power, only a second chance at a false alarm.</span>
     <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">k</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">base_hat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">base_ci</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pass_hat_k_ci"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">base_hat</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">)</span>
-        <span class="n">hi</span> <span class="o">=</span> <span class="n">difference_upper_bound</span><span class="p">(</span>
-            <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">,</span> <span class="n">base_ci</span>
-        <span class="p">)</span>
-        <span class="c1"># A zero-width baseline CI (a *perfect* baseline: every task passed every trial) would</span>
-        <span class="c1"># contribute zero uncertainty and silently reduce this back to the interval-vs-POINT</span>
-        <span class="c1"># test this module exists to avoid -- and a perfect baseline is not rare. Floor the</span>
-        <span class="c1"># baseline's SE with the current run's rather than pretend it is certain.</span>
-        <span class="k">if</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">base_ci</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">):</span>
-            <span class="n">hi</span> <span class="o">=</span> <span class="n">difference_upper_bound</span><span class="p">(</span>
-                <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span><span class="p">,</span> <span class="n">base_hat</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k_ci</span>
+        <span class="n">cur_se</span> <span class="o">=</span> <span class="n">_pass_hat_k_se</span><span class="p">(</span><span class="n">_summary</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
+        <span class="n">base_se</span> <span class="o">=</span> <span class="n">_pass_hat_k_se</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="c1"># Only a LEGACY baseline (no persisted per-task SD) can still report a zero SE: a</span>
+        <span class="c1"># perfect run has a zero-width bootstrap CI, which would contribute no uncertainty and</span>
+        <span class="c1"># silently reduce this back to the interval-vs-POINT test this module exists to avoid.</span>
+        <span class="c1"># Floor it with the current run's SE rather than pretend the baseline is certain.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">base_se</span> <span class="ow">and</span> <span class="n">cur_se</span><span class="p">:</span>
+            <span class="n">base_se</span> <span class="o">=</span> <span class="n">cur_se</span>
+        <span class="k">if</span> <span class="n">cur_se</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">base_se</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hi</span> <span class="o">=</span> <span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span> <span class="o">-</span> <span class="n">base_hat</span><span class="p">)</span> <span class="o">+</span> <span class="n">DEFAULT_Z</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                <span class="n">cur_se</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">base_se</span><span class="o">**</span><span class="mi">2</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hi</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">:</span>
-            <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"pass^</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> regressed: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs baseline "</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">base_hat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; the interval for the change tops out at </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> "</span>
-                <span class="sa">f</span><span class="s2">"(tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2">)"</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">hi</span><span class="p">):</span>
+                <span class="c1"># A NaN point or SE (a hand-edited or legacy record) must not read as "no</span>
+                <span class="c1"># regression" just because NaN &lt; x is False. Say the arm could not run.</span>
+                <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"pass^</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> could not be compared: non-finite estimate "</span>
+                    <span class="sa">f</span><span class="s2">"(current </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="si">!r}</span><span class="s2">, baseline </span><span class="si">{</span><span class="n">base_hat</span><span class="si">!r}</span><span class="s2">)"</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">hi</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">tolerance</span><span class="p">:</span>
+                <span class="n">reasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"pass^</span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> regressed: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_hat_k</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> vs baseline "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">base_hat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; the interval for the change tops out at </span><span class="si">{</span><span class="n">hi</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"(tolerance </span><span class="si">{</span><span class="n">tolerance</span><span class="si">}</span><span class="s2">)"</span>
+                <span class="p">)</span>
     <span class="c1"># Cost: fail only if we are CONFIDENT it rose (our low above the baseline's high).</span>
     <span class="n">cost_ceiling</span> <span class="o">=</span> <span class="n">_upper</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s2">"cost_ci"</span><span class="p">,</span> <span class="n">base_cost</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span>
@@ -1325,6 +1337,22 @@ window.runMermaid = runMermaid;</script>
             <span class="s2">"agent_regression_gate: malformed baseline -- it carries neither 'n_success' nor "</span>
             <span class="s2">"'success_rate', so the success check would be silently skipped. Re-baseline."</span>
         <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pass_hat_k_se</span><span class="p">(</span><span class="n">record</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""SE of a summary's ``pass_hat_k``: from the per-task SD when persisted, else from its CI.</span>
+
+<span class="sd">    The SD route (``sd / sqrt(n_tasks)`` with an Agresti--Coull-style floor, see</span>
+<span class="sd">    :func:`~ek.agents.reliability.mean_standard_error`) is exact for a mean of per-task</span>
+<span class="sd">    estimators and never zero. Summaries written before ``pass_hat_k_sd`` existed fall back to</span>
+<span class="sd">    the old recovery from the bootstrap CI (``width / (2 z)``), which the caller floors.</span>
+<span class="sd">    """</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pass_hat_k"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="s2">"pass_hat_k_sd"</span> <span class="ow">in</span> <span class="n">record</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"n_tasks"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mean_standard_error</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">record</span><span class="p">[</span><span class="s2">"pass_hat_k_sd"</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="s2">"n_tasks"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">_se_from_ci</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"pass_hat_k_ci"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">point</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_lower</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">ci_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">point</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>

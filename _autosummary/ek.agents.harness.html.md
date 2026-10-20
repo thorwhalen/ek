@@ -14,7 +14,7 @@ that hides inside the tolerance band.
 
 [`agent_regression_gate()`](#ek.agents.harness.agent_regression_gate) instead tests the **difference** `current - baseline` with both
 runs’ uncertainty folded in (a Newcombe score interval on the success rate; a combined-SE bound
-on `pass^k`), failing only when the upper bound of that change is confidently negative. Two
+on `pass^k`, each SE from the per-task sample SD), failing only when the upper bound of that change is confidently negative. Two
 tempting shortcuts are **both wrong**, and this module has shipped and fixed each of them:
 comparing our interval to the baseline’s *point* (the baseline is itself noisy, so one flake
 against a lucky baseline reads as a regression), and asking whether two 95% intervals *overlap*
