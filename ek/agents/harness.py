@@ -521,7 +521,14 @@ def agent_regression_gate(
             hi = (report.pass_hat_k - base_hat) + DEFAULT_Z * math.sqrt(
                 cur_se**2 + base_se**2
             )
-            if hi < -tolerance:
+            if not math.isfinite(hi):
+                # A NaN point or SE (a hand-edited or legacy record) must not read as "no
+                # regression" just because NaN < x is False. Say the arm could not run.
+                reasons.append(
+                    f"pass^{report.k} could not be compared: non-finite estimate "
+                    f"(current {report.pass_hat_k!r}, baseline {base_hat!r})"
+                )
+            elif hi < -tolerance:
                 reasons.append(
                     f"pass^{report.k} regressed: {report.pass_hat_k:.3f} vs baseline "
                     f"{base_hat:.3f}; the interval for the change tops out at {hi:+.3f} "

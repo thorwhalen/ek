@@ -156,6 +156,20 @@ def test_gate_accepts_legacy_baselines_without_pass_hat_k_sd(tmp_path):
     assert any("pass^4 regressed" in r for r in gate.reasons)
 
 
+def test_gate_handles_null_sd_and_nan_baselines(tmp_path):
+    tasks = _tasks(40)
+    good = _quiet(run_suite, _flaky_agent(p_fail=0.05, seed=1), tasks, k=2)
+    record = save_agent_baseline(good, "b", rootdir=str(tmp_path))
+    same = _quiet(run_suite, _flaky_agent(p_fail=0.05, seed=2), tasks, k=2)
+
+    # A persisted null SD (one-task suites write it) takes the floor route, not a crash.
+    assert _quiet(agent_regression_gate, same, {**record, "pass_hat_k_sd": None}).passed
+
+    # A NaN estimate (hand-edited / raw-JSON record) must not read as "no regression".
+    gate = _quiet(agent_regression_gate, same, {**record, "pass_hat_k": float("nan")})
+    assert not gate.passed and any("could not be compared" in r for r in gate.reasons)
+
+
 def test_gate_floors_a_legacy_perfect_baseline(tmp_path):
     """A legacy PERFECT baseline (zero-width CI, no SD) is floored, not treated as certain."""
     tasks = _tasks(40)

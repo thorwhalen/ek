@@ -220,9 +220,11 @@ def mean_standard_error(
 
     The floor is Agresti--Coull's trick generalised to bounded values: add ``z**2 / 2``
     pseudo-units at *each* bound, and take the SE of the augmented mean. For 0/1 values this is
-    the Agresti--Coull SE ``sqrt(p~(1-p~)/(n+z**2))``; in the interior it is within a few percent
-    of ``sd / sqrt(n)``, so it only bites where the plain estimate is degenerate. The result is
-    ``max(plain, floor)``.
+    (up to the sample-variance ``n - 1``) the Agresti--Coull SE ``sqrt(p~(1-p~)/(n+z**2))``. With
+    well-spread per-task values it is within a few percent of ``sd / sqrt(n)``; it binds where the
+    spread is small -- near the bounds, or when every task scores about the same -- which is
+    conservative there. The result is ``max(plain, floor)``. It is a normal (``z``) SE with no
+    small-sample t-correction, so with fewer than ~20 tasks it is somewhat optimistic.
 
     Returns ``None`` when there is nothing to estimate from (``n <= 0`` or no ``mean``). A
     missing ``sd`` (fewer than two units) contributes nothing; the floor still applies.
