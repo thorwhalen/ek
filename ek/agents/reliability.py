@@ -350,7 +350,9 @@ class ReliabilityReport:
         (:func:`mean_standard_error`); ``None`` if ``pass^k`` could not be measured."""
         if self.pass_hat_k is None:
             return None
-        return mean_standard_error(self.pass_hat_k, self.pass_hat_k_sd, self.n_tasks, z=z)
+        return mean_standard_error(
+            self.pass_hat_k, self.pass_hat_k_sd, self.n_tasks, z=z
+        )
 
 
 def _group_trials(source: Any) -> dict:
