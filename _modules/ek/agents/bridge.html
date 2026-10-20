@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=297ad043"></script>
+    <script src="../../../_static/documentation_options.js?v=8d02545a"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.12" />
+  <meta name="docsearch:version" content="0.1.13" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -744,10 +744,12 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">Step</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">Trajectory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cost</span><span class="p">,</span> <span class="n">Episode</span><span class="p">,</span> <span class="n">RunProvenance</span><span class="p">,</span> <span class="n">Step</span><span class="p">,</span> <span class="n">TaskSpec</span><span class="p">,</span> <span class="n">Trajectory</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_loads</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -970,6 +972,128 @@ window.runMermaid = runMermaid;</script>
         <span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">,</span>
         <span class="n">output</span><span class="o">=</span><span class="n">completion</span><span class="p">,</span>
     <span class="p">)</span></div>
+
+
+
+<span class="c1">#: Inspect's letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades</span>
+<span class="c1">#: as numbers -- the mapping ``inspect_ai.scorer.value_to_float`` uses, restated so reading a</span>
+<span class="c1">#: log needs no ``inspect_ai`` import.</span>
+<span class="n">INSPECT_SCORE_VALUES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"C"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">"I"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">"P"</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="s2">"N"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">"yes"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">"no"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">"true"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">"false"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#: A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL</span>
+<span class="c1">#: "P" grade is 0.5, so it is a failure unless the threshold is lowered).</span>
+<span class="n">DEFAULT_SUCCESS_THRESHOLD</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+
+<div class="viewcode-block" id="inspect_score_value">
+<a class="viewcode-back" href="../../../_autosummary/ek.agents.bridge.html#ek.agents.inspect_score_value">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">inspect_score_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""An Inspect ``Score.value`` as a float, or ``None`` when it is not a scalar grade.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)</span>
+<span class="sd">        (1.0, 0.5, 0.25)</span>
+<span class="sd">        &gt;&gt;&gt; inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar</span>
+<span class="sd">        True</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">INSPECT_SCORE_VALUES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">INSPECT_SCORE_VALUES</span><span class="p">[</span><span class="n">text</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">INSPECT_SCORE_VALUES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">INSPECT_SCORE_VALUES</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># NaN/inf is "no grade", not a failure (nan &gt;= threshold would silently read as False).</span>
+    <span class="k">return</span> <span class="n">number</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_str_or_empty</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">""</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="episodes_from_inspect_log">
+<a class="viewcode-back" href="../../../_autosummary/ek.agents.bridge.html#ek.agents.episodes_from_inspect_log">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">episodes_from_inspect_log</span><span class="p">(</span>
+    <span class="n">log</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">scorer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">success_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_SUCCESS_THRESHOLD</span><span class="p">,</span>
+    <span class="n">task_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Episode</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Yield one graded :class:`Episode` per sample *per epoch* of an Inspect ``EvalLog``.</span>
+
+<span class="sd">    ``task_prefix`` (e.g. the Inspect task name) is prepended as ``"&lt;prefix&gt;/&lt;sample id&gt;"`` --</span>
+<span class="sd">    needed when pooling several logs, whose sample ids (often ``1, 2, 3``) would otherwise</span>
+<span class="sd">    collide and be counted as extra trials of one task. A ``scorer`` that no sample has raises</span>
+<span class="sd">    ``ValueError`` (a typo would otherwise leave every episode silently ungraded).</span>
+
+<span class="sd">    Duck-typed like :func:`from_inspect_sample` (no ``inspect_ai`` import): reads</span>
+<span class="sd">    ``log.samples`` and ``log.eval``. Each sample's score -- the ``scorer`` named, else the</span>
+<span class="sd">    first -- is read with :func:`inspect_score_value` and the episode is graded</span>
+<span class="sd">    ``success = value &gt;= success_threshold``; a sample with no scalar score stays ungraded</span>
+<span class="sd">    (``success=None``) rather than being silently counted as a failure.</span>
+
+<span class="sd">    Inspect's ``epochs`` are ek's *trials*: an eval run with ``epochs=k`` yields k episodes per</span>
+<span class="sd">    ``task_id`` (the sample id), which is exactly what :func:`~ek.agents.reliability` needs for</span>
+<span class="sd">    ``pass^k``. The run's model and task version are recorded as :class:`RunProvenance`.</span>
+
+<span class="sd">    Example (a log-shaped stand-in; a real ``EvalLog`` has the same attributes):</span>
+<span class="sd">        &gt;&gt;&gt; from types import SimpleNamespace as NS</span>
+<span class="sd">        &gt;&gt;&gt; sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),</span>
+<span class="sd">        ...             scores={"match": NS(value="C")})</span>
+<span class="sd">        &gt;&gt;&gt; log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))</span>
+<span class="sd">        &gt;&gt;&gt; [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]</span>
+<span class="sd">        [('q1', True, 1)]</span>
+<span class="sd">    """</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="s2">"eval"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">RunProvenance</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">_str_or_empty</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+        <span class="n">suite_version</span><span class="o">=</span><span class="n">_str_or_empty</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="s2">"task_version"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+    <span class="p">)</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="s2">"samples"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">())</span>
+    <span class="k">if</span> <span class="n">scorer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">samples</span><span class="p">:</span>
+        <span class="n">known</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})}</span>
+        <span class="k">if</span> <span class="n">scorer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"episodes_from_inspect_log: no sample has a score named </span><span class="si">{</span><span class="n">scorer</span><span class="si">!r}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"(scorers in this log: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">known</span><span class="p">)</span><span class="si">}</span><span class="s2">) -- every episode would be ungraded."</span>
+            <span class="p">)</span>
+    <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">scorer</span> <span class="k">if</span> <span class="n">scorer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">inspect_score_value</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+        <span class="n">episode</span> <span class="o">=</span> <span class="n">from_inspect_sample</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">task_prefix</span><span class="p">:</span>
+            <span class="n">episode</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">task_prefix</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">episode</span><span class="o">.</span><span class="n">task_id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">replace</span><span class="p">(</span>
+            <span class="n">episode</span><span class="p">,</span>
+            <span class="n">success</span><span class="o">=</span><span class="kc">None</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="n">success_threshold</span><span class="p">,</span>
+            <span class="n">run</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+            <span class="n">meta</span><span class="o">=</span><span class="p">{</span>
+                <span class="o">**</span><span class="n">episode</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span>
+                <span class="s2">"epoch"</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="s2">"epoch"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="s2">"score"</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                <span class="s2">"scorer"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span></div>
 
 
 

@@ -1,4 +1,4 @@
-> built 2026-10-20 12:21 UTC from b249552 (main) · ek 0.1.12. Details: build_info.json
+> built 2026-10-20 15:23 UTC from 4d706df (main) · ek 0.1.13. Details: build_info.json
 
 # index.html.md
 
@@ -111,7 +111,9 @@ Also included: BFCL-style tool-call correctness (cost-weighted by the tool gramm
 argument to a *destructive* tool costs more), an order-sensitive trajectory distance, and an
 LLM-as-judge signal — with `judge_validation()`, because an unvalidated judge is a liability, not
 a metric. **None of this needs an extra**: `ek.agents` is pure-python, and the bridges duck-type,
-so it scores an Inspect/DeepEval run without importing either.
+so it scores an Inspect/DeepEval run without importing either. With `ek[agents]` installed,
+`run_inspect(task, model=..., epochs=k)` runs an Inspect AI eval and returns graded episodes
+ready for `reliability(..., k=k)` (use `model="mockllm/model"` to try it offline).
 
 ## Install
 
@@ -119,6 +121,7 @@ so it scores an Inspect/DeepEval run without importing either.
 pip install ek            # lean, permissive core (dol, config2py, jiwer, rapidfuzz)
 pip install "ek[ocr]"     # + the ocracy OCR fleet (install engines via ocracy extras)
 pip install "ek[agents]"  # + external agent harnesses to *run* (inspect-ai, deepeval, ragas)
+pip install "ek[agreement]"  # + uqlm self-consistency (heavy: torch/transformers)
 pip install "ek[all]"     # + the permissive capability tiers (metrics, calibration, ...)
 ```
 
@@ -501,15 +504,34 @@ tool-using agent, and parsing them needs no SDK at all.
 ({'city': 'Paris'}, '18C')
 ```
 
+### Module Attributes
+
+| [`INSPECT_SCORE_VALUES`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.INSPECT_SCORE_VALUES)      | Inspect's letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades as numbers -- the mapping `inspect_ai.scorer.value_to_float` uses, restated so reading a log needs no `inspect_ai` import.   |
+|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DEFAULT_SUCCESS_THRESHOLD`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD) | A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL "P" grade is 0.5, so it is a failure unless the threshold is lowered).                                                        |
+
 ### Functions
 
-| [`as_agent`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.as_agent)(fn)                                 | Wrap a plain `input -> answer` function into the harness's `TaskSpec -> Episode` shape.                                                  |
-|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| [`cost_from_usage`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.cost_from_usage)(usage, \*[, latency_s])      | Build a [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                |
-| [`episode_from_messages`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.episode_from_messages)(messages, \*[, ...])   | Build a full [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state). |
-| [`from_deepeval_test_case`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.from_deepeval_test_case)(case, \*[, task_id]) | Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).                                                             |
-| [`from_inspect_sample`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.from_inspect_sample)(sample, \*[, task_id])   | Adapt an Inspect AI `EvalSample`-shaped object into an `Episode` (duck-typed).                                                           |
-| [`trajectory_from_messages`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.trajectory_from_messages)(messages)           | Parse a chat transcript into a [`Trajectory`](_autosummary/ek.agents.base.html.md#ek.agents.base.Trajectory).                    |
+| [`as_agent`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.as_agent)(fn)                                      | Wrap a plain `input -> answer` function into the harness's `TaskSpec -> Episode` shape.                                                  |
+|----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| [`cost_from_usage`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.cost_from_usage)(usage, \*[, latency_s])           | Build a [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                |
+| [`episode_from_messages`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.episode_from_messages)(messages, \*[, ...])        | Build a full [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state). |
+| [`episodes_from_inspect_log`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.episodes_from_inspect_log)(log, \*[, scorer, ...]) | Yield one graded `Episode` per sample *per epoch* of an Inspect `EvalLog`.                                                               |
+| [`from_deepeval_test_case`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.from_deepeval_test_case)(case, \*[, task_id])      | Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).                                                             |
+| [`from_inspect_sample`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.from_inspect_sample)(sample, \*[, task_id])        | Adapt an Inspect AI `EvalSample`-shaped object into an `Episode` (duck-typed).                                                           |
+| [`inspect_score_value`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.inspect_score_value)(value)                        | An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.                                                            |
+| [`trajectory_from_messages`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.trajectory_from_messages)(messages)                | Parse a chat transcript into a [`Trajectory`](_autosummary/ek.agents.base.html.md#ek.agents.base.Trajectory).                    |
+
+### ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD *= 1.0*
+
+A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL
+“P” grade is 0.5, so it is a failure unless the threshold is lowered).
+
+### ek.agents.bridge.INSPECT_SCORE_VALUES *= {'C': 1.0, 'I': 0.0, 'N': 0.0, 'P': 0.5, 'false': 0.0, 'no': 0.0, 'true': 1.0, 'yes': 1.0}*
+
+Inspect’s letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades
+as numbers – the mapping `inspect_ai.scorer.value_to_float` uses, restated so reading a
+log needs no `inspect_ai` import.
 
 ### ek.agents.bridge.as_agent(fn)
 
@@ -556,6 +578,39 @@ Build a full [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Epis
 * **Return type:**
   [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)
 
+### ek.agents.bridge.episodes_from_inspect_log(log, , scorer=None, success_threshold=1.0, task_prefix='')
+
+Yield one graded `Episode` per sample *per epoch* of an Inspect `EvalLog`.
+
+`task_prefix` (e.g. the Inspect task name) is prepended as `"<prefix>/<sample id>"` –
+needed when pooling several logs, whose sample ids (often `1, 2, 3`) would otherwise
+collide and be counted as extra trials of one task. A `scorer` that no sample has raises
+`ValueError` (a typo would otherwise leave every episode silently ungraded).
+
+Duck-typed like [`from_inspect_sample()`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.from_inspect_sample) (no `inspect_ai` import): reads
+`log.samples` and `log.eval`. Each sample’s score – the `scorer` named, else the
+first – is read with [`inspect_score_value()`](_autosummary/ek.agents.bridge.html.md#ek.agents.bridge.inspect_score_value) and the episode is graded
+`success = value >= success_threshold`; a sample with no scalar score stays ungraded
+(`success=None`) rather than being silently counted as a failure.
+
+Inspect’s `epochs` are ek’s *trials*: an eval run with `epochs=k` yields k episodes per
+`task_id` (the sample id), which is exactly what [`reliability()`](_autosummary/ek.agents.html.md#ek.agents.reliability) needs for
+`pass^k`. The run’s model and task version are recorded as `RunProvenance`.
+
+Example (a log-shaped stand-in; a real `EvalLog` has the same attributes):
+
+```pycon
+>>> from types import SimpleNamespace as NS
+>>> sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),
+...             scores={"match": NS(value="C")})
+>>> log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))
+>>> [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]
+[('q1', True, 1)]
+```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)]
+
 ### ek.agents.bridge.from_deepeval_test_case(case, , task_id='')
 
 Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).
@@ -576,6 +631,22 @@ an Inspect log never drags the harness into `ek`’s dependency closure.
 
 * **Return type:**
   [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)
+
+### ek.agents.bridge.inspect_score_value(value)
+
+An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.
+
+### Example
+
+```pycon
+>>> inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)
+(1.0, 0.5, 0.25)
+>>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
+True
+```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### ek.agents.bridge.trajectory_from_messages(messages)
 
@@ -1057,6 +1128,9 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`episode_from_messages`](_autosummary/ek.agents.html.md#ek.agents.episode_from_messages)(messages, \*[, ...])         | Build a full [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state).                                 |
 | [`cost_from_usage`](_autosummary/ek.agents.html.md#ek.agents.cost_from_usage)(usage, \*[, latency_s])            | Build a [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                                                |
 | [`from_inspect_sample`](_autosummary/ek.agents.html.md#ek.agents.from_inspect_sample)(sample, \*[, task_id])         | Adapt an Inspect AI `EvalSample`-shaped object into an [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) (duck-typed).                                            |
+| [`episodes_from_inspect_log`](_autosummary/ek.agents.html.md#ek.agents.episodes_from_inspect_log)(log, \*[, scorer, ...])  | Yield one graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) per sample *per epoch* of an Inspect `EvalLog`.                                                |
+| [`inspect_score_value`](_autosummary/ek.agents.html.md#ek.agents.inspect_score_value)(value)                         | An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.                                                                                            |
+| [`run_inspect`](_autosummary/ek.agents.html.md#ek.agents.run_inspect)(tasks, \*[, model, epochs, ...])       | Run an Inspect AI eval and return its samples as graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) s.                                                      |
 | [`from_deepeval_test_case`](_autosummary/ek.agents.html.md#ek.agents.from_deepeval_test_case)(case, \*[, task_id])       | Adapt a DeepEval `LLMTestCase`-shaped object into an [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) (duck-typed).                                              |
 
 ### Classes
@@ -1170,7 +1244,12 @@ the label says so, and `detail['flavor']` records it.
   * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `tool_correctness` | `task_completion` | `geval`.
   * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – An injected DeepEval-shaped metric (`.measure(case)`, `.score`); `None`
     builds the real one lazily (telemetry disabled first).
-  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval).
+  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval, and
+    `model=` – a model name or a `DeepEvalBaseLLM` – for any of them: DeepEval >= 4
+    builds its default OpenAI judge at construction, so without `model=` it needs
+    `OPENAI_API_KEY` even for `tool_correctness`). For GEval, `name` defaults to
+    `"ek_geval"` and `evaluation_params` to `DEFAULT_GEVAL_PARAMS` (strings are
+    accepted).
 
 #### aggregate(scores)
 
@@ -1282,7 +1361,7 @@ The cached-input rate (explicit, else the discounted input rate).
 
 The reasoning-token rate (explicit, else the output rate).
 
-### *class* ek.agents.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3)
+### *class* ek.agents.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3, \*\*metric_kwargs)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1292,12 +1371,19 @@ The sample is a mapping/object with `user_input` (or `question`), `response` (or
 `answer`) and `retrieved_contexts` (or `contexts`). The score is in `[0, 1]`.
 Ragas metrics call an LLM, so pass a configured `metric` (or `llm=` to build one).
 
+Both Ragas metric APIs are accepted: the collections API (`ascore(**fields)` returning a
+`MetricResult`; `ragas.metrics.collections`, the one that survives Ragas 1.0) and the
+legacy one (`single_turn_ascore(SingleTurnSample)`; deprecated since Ragas 0.4).
+
 * **Parameters:**
-  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object exposing `single_turn_ascore(sample)` (injected), or
-    `None` to build `name` from `llm`.
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object (either API), or `None` to build `name` from `llm`.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `faithfulness` | `answer_relevancy` | `context_precision`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A `ragas` LLM wrapper, used when `metric` is `None`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The judge, used when `metric` is `None`. An `InstructorBaseRagasLLM` (from
+    `ragas.llms.llm_factory`) builds the collections metric; any other Ragas LLM
+    wrapper (e.g. `LangchainLLMWrapper`) builds the legacy one.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – an LLM call per sample.
+  * **\*\*metric_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to the Ragas constructor (e.g. `embeddings=` for
+    `answer_relevancy`).
 
 ### Example
 
@@ -1522,8 +1608,10 @@ calibrate before gating (Hard Rule 1).
 * **Parameters:**
   * **scorer** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A backend with `score(prompt) -> float` (tests / custom sampling), or
     `None` to build uqlm’s `BlackBoxUQ` from `llm`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`.
-  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`).
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`. uqlm reads its
+    `temperature` attribute, so it must have one.
+  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`, which
+    downloads an NLI model on first use; `"exact_match"` needs none).
   * **num_responses** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Samples per prompt.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – it pays for `num_responses` extra generations.
 
@@ -1740,6 +1828,39 @@ Build a full [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Epis
 * **Return type:**
   [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)
 
+### ek.agents.episodes_from_inspect_log(log, , scorer=None, success_threshold=1.0, task_prefix='')
+
+Yield one graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) per sample *per epoch* of an Inspect `EvalLog`.
+
+`task_prefix` (e.g. the Inspect task name) is prepended as `"<prefix>/<sample id>"` –
+needed when pooling several logs, whose sample ids (often `1, 2, 3`) would otherwise
+collide and be counted as extra trials of one task. A `scorer` that no sample has raises
+`ValueError` (a typo would otherwise leave every episode silently ungraded).
+
+Duck-typed like [`from_inspect_sample()`](_autosummary/ek.agents.html.md#ek.agents.from_inspect_sample) (no `inspect_ai` import): reads
+`log.samples` and `log.eval`. Each sample’s score – the `scorer` named, else the
+first – is read with [`inspect_score_value()`](_autosummary/ek.agents.html.md#ek.agents.inspect_score_value) and the episode is graded
+`success = value >= success_threshold`; a sample with no scalar score stays ungraded
+(`success=None`) rather than being silently counted as a failure.
+
+Inspect’s `epochs` are ek’s *trials*: an eval run with `epochs=k` yields k episodes per
+`task_id` (the sample id), which is exactly what [`reliability()`](_autosummary/ek.agents.html.md#ek.agents.reliability) needs for
+`pass^k`. The run’s model and task version are recorded as [`RunProvenance`](_autosummary/ek.agents.html.md#ek.agents.RunProvenance).
+
+Example (a log-shaped stand-in; a real `EvalLog` has the same attributes):
+
+```pycon
+>>> from types import SimpleNamespace as NS
+>>> sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),
+...             scores={"match": NS(value="C")})
+>>> log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))
+>>> [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]
+[('q1', True, 1)]
+```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)]
+
 ### ek.agents.final_state_match(episode, gold)
 
 Compare the episode’s **final state** with the goal state (the tau-bench oracle).
@@ -1767,6 +1888,22 @@ an Inspect log never drags the harness into `ek`’s dependency closure.
 
 * **Return type:**
   [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)
+
+### ek.agents.inspect_score_value(value)
+
+An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.
+
+### Example
+
+```pycon
+>>> inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)
+(1.0, 0.5, 0.25)
+>>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
+True
+```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### ek.agents.is_episode(x)
 
@@ -2025,6 +2162,38 @@ Compute `pass@k` / `pass^k` / success-rate over a k-trial run.
 0.667
 ```
 
+### ek.agents.run_inspect(tasks, , model=None, epochs=None, scorer=None, success_threshold=1.0, log_dir=None, \*\*eval_kwargs)
+
+Run an Inspect AI eval and return its samples as graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) s.
+
+A thin convenience over `inspect_ai.eval` + [`episodes_from_inspect_log()`](_autosummary/ek.agents.html.md#ek.agents.episodes_from_inspect_log):
+one episode per sample per epoch, graded by the sample’s score (`scorer`, else the first)
+reaching `success_threshold`. Run with `epochs=k` and the result is a k-trial run –
+hand it to [`reliability()`](_autosummary/ek.agents.html.md#ek.agents.reliability) for `pass^k`, or to
+[`cost_report()`](_autosummary/ek.agents.html.md#ek.agents.cost_report) for cost per successful task.
+
+* **Parameters:**
+  * **tasks** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Anything `inspect_ai.eval` accepts (a `Task`, a task function, a registry
+    name, a list of them).
+  * **model** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The model under test (e.g. `"openai/gpt-4o"`); `None` lets Inspect use
+    `INSPECT_EVAL_MODEL`. `"mockllm/model"` runs offline at no cost.
+  * **epochs** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Trials per sample (Inspect’s `epochs`); `None` keeps the task’s own setting.
+  * **scorer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which scorer’s value grades success (default: each sample’s first score).
+  * **success_threshold** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A sample succeeds when its score value is `>=` this.
+  * **log_dir** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Where Inspect writes its `.eval` logs. `None` uses a temporary directory
+    that is removed once the episodes are read – pass a path to keep the logs.
+  * **\*\*eval_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to `inspect_ai.eval` (`limit=`, `solver=`, …). `display`
+    defaults to `"none"`.
+* **Raises:**
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – if any eval did not finish with status `success` (a partial run is not
+      a k-trial run, and grading it as one would understate failures).
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+#### NOTE
+`inspect_ai.eval` is synchronous and refuses to run inside an event loop; from async
+code, call `inspect_ai.eval_async` and pass each log to `episodes_from_inspect_log`.
+
 ### ek.agents.run_suite(agent, tasks, , k=1, check=None, metrics=None, price=None, prices=None, run=None, seed=None, persist=False, run_id=None, rootdir=None)
 
 Run `agent` over a task suite, `k` trials per task, and report reliability + cost.
@@ -2135,7 +2304,7 @@ where agent success rates live. Wilson is the cheap, dependency-free fix.
 | [`metrics`](_autosummary/ek.agents.metrics.html.md#module-ek.agents.metrics)       | Task-success and cost-per-successful-task: the two metrics that drive the whole thing.                                                                                                                                                        |
 | [`toolcalls`](_autosummary/ek.agents.toolcalls.html.md#module-ek.agents.toolcalls)   | Tool-call correctness: BFCL-style AST matching over a *multiset* of calls.                                                                                                                                                                    |
 | [`trajectory`](_autosummary/ek.agents.trajectory.html.md#module-ek.agents.trajectory) | Trajectory (process) evaluation: a cost-weighted **sequence** edit distance over steps.                                                                                                                                                       |
-| [`wrappers`](_autosummary/ek.agents.wrappers.html.md#module-ek.agents.wrappers)     | Optional WRAP adapters behind `ek[agents]`: uqlm, Ragas and DeepEval as ek strategies.                                                                                                                                                        |
+| [`wrappers`](_autosummary/ek.agents.wrappers.html.md#module-ek.agents.wrappers)     | Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.                                                                                                                                                                |
 
 
 # _autosummary/ek.agents.judge.html.md
@@ -2629,13 +2798,17 @@ Corpus distance = total raw distance / total maximum distance (never a mean).
 
 # ek.agents.wrappers
 
-Optional WRAP adapters behind `ek[agents]`: uqlm, Ragas and DeepEval as ek strategies.
+Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.
 
 `ek.agents` scores episodes in pure python; this module is the batteries-included layer for
 teams who already run these libraries. Every adapter imports its backend **lazily** (at call
 time, guarded by [`requires_extra()`](_autosummary/ek.registry.html.md#ek.registry.requires_extra)), so `import ek` stays light, and each
 takes an injectable backend object so it can be tested – and used – without network access.
+The dependency direction stays `ek -> backend`, never the reverse. Inspect AI, Ragas and
+DeepEval come with `ek[agents]`; uqlm (heavy: torch/transformers) with `ek[agreement]`.
 
+- [`run_inspect()`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.run_inspect) – run an Inspect AI eval and get graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) s
+  back (Inspect’s `epochs` are ek’s trials, so the result feeds `reliability` directly).
 - [`UqlmConsistencySignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.UqlmConsistencySignal) – black-box sample-and-vote self-consistency from `uqlm`
   (a `[0, 1]` confidence), a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) (expensive: `cost_tier=3`).
 - [`RagasSignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RagasSignal) – reference-free Ragas metrics (faithfulness, answer relevancy,
@@ -2657,18 +2830,21 @@ Example (a fake backend, no extra needed):
 
 ### Module Attributes
 
-| [`DEEPEVAL_TELEMETRY_ENV`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV)   | Env var that opts out of DeepEval's Confident-AI telemetry (set before importing it).   |
-|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| [`DEFAULT_NUM_RESPONSES`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_NUM_RESPONSES)    | Sample count for uqlm's black-box scorers (a keyword default, not a magic number).      |
-| [`DEFAULT_UQLM_SCORER`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_UQLM_SCORER)      | uqlm black-box scorer used when none is named.                                          |
-| [`DEFAULT_RAGAS_METRIC`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_RAGAS_METRIC)     | Ragas metric used when none is named.                                                   |
-| [`RAGAS_METRICS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RAGAS_METRICS)            | ek's metric name -> Ragas class name.                                                   |
-| [`DEEPEVAL_KINDS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_KINDS)           | ek name -> (DeepEval class name, needs an LLM judge).                                   |
+| [`DEEPEVAL_TELEMETRY_ENV`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV)   | Env var that opts out of DeepEval's Confident-AI telemetry (set before importing it).                                                                                                                                    |
+|---------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DEFAULT_NUM_RESPONSES`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_NUM_RESPONSES)    | Sample count for uqlm's black-box scorers (a keyword default, not a magic number).                                                                                                                                       |
+| [`DEFAULT_UQLM_SCORER`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_UQLM_SCORER)      | uqlm black-box scorer used when none is named.                                                                                                                                                                           |
+| [`DEFAULT_RAGAS_METRIC`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_RAGAS_METRIC)     | Ragas metric used when none is named.                                                                                                                                                                                    |
+| [`RAGAS_METRICS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RAGAS_METRICS)            | ek's metric name -> Ragas class name in the legacy `ragas.metrics` API (deprecated since Ragas 0.4) -- metrics take a `BaseRagasLLM` and expose `single_turn_ascore(sample)`.                                            |
+| [`RAGAS_COLLECTION_METRICS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RAGAS_COLLECTION_METRICS) | ek's metric name -> Ragas class name in `ragas.metrics.collections` (Ragas >= 0.4, the API that survives 1.0) -- metrics take an `InstructorBaseRagasLLM` (`llm_factory`) and expose `ascore(**fields) -> MetricResult`. |
+| [`DEEPEVAL_KINDS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_KINDS)           | ek name -> (DeepEval class name, needs an LLM judge).                                                                                                                                                                    |
+| [`DEFAULT_GEVAL_PARAMS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_GEVAL_PARAMS)     | Test-case fields a GEval judge reads when `evaluation_params` is not given.                                                                                                                                              |
 
 ### Functions
 
-| [`disable_deepeval_telemetry`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.disable_deepeval_telemetry)()   | Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choice).   |
-|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| [`disable_deepeval_telemetry`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.disable_deepeval_telemetry)()                 | Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choice).                                                   |
+|-----------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| [`run_inspect`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.run_inspect)(tasks, \*[, model, epochs, ...]) | Run an Inspect AI eval and return its samples as graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) s. |
 
 ### Classes
 
@@ -2684,6 +2860,11 @@ ek name -> (DeepEval class name, needs an LLM judge).
 ### ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV *= 'DEEPEVAL_TELEMETRY_OPT_OUT'*
 
 Env var that opts out of DeepEval’s Confident-AI telemetry (set before importing it).
+
+### ek.agents.wrappers.DEFAULT_GEVAL_PARAMS *= ('input', 'actual_output')*
+
+Test-case fields a GEval judge reads when `evaluation_params` is not given. DeepEval >= 4
+refuses a plain `LLMTestCase` without them (it would otherwise evaluate a *trace*).
 
 ### ek.agents.wrappers.DEFAULT_NUM_RESPONSES *= 5*
 
@@ -2714,7 +2895,12 @@ the label says so, and `detail['flavor']` records it.
   * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `tool_correctness` | `task_completion` | `geval`.
   * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – An injected DeepEval-shaped metric (`.measure(case)`, `.score`); `None`
     builds the real one lazily (telemetry disabled first).
-  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval).
+  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval, and
+    `model=` – a model name or a `DeepEvalBaseLLM` – for any of them: DeepEval >= 4
+    builds its default OpenAI judge at construction, so without `model=` it needs
+    `OPENAI_API_KEY` even for `tool_correctness`). For GEval, `name` defaults to
+    `"ek_geval"` and `evaluation_params` to `DEFAULT_GEVAL_PARAMS` (strings are
+    accepted).
 
 #### aggregate(scores)
 
@@ -2723,11 +2909,18 @@ Mean of the per-episode scores (DeepEval scores are per-case, not count-based).
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
+### ek.agents.wrappers.RAGAS_COLLECTION_METRICS *= {'answer_relevancy': 'AnswerRelevancy', 'context_precision': 'ContextPrecisionWithoutReference', 'faithfulness': 'Faithfulness'}*
+
+ek’s metric name -> Ragas class name in `ragas.metrics.collections` (Ragas >= 0.4, the API
+that survives 1.0) – metrics take an `InstructorBaseRagasLLM` (`llm_factory`) and expose
+`ascore(**fields) -> MetricResult`. `answer_relevancy` also needs `embeddings=`.
+
 ### ek.agents.wrappers.RAGAS_METRICS *= {'answer_relevancy': 'ResponseRelevancy', 'context_precision': 'LLMContextPrecisionWithoutReference', 'faithfulness': 'Faithfulness'}*
 
-ek’s metric name -> Ragas class name.
+ek’s metric name -> Ragas class name in the legacy `ragas.metrics` API (deprecated since
+Ragas 0.4) – metrics take a `BaseRagasLLM` and expose `single_turn_ascore(sample)`.
 
-### *class* ek.agents.wrappers.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3)
+### *class* ek.agents.wrappers.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3, \*\*metric_kwargs)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2737,12 +2930,19 @@ The sample is a mapping/object with `user_input` (or `question`), `response` (or
 `answer`) and `retrieved_contexts` (or `contexts`). The score is in `[0, 1]`.
 Ragas metrics call an LLM, so pass a configured `metric` (or `llm=` to build one).
 
+Both Ragas metric APIs are accepted: the collections API (`ascore(**fields)` returning a
+`MetricResult`; `ragas.metrics.collections`, the one that survives Ragas 1.0) and the
+legacy one (`single_turn_ascore(SingleTurnSample)`; deprecated since Ragas 0.4).
+
 * **Parameters:**
-  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object exposing `single_turn_ascore(sample)` (injected), or
-    `None` to build `name` from `llm`.
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object (either API), or `None` to build `name` from `llm`.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `faithfulness` | `answer_relevancy` | `context_precision`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A `ragas` LLM wrapper, used when `metric` is `None`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The judge, used when `metric` is `None`. An `InstructorBaseRagasLLM` (from
+    `ragas.llms.llm_factory`) builds the collections metric; any other Ragas LLM
+    wrapper (e.g. `LangchainLLMWrapper`) builds the legacy one.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – an LLM call per sample.
+  * **\*\*metric_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to the Ragas constructor (e.g. `embeddings=` for
+    `answer_relevancy`).
 
 ### Example
 
@@ -2766,8 +2966,10 @@ calibrate before gating (Hard Rule 1).
 * **Parameters:**
   * **scorer** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A backend with `score(prompt) -> float` (tests / custom sampling), or
     `None` to build uqlm’s `BlackBoxUQ` from `llm`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`.
-  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`).
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`. uqlm reads its
+    `temperature` attribute, so it must have one.
+  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`, which
+    downloads an NLI model on first use; `"exact_match"` needs none).
   * **num_responses** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Samples per prompt.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – it pays for `num_responses` extra generations.
 
@@ -2786,6 +2988,38 @@ Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choic
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+### ek.agents.wrappers.run_inspect(tasks, , model=None, epochs=None, scorer=None, success_threshold=1.0, log_dir=None, \*\*eval_kwargs)
+
+Run an Inspect AI eval and return its samples as graded [`Episode`](_autosummary/ek.agents.html.md#ek.agents.Episode) s.
+
+A thin convenience over `inspect_ai.eval` + [`episodes_from_inspect_log()`](_autosummary/ek.agents.html.md#ek.agents.episodes_from_inspect_log):
+one episode per sample per epoch, graded by the sample’s score (`scorer`, else the first)
+reaching `success_threshold`. Run with `epochs=k` and the result is a k-trial run –
+hand it to [`reliability()`](_autosummary/ek.agents.html.md#ek.agents.reliability) for `pass^k`, or to
+[`cost_report()`](_autosummary/ek.agents.html.md#ek.agents.cost_report) for cost per successful task.
+
+* **Parameters:**
+  * **tasks** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Anything `inspect_ai.eval` accepts (a `Task`, a task function, a registry
+    name, a list of them).
+  * **model** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The model under test (e.g. `"openai/gpt-4o"`); `None` lets Inspect use
+    `INSPECT_EVAL_MODEL`. `"mockllm/model"` runs offline at no cost.
+  * **epochs** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Trials per sample (Inspect’s `epochs`); `None` keeps the task’s own setting.
+  * **scorer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which scorer’s value grades success (default: each sample’s first score).
+  * **success_threshold** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A sample succeeds when its score value is `>=` this.
+  * **log_dir** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Where Inspect writes its `.eval` logs. `None` uses a temporary directory
+    that is removed once the episodes are read – pass a path to keep the logs.
+  * **\*\*eval_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to `inspect_ai.eval` (`limit=`, `solver=`, …). `display`
+    defaults to `"none"`.
+* **Raises:**
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – if any eval did not finish with status `success` (a partial run is not
+      a k-trial run, and grading it as one would understate failures).
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+#### NOTE
+`inspect_ai.eval` is synchronous and refuses to run inside an event loop; from async
+code, call `inspect_ai.eval_async` and pass each log to `episodes_from_inspect_log`.
 
 
 # _autosummary/ek.base.html.md
@@ -9654,18 +9888,18 @@ caught; a *truly* constant column (no spread at all) yields no findings. For
 
 # About this build
 
-This documentation was built on **2026-10-20 12:21 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/b249552e61a257e0b215e7518d713b04eb55ca2f"><code>b249552</code></a> on branch <code>main</code>, for **ek 0.1.12** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 15:23 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/4d706df73fe693a1a56fed963746282f84a9e9c0"><code>4d706df</code></a> on branch <code>main</code>, for **ek 0.1.13** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.12) is behind the latest release on PyPI (0.1.13): `pip install ek` gives newer code than these docs describe.
+- The documented version (0.1.13) is behind the latest release on PyPI (0.1.14): `pip install ek` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                      |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/ek/commit/b249552e61a257e0b215e7518d713b04eb55ca2f"><code>b249552e61a257e0b215e7518d713b04eb55ca2f</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/ek/commit/4d706df73fe693a1a56fed963746282f84a9e9c0"><code>4d706df73fe693a1a56fed963746282f84a9e9c0</code></a> |
 | Branch              | <code>main</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                 |
 | Working tree        | clean                                                                                                                                                |
@@ -9676,15 +9910,15 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/ek</code>                                                                 |
-| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/39421415869">39421415869</a>        |
+| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/39447622662">39447622662</a>        |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>b249552e61a257e0b215e7518d713b04eb55ca2f</code> (in the history of the built commit) |
+| Event commit | <code>4d706df73fe693a1a56fed963746282f84a9e9c0</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.20  |
+| epythet  | 0.2.21  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -9703,14 +9937,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/ek/0.1.13/">0.1.13</a>, newer than the documented version (0.1.12).
+Latest release: <a href="https://pypi.org/project/ek/0.1.14/">0.1.14</a>, newer than the documented version (0.1.13).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/ek && cd ek
-git checkout b249552e61a257e0b215e7518d713b04eb55ca2f
-pip install "epythet==0.2.20"
+git checkout 4d706df73fe693a1a56fed963746282f84a9e9c0
+pip install "epythet==0.2.21"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

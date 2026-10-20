@@ -107,7 +107,9 @@ Also included: BFCL-style tool-call correctness (cost-weighted by the tool gramm
 argument to a *destructive* tool costs more), an order-sensitive trajectory distance, and an
 LLM-as-judge signal — with `judge_validation()`, because an unvalidated judge is a liability, not
 a metric. **None of this needs an extra**: `ek.agents` is pure-python, and the bridges duck-type,
-so it scores an Inspect/DeepEval run without importing either.
+so it scores an Inspect/DeepEval run without importing either. With `ek[agents]` installed,
+`run_inspect(task, model=..., epochs=k)` runs an Inspect AI eval and returns graded episodes
+ready for `reliability(..., k=k)` (use `model="mockllm/model"` to try it offline).
 
 ## Install
 
@@ -115,6 +117,7 @@ so it scores an Inspect/DeepEval run without importing either.
 pip install ek            # lean, permissive core (dol, config2py, jiwer, rapidfuzz)
 pip install "ek[ocr]"     # + the ocracy OCR fleet (install engines via ocracy extras)
 pip install "ek[agents]"  # + external agent harnesses to *run* (inspect-ai, deepeval, ragas)
+pip install "ek[agreement]"  # + uqlm self-consistency (heavy: torch/transformers)
 pip install "ek[all]"     # + the permissive capability tiers (metrics, calibration, ...)
 ```
 

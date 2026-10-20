@@ -22,7 +22,7 @@
 - [ek.agents.metrics](_autosummary/ek.agents.metrics.html.md): Task-success and cost-per-successful-task: the two metrics that drive the whole thing.
 - [ek.agents.toolcalls](_autosummary/ek.agents.toolcalls.html.md): Tool-call correctness: BFCL-style AST matching over a &#42;multiset&#42; of calls.
 - [ek.agents.trajectory](_autosummary/ek.agents.trajectory.html.md): Trajectory (process) evaluation: a cost-weighted &#42;&#42;sequence&#42;&#42; edit distance over steps.
-- [ek.agents.wrappers](_autosummary/ek.agents.wrappers.html.md): Optional WRAP adapters behind &#96;ek&#91;agents&#93;&#96;: uqlm, Ragas and DeepEval as ek strategies.
+- [ek.agents.wrappers](_autosummary/ek.agents.wrappers.html.md): Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.
 - [ek.metrics](_autosummary/ek.metrics.html.md): Reference-based (offline) metrics: the &#96;score()&#96; side of &#96;ek&#96;.
 - [ek.metrics.anls](_autosummary/ek.metrics.anls.html.md): ANLS / ANLS&#92;&#42; (nested-JSON) similarity, wrapping &#96;anls_star&#96;.
 - [ek.metrics.fields](_autosummary/ek.metrics.fields.html.md): Field-level metric for record / dict-shaped extractions.
@@ -44,7 +44,7 @@
 - [ek.tools](_autosummary/ek.tools.html.md): Small, CLI-friendly functions over the &#96;ek&#96; core (the dispatch surface).
 - [ek.validate](_autosummary/ek.validate.html.md): Reference-free post-extraction validation &amp; correction (issue #7).
 - [For AI agents](ai-agents.html.md): &#96;ek&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 12:21 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 15:23 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

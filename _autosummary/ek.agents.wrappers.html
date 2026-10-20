@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=297ad043"></script>
+    <script src="../_static/documentation_options.js?v=8d02545a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.12" />
+  <meta name="docsearch:version" content="0.1.13" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -433,12 +433,16 @@
                   
   <section id="module-ek.agents.wrappers">
 <span id="ek-agents-wrappers"></span><h1>ek.agents.wrappers<a class="headerlink" href="#module-ek.agents.wrappers" title="Link to this heading">#</a></h1>
-<p>Optional WRAP adapters behind <code class="docutils literal notranslate"><span class="pre">ek[agents]</span></code>: uqlm, Ragas and DeepEval as ek strategies.</p>
+<p>Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ek.agents</span></code> scores episodes in pure python; this module is the batteries-included layer for
 teams who already run these libraries. Every adapter imports its backend <strong>lazily</strong> (at call
 time, guarded by <a class="reference internal" href="ek.registry.html#ek.registry.requires_extra" title="ek.registry.requires_extra"><code class="xref py py-func docutils literal notranslate"><span class="pre">requires_extra()</span></code></a>), so <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">ek</span></code> stays light, and each
-takes an injectable backend object so it can be tested – and used – without network access.</p>
+takes an injectable backend object so it can be tested – and used – without network access.
+The dependency direction stays <code class="docutils literal notranslate"><span class="pre">ek</span> <span class="pre">-&gt;</span> <span class="pre">backend</span></code>, never the reverse. Inspect AI, Ragas and
+DeepEval come with <code class="docutils literal notranslate"><span class="pre">ek[agents]</span></code>; uqlm (heavy: torch/transformers) with <code class="docutils literal notranslate"><span class="pre">ek[agreement]</span></code>.</p>
 <ul class="simple">
+<li><p><a class="reference internal" href="#ek.agents.wrappers.run_inspect" title="ek.agents.wrappers.run_inspect"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_inspect()</span></code></a> – run an Inspect AI eval and get graded <a class="reference internal" href="ek.agents.html#ek.agents.Episode" title="ek.agents.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> s
+back (Inspect’s <code class="docutils literal notranslate"><span class="pre">epochs</span></code> are ek’s trials, so the result feeds <code class="docutils literal notranslate"><span class="pre">reliability</span></code> directly).</p></li>
 <li><p><a class="reference internal" href="#ek.agents.wrappers.UqlmConsistencySignal" title="ek.agents.wrappers.UqlmConsistencySignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">UqlmConsistencySignal</span></code></a> – black-box sample-and-vote self-consistency from <code class="docutils literal notranslate"><span class="pre">uqlm</span></code>
 (a <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> confidence), a <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a> (expensive: <code class="docutils literal notranslate"><span class="pre">cost_tier=3</span></code>).</p></li>
 <li><p><a class="reference internal" href="#ek.agents.wrappers.RagasSignal" title="ek.agents.wrappers.RagasSignal"><code class="xref py py-class docutils literal notranslate"><span class="pre">RagasSignal</span></code></a> – reference-free Ragas metrics (faithfulness, answer relevancy,
@@ -472,10 +476,16 @@ Note <code class="docutils literal notranslate"><span class="pre">ToolCorrectnes
 <td><p>Ragas metric used when none is named.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.wrappers.RAGAS_METRICS" title="ek.agents.wrappers.RAGAS_METRICS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RAGAS_METRICS</span></code></a></p></td>
-<td><p>ek's metric name -&gt; Ragas class name.</p></td>
+<td><p>ek's metric name -&gt; Ragas class name in the legacy <code class="docutils literal notranslate"><span class="pre">ragas.metrics</span></code> API (deprecated since Ragas 0.4) -- metrics take a <code class="docutils literal notranslate"><span class="pre">BaseRagasLLM</span></code> and expose <code class="docutils literal notranslate"><span class="pre">single_turn_ascore(sample)</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.wrappers.DEEPEVAL_KINDS" title="ek.agents.wrappers.DEEPEVAL_KINDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEEPEVAL_KINDS</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.wrappers.RAGAS_COLLECTION_METRICS" title="ek.agents.wrappers.RAGAS_COLLECTION_METRICS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RAGAS_COLLECTION_METRICS</span></code></a></p></td>
+<td><p>ek's metric name -&gt; Ragas class name in <code class="docutils literal notranslate"><span class="pre">ragas.metrics.collections</span></code> (Ragas &gt;= 0.4, the API that survives 1.0) -- metrics take an <code class="docutils literal notranslate"><span class="pre">InstructorBaseRagasLLM</span></code> (<code class="docutils literal notranslate"><span class="pre">llm_factory</span></code>) and expose <code class="docutils literal notranslate"><span class="pre">ascore(**fields)</span> <span class="pre">-&gt;</span> <span class="pre">MetricResult</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.wrappers.DEEPEVAL_KINDS" title="ek.agents.wrappers.DEEPEVAL_KINDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEEPEVAL_KINDS</span></code></a></p></td>
 <td><p>ek name -&gt; (DeepEval class name, needs an LLM judge).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.wrappers.DEFAULT_GEVAL_PARAMS" title="ek.agents.wrappers.DEFAULT_GEVAL_PARAMS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_GEVAL_PARAMS</span></code></a></p></td>
+<td><p>Test-case fields a GEval judge reads when <code class="docutils literal notranslate"><span class="pre">evaluation_params</span></code> is not given.</p></td>
 </tr>
 </tbody>
 </table>
@@ -485,6 +495,9 @@ Note <code class="docutils literal notranslate"><span class="pre">ToolCorrectnes
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.wrappers.disable_deepeval_telemetry" title="ek.agents.wrappers.disable_deepeval_telemetry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disable_deepeval_telemetry</span></code></a>()</p></td>
 <td><p>Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choice).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.wrappers.run_inspect" title="ek.agents.wrappers.run_inspect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_inspect</span></code></a>(tasks, *[, model, epochs, ...])</p></td>
+<td><p>Run an Inspect AI eval and return its samples as graded <a class="reference internal" href="ek.agents.html#ek.agents.Episode" title="ek.agents.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> s.</p></td>
 </tr>
 </tbody>
 </table>
@@ -514,6 +527,13 @@ Note <code class="docutils literal notranslate"><span class="pre">ToolCorrectnes
 <dt class="sig sig-object py" id="ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV">
 <span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">DEEPEVAL_TELEMETRY_ENV</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DEEPEVAL_TELEMETRY_OPT_OUT'</span></span><a class="headerlink" href="#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV" title="Link to this definition">#</a></dt>
 <dd><p>Env var that opts out of DeepEval’s Confident-AI telemetry (set before importing it).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.wrappers.DEFAULT_GEVAL_PARAMS">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_GEVAL_PARAMS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('input',</span> <span class="pre">'actual_output')</span></span><a class="headerlink" href="#ek.agents.wrappers.DEFAULT_GEVAL_PARAMS" title="Link to this definition">#</a></dt>
+<dd><p>Test-case fields a GEval judge reads when <code class="docutils literal notranslate"><span class="pre">evaluation_params</span></code> is not given. DeepEval &gt;= 4
+refuses a plain <code class="docutils literal notranslate"><span class="pre">LLMTestCase</span></code> without them (it would otherwise evaluate a <em>trace</em>).</p>
 </dd></dl>
 
 <dl class="py data">
@@ -550,7 +570,12 @@ the label says so, and <code class="docutils literal notranslate"><span class="p
 <li><p><strong>kind</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">tool_correctness</span></code> | <code class="docutils literal notranslate"><span class="pre">task_completion</span></code> | <code class="docutils literal notranslate"><span class="pre">geval</span></code>.</p></li>
 <li><p><strong>metric</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – An injected DeepEval-shaped metric (<code class="docutils literal notranslate"><span class="pre">.measure(case)</span></code>, <code class="docutils literal notranslate"><span class="pre">.score</span></code>); <code class="docutils literal notranslate"><span class="pre">None</span></code>
 builds the real one lazily (telemetry disabled first).</p></li>
-<li><p><strong>**metric_kwargs</strong> – Passed to the DeepEval constructor (e.g. <code class="docutils literal notranslate"><span class="pre">criteria=</span></code> for GEval).</p></li>
+<li><p><strong>**metric_kwargs</strong> – Passed to the DeepEval constructor (e.g. <code class="docutils literal notranslate"><span class="pre">criteria=</span></code> for GEval, and
+<code class="docutils literal notranslate"><span class="pre">model=</span></code> – a model name or a <code class="docutils literal notranslate"><span class="pre">DeepEvalBaseLLM</span></code> – for any of them: DeepEval &gt;= 4
+builds its default OpenAI judge at construction, so without <code class="docutils literal notranslate"><span class="pre">model=</span></code> it needs
+<code class="docutils literal notranslate"><span class="pre">OPENAI_API_KEY</span></code> even for <code class="docutils literal notranslate"><span class="pre">tool_correctness</span></code>). For GEval, <code class="docutils literal notranslate"><span class="pre">name</span></code> defaults to
+<code class="docutils literal notranslate"><span class="pre">&quot;ek_geval&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">evaluation_params</span></code> to <code class="docutils literal notranslate"><span class="pre">DEFAULT_GEVAL_PARAMS</span></code> (strings are
+accepted).</p></li>
 </ul>
 </dd>
 </dl>
@@ -568,27 +593,42 @@ builds the real one lazily (telemetry disabled first).</p></li>
 </dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.wrappers.RAGAS_COLLECTION_METRICS">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">RAGAS_COLLECTION_METRICS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'answer_relevancy':</span> <span class="pre">'AnswerRelevancy',</span> <span class="pre">'context_precision':</span> <span class="pre">'ContextPrecisionWithoutReference',</span> <span class="pre">'faithfulness':</span> <span class="pre">'Faithfulness'}</span></span><a class="headerlink" href="#ek.agents.wrappers.RAGAS_COLLECTION_METRICS" title="Link to this definition">#</a></dt>
+<dd><p>ek’s metric name -&gt; Ragas class name in <code class="docutils literal notranslate"><span class="pre">ragas.metrics.collections</span></code> (Ragas &gt;= 0.4, the API
+that survives 1.0) – metrics take an <code class="docutils literal notranslate"><span class="pre">InstructorBaseRagasLLM</span></code> (<code class="docutils literal notranslate"><span class="pre">llm_factory</span></code>) and expose
+<code class="docutils literal notranslate"><span class="pre">ascore(**fields)</span> <span class="pre">-&gt;</span> <span class="pre">MetricResult</span></code>. <code class="docutils literal notranslate"><span class="pre">answer_relevancy</span></code> also needs <code class="docutils literal notranslate"><span class="pre">embeddings=</span></code>.</p>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="ek.agents.wrappers.RAGAS_METRICS">
 <span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">RAGAS_METRICS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'answer_relevancy':</span> <span class="pre">'ResponseRelevancy',</span> <span class="pre">'context_precision':</span> <span class="pre">'LLMContextPrecisionWithoutReference',</span> <span class="pre">'faithfulness':</span> <span class="pre">'Faithfulness'}</span></span><a class="headerlink" href="#ek.agents.wrappers.RAGAS_METRICS" title="Link to this definition">#</a></dt>
-<dd><p>ek’s metric name -&gt; Ragas class name.</p>
+<dd><p>ek’s metric name -&gt; Ragas class name in the legacy <code class="docutils literal notranslate"><span class="pre">ragas.metrics</span></code> API (deprecated since
+Ragas 0.4) – metrics take a <code class="docutils literal notranslate"><span class="pre">BaseRagasLLM</span></code> and expose <code class="docutils literal notranslate"><span class="pre">single_turn_ascore(sample)</span></code>.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.agents.wrappers.RagasSignal">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">RagasSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'faithfulness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/wrappers.html#RagasSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.wrappers.RagasSignal" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">RagasSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'faithfulness'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">metric_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/wrappers.html#RagasSignal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.wrappers.RagasSignal" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A reference-free Ragas metric as a <a class="reference internal" href="ek.base.html#ek.base.Signal" title="ek.base.Signal"><code class="xref py py-class docutils literal notranslate"><span class="pre">Signal</span></code></a> over a RAG sample.</p>
 <p>The sample is a mapping/object with <code class="docutils literal notranslate"><span class="pre">user_input</span></code> (or <code class="docutils literal notranslate"><span class="pre">question</span></code>), <code class="docutils literal notranslate"><span class="pre">response</span></code> (or
 <code class="docutils literal notranslate"><span class="pre">answer</span></code>) and <code class="docutils literal notranslate"><span class="pre">retrieved_contexts</span></code> (or <code class="docutils literal notranslate"><span class="pre">contexts</span></code>). The score is in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.
 Ragas metrics call an LLM, so pass a configured <code class="docutils literal notranslate"><span class="pre">metric</span></code> (or <code class="docutils literal notranslate"><span class="pre">llm=</span></code> to build one).</p>
+<p>Both Ragas metric APIs are accepted: the collections API (<code class="docutils literal notranslate"><span class="pre">ascore(**fields)</span></code> returning a
+<code class="docutils literal notranslate"><span class="pre">MetricResult</span></code>; <code class="docutils literal notranslate"><span class="pre">ragas.metrics.collections</span></code>, the one that survives Ragas 1.0) and the
+legacy one (<code class="docutils literal notranslate"><span class="pre">single_turn_ascore(SingleTurnSample)</span></code>; deprecated since Ragas 0.4).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>metric</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A Ragas metric object exposing <code class="docutils literal notranslate"><span class="pre">single_turn_ascore(sample)</span></code> (injected), or
-<code class="docutils literal notranslate"><span class="pre">None</span></code> to build <code class="docutils literal notranslate"><span class="pre">name</span></code> from <code class="docutils literal notranslate"><span class="pre">llm</span></code>.</p></li>
+<li><p><strong>metric</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A Ragas metric object (either API), or <code class="docutils literal notranslate"><span class="pre">None</span></code> to build <code class="docutils literal notranslate"><span class="pre">name</span></code> from <code class="docutils literal notranslate"><span class="pre">llm</span></code>.</p></li>
 <li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">faithfulness</span></code> | <code class="docutils literal notranslate"><span class="pre">answer_relevancy</span></code> | <code class="docutils literal notranslate"><span class="pre">context_precision</span></code>.</p></li>
-<li><p><strong>llm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A <code class="docutils literal notranslate"><span class="pre">ragas</span></code> LLM wrapper, used when <code class="docutils literal notranslate"><span class="pre">metric</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>llm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – The judge, used when <code class="docutils literal notranslate"><span class="pre">metric</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>. An <code class="docutils literal notranslate"><span class="pre">InstructorBaseRagasLLM</span></code> (from
+<code class="docutils literal notranslate"><span class="pre">ragas.llms.llm_factory</span></code>) builds the collections metric; any other Ragas LLM
+wrapper (e.g. <code class="docutils literal notranslate"><span class="pre">LangchainLLMWrapper</span></code>) builds the legacy one.</p></li>
 <li><p><strong>cost_tier</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">3</span></code> – an LLM call per sample.</p></li>
+<li><p><strong>**metric_kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Passed to the Ragas constructor (e.g. <code class="docutils literal notranslate"><span class="pre">embeddings=</span></code> for
+<code class="docutils literal notranslate"><span class="pre">answer_relevancy</span></code>).</p></li>
 </ul>
 </dd>
 </dl>
@@ -614,8 +654,10 @@ calibrate before gating (Hard Rule 1).</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scorer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A backend with <code class="docutils literal notranslate"><span class="pre">score(prompt)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code> (tests / custom sampling), or
 <code class="docutils literal notranslate"><span class="pre">None</span></code> to build uqlm’s <code class="docutils literal notranslate"><span class="pre">BlackBoxUQ</span></code> from <code class="docutils literal notranslate"><span class="pre">llm</span></code>.</p></li>
-<li><p><strong>llm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A LangChain chat model, required when <code class="docutils literal notranslate"><span class="pre">scorer</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>scorer_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The uqlm scorer column to read (default <code class="docutils literal notranslate"><span class="pre">&quot;noncontradiction&quot;</span></code>).</p></li>
+<li><p><strong>llm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – A LangChain chat model, required when <code class="docutils literal notranslate"><span class="pre">scorer</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>. uqlm reads its
+<code class="docutils literal notranslate"><span class="pre">temperature</span></code> attribute, so it must have one.</p></li>
+<li><p><strong>scorer_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The uqlm scorer column to read (default <code class="docutils literal notranslate"><span class="pre">&quot;noncontradiction&quot;</span></code>, which
+downloads an NLI model on first use; <code class="docutils literal notranslate"><span class="pre">&quot;exact_match&quot;</span></code> needs none).</p></li>
 <li><p><strong>num_responses</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Samples per prompt.</p></li>
 <li><p><strong>cost_tier</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – <code class="docutils literal notranslate"><span class="pre">3</span></code> – it pays for <code class="docutils literal notranslate"><span class="pre">num_responses</span></code> extra generations.</p></li>
 </ul>
@@ -639,6 +681,46 @@ calibrate before gating (Hard Rule 1).</p>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.wrappers.run_inspect">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.wrappers.</span></span><span class="sig-name descname"><span class="pre">run_inspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tasks</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scorer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">eval_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/wrappers.html#run_inspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.wrappers.run_inspect" title="Link to this definition">#</a></dt>
+<dd><p>Run an Inspect AI eval and return its samples as graded <a class="reference internal" href="ek.agents.html#ek.agents.Episode" title="ek.agents.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> s.</p>
+<p>A thin convenience over <code class="docutils literal notranslate"><span class="pre">inspect_ai.eval</span></code> + <a class="reference internal" href="ek.agents.html#ek.agents.episodes_from_inspect_log" title="ek.agents.episodes_from_inspect_log"><code class="xref py py-func docutils literal notranslate"><span class="pre">episodes_from_inspect_log()</span></code></a>:
+one episode per sample per epoch, graded by the sample’s score (<code class="docutils literal notranslate"><span class="pre">scorer</span></code>, else the first)
+reaching <code class="docutils literal notranslate"><span class="pre">success_threshold</span></code>. Run with <code class="docutils literal notranslate"><span class="pre">epochs=k</span></code> and the result is a k-trial run –
+hand it to <a class="reference internal" href="ek.agents.html#ek.agents.reliability" title="ek.agents.reliability"><code class="xref py py-func docutils literal notranslate"><span class="pre">reliability()</span></code></a> for <code class="docutils literal notranslate"><span class="pre">pass^k</span></code>, or to
+<a class="reference internal" href="ek.agents.html#ek.agents.cost_report" title="ek.agents.cost_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">cost_report()</span></code></a> for cost per successful task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tasks</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Anything <code class="docutils literal notranslate"><span class="pre">inspect_ai.eval</span></code> accepts (a <code class="docutils literal notranslate"><span class="pre">Task</span></code>, a task function, a registry
+name, a list of them).</p></li>
+<li><p><strong>model</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – The model under test (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;openai/gpt-4o&quot;</span></code>); <code class="docutils literal notranslate"><span class="pre">None</span></code> lets Inspect use
+<code class="docutils literal notranslate"><span class="pre">INSPECT_EVAL_MODEL</span></code>. <code class="docutils literal notranslate"><span class="pre">&quot;mockllm/model&quot;</span></code> runs offline at no cost.</p></li>
+<li><p><strong>epochs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Trials per sample (Inspect’s <code class="docutils literal notranslate"><span class="pre">epochs</span></code>); <code class="docutils literal notranslate"><span class="pre">None</span></code> keeps the task’s own setting.</p></li>
+<li><p><strong>scorer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Which scorer’s value grades success (default: each sample’s first score).</p></li>
+<li><p><strong>success_threshold</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – A sample succeeds when its score value is <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code> this.</p></li>
+<li><p><strong>log_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Where Inspect writes its <code class="docutils literal notranslate"><span class="pre">.eval</span></code> logs. <code class="docutils literal notranslate"><span class="pre">None</span></code> uses a temporary directory
+that is removed once the episodes are read – pass a path to keep the logs.</p></li>
+<li><p><strong>**eval_kwargs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></span>) – Passed to <code class="docutils literal notranslate"><span class="pre">inspect_ai.eval</span></code> (<code class="docutils literal notranslate"><span class="pre">limit=</span></code>, <code class="docutils literal notranslate"><span class="pre">solver=</span></code>, …). <code class="docutils literal notranslate"><span class="pre">display</span></code>
+defaults to <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#RuntimeError" title="(in Python v3.15)"><strong>RuntimeError</strong></a> – if any eval did not finish with status <code class="docutils literal notranslate"><span class="pre">success</span></code> (a partial run is not
+    a k-trial run, and grading it as one would understate failures).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">inspect_ai.eval</span></code> is synchronous and refuses to run inside an event loop; from async
+code, call <code class="docutils literal notranslate"><span class="pre">inspect_ai.eval_async</span></code> and pass each log to <code class="docutils literal notranslate"><span class="pre">episodes_from_inspect_log</span></code>.</p>
+</div>
 </dd></dl>
 
 </section>
@@ -692,6 +774,7 @@ calibrate before gating (Hard Rule 1).</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEEPEVAL_KINDS"><code class="docutils literal notranslate"><span class="pre">DEEPEVAL_KINDS</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV"><code class="docutils literal notranslate"><span class="pre">DEEPEVAL_TELEMETRY_ENV</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEFAULT_GEVAL_PARAMS"><code class="docutils literal notranslate"><span class="pre">DEFAULT_GEVAL_PARAMS</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEFAULT_NUM_RESPONSES"><code class="docutils literal notranslate"><span class="pre">DEFAULT_NUM_RESPONSES</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEFAULT_RAGAS_METRIC"><code class="docutils literal notranslate"><span class="pre">DEFAULT_RAGAS_METRIC</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DEFAULT_UQLM_SCORER"><code class="docutils literal notranslate"><span class="pre">DEFAULT_UQLM_SCORER</span></code></a></li>
@@ -699,10 +782,12 @@ calibrate before gating (Hard Rule 1).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.DeepEvalMetric.aggregate"><code class="docutils literal notranslate"><span class="pre">DeepEvalMetric.aggregate()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.RAGAS_COLLECTION_METRICS"><code class="docutils literal notranslate"><span class="pre">RAGAS_COLLECTION_METRICS</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.RAGAS_METRICS"><code class="docutils literal notranslate"><span class="pre">RAGAS_METRICS</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.RagasSignal"><code class="docutils literal notranslate"><span class="pre">RagasSignal</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.UqlmConsistencySignal"><code class="docutils literal notranslate"><span class="pre">UqlmConsistencySignal</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.disable_deepeval_telemetry"><code class="docutils literal notranslate"><span class="pre">disable_deepeval_telemetry()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.wrappers.run_inspect"><code class="docutils literal notranslate"><span class="pre">run_inspect()</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -1,36 +1,36 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-20T12:21:41Z",
+  "built_at": "2026-10-20T15:23:35Z",
   "package": {
     "name": "ek",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "display_name": "ek",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "b249552e61a257e0b215e7518d713b04eb55ca2f",
-    "short_commit": "b249552",
+    "commit": "4d706df73fe693a1a56fed963746282f84a9e9c0",
+    "short_commit": "4d706df",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/ek",
-    "commit_url": "https://github.com/thorwhalen/ek/commit/b249552e61a257e0b215e7518d713b04eb55ca2f",
+    "commit_url": "https://github.com/thorwhalen/ek/commit/4d706df73fe693a1a56fed963746282f84a9e9c0",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/ek",
-    "sha": "b249552e61a257e0b215e7518d713b04eb55ca2f",
+    "sha": "4d706df73fe693a1a56fed963746282f84a9e9c0",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "39421415869",
-    "run_url": "https://github.com/thorwhalen/ek/actions/runs/39421415869",
+    "run_id": "39447622662",
+    "run_url": "https://github.com/thorwhalen/ek/actions/runs/39447622662",
     "server_url": "https://github.com"
   },
   "tools": {
-    "epythet": "0.2.20",
+    "epythet": "0.2.21",
     "sphinx": "9.1.1",
     "docutils": "0.22.4",
     "python": "3.12.15"
@@ -56,20 +56,20 @@
   },
   "site": {
     "modules_documented": 36,
-    "objects_documented": 633
+    "objects_documented": 643
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.13",
+    "latest": "0.1.14",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout b249552e61a257e0b215e7518d713b04eb55ca2f\npip install \"epythet==0.2.20\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout 4d706df73fe693a1a56fed963746282f84a9e9c0\npip install \"epythet==0.2.21\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.1.12) is behind the latest release on PyPI (0.1.13): `pip install ek` gives newer code than these docs describe."
+      "The documented version (0.1.13) is behind the latest release on PyPI (0.1.14): `pip install ek` gives newer code than these docs describe."
     ]
   }
 }

@@ -42,6 +42,9 @@ ek.agents
       episode_from_messages
       cost_from_usage
       from_inspect_sample
+      episodes_from_inspect_log
+      inspect_score_value
+      run_inspect
       from_deepeval_test_case
    
    .. rubric:: Classes

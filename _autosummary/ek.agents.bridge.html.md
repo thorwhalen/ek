@@ -31,15 +31,34 @@ tool-using agent, and parsing them needs no SDK at all.
 ({'city': 'Paris'}, '18C')
 ```
 
+### Module Attributes
+
+| [`INSPECT_SCORE_VALUES`](#ek.agents.bridge.INSPECT_SCORE_VALUES)      | Inspect's letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades as numbers -- the mapping `inspect_ai.scorer.value_to_float` uses, restated so reading a log needs no `inspect_ai` import.   |
+|----------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DEFAULT_SUCCESS_THRESHOLD`](#ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD) | A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL "P" grade is 0.5, so it is a failure unless the threshold is lowered).                                                        |
+
 ### Functions
 
-| [`as_agent`](#ek.agents.bridge.as_agent)(fn)                                 | Wrap a plain `input -> answer` function into the harness's `TaskSpec -> Episode` shape.                                                  |
-|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| [`cost_from_usage`](#ek.agents.bridge.cost_from_usage)(usage, \*[, latency_s])      | Build a [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                |
-| [`episode_from_messages`](#ek.agents.bridge.episode_from_messages)(messages, \*[, ...])   | Build a full [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state). |
-| [`from_deepeval_test_case`](#ek.agents.bridge.from_deepeval_test_case)(case, \*[, task_id]) | Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).                                                             |
-| [`from_inspect_sample`](#ek.agents.bridge.from_inspect_sample)(sample, \*[, task_id])   | Adapt an Inspect AI `EvalSample`-shaped object into an `Episode` (duck-typed).                                                           |
-| [`trajectory_from_messages`](#ek.agents.bridge.trajectory_from_messages)(messages)           | Parse a chat transcript into a [`Trajectory`](ek.agents.base.html.md#ek.agents.base.Trajectory).                    |
+| [`as_agent`](#ek.agents.bridge.as_agent)(fn)                                      | Wrap a plain `input -> answer` function into the harness's `TaskSpec -> Episode` shape.                                                  |
+|----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| [`cost_from_usage`](#ek.agents.bridge.cost_from_usage)(usage, \*[, latency_s])           | Build a [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                |
+| [`episode_from_messages`](#ek.agents.bridge.episode_from_messages)(messages, \*[, ...])        | Build a full [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state). |
+| [`episodes_from_inspect_log`](#ek.agents.bridge.episodes_from_inspect_log)(log, \*[, scorer, ...]) | Yield one graded `Episode` per sample *per epoch* of an Inspect `EvalLog`.                                                               |
+| [`from_deepeval_test_case`](#ek.agents.bridge.from_deepeval_test_case)(case, \*[, task_id])      | Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).                                                             |
+| [`from_inspect_sample`](#ek.agents.bridge.from_inspect_sample)(sample, \*[, task_id])        | Adapt an Inspect AI `EvalSample`-shaped object into an `Episode` (duck-typed).                                                           |
+| [`inspect_score_value`](#ek.agents.bridge.inspect_score_value)(value)                        | An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.                                                            |
+| [`trajectory_from_messages`](#ek.agents.bridge.trajectory_from_messages)(messages)                | Parse a chat transcript into a [`Trajectory`](ek.agents.base.html.md#ek.agents.base.Trajectory).                    |
+
+### ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD *= 1.0*
+
+A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL
+“P” grade is 0.5, so it is a failure unless the threshold is lowered).
+
+### ek.agents.bridge.INSPECT_SCORE_VALUES *= {'C': 1.0, 'I': 0.0, 'N': 0.0, 'P': 0.5, 'false': 0.0, 'no': 0.0, 'true': 1.0, 'yes': 1.0}*
+
+Inspect’s letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades
+as numbers – the mapping `inspect_ai.scorer.value_to_float` uses, restated so reading a
+log needs no `inspect_ai` import.
 
 ### ek.agents.bridge.as_agent(fn)
 
@@ -86,6 +105,39 @@ Build a full [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode) from a t
 * **Return type:**
   [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)
 
+### ek.agents.bridge.episodes_from_inspect_log(log, , scorer=None, success_threshold=1.0, task_prefix='')
+
+Yield one graded `Episode` per sample *per epoch* of an Inspect `EvalLog`.
+
+`task_prefix` (e.g. the Inspect task name) is prepended as `"<prefix>/<sample id>"` –
+needed when pooling several logs, whose sample ids (often `1, 2, 3`) would otherwise
+collide and be counted as extra trials of one task. A `scorer` that no sample has raises
+`ValueError` (a typo would otherwise leave every episode silently ungraded).
+
+Duck-typed like [`from_inspect_sample()`](#ek.agents.bridge.from_inspect_sample) (no `inspect_ai` import): reads
+`log.samples` and `log.eval`. Each sample’s score – the `scorer` named, else the
+first – is read with [`inspect_score_value()`](#ek.agents.bridge.inspect_score_value) and the episode is graded
+`success = value >= success_threshold`; a sample with no scalar score stays ungraded
+(`success=None`) rather than being silently counted as a failure.
+
+Inspect’s `epochs` are ek’s *trials*: an eval run with `epochs=k` yields k episodes per
+`task_id` (the sample id), which is exactly what [`reliability()`](ek.agents.html.md#ek.agents.reliability) needs for
+`pass^k`. The run’s model and task version are recorded as `RunProvenance`.
+
+Example (a log-shaped stand-in; a real `EvalLog` has the same attributes):
+
+```pycon
+>>> from types import SimpleNamespace as NS
+>>> sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),
+...             scores={"match": NS(value="C")})
+>>> log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))
+>>> [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]
+[('q1', True, 1)]
+```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)]
+
 ### ek.agents.bridge.from_deepeval_test_case(case, , task_id='')
 
 Adapt a DeepEval `LLMTestCase`-shaped object into an `Episode` (duck-typed).
@@ -106,6 +158,22 @@ an Inspect log never drags the harness into `ek`’s dependency closure.
 
 * **Return type:**
   [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)
+
+### ek.agents.bridge.inspect_score_value(value)
+
+An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.
+
+### Example
+
+```pycon
+>>> inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)
+(1.0, 0.5, 0.25)
+>>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
+True
+```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### ek.agents.bridge.trajectory_from_messages(messages)
 

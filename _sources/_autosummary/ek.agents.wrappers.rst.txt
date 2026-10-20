@@ -13,13 +13,16 @@ ek.agents.wrappers
       DEFAULT_UQLM_SCORER
       DEFAULT_RAGAS_METRIC
       RAGAS_METRICS
+      RAGAS_COLLECTION_METRICS
       DEEPEVAL_KINDS
+      DEFAULT_GEVAL_PARAMS
    
    .. rubric:: Functions
 
    .. autosummary::
    
       disable_deepeval_telemetry
+      run_inspect
    
    .. rubric:: Classes
 

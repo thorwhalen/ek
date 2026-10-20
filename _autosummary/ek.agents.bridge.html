@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=297ad043"></script>
+    <script src="../_static/documentation_options.js?v=8d02545a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.12" />
+  <meta name="docsearch:version" content="0.1.13" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -458,6 +458,18 @@ tool-using agent, and parsing them needs no SDK at all.</p>
 <span class="go">({'city': 'Paris'}, '18C')</span>
 </pre></div>
 </div>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.bridge.INSPECT_SCORE_VALUES" title="ek.agents.bridge.INSPECT_SCORE_VALUES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">INSPECT_SCORE_VALUES</span></code></a></p></td>
+<td><p>Inspect's letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades as numbers -- the mapping <code class="docutils literal notranslate"><span class="pre">inspect_ai.scorer.value_to_float</span></code> uses, restated so reading a log needs no <code class="docutils literal notranslate"><span class="pre">inspect_ai</span></code> import.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD" title="ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DEFAULT_SUCCESS_THRESHOLD</span></code></a></p></td>
+<td><p>A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL &quot;P&quot; grade is 0.5, so it is a failure unless the threshold is lowered).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -470,11 +482,17 @@ tool-using agent, and parsing them needs no SDK at all.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.bridge.episode_from_messages" title="ek.agents.bridge.episode_from_messages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">episode_from_messages</span></code></a>(messages, *[, ...])</p></td>
 <td><p>Build a full <a class="reference internal" href="ek.agents.base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a> from a transcript (+ optional usage/state).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.bridge.from_deepeval_test_case" title="ek.agents.bridge.from_deepeval_test_case"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_deepeval_test_case</span></code></a>(case, *[, task_id])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.bridge.episodes_from_inspect_log" title="ek.agents.bridge.episodes_from_inspect_log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">episodes_from_inspect_log</span></code></a>(log, *[, scorer, ...])</p></td>
+<td><p>Yield one graded <code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code> per sample <em>per epoch</em> of an Inspect <code class="docutils literal notranslate"><span class="pre">EvalLog</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.bridge.from_deepeval_test_case" title="ek.agents.bridge.from_deepeval_test_case"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_deepeval_test_case</span></code></a>(case, *[, task_id])</p></td>
 <td><p>Adapt a DeepEval <code class="docutils literal notranslate"><span class="pre">LLMTestCase</span></code>-shaped object into an <code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code> (duck-typed).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.bridge.from_inspect_sample" title="ek.agents.bridge.from_inspect_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_inspect_sample</span></code></a>(sample, *[, task_id])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.bridge.from_inspect_sample" title="ek.agents.bridge.from_inspect_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_inspect_sample</span></code></a>(sample, *[, task_id])</p></td>
 <td><p>Adapt an Inspect AI <code class="docutils literal notranslate"><span class="pre">EvalSample</span></code>-shaped object into an <code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code> (duck-typed).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ek.agents.bridge.inspect_score_value" title="ek.agents.bridge.inspect_score_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inspect_score_value</span></code></a>(value)</p></td>
+<td><p>An Inspect <code class="docutils literal notranslate"><span class="pre">Score.value</span></code> as a float, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when it is not a scalar grade.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#ek.agents.bridge.trajectory_from_messages" title="ek.agents.bridge.trajectory_from_messages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trajectory_from_messages</span></code></a>(messages)</p></td>
 <td><p>Parse a chat transcript into a <a class="reference internal" href="ek.agents.base.html#ek.agents.base.Trajectory" title="ek.agents.base.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>.</p></td>
@@ -482,6 +500,21 @@ tool-using agent, and parsing them needs no SDK at all.</p>
 </tbody>
 </table>
 </div>
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_SUCCESS_THRESHOLD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></span><a class="headerlink" href="#ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD" title="Link to this definition">#</a></dt>
+<dd><p>A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL
+“P” grade is 0.5, so it is a failure unless the threshold is lowered).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ek.agents.bridge.INSPECT_SCORE_VALUES">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">INSPECT_SCORE_VALUES</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'C':</span> <span class="pre">1.0,</span> <span class="pre">'I':</span> <span class="pre">0.0,</span> <span class="pre">'N':</span> <span class="pre">0.0,</span> <span class="pre">'P':</span> <span class="pre">0.5,</span> <span class="pre">'false':</span> <span class="pre">0.0,</span> <span class="pre">'no':</span> <span class="pre">0.0,</span> <span class="pre">'true':</span> <span class="pre">1.0,</span> <span class="pre">'yes':</span> <span class="pre">1.0}</span></span><a class="headerlink" href="#ek.agents.bridge.INSPECT_SCORE_VALUES" title="Link to this definition">#</a></dt>
+<dd><p>Inspect’s letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades
+as numbers – the mapping <code class="docutils literal notranslate"><span class="pre">inspect_ai.scorer.value_to_float</span></code> uses, restated so reading a
+log needs no <code class="docutils literal notranslate"><span class="pre">inspect_ai</span></code> import.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="ek.agents.bridge.as_agent">
 <span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">as_agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/bridge.html#as_agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.bridge.as_agent" title="Link to this definition">#</a></dt>
@@ -533,6 +566,38 @@ tool-using agent, and parsing them needs no SDK at all.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.bridge.episodes_from_inspect_log">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">episodes_from_inspect_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">scorer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/bridge.html#episodes_from_inspect_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.bridge.episodes_from_inspect_log" title="Link to this definition">#</a></dt>
+<dd><p>Yield one graded <code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code> per sample <em>per epoch</em> of an Inspect <code class="docutils literal notranslate"><span class="pre">EvalLog</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">task_prefix</span></code> (e.g. the Inspect task name) is prepended as <code class="docutils literal notranslate"><span class="pre">&quot;&lt;prefix&gt;/&lt;sample</span> <span class="pre">id&gt;&quot;</span></code> –
+needed when pooling several logs, whose sample ids (often <code class="docutils literal notranslate"><span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3</span></code>) would otherwise
+collide and be counted as extra trials of one task. A <code class="docutils literal notranslate"><span class="pre">scorer</span></code> that no sample has raises
+<code class="docutils literal notranslate"><span class="pre">ValueError</span></code> (a typo would otherwise leave every episode silently ungraded).</p>
+<p>Duck-typed like <a class="reference internal" href="#ek.agents.bridge.from_inspect_sample" title="ek.agents.bridge.from_inspect_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_inspect_sample()</span></code></a> (no <code class="docutils literal notranslate"><span class="pre">inspect_ai</span></code> import): reads
+<code class="docutils literal notranslate"><span class="pre">log.samples</span></code> and <code class="docutils literal notranslate"><span class="pre">log.eval</span></code>. Each sample’s score – the <code class="docutils literal notranslate"><span class="pre">scorer</span></code> named, else the
+first – is read with <a class="reference internal" href="#ek.agents.bridge.inspect_score_value" title="ek.agents.bridge.inspect_score_value"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect_score_value()</span></code></a> and the episode is graded
+<code class="docutils literal notranslate"><span class="pre">success</span> <span class="pre">=</span> <span class="pre">value</span> <span class="pre">&gt;=</span> <span class="pre">success_threshold</span></code>; a sample with no scalar score stays ungraded
+(<code class="docutils literal notranslate"><span class="pre">success=None</span></code>) rather than being silently counted as a failure.</p>
+<p>Inspect’s <code class="docutils literal notranslate"><span class="pre">epochs</span></code> are ek’s <em>trials</em>: an eval run with <code class="docutils literal notranslate"><span class="pre">epochs=k</span></code> yields k episodes per
+<code class="docutils literal notranslate"><span class="pre">task_id</span></code> (the sample id), which is exactly what <a class="reference internal" href="ek.agents.html#ek.agents.reliability" title="ek.agents.reliability"><code class="xref py py-func docutils literal notranslate"><span class="pre">reliability()</span></code></a> needs for
+<code class="docutils literal notranslate"><span class="pre">pass^k</span></code>. The run’s model and task version are recorded as <code class="xref py py-class docutils literal notranslate"><span class="pre">RunProvenance</span></code>.</p>
+<p>Example (a log-shaped stand-in; a real <code class="docutils literal notranslate"><span class="pre">EvalLog</span></code> has the same attributes):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span> <span class="k">as</span> <span class="n">NS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">"q1"</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="p">[],</span> <span class="n">output</span><span class="o">=</span><span class="n">NS</span><span class="p">(</span><span class="n">completion</span><span class="o">=</span><span class="s2">"4"</span><span class="p">,</span> <span class="n">usage</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+<span class="gp">... </span>            <span class="n">scores</span><span class="o">=</span><span class="p">{</span><span class="s2">"match"</span><span class="p">:</span> <span class="n">NS</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"C"</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="n">NS</span><span class="p">(</span><span class="n">samples</span><span class="o">=</span><span class="p">[</span><span class="n">sample</span><span class="p">],</span> <span class="nb">eval</span><span class="o">=</span><span class="n">NS</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"mockllm/model"</span><span class="p">,</span> <span class="n">task_version</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[(</span><span class="n">e</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">success</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">])</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">episodes_from_inspect_log</span><span class="p">(</span><span class="n">log</span><span class="p">)]</span>
+<span class="go">[('q1', True, 1)]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="ek.agents.base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="ek.agents.bridge.from_deepeval_test_case">
 <span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">from_deepeval_test_case</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">case</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/bridge.html#from_deepeval_test_case"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.bridge.from_deepeval_test_case" title="Link to this definition">#</a></dt>
 <dd><p>Adapt a DeepEval <code class="docutils literal notranslate"><span class="pre">LLMTestCase</span></code>-shaped object into an <code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code> (duck-typed).</p>
@@ -555,6 +620,24 @@ an Inspect log never drags the harness into <code class="docutils literal notran
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="ek.agents.base.html#ek.agents.base.Episode" title="ek.agents.base.Episode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Episode</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ek.agents.bridge.inspect_score_value">
+<span class="sig-prename descclassname"><span class="pre">ek.agents.bridge.</span></span><span class="sig-name descname"><span class="pre">inspect_score_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/agents/bridge.html#inspect_score_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.agents.bridge.inspect_score_value" title="Link to this definition">#</a></dt>
+<dd><p>An Inspect <code class="docutils literal notranslate"><span class="pre">Score.value</span></code> as a float, or <code class="docutils literal notranslate"><span class="pre">None</span></code> when it is not a scalar grade.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inspect_score_value</span><span class="p">(</span><span class="s2">"C"</span><span class="p">),</span> <span class="n">inspect_score_value</span><span class="p">(</span><span class="s2">"P"</span><span class="p">),</span> <span class="n">inspect_score_value</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.25)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inspect_score_value</span><span class="p">({</span><span class="s2">"accuracy"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span> <span class="ow">is</span> <span class="kc">None</span>   <span class="c1"># a multi-value score: no scalar</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -622,11 +705,15 @@ as errored – error <em>recovery</em> across later steps is itself an evaluable
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.DEFAULT_SUCCESS_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">DEFAULT_SUCCESS_THRESHOLD</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.INSPECT_SCORE_VALUES"><code class="docutils literal notranslate"><span class="pre">INSPECT_SCORE_VALUES</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.as_agent"><code class="docutils literal notranslate"><span class="pre">as_agent()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.cost_from_usage"><code class="docutils literal notranslate"><span class="pre">cost_from_usage()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.episode_from_messages"><code class="docutils literal notranslate"><span class="pre">episode_from_messages()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.episodes_from_inspect_log"><code class="docutils literal notranslate"><span class="pre">episodes_from_inspect_log()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.from_deepeval_test_case"><code class="docutils literal notranslate"><span class="pre">from_deepeval_test_case()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.from_inspect_sample"><code class="docutils literal notranslate"><span class="pre">from_inspect_sample()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.inspect_score_value"><code class="docutils literal notranslate"><span class="pre">inspect_score_value()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ek.agents.bridge.trajectory_from_messages"><code class="docutils literal notranslate"><span class="pre">trajectory_from_messages()</span></code></a></li>
 </ul>
   </nav></div>

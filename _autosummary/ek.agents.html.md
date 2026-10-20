@@ -81,6 +81,9 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`episode_from_messages`](#ek.agents.episode_from_messages)(messages, \*[, ...])         | Build a full [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode) from a transcript (+ optional usage/state).                                 |
 | [`cost_from_usage`](#ek.agents.cost_from_usage)(usage, \*[, latency_s])            | Build a [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.                                                |
 | [`from_inspect_sample`](#ek.agents.from_inspect_sample)(sample, \*[, task_id])         | Adapt an Inspect AI `EvalSample`-shaped object into an [`Episode`](#ek.agents.Episode) (duck-typed).                                            |
+| [`episodes_from_inspect_log`](#ek.agents.episodes_from_inspect_log)(log, \*[, scorer, ...])  | Yield one graded [`Episode`](#ek.agents.Episode) per sample *per epoch* of an Inspect `EvalLog`.                                                |
+| [`inspect_score_value`](#ek.agents.inspect_score_value)(value)                         | An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.                                                                                            |
+| [`run_inspect`](#ek.agents.run_inspect)(tasks, \*[, model, epochs, ...])       | Run an Inspect AI eval and return its samples as graded [`Episode`](#ek.agents.Episode) s.                                                      |
 | [`from_deepeval_test_case`](#ek.agents.from_deepeval_test_case)(case, \*[, task_id])       | Adapt a DeepEval `LLMTestCase`-shaped object into an [`Episode`](#ek.agents.Episode) (duck-typed).                                              |
 
 ### Classes
@@ -194,7 +197,12 @@ the label says so, and `detail['flavor']` records it.
   * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `tool_correctness` | `task_completion` | `geval`.
   * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – An injected DeepEval-shaped metric (`.measure(case)`, `.score`); `None`
     builds the real one lazily (telemetry disabled first).
-  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval).
+  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval, and
+    `model=` – a model name or a `DeepEvalBaseLLM` – for any of them: DeepEval >= 4
+    builds its default OpenAI judge at construction, so without `model=` it needs
+    `OPENAI_API_KEY` even for `tool_correctness`). For GEval, `name` defaults to
+    `"ek_geval"` and `evaluation_params` to `DEFAULT_GEVAL_PARAMS` (strings are
+    accepted).
 
 #### aggregate(scores)
 
@@ -306,7 +314,7 @@ The cached-input rate (explicit, else the discounted input rate).
 
 The reasoning-token rate (explicit, else the output rate).
 
-### *class* ek.agents.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3)
+### *class* ek.agents.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3, \*\*metric_kwargs)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -316,12 +324,19 @@ The sample is a mapping/object with `user_input` (or `question`), `response` (or
 `answer`) and `retrieved_contexts` (or `contexts`). The score is in `[0, 1]`.
 Ragas metrics call an LLM, so pass a configured `metric` (or `llm=` to build one).
 
+Both Ragas metric APIs are accepted: the collections API (`ascore(**fields)` returning a
+`MetricResult`; `ragas.metrics.collections`, the one that survives Ragas 1.0) and the
+legacy one (`single_turn_ascore(SingleTurnSample)`; deprecated since Ragas 0.4).
+
 * **Parameters:**
-  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object exposing `single_turn_ascore(sample)` (injected), or
-    `None` to build `name` from `llm`.
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object (either API), or `None` to build `name` from `llm`.
   * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `faithfulness` | `answer_relevancy` | `context_precision`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A `ragas` LLM wrapper, used when `metric` is `None`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The judge, used when `metric` is `None`. An `InstructorBaseRagasLLM` (from
+    `ragas.llms.llm_factory`) builds the collections metric; any other Ragas LLM
+    wrapper (e.g. `LangchainLLMWrapper`) builds the legacy one.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – an LLM call per sample.
+  * **\*\*metric_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to the Ragas constructor (e.g. `embeddings=` for
+    `answer_relevancy`).
 
 ### Example
 
@@ -546,8 +561,10 @@ calibrate before gating (Hard Rule 1).
 * **Parameters:**
   * **scorer** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A backend with `score(prompt) -> float` (tests / custom sampling), or
     `None` to build uqlm’s `BlackBoxUQ` from `llm`.
-  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`.
-  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`).
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`. uqlm reads its
+    `temperature` attribute, so it must have one.
+  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`, which
+    downloads an NLI model on first use; `"exact_match"` needs none).
   * **num_responses** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Samples per prompt.
   * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – it pays for `num_responses` extra generations.
 
@@ -764,6 +781,39 @@ Build a full [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode) from a t
 * **Return type:**
   [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)
 
+### ek.agents.episodes_from_inspect_log(log, , scorer=None, success_threshold=1.0, task_prefix='')
+
+Yield one graded [`Episode`](#ek.agents.Episode) per sample *per epoch* of an Inspect `EvalLog`.
+
+`task_prefix` (e.g. the Inspect task name) is prepended as `"<prefix>/<sample id>"` –
+needed when pooling several logs, whose sample ids (often `1, 2, 3`) would otherwise
+collide and be counted as extra trials of one task. A `scorer` that no sample has raises
+`ValueError` (a typo would otherwise leave every episode silently ungraded).
+
+Duck-typed like [`from_inspect_sample()`](#ek.agents.from_inspect_sample) (no `inspect_ai` import): reads
+`log.samples` and `log.eval`. Each sample’s score – the `scorer` named, else the
+first – is read with [`inspect_score_value()`](#ek.agents.inspect_score_value) and the episode is graded
+`success = value >= success_threshold`; a sample with no scalar score stays ungraded
+(`success=None`) rather than being silently counted as a failure.
+
+Inspect’s `epochs` are ek’s *trials*: an eval run with `epochs=k` yields k episodes per
+`task_id` (the sample id), which is exactly what [`reliability()`](#ek.agents.reliability) needs for
+`pass^k`. The run’s model and task version are recorded as [`RunProvenance`](#ek.agents.RunProvenance).
+
+Example (a log-shaped stand-in; a real `EvalLog` has the same attributes):
+
+```pycon
+>>> from types import SimpleNamespace as NS
+>>> sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),
+...             scores={"match": NS(value="C")})
+>>> log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))
+>>> [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]
+[('q1', True, 1)]
+```
+
+* **Return type:**
+  [`Iterator`](https://docs.python.org/3/library/typing.html#typing.Iterator)[[`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)]
+
 ### ek.agents.final_state_match(episode, gold)
 
 Compare the episode’s **final state** with the goal state (the tau-bench oracle).
@@ -791,6 +841,22 @@ an Inspect log never drags the harness into `ek`’s dependency closure.
 
 * **Return type:**
   [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)
+
+### ek.agents.inspect_score_value(value)
+
+An Inspect `Score.value` as a float, or `None` when it is not a scalar grade.
+
+### Example
+
+```pycon
+>>> inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)
+(1.0, 0.5, 0.25)
+>>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
+True
+```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
 ### ek.agents.is_episode(x)
 
@@ -1049,6 +1115,38 @@ Compute `pass@k` / `pass^k` / success-rate over a k-trial run.
 0.667
 ```
 
+### ek.agents.run_inspect(tasks, , model=None, epochs=None, scorer=None, success_threshold=1.0, log_dir=None, \*\*eval_kwargs)
+
+Run an Inspect AI eval and return its samples as graded [`Episode`](#ek.agents.Episode) s.
+
+A thin convenience over `inspect_ai.eval` + [`episodes_from_inspect_log()`](#ek.agents.episodes_from_inspect_log):
+one episode per sample per epoch, graded by the sample’s score (`scorer`, else the first)
+reaching `success_threshold`. Run with `epochs=k` and the result is a k-trial run –
+hand it to [`reliability()`](#ek.agents.reliability) for `pass^k`, or to
+[`cost_report()`](#ek.agents.cost_report) for cost per successful task.
+
+* **Parameters:**
+  * **tasks** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Anything `inspect_ai.eval` accepts (a `Task`, a task function, a registry
+    name, a list of them).
+  * **model** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The model under test (e.g. `"openai/gpt-4o"`); `None` lets Inspect use
+    `INSPECT_EVAL_MODEL`. `"mockllm/model"` runs offline at no cost.
+  * **epochs** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`int`](https://docs.python.org/3/builtins/functions.html#int)]) – Trials per sample (Inspect’s `epochs`); `None` keeps the task’s own setting.
+  * **scorer** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Which scorer’s value grades success (default: each sample’s first score).
+  * **success_threshold** ([`float`](https://docs.python.org/3/builtins/functions.html#float)) – A sample succeeds when its score value is `>=` this.
+  * **log_dir** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Where Inspect writes its `.eval` logs. `None` uses a temporary directory
+    that is removed once the episodes are read – pass a path to keep the logs.
+  * **\*\*eval_kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Passed to `inspect_ai.eval` (`limit=`, `solver=`, …). `display`
+    defaults to `"none"`.
+* **Raises:**
+  [**RuntimeError**](https://docs.python.org/3/builtins/exceptions.html#RuntimeError) – if any eval did not finish with status `success` (a partial run is not
+      a k-trial run, and grading it as one would understate failures).
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)
+
+#### NOTE
+`inspect_ai.eval` is synchronous and refuses to run inside an event loop; from async
+code, call `inspect_ai.eval_async` and pass each log to `episodes_from_inspect_log`.
+
 ### ek.agents.run_suite(agent, tasks, , k=1, check=None, metrics=None, price=None, prices=None, run=None, seed=None, persist=False, run_id=None, rootdir=None)
 
 Run `agent` over a task suite, `k` trials per task, and report reliability + cost.
@@ -1159,4 +1257,4 @@ where agent success rates live. Wilson is the cheap, dependency-free fix.
 | [`metrics`](ek.agents.metrics.html.md#module-ek.agents.metrics)       | Task-success and cost-per-successful-task: the two metrics that drive the whole thing.                                                                                                                                                        |
 | [`toolcalls`](ek.agents.toolcalls.html.md#module-ek.agents.toolcalls)   | Tool-call correctness: BFCL-style AST matching over a *multiset* of calls.                                                                                                                                                                    |
 | [`trajectory`](ek.agents.trajectory.html.md#module-ek.agents.trajectory) | Trajectory (process) evaluation: a cost-weighted **sequence** edit distance over steps.                                                                                                                                                       |
-| [`wrappers`](ek.agents.wrappers.html.md#module-ek.agents.wrappers)     | Optional WRAP adapters behind `ek[agents]`: uqlm, Ragas and DeepEval as ek strategies.                                                                                                                                                        |
+| [`wrappers`](ek.agents.wrappers.html.md#module-ek.agents.wrappers)     | Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.                                                                                                                                                                |

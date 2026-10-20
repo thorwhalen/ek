@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=297ad043"></script>
+    <script src="../../../_static/documentation_options.js?v=8d02545a"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.12" />
+  <meta name="docsearch:version" content="0.1.13" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -712,13 +712,17 @@ window.runMermaid = runMermaid;</script>
                 <article class="bd-article">
                   
   <h1>Source code for ek.agents.wrappers</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Optional WRAP adapters behind ``ek[agents]``: uqlm, Ragas and DeepEval as ek strategies.</span>
+<span></span><span class="sd">"""Optional WRAP adapters: Inspect AI, uqlm, Ragas and DeepEval as ek strategies.</span>
 
 <span class="sd">``ek.agents`` scores episodes in pure python; this module is the batteries-included layer for</span>
 <span class="sd">teams who already run these libraries. Every adapter imports its backend **lazily** (at call</span>
 <span class="sd">time, guarded by :func:`~ek.registry.requires_extra`), so ``import ek`` stays light, and each</span>
 <span class="sd">takes an injectable backend object so it can be tested -- and used -- without network access.</span>
+<span class="sd">The dependency direction stays ``ek -&gt; backend``, never the reverse. Inspect AI, Ragas and</span>
+<span class="sd">DeepEval come with ``ek[agents]``; uqlm (heavy: torch/transformers) with ``ek[agreement]``.</span>
 
+<span class="sd">- :func:`run_inspect` -- run an Inspect AI eval and get graded :class:`~ek.agents.Episode` s</span>
+<span class="sd">  back (Inspect's ``epochs`` are ek's trials, so the result feeds ``reliability`` directly).</span>
 <span class="sd">- :class:`UqlmConsistencySignal` -- black-box sample-and-vote self-consistency from ``uqlm``</span>
 <span class="sd">  (a ``[0, 1]`` confidence), a :class:`~ek.base.Signal` (expensive: ``cost_tier=3``).</span>
 <span class="sd">- :class:`RagasSignal` -- reference-free Ragas metrics (faithfulness, answer relevancy,</span>
@@ -741,11 +745,13 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..base</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphGrammar</span><span class="p">,</span> <span class="n">Score</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">register</span><span class="p">,</span> <span class="n">requires_extra</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.bridge</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_SUCCESS_THRESHOLD</span><span class="p">,</span> <span class="n">episodes_from_inspect_log</span>
 
 <span class="c1">#: Env var that opts out of DeepEval's Confident-AI telemetry (set before importing it).</span>
 <span class="n">DEEPEVAL_TELEMETRY_ENV</span> <span class="o">=</span> <span class="s2">"DEEPEVAL_TELEMETRY_OPT_OUT"</span>
@@ -783,6 +789,102 @@ window.runMermaid = runMermaid;</script>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Inspect AI: run an eval, get Episodes</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="run_inspect">
+<a class="viewcode-back" href="../../../_autosummary/ek.agents.wrappers.html#ek.agents.run_inspect">[docs]</a>
+<span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agents"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"inspect_ai"</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_inspect</span><span class="p">(</span>
+    <span class="n">tasks</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scorer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">success_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DEFAULT_SUCCESS_THRESHOLD</span><span class="p">,</span>
+    <span class="n">log_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">eval_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run an Inspect AI eval and return its samples as graded :class:`~ek.agents.Episode` s.</span>
+
+<span class="sd">    A thin convenience over ``inspect_ai.eval`` + :func:`~ek.agents.episodes_from_inspect_log`:</span>
+<span class="sd">    one episode per sample per epoch, graded by the sample's score (``scorer``, else the first)</span>
+<span class="sd">    reaching ``success_threshold``. Run with ``epochs=k`` and the result is a k-trial run --</span>
+<span class="sd">    hand it to :func:`~ek.agents.reliability` for ``pass^k``, or to</span>
+<span class="sd">    :func:`~ek.agents.cost_report` for cost per successful task.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        tasks: Anything ``inspect_ai.eval`` accepts (a ``Task``, a task function, a registry</span>
+<span class="sd">            name, a list of them).</span>
+<span class="sd">        model: The model under test (e.g. ``"openai/gpt-4o"``); ``None`` lets Inspect use</span>
+<span class="sd">            ``INSPECT_EVAL_MODEL``. ``"mockllm/model"`` runs offline at no cost.</span>
+<span class="sd">        epochs: Trials per sample (Inspect's ``epochs``); ``None`` keeps the task's own setting.</span>
+<span class="sd">        scorer: Which scorer's value grades success (default: each sample's first score).</span>
+<span class="sd">        success_threshold: A sample succeeds when its score value is ``&gt;=`` this.</span>
+<span class="sd">        log_dir: Where Inspect writes its ``.eval`` logs. ``None`` uses a temporary directory</span>
+<span class="sd">            that is removed once the episodes are read -- pass a path to keep the logs.</span>
+<span class="sd">        **eval_kwargs: Passed to ``inspect_ai.eval`` (``limit=``, ``solver=``, ...). ``display``</span>
+<span class="sd">            defaults to ``"none"``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        RuntimeError: if any eval did not finish with status ``success`` (a partial run is not</span>
+<span class="sd">            a k-trial run, and grading it as one would understate failures).</span>
+
+<span class="sd">    Note: ``inspect_ai.eval`` is synchronous and refuses to run inside an event loop; from async</span>
+<span class="sd">    code, call ``inspect_ai.eval_async`` and pass each log to ``episodes_from_inspect_log``.</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">inspect_ai</span><span class="w"> </span><span class="kn">import</span> <span class="nb">eval</span> <span class="k">as</span> <span class="n">inspect_eval</span>
+
+    <span class="n">eval_kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"display"</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">epochs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">eval_kwargs</span><span class="p">[</span><span class="s2">"epochs"</span><span class="p">]</span> <span class="o">=</span> <span class="n">epochs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">collect</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="n">inspect_eval</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="n">directory</span><span class="p">,</span> <span class="o">**</span><span class="n">eval_kwargs</span><span class="p">)</span>
+        <span class="n">failed</span> <span class="o">=</span> <span class="p">[</span><span class="n">log</span> <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">logs</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"success"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">log</span><span class="o">.</span><span class="n">status</span><span class="p">)</span> <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">failed</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"run_inspect: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Inspect eval(s) did not succeed: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">errors</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+        <span class="c1"># Several logs (a list of tasks) pool their samples; prefix the task name so sample ids</span>
+        <span class="c1"># that repeat across tasks are not counted as extra trials of one task.</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="s2">"eval"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">"task"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span> <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">))</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">):</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">#</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">)]</span>
+        <span class="c1"># Read the samples while the log files still exist (Inspect may load them lazily).</span>
+        <span class="n">episodes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">episode</span>
+            <span class="k">for</span> <span class="n">log</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">logs</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">episode</span> <span class="ow">in</span> <span class="n">episodes_from_inspect_log</span><span class="p">(</span>
+                <span class="n">log</span><span class="p">,</span>
+                <span class="n">scorer</span><span class="o">=</span><span class="n">scorer</span><span class="p">,</span>
+                <span class="n">success_threshold</span><span class="o">=</span><span class="n">success_threshold</span><span class="p">,</span>
+                <span class="n">task_prefix</span><span class="o">=</span><span class="n">name</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">ungraded</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">episodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">episodes</span> <span class="ow">or</span> <span class="n">ungraded</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"run_inspect: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">episodes</span><span class="p">)</span><span class="si">}</span><span class="s2"> episode(s), </span><span class="si">{</span><span class="n">ungraded</span><span class="si">}</span><span class="s2"> ungraded (no scalar "</span>
+                <span class="s2">"score). Check log_samples / fail_on_error / the scorer before trusting a "</span>
+                <span class="s2">"success rate."</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">episodes</span>
+
+    <span class="k">if</span> <span class="n">log_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">collect</span><span class="p">(</span><span class="n">log_dir</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">"ek-inspect-"</span><span class="p">)</span> <span class="k">as</span> <span class="n">directory</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">collect</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1"># uqlm: black-box self-consistency</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
 
@@ -799,8 +901,10 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    Args:</span>
 <span class="sd">        scorer: A backend with ``score(prompt) -&gt; float`` (tests / custom sampling), or</span>
 <span class="sd">            ``None`` to build uqlm's ``BlackBoxUQ`` from ``llm``.</span>
-<span class="sd">        llm: A LangChain chat model, required when ``scorer`` is ``None``.</span>
-<span class="sd">        scorer_name: The uqlm scorer column to read (default ``"noncontradiction"``).</span>
+<span class="sd">        llm: A LangChain chat model, required when ``scorer`` is ``None``. uqlm reads its</span>
+<span class="sd">            ``temperature`` attribute, so it must have one.</span>
+<span class="sd">        scorer_name: The uqlm scorer column to read (default ``"noncontradiction"``, which</span>
+<span class="sd">            downloads an NLI model on first use; ``"exact_match"`` needs none).</span>
 <span class="sd">        num_responses: Samples per prompt.</span>
 <span class="sd">        cost_tier: ``3`` -- it pays for ``num_responses`` extra generations.</span>
 
@@ -826,17 +930,22 @@ window.runMermaid = runMermaid;</script>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_responses</span> <span class="o">=</span> <span class="n">num_responses</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost_tier</span> <span class="o">=</span> <span class="n">cost_tier</span>
 
-    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agents"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"uqlm"</span><span class="p">])</span>
+    <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agreement"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"uqlm"</span><span class="p">])</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">uqlm</span><span class="w"> </span><span class="kn">import</span> <span class="n">BlackBoxUQ</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"UqlmConsistencySignal needs `llm=` (or an injected `scorer=`)."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"UqlmConsistencySignal needs `llm=` (or an injected `scorer=`)."</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">BlackBoxUQ</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">,</span> <span class="n">scorers</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scorer_name</span><span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_score_with_uqlm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">uq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_backend</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">_run</span><span class="p">(</span><span class="n">uq</span><span class="o">.</span><span class="n">generate_and_score</span><span class="p">(</span><span class="n">prompts</span><span class="o">=</span><span class="p">[</span><span class="n">prompt</span><span class="p">],</span> <span class="n">num_responses</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_responses</span><span class="p">))</span>
+        <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"prompts"</span><span class="p">:</span> <span class="p">[</span><span class="n">prompt</span><span class="p">],</span> <span class="s2">"num_responses"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_responses</span><span class="p">}</span>
+        <span class="k">if</span> <span class="s2">"show_progress_bars"</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">uq</span><span class="o">.</span><span class="n">generate_and_score</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"show_progress_bars"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># a Signal is called per item; keep it quiet</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">_run</span><span class="p">(</span><span class="n">uq</span><span class="o">.</span><span class="n">generate_and_score</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scorer_name</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -863,17 +972,31 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"retrieved_contexts"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"retrieved_contexts"</span><span class="p">,</span> <span class="s2">"contexts"</span><span class="p">,</span> <span class="s2">"context"</span><span class="p">),</span>
 <span class="p">}</span>
 
-<span class="c1">#: ek's metric name -&gt; Ragas class name.</span>
+<span class="c1">#: ek's metric name -&gt; Ragas class name in the legacy ``ragas.metrics`` API (deprecated since</span>
+<span class="c1">#: Ragas 0.4) -- metrics take a ``BaseRagasLLM`` and expose ``single_turn_ascore(sample)``.</span>
 <span class="n">RAGAS_METRICS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"faithfulness"</span><span class="p">:</span> <span class="s2">"Faithfulness"</span><span class="p">,</span>
     <span class="s2">"answer_relevancy"</span><span class="p">:</span> <span class="s2">"ResponseRelevancy"</span><span class="p">,</span>
     <span class="s2">"context_precision"</span><span class="p">:</span> <span class="s2">"LLMContextPrecisionWithoutReference"</span><span class="p">,</span>
 <span class="p">}</span>
 
+<span class="c1">#: ek's metric name -&gt; Ragas class name in ``ragas.metrics.collections`` (Ragas &gt;= 0.4, the API</span>
+<span class="c1">#: that survives 1.0) -- metrics take an ``InstructorBaseRagasLLM`` (``llm_factory``) and expose</span>
+<span class="c1">#: ``ascore(**fields) -&gt; MetricResult``. ``answer_relevancy`` also needs ``embeddings=``.</span>
+<span class="n">RAGAS_COLLECTION_METRICS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"faithfulness"</span><span class="p">:</span> <span class="s2">"Faithfulness"</span><span class="p">,</span>
+    <span class="s2">"answer_relevancy"</span><span class="p">:</span> <span class="s2">"AnswerRelevancy"</span><span class="p">,</span>
+    <span class="s2">"context_precision"</span><span class="p">:</span> <span class="s2">"ContextPrecisionWithoutReference"</span><span class="p">,</span>
+<span class="p">}</span>
+
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_pick</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">aliases</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">sample</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span>
+            <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span>
     <span class="k">return</span> <span class="kc">None</span>
@@ -888,12 +1011,19 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    ``answer``) and ``retrieved_contexts`` (or ``contexts``). The score is in ``[0, 1]``.</span>
 <span class="sd">    Ragas metrics call an LLM, so pass a configured ``metric`` (or ``llm=`` to build one).</span>
 
+<span class="sd">    Both Ragas metric APIs are accepted: the collections API (``ascore(**fields)`` returning a</span>
+<span class="sd">    ``MetricResult``; ``ragas.metrics.collections``, the one that survives Ragas 1.0) and the</span>
+<span class="sd">    legacy one (``single_turn_ascore(SingleTurnSample)``; deprecated since Ragas 0.4).</span>
+
 <span class="sd">    Args:</span>
-<span class="sd">        metric: A Ragas metric object exposing ``single_turn_ascore(sample)`` (injected), or</span>
-<span class="sd">            ``None`` to build ``name`` from ``llm``.</span>
+<span class="sd">        metric: A Ragas metric object (either API), or ``None`` to build ``name`` from ``llm``.</span>
 <span class="sd">        name: ``faithfulness`` | ``answer_relevancy`` | ``context_precision``.</span>
-<span class="sd">        llm: A ``ragas`` LLM wrapper, used when ``metric`` is ``None``.</span>
+<span class="sd">        llm: The judge, used when ``metric`` is ``None``. An ``InstructorBaseRagasLLM`` (from</span>
+<span class="sd">            ``ragas.llms.llm_factory``) builds the collections metric; any other Ragas LLM</span>
+<span class="sd">            wrapper (e.g. ``LangchainLLMWrapper``) builds the legacy one.</span>
 <span class="sd">        cost_tier: ``3`` -- an LLM call per sample.</span>
+<span class="sd">        **metric_kwargs: Passed to the Ragas constructor (e.g. ``embeddings=`` for</span>
+<span class="sd">            ``answer_relevancy``).</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; class Fake:</span>
@@ -909,19 +1039,45 @@ window.runMermaid = runMermaid;</script>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_RAGAS_METRIC</span><span class="p">,</span>
         <span class="n">llm</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">cost_tier</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">metric_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="n">metric</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RAGAS_METRICS</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"name must be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">RAGAS_METRICS</span><span class="p">)</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"name must be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">RAGAS_METRICS</span><span class="p">)</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">"</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">llm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost_tier</span> <span class="o">=</span> <span class="n">cost_tier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric_kwargs</span> <span class="o">=</span> <span class="n">metric_kwargs</span>
 
     <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agents"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"ragas"</span><span class="p">])</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_build_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># Ragas &gt;= 0.4: the collections API, built from an Instructor-style LLM</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">ragas.metrics.collections</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">collections</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">ragas.llms</span><span class="w"> </span><span class="kn">import</span> <span class="n">InstructorBaseRagasLLM</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">collections</span> <span class="o">=</span> <span class="n">InstructorBaseRagasLLM</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">collections</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">,</span> <span class="n">InstructorBaseRagasLLM</span><span class="p">):</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">collections</span><span class="p">,</span> <span class="n">RAGAS_COLLECTION_METRICS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">metric_kwargs</span><span class="p">)</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">ragas.metrics</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rm</span>
 
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rm</span><span class="p">,</span> <span class="n">RAGAS_METRICS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">])(</span><span class="n">llm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">)</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rm</span><span class="p">,</span> <span class="n">RAGAS_METRICS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">llm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">metric_kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Score with whichever API the metric speaks (legacy sample, or collections fields)."""</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="s2">"single_turn_ascore"</span><span class="p">):</span>
+            <span class="n">real</span> <span class="o">=</span> <span class="n">_is_backend</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="s2">"ragas"</span><span class="p">)</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_sample</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="k">if</span> <span class="n">real</span> <span class="k">else</span> <span class="n">fields</span>
+            <span class="k">return</span> <span class="n">_run</span><span class="p">(</span><span class="n">metric</span><span class="o">.</span><span class="n">single_turn_ascore</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">metric</span><span class="o">.</span><span class="n">ascore</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="n">takes_any</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">p</span><span class="o">.</span><span class="n">VAR_KEYWORD</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">takes_any</span> <span class="ow">or</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">params</span><span class="p">}</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">_run</span><span class="p">(</span><span class="n">metric</span><span class="o">.</span><span class="n">ascore</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>  <span class="c1"># a MetricResult carries .value</span>
 
     <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agents"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"ragas"</span><span class="p">])</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_make_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -937,14 +1093,19 @@ window.runMermaid = runMermaid;</script>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_metric</span><span class="p">()</span>
-        <span class="n">sample</span> <span class="o">=</span> <span class="n">fields</span> <span class="k">if</span> <span class="n">_is_fake</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_sample</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">_clamp01</span><span class="p">(</span><span class="n">_run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="o">.</span><span class="n">single_turn_ascore</span><span class="p">(</span><span class="n">sample</span><span class="p">)))</span></div>
+        <span class="k">return</span> <span class="n">_clamp01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_score</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span></div>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_is_fake</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""True for an injected, non-Ragas metric (its module is not under ``ragas``)."""</span>
-    <span class="k">return</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"ragas"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_backend</span><span class="p">(</span><span class="n">metric</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">package</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""True when ``metric`` is a real ``package`` object (its class lives under ``package``).</span>
+
+<span class="sd">    An injected fake (tests, a custom backend) gets the plain-dict sample/case instead of the</span>
+<span class="sd">    library's own type. Per-package on purpose: a single "is it Ragas?" check once routed real</span>
+<span class="sd">    DeepEval metrics down the fake path, handing them a ``dict`` instead of an ``LLMTestCase``.</span>
+<span class="sd">    """</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span>
+    <span class="k">return</span> <span class="n">module</span> <span class="o">==</span> <span class="n">package</span> <span class="ow">or</span> <span class="n">module</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">package</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">)</span>
 
 
 <span class="c1"># ---------------------------------------------------------------------------</span>
@@ -957,6 +1118,53 @@ window.runMermaid = runMermaid;</script>
     <span class="s2">"task_completion"</span><span class="p">:</span> <span class="s2">"TaskCompletionMetric"</span><span class="p">,</span>
     <span class="s2">"geval"</span><span class="p">:</span> <span class="s2">"GEval"</span><span class="p">,</span>
 <span class="p">}</span>
+
+
+<span class="c1">#: Test-case fields a GEval judge reads when ``evaluation_params`` is not given. DeepEval &gt;= 4</span>
+<span class="c1">#: refuses a plain ``LLMTestCase`` without them (it would otherwise evaluate a *trace*).</span>
+<span class="n">DEFAULT_GEVAL_PARAMS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"input"</span><span class="p">,</span> <span class="s2">"actual_output"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_geval_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">test_case_module</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Fill GEval's ``name`` / ``evaluation_params`` defaults; accept params as plain strings.</span>
+
+<span class="sd">    The params enum was ``LLMTestCaseParams`` before DeepEval 4 and is ``SingleTurnParams`` since;</span>
+<span class="sd">    either is resolved here so callers can write ``evaluation_params=["input", "actual_output"]``.</span>
+<span class="sd">    """</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"ek_geval"</span><span class="p">)</span>
+    <span class="n">enum</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">test_case_module</span><span class="p">,</span> <span class="s2">"SingleTurnParams"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span>
+        <span class="n">test_case_module</span><span class="p">,</span> <span class="s2">"LLMTestCaseParams"</span>
+    <span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"evaluation_params"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">DEFAULT_GEVAL_PARAMS</span>
+    <span class="n">kwargs</span><span class="p">[</span><span class="s2">"evaluation_params"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">enum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_no_judge_model</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A ``DeepEvalBaseLLM`` that raises if called (for metrics that need no LLM judge)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepeval.models.base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepEvalBaseLLM</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">NoJudge</span><span class="p">(</span><span class="n">DeepEvalBaseLLM</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"ek-no-judge"</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">"this DeepEval metric asked for an LLM judge; pass `model=` (a model name or a "</span>
+                <span class="s2">"DeepEvalBaseLLM) to DeepEvalMetric."</span>
+            <span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">a_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">get_model_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">"ek-no-judge"</span>
+
+    <span class="k">return</span> <span class="n">NoJudge</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="disable_deepeval_telemetry">
@@ -983,12 +1191,21 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        kind: ``tool_correctness`` | ``task_completion`` | ``geval``.</span>
 <span class="sd">        metric: An injected DeepEval-shaped metric (``.measure(case)``, ``.score``); ``None``</span>
 <span class="sd">            builds the real one lazily (telemetry disabled first).</span>
-<span class="sd">        **metric_kwargs: Passed to the DeepEval constructor (e.g. ``criteria=`` for GEval).</span>
+<span class="sd">        **metric_kwargs: Passed to the DeepEval constructor (e.g. ``criteria=`` for GEval, and</span>
+<span class="sd">            ``model=`` -- a model name or a ``DeepEvalBaseLLM`` -- for any of them: DeepEval &gt;= 4</span>
+<span class="sd">            builds its default OpenAI judge at construction, so without ``model=`` it needs</span>
+<span class="sd">            ``OPENAI_API_KEY`` even for ``tool_correctness``). For GEval, ``name`` defaults to</span>
+<span class="sd">            ``"ek_geval"`` and ``evaluation_params`` to ``DEFAULT_GEVAL_PARAMS`` (strings are</span>
+<span class="sd">            accepted).</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"tool_correctness"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metric_kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"tool_correctness"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metric_kwargs</span>
+    <span class="p">):</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">DEEPEVAL_KINDS</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"kind must be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">DEEPEVAL_KINDS</span><span class="p">)</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">kind</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"kind must be one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">DEEPEVAL_KINDS</span><span class="p">)</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">kind</span><span class="si">!r}</span><span class="s2">"</span>
+            <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"deepeval_</span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2">"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
@@ -998,21 +1215,68 @@ window.runMermaid = runMermaid;</script>
     <span class="k">def</span><span class="w"> </span><span class="nf">_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="n">disable_deepeval_telemetry</span><span class="p">()</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">deepeval.metrics</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dm</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">deepeval.test_case</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tc</span>
 
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">DEEPEVAL_KINDS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">])(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">metric_kwargs</span><span class="p">)</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_kwargs</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"geval"</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">_geval_kwargs</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">tc</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"tool_correctness"</span>
+            <span class="ow">and</span> <span class="s2">"model"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"available_tools"</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="c1"># Without available_tools this metric is deterministic -- it never asks a judge --</span>
+            <span class="c1"># yet DeepEval &gt;= 4 builds an OpenAI client at construction and demands a key.</span>
+            <span class="c1"># A judge that refuses to be called makes it work offline, and fails loudly if a</span>
+            <span class="c1"># future DeepEval starts calling it after all.</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">:</span> <span class="n">_no_judge_model</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">DEEPEVAL_KINDS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">])(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@requires_extra</span><span class="p">(</span><span class="s2">"agents"</span><span class="p">,</span> <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">"deepeval"</span><span class="p">])</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_real_case</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">fields</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_real_case</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build a real ``LLMTestCase``; tool calls carry their arguments as ``input_parameters``."""</span>
         <span class="n">disable_deepeval_telemetry</span><span class="p">()</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">deepeval.test_case</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMTestCase</span><span class="p">,</span> <span class="n">ToolCall</span>
 
+        <span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"tools_called"</span><span class="p">,</span> <span class="s2">"expected_tools"</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
-                <span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ToolCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+                <span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">ToolCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="n">params</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">()))</span>
+                <span class="p">]</span>
         <span class="k">return</span> <span class="n">LLMTestCase</span><span class="p">(</span><span class="o">**</span><span class="n">fields</span><span class="p">)</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calls</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""``[(tool_name, args), ...]`` from Steps, ``(name, args)`` pairs or bare names."""</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="ow">or</span> <span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">item</span><span class="p">,</span> <span class="p">{}))</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">Mapping</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">)))</span>
+            <span class="p">):</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="p">{})))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"args"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">"tool"</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}))</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_case_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The tool-call arguments that go with :meth:`_case_fields`' tool names (same order)."""</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">"steps"</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"tools_called"</span><span class="p">:</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calls</span><span class="p">(</span><span class="n">steps</span><span class="p">)]}</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gold</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"expected_tools"</span> <span class="ow">in</span> <span class="n">gold</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calls</span><span class="p">(</span><span class="n">gold</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">])]</span>
+        <span class="k">return</span> <span class="n">args</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_case_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">episode</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">gold</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="n">calls</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">"tool"</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">"steps"</span><span class="p">,</span> <span class="p">())]</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"trajectory"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">"steps"</span><span class="p">,</span> <span class="p">())</span>
+        <span class="n">calls</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calls</span><span class="p">(</span><span class="n">steps</span><span class="p">)]</span>
         <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"input"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"task_id"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
             <span class="s2">"actual_output"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">episode</span><span class="p">,</span> <span class="s2">"output"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">),</span>
@@ -1022,7 +1286,9 @@ window.runMermaid = runMermaid;</script>
             <span class="k">if</span> <span class="s2">"expected_output"</span> <span class="ow">in</span> <span class="n">gold</span><span class="p">:</span>
                 <span class="n">fields</span><span class="p">[</span><span class="s2">"expected_output"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gold</span><span class="p">[</span><span class="s2">"expected_output"</span><span class="p">]</span>
             <span class="k">if</span> <span class="s2">"expected_tools"</span> <span class="ow">in</span> <span class="n">gold</span><span class="p">:</span>
-                <span class="n">fields</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="s2">"tool"</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">gold</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">]]</span>
+                <span class="n">fields</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calls</span><span class="p">(</span><span class="n">gold</span><span class="p">[</span><span class="s2">"expected_tools"</span><span class="p">])</span>
+                <span class="p">]</span>
         <span class="k">elif</span> <span class="n">gold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fields</span><span class="p">[</span><span class="s2">"expected_output"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">gold</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fields</span>
@@ -1033,7 +1299,11 @@ window.runMermaid = runMermaid;</script>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build</span><span class="p">()</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_case_fields</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">)</span>
-        <span class="n">case</span> <span class="o">=</span> <span class="n">fields</span> <span class="k">if</span> <span class="n">_is_fake</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_real_case</span><span class="p">(</span><span class="o">**</span><span class="n">fields</span><span class="p">)</span>
+        <span class="n">case</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_real_case</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_case_args</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">gold</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">_is_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span> <span class="s2">"deepeval"</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">fields</span>
+        <span class="p">)</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">_clamp01</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_measure</span><span class="p">(</span><span class="n">case</span><span class="p">))</span>
         <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"higher_is_better"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"deepeval"</span><span class="p">}</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"tool_correctness"</span><span class="p">:</span>

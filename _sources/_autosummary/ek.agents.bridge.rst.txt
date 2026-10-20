@@ -4,6 +4,13 @@ ek.agents.bridge
 .. automodule:: ek.agents.bridge
 
    
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      INSPECT_SCORE_VALUES
+      DEFAULT_SUCCESS_THRESHOLD
+   
    .. rubric:: Functions
 
    .. autosummary::
@@ -11,7 +18,9 @@ ek.agents.bridge
       as_agent
       cost_from_usage
       episode_from_messages
+      episodes_from_inspect_log
       from_deepeval_test_case
       from_inspect_sample
+      inspect_score_value
       trajectory_from_messages
    
