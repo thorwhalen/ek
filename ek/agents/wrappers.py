@@ -115,12 +115,16 @@ class UqlmConsistencySignal:
         from uqlm import BlackBoxUQ
 
         if self.llm is None:
-            raise ValueError("UqlmConsistencySignal needs `llm=` (or an injected `scorer=`).")
+            raise ValueError(
+                "UqlmConsistencySignal needs `llm=` (or an injected `scorer=`)."
+            )
         return BlackBoxUQ(llm=self.llm, scorers=[self.scorer_name])
 
     def _score_with_uqlm(self, prompt: str) -> float:
         uq = self._build_backend()
-        result = _run(uq.generate_and_score(prompts=[prompt], num_responses=self.num_responses))
+        result = _run(
+            uq.generate_and_score(prompts=[prompt], num_responses=self.num_responses)
+        )
         frame = result.to_df()
         return float(frame[self.scorer_name].iloc[0])
 
@@ -156,7 +160,11 @@ RAGAS_METRICS = {
 
 def _pick(sample: Any, aliases: tuple) -> Any:
     for key in aliases:
-        value = sample.get(key) if isinstance(sample, Mapping) else getattr(sample, key, None)
+        value = (
+            sample.get(key)
+            if isinstance(sample, Mapping)
+            else getattr(sample, key, None)
+        )
         if value is not None:
             return value
     return None
@@ -192,7 +200,9 @@ class RagasSignal:
         cost_tier: int = 3,
     ):
         if metric is None and name not in RAGAS_METRICS:
-            raise ValueError(f"name must be one of {sorted(RAGAS_METRICS)}, got {name!r}")
+            raise ValueError(
+                f"name must be one of {sorted(RAGAS_METRICS)}, got {name!r}"
+            )
         self.metric = metric
         self.name = name
         self.llm = llm
@@ -261,9 +271,13 @@ class DeepEvalMetric:
         **metric_kwargs: Passed to the DeepEval constructor (e.g. ``criteria=`` for GEval).
     """
 
-    def __init__(self, kind: str = "tool_correctness", *, metric: Any = None, **metric_kwargs):
+    def __init__(
+        self, kind: str = "tool_correctness", *, metric: Any = None, **metric_kwargs
+    ):
         if kind not in DEEPEVAL_KINDS:
-            raise ValueError(f"kind must be one of {sorted(DEEPEVAL_KINDS)}, got {kind!r}")
+            raise ValueError(
+                f"kind must be one of {sorted(DEEPEVAL_KINDS)}, got {kind!r}"
+            )
         self.kind = kind
         self.name = f"deepeval_{kind}"
         self.metric = metric
@@ -287,7 +301,10 @@ class DeepEvalMetric:
         return LLMTestCase(**fields)
 
     def _case_fields(self, episode: Any, gold: Any) -> dict:
-        calls = [getattr(s, "tool", s) for s in getattr(getattr(episode, "trajectory", None), "steps", ())]
+        calls = [
+            getattr(s, "tool", s)
+            for s in getattr(getattr(episode, "trajectory", None), "steps", ())
+        ]
         fields: dict = {
             "input": str(getattr(episode, "task_id", "")),
             "actual_output": str(getattr(episode, "output", "") or ""),
@@ -297,7 +314,9 @@ class DeepEvalMetric:
             if "expected_output" in gold:
                 fields["expected_output"] = gold["expected_output"]
             if "expected_tools" in gold:
-                fields["expected_tools"] = [getattr(t, "tool", t) for t in gold["expected_tools"]]
+                fields["expected_tools"] = [
+                    getattr(t, "tool", t) for t in gold["expected_tools"]
+                ]
         elif gold is not None:
             fields["expected_output"] = str(gold)
         return fields
