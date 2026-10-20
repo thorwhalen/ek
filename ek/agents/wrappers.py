@@ -137,7 +137,9 @@ def run_inspect(
             )
         # Several logs (a list of tasks) pool their samples; prefix the task name so sample ids
         # that repeat across tasks are not counted as extra trials of one task.
-        names = [str(getattr(getattr(log, "eval", None), "task", "") or "") for log in logs]
+        names = [
+            str(getattr(getattr(log, "eval", None), "task", "") or "") for log in logs
+        ]
         if len(logs) > 1 and len(set(names)) < len(names):
             names = [f"{name}#{i}" for i, name in enumerate(names)]
         # Read the samples while the log files still exist (Inspect may load them lazily).
@@ -225,7 +227,9 @@ class UqlmConsistencySignal:
         uq = self._build_backend()
         kwargs: dict = {"prompts": [prompt], "num_responses": self.num_responses}
         if "show_progress_bars" in inspect.signature(uq.generate_and_score).parameters:
-            kwargs["show_progress_bars"] = False  # a Signal is called per item; keep it quiet
+            kwargs["show_progress_bars"] = (
+                False  # a Signal is called per item; keep it quiet
+            )
         result = _run(uq.generate_and_score(**kwargs))
         frame = result.to_df()
         return float(frame[self.scorer_name].iloc[0])
