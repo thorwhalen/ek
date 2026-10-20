@@ -40,7 +40,7 @@ def test_uqlm_signal_fake_and_clamp():
 
 @pytest.mark.skipif(_has("uqlm"), reason="uqlm installed")
 def test_uqlm_missing_extra_is_actionable():
-    with pytest.raises(MissingExtraError, match=r"ek\[agents\]"):
+    with pytest.raises(MissingExtraError, match=r"ek\[agreement\]"):
         UqlmConsistencySignal(llm=object())("q")
 
 
