@@ -72,7 +72,7 @@ table scoring for engines that cannot emit cells in the first place.
 Benchmark an OCR engine against a gold corpus.
 
 * **Parameters:**
-  * **engine** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
+  * **engine** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
   * **gold** ([`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)) – A mapping `key -> {image, reference_text, [slice], ...}` – a plain
     dict or a `ek` gold store.
   * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `"cer"` (default) or `"wer"` (or any registered string metric).
@@ -154,7 +154,7 @@ recoverable table structure.
     engine-specific payload), `.markdown` (VLM/markdown engines), and
     `.meta` – never ocracy types, so any `image -> OcrResult` callable’s
     output works.
-  * **parser** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
+  * **parser** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
 
     How to turn the raw payload into a table (dependency injection /
     open-closed). One of:

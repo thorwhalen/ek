@@ -57,7 +57,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 An ordered, named, versioned pipeline of `str -> str` steps.
 
 * **Parameters:**
-  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
+  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
     plain callables. Applied left to right.
   * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Override the auto-derived version string (the `+`-joined names).
   * **audit_marks** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If true, warn when a step would run on text carrying combining
@@ -125,7 +125,7 @@ Accepts `None`, a registered normalizer name, a callable, a sequence of
 steps, or an existing [`Canonicalizer`](#ek.canonicalize.Canonicalizer).
 
 * **Return type:**
-  `Union`[[`Canonicalizer`](#ek.canonicalize.Canonicalizer), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Canonicalizer`](#ek.canonicalize.Canonicalizer), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]
 
 ### ek.canonicalize.strip(s)
 

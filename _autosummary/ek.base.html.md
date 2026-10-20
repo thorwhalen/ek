@@ -87,7 +87,7 @@ every layer stays replaceable (open-closed).
 | [`TypeRef`](#ek.base.TypeRef)(kind, name[, field])                     | A reference into the schema, so an injected cost function can read weights.                                             |
 | [`Validator`](#ek.base.Validator)(\*args, \*\*kwargs)                    | Reference-free check on a value, yielding zero or more [`Finding`](#ek.base.Finding) s.      |
 
-### *class* ek.base.AnnotatedExtraction(grammar, estimates=<factory>)
+### *class* ek.base.AnnotatedExtraction(grammar, estimates=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -132,7 +132,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A directed relation kind between two [`NodeType`](#ek.base.NodeType) names.
 
-### *class* ek.base.FieldEstimate(value, raw_signals=<factory>, confidence=None, findings=(), provenance=None, decision=None)
+### *class* ek.base.FieldEstimate(value, raw_signals=dict(), confidence=None, findings=(), provenance=None, decision=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -166,7 +166,7 @@ A `suggestion` is present iff the producing layer can *correct* (only the
 deterministic canonicalizer and the gated LLM corrector freely do so). The
 original value is always retained elsewhere; a Finding never mutates.
 
-### *class* ek.base.GraphGrammar(node_types=<factory>, edge_types=<factory>)
+### *class* ek.base.GraphGrammar(node_types=dict(), edge_types=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -215,7 +215,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Addresses a node (or one of its fields) in an extracted graph; keys Layer B.
 
-### *class* ek.base.NodeType(name, fields=<factory>, importance=1.0)
+### *class* ek.base.NodeType(name, fields=dict(), importance=1.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -244,7 +244,7 @@ Where an extracted value came from, for audit and click-to-source review.
 `bbox` is intentionally typed `Any` so `ek` core need not import any OCR
 package; the OCR instance stores normalized `[0, 1]` top-left-origin geometry.
 
-### *class* ek.base.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=<factory>, provenance=<factory>, per_field=None)
+### *class* ek.base.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=dict(), provenance=dict(), per_field=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -256,7 +256,7 @@ updated [`FieldEstimate`](#ek.base.FieldEstimate) (confidence/findings/decision 
 scalar fields summarize: `calibrated_confidence` is the weakest field, and
 `decision` the most severe (`block` > `flag` > `accept`).
 
-### *class* ek.base.Report(metric='', aggregate=None, n=0, scores=<factory>, per_slice=<factory>, detail=<factory>)
+### *class* ek.base.Report(metric='', aggregate=None, n=0, scores=list(), per_slice=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -266,7 +266,7 @@ Aggregate of many [`Score`](#ek.base.Score) s over a corpus, with optional per-s
 aggregator – e.g. globally accumulated WER – not a naive mean of per-item
 values). `per_slice` maps a slice label to its own aggregate.
 
-### *class* ek.base.Score(value, precision=None, recall=None, f1=None, metric='', detail=<factory>)
+### *class* ek.base.Score(value, precision=None, recall=None, f1=None, metric='', detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

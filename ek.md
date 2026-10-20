@@ -1,4 +1,4 @@
-> built 2026-10-14 03:58 UTC from 3c8454e (main) · ek 0.1.11. Details: build_info.json
+> built 2026-10-20 12:21 UTC from b249552 (main) · ek 0.1.12. Details: build_info.json
 
 # index.html.md
 
@@ -248,7 +248,7 @@ Multiplier applied to a destructive tool’s importance when it is not set expli
 Calling a destructive tool wrongly is categorically worse than calling a read-only one;
 a keyword-tunable default, never a magic number buried in a metric.
 
-### *class* ek.agents.base.Episode(task_id='', trajectory=<factory>, output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=<factory>)
+### *class* ek.agents.base.Episode(task_id='', trajectory=Trajectory(), output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -317,7 +317,7 @@ version and the scaffold are not – changing them invalidates a baseline.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
-### *class* ek.agents.base.Step(tool, args=<factory>, observation=None, error=None)
+### *class* ek.agents.base.Step(tool, args=dict(), observation=None, error=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -355,7 +355,7 @@ The Layer-A grammar for this task’s tool set.
 * **Return type:**
   [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)
 
-### *class* ek.agents.base.ToolSpec(name, params=<factory>, importance=None, destructive=False)
+### *class* ek.agents.base.ToolSpec(name, params=dict(), importance=None, destructive=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -415,9 +415,6 @@ Gold tool calls are usually written as bare pairs or dicts (no observation), whi
 prediction arrives as a [`Step`](_autosummary/ek.agents.base.html.md#ek.agents.base.Step); both must compare. Progressive disclosure: the
 simple literal works, the rich object works.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -430,6 +427,9 @@ simple literal works, the rich object works.
 >>> as_call("search")
 ('search', {})
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### ek.agents.base.is_episode(x)
 
@@ -452,9 +452,6 @@ Build the Layer-A [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGra
 The resulting grammar is the frozen cost SSOT every agent metric reads: node cost =
 the tool’s call weight, field cost = the argument’s importance.
 
-* **Return type:**
-  [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)
-
 ### Example
 
 ```pycon
@@ -464,6 +461,9 @@ the tool’s call weight, field cost = the argument’s importance.
 >>> g.node_cost("send")
 10.0
 ```
+
+* **Return type:**
+  [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)
 
 
 # _autosummary/ek.agents.bridge.html.md
@@ -517,9 +517,6 @@ Wrap a plain `input -> answer` function into the harness’s `TaskSpec -> Episod
 
 Progressive disclosure: the trivial agent should not have to learn the Episode type.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
-
 ### Example
 
 ```pycon
@@ -529,15 +526,15 @@ Progressive disclosure: the trivial agent should not have to learn the Episode t
 'HI'
 ```
 
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
+
 ### ek.agents.bridge.cost_from_usage(usage, , latency_s=None)
 
 Build a [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.
 
 Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 (`input_tokens` / `output_tokens` / `cache_read_input_tokens`) spellings.
-
-* **Return type:**
-  [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)
 
 ### Example
 
@@ -546,6 +543,9 @@ Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 >>> c.input_tokens, c.output_tokens
 (100, 20)
 ```
+
+* **Return type:**
+  [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)
 
 ### ek.agents.bridge.episode_from_messages(messages, , task_id='', usage=None, output=None, final_state=None, latency_s=None)
 
@@ -608,9 +608,10 @@ per token. Two facts force it (`misc/docs/ek_11`):
    any price is not cheap, it is unusable; a per-token metric that reports it as
    “$0.003/call” is actively misleading).
 
-**No hardcoded prices.** Rates go stale monthly, so this module ships *no* built-in price
-table: a [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice) is either passed directly or resolved from an injected
-catalog ([`load_prices()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices) reads LiteLLM’s MIT-licensed
+**No hardcoded prices in code.** Rates go stale monthly, so no price is baked into a
+function: a [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice) is either passed directly or resolved from an injected
+catalog. [`load_prices()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices) with no argument reads the bundled *data file* snapshot
+([`bundled_prices_path()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.bundled_prices_path), may be stale – pass your own to refresh); it reads LiteLLM’s MIT-licensed
 `model_prices_and_context_window.json` – **the data file, never the SDK**, whose
 `enterprise/` subtree is a proprietary carve-out). Missing rates raise an *actionable*
 error rather than silently guessing.
@@ -630,15 +631,17 @@ error rather than silently guessing.
 | [`DEFAULT_CACHE_DISCOUNT`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.DEFAULT_CACHE_DISCOUNT)   | Cached input is billed at a fraction of the normal input rate (~10% across the major providers).   |
 |---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
 | [`DEFAULT_BATCH_DISCOUNT`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.DEFAULT_BATCH_DISCOUNT)   | Batch/deferred APIs are ~50% off.                                                                  |
+| [`BUNDLED_PRICES_FILENAME`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.BUNDLED_PRICES_FILENAME)  | The bundled LiteLLM price snapshot (MIT; see `data/LITELLM_LICENSE.md`).                           |
 
 ### Functions
 
-| [`cost_of_pass`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.cost_of_pass)(total_cost, n_success)                | Expected monetary cost of one *successful* task: `total_cost / n_success`.                                                     |
+| [`bundled_prices_path`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.bundled_prices_path)()                              | Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).                                            |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| [`cost_of_pass`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.cost_of_pass)(total_cost, n_success)                | Expected monetary cost of one *successful* task: `total_cost / n_success`.                                                     |
 | [`cost_report`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.cost_report)(episodes, \*[, prices, price])         | The quality x cost x latency triple, reported **together**.                                                                    |
 | [`dollars`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.dollars)(cost, price, \*[, prices, batch])          | Monetary cost of one [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) tally, in USD.                  |
 | [`episode_dollars`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.episode_dollars)(episode, \*[, prices, price, ...]) | Monetary cost of one episode (0.0 if it carries no [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)). |
-| [`load_prices`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices)(source)                                | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                       |
+| [`load_prices`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices)([source])                              | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                       |
 | [`per_million`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.per_million)(input, output, \*[, ...])              | Build a [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice) from the human-facing **USD per 1M tokens** figures.       |
 | [`price_of`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.price_of)(model, \*[, prices])                      | Resolve a model's rates from an injected catalog, or fail *actionably*.                                                        |
 
@@ -651,6 +654,10 @@ error rather than silently guessing.
 
 | [`UnknownModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.UnknownModelPrice)   | Raised when a model's rates are not in the injected price catalog.   |
 |----------------------------------------------------------------------|----------------------------------------------------------------------|
+
+### ek.agents.cost.BUNDLED_PRICES_FILENAME *= 'model_prices_and_context_window.json'*
+
+The bundled LiteLLM price snapshot (MIT; see `data/LITELLM_LICENSE.md`).
 
 ### ek.agents.cost.DEFAULT_BATCH_DISCOUNT *= 0.5*
 
@@ -689,15 +696,19 @@ Bases: [`KeyError`](https://docs.python.org/3/builtins/exceptions.html#KeyError)
 
 Raised when a model’s rates are not in the injected price catalog.
 
+### ek.agents.cost.bundled_prices_path()
+
+Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### ek.agents.cost.cost_of_pass(total_cost, n_success)
 
 Expected monetary cost of one *successful* task: `total_cost / n_success`.
 
 Returns `inf` when nothing succeeded – infeasibility is the honest answer, not a
 cheap-looking zero (this divergence is the point of the metric).
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -707,6 +718,9 @@ cheap-looking zero (this divergence is the point of the metric).
 >>> cost_of_pass(10.0, 0)
 inf
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.agents.cost.cost_report(episodes, , prices=None, price=None)
 
@@ -719,9 +733,6 @@ a report that omits cost is not a report. Returns `n`, `n_success`, `success_rat
 With **no** `price`/`prices`, dollar figures are `None` rather than a fabricated zero:
 `ek` will not invent rates, and a silent 0.0 would make a costly agent look free. Tokens
 and latency are still reported.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -737,13 +748,16 @@ and latency are still reported.
 True
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 ### ek.agents.cost.dollars(cost, price, , prices=None, batch=False)
 
 Monetary cost of one [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) tally, in USD.
 
 * **Parameters:**
   * **cost** ([`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)) – The token/retry tally.
-  * **price** (`Union`[[`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), or a model name to resolve against `prices`.
+  * **price** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), or a model name to resolve against `prices`.
   * **prices** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)]]) – The injected price catalog (required when `price` is a name).
   * **batch** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Apply the batch-API discount ([`DEFAULT_BATCH_DISCOUNT`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.DEFAULT_BATCH_DISCOUNT)).
 * **Raises:**
@@ -758,19 +772,17 @@ Monetary cost of one episode (0.0 if it carries no [`Cost`](_autosummary/ek.agen
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### ek.agents.cost.load_prices(source)
+### ek.agents.cost.load_prices(source=None)
 
 Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.
 
 `source` is a path to (or an already-parsed mapping of) LiteLLM’s MIT-licensed
-`model_prices_and_context_window.json`. We read the **data file only** and never
+`model_prices_and_context_window.json`; `None` (default) uses the bundled snapshot
+([`bundled_prices_path()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.bundled_prices_path)). We read the **data file only** and never
 import the `litellm` SDK – its `enterprise/` subtree is a proprietary carve-out,
 and the SDK drags a large transitive tree in just to look up a rate.
 
 Entries lacking token rates (embeddings, unpriced models) are skipped.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -781,12 +793,12 @@ Entries lacking token rates (embeddings, unpriced models) are skipped.
 2e-06
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 ### ek.agents.cost.per_million(input, output, , cached_input=None, reasoning=None)
 
 Build a [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice) from the human-facing **USD per 1M tokens** figures.
-
-* **Return type:**
-  [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
 
 ### Example
 
@@ -796,13 +808,15 @@ Build a [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelP
 (3e-06, 1.5e-05)
 ```
 
+* **Return type:**
+  [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
+
 ### ek.agents.cost.price_of(model, , prices=None)
 
 Resolve a model’s rates from an injected catalog, or fail *actionably*.
 
-`ek` deliberately ships no built-in price table (rates go stale monthly and would be
-magic numbers). Supply one with `prices=`, or load the LiteLLM catalog with
-[`load_prices()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices).
+`ek` never guesses a rate (they go stale monthly). Supply a catalog with `prices=`;
+[`load_prices()`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.load_prices) loads the bundled LiteLLM snapshot or your own file.
 
 * **Return type:**
   [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
@@ -871,7 +885,7 @@ not exist.
 | [`AgentGateResult`](_autosummary/ek.agents.harness.html.md#ek.agents.harness.AgentGateResult)([passed, reasons, ...])   | Outcome of a variance-aware agent regression check.   |
 |--------------------------------------------------------------------------------------------|-------------------------------------------------------|
 
-### *class* ek.agents.harness.AgentGateResult(passed=True, reasons=<factory>, pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
+### *class* ek.agents.harness.AgentGateResult(passed=True, reasons=list(), pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1029,7 +1043,8 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`episode_dollars`](_autosummary/ek.agents.html.md#ek.agents.episode_dollars)(episode, \*[, prices, price, ...]) | Monetary cost of one episode (0.0 if it carries no [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)).                                           |
 | [`cost_of_pass`](_autosummary/ek.agents.html.md#ek.agents.cost_of_pass)(total_cost, n_success)                | Expected monetary cost of one *successful* task: `total_cost / n_success`.                                                                                               |
 | [`cost_report`](_autosummary/ek.agents.html.md#ek.agents.cost_report)(episodes, \*[, prices, price])         | The quality x cost x latency triple, reported **together**.                                                                                                              |
-| [`load_prices`](_autosummary/ek.agents.html.md#ek.agents.load_prices)(source)                                | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                                                                 |
+| [`load_prices`](_autosummary/ek.agents.html.md#ek.agents.load_prices)([source])                              | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                                                                 |
+| [`bundled_prices_path`](_autosummary/ek.agents.html.md#ek.agents.bundled_prices_path)()                              | Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).                                                                                      |
 | [`price_of`](_autosummary/ek.agents.html.md#ek.agents.price_of)(model, \*[, prices])                      | Resolve a model's rates from an injected catalog, or fail *actionably*.                                                                                                  |
 | [`judge_validation`](_autosummary/ek.agents.html.md#ek.agents.judge_validation)(judge_labels, human_labels, \*)   | Certify a judge against human labels **before** trusting it.                                                                                                             |
 | [`pairwise_judge`](_autosummary/ek.agents.html.md#ek.agents.pairwise_judge)(judge, a, b, \*[, criteria, swap])  | Pairwise preference for `a` over `b`, **corrected for position bias**.                                                                                                   |
@@ -1062,6 +1077,9 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`Checker`](_autosummary/ek.agents.html.md#ek.agents.Checker)(\*args, \*\*kwargs)                       | The success oracle: did this episode leave the world in the required state?                                                          |
 | [`ReliabilityReport`](_autosummary/ek.agents.html.md#ek.agents.ReliabilityReport)([k, n_tasks, n_trials, ...])    | Corpus-level reliability over a k-trial run, with per-task and per-slice cuts.                                                       |
 | [`ModelPrice`](_autosummary/ek.agents.html.md#ek.agents.ModelPrice)([input, output, cached_input, ...])    | Per-token rates for one model, in **USD per token**.                                                                                 |
+| [`UqlmConsistencySignal`](_autosummary/ek.agents.html.md#ek.agents.UqlmConsistencySignal)([scorer, llm, ...])         | Self-consistency confidence in `[0, 1]` from `uqlm`'s black-box scorers.                                                             |
+| [`RagasSignal`](_autosummary/ek.agents.html.md#ek.agents.RagasSignal)([metric, name, llm, cost_tier])       | A reference-free Ragas metric as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) over a RAG sample.         |
+| [`DeepEvalMetric`](_autosummary/ek.agents.html.md#ek.agents.DeepEvalMetric)([kind, metric])                    | A DeepEval metric as an ek `Metric` over an [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode).         |
 | [`JudgeSignal`](_autosummary/ek.agents.html.md#ek.agents.JudgeSignal)(judge[, criteria, cost_tier, name])   | A reference-free, criteria-only LLM judge as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal).               |
 | [`AgentGateResult`](_autosummary/ek.agents.html.md#ek.agents.AgentGateResult)([passed, reasons, ...])           | Outcome of a variance-aware agent regression check.                                                                                  |
 
@@ -1070,7 +1088,7 @@ Research: `misc/docs/ek_07` (map) - `ek_08` (task success) - `ek_09` (judge/QE) 
 | [`UnknownModelPrice`](_autosummary/ek.agents.html.md#ek.agents.UnknownModelPrice)   | Raised when a model's rates are not in the injected price catalog.   |
 |----------------------------------------------------------------------|----------------------------------------------------------------------|
 
-### *class* ek.agents.AgentGateResult(passed=True, reasons=<factory>, pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
+### *class* ek.agents.AgentGateResult(passed=True, reasons=list(), pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1135,7 +1153,33 @@ for an agent that never succeeds is actively misleading).
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.agents.Episode(task_id='', trajectory=<factory>, output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=<factory>)
+### *class* ek.agents.DeepEvalMetric(kind='tool_correctness', , metric=None, \*\*metric_kwargs)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A DeepEval metric as an ek `Metric` over an [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode).
+
+`score(episode, gold)` builds a DeepEval `LLMTestCase` from the episode’s output and
+tool calls (`gold` is the expected output string, or a mapping with `expected_output`
+/ `expected_tools`) and returns DeepEval’s score as an ek `Score`.
+
+`tool_correctness` is **recall-flavored** (divides by `len(expected_tools)`), not F1:
+the label says so, and `detail['flavor']` records it.
+
+* **Parameters:**
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `tool_correctness` | `task_completion` | `geval`.
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – An injected DeepEval-shaped metric (`.measure(case)`, `.score`); `None`
+    builds the real one lazily (telemetry disabled first).
+  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval).
+
+#### aggregate(scores)
+
+Mean of the per-episode scores (DeepEval scores are per-case, not count-based).
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
+### *class* ek.agents.Episode(task_id='', trajectory=Trajectory(), output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1238,7 +1282,33 @@ The cached-input rate (explicit, else the discounted input rate).
 
 The reasoning-token rate (explicit, else the output rate).
 
-### *class* ek.agents.ReliabilityReport(k=1, n_tasks=0, n_trials=0, n_success=0, success_rate=0.0, success_ci=(0.0, 1.0), pass_at_k=None, pass_hat_k=None, pass_hat_k_ci=(0.0, 1.0), stochastic=True, per_task=<factory>, per_slice=<factory>, cost=<factory>, detail=<factory>)
+### *class* ek.agents.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A reference-free Ragas metric as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) over a RAG sample.
+
+The sample is a mapping/object with `user_input` (or `question`), `response` (or
+`answer`) and `retrieved_contexts` (or `contexts`). The score is in `[0, 1]`.
+Ragas metrics call an LLM, so pass a configured `metric` (or `llm=` to build one).
+
+* **Parameters:**
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object exposing `single_turn_ascore(sample)` (injected), or
+    `None` to build `name` from `llm`.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `faithfulness` | `answer_relevancy` | `context_precision`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A `ragas` LLM wrapper, used when `metric` is `None`.
+  * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – an LLM call per sample.
+
+### Example
+
+```pycon
+>>> class Fake:
+...     async def single_turn_ascore(self, sample): return 0.5
+>>> RagasSignal(Fake())({"question": "q", "answer": "a", "contexts": ["c"]})
+0.5
+```
+
+### *class* ek.agents.ReliabilityReport(k=1, n_tasks=0, n_trials=0, n_success=0, success_rate=0.0, success_ci=(0.0, 1.0), pass_at_k=None, pass_hat_k=None, pass_hat_k_ci=(0.0, 1.0), stochastic=True, per_task=dict(), per_slice=dict(), cost=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1278,7 +1348,7 @@ version and the scaffold are not – changing them invalidates a baseline.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
-### *class* ek.agents.Step(tool, args=<factory>, observation=None, error=None)
+### *class* ek.agents.Step(tool, args=dict(), observation=None, error=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1358,7 +1428,7 @@ Micro-averaged F1 over the corpus (sum TP/FP/FN, then divide) – never a mean.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.agents.ToolSpec(name, params=<factory>, importance=None, destructive=False)
+### *class* ek.agents.ToolSpec(name, params=dict(), importance=None, destructive=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1439,6 +1509,33 @@ Bases: [`KeyError`](https://docs.python.org/3/builtins/exceptions.html#KeyError)
 
 Raised when a model’s rates are not in the injected price catalog.
 
+### *class* ek.agents.UqlmConsistencySignal(scorer=None, , llm=None, scorer_name='noncontradiction', num_responses=5, cost_tier=3)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Self-consistency confidence in `[0, 1]` from `uqlm`’s black-box scorers.
+
+Samples `num_responses` generations for the prompt and measures how much they agree
+(non-contradiction, exact match, semantic negentropy, …). Raw and **uncalibrated**:
+calibrate before gating (Hard Rule 1).
+
+* **Parameters:**
+  * **scorer** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A backend with `score(prompt) -> float` (tests / custom sampling), or
+    `None` to build uqlm’s `BlackBoxUQ` from `llm`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`.
+  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`).
+  * **num_responses** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Samples per prompt.
+  * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – it pays for `num_responses` extra generations.
+
+### Example
+
+```pycon
+>>> class Fake:
+...     def score(self, prompt): return 2.0   # out-of-range is clamped
+>>> UqlmConsistencySignal(scorer=Fake())("q")
+1.0
+```
+
 ### ek.agents.agent_regression_gate(report, baseline, , tolerance=0.0, cost_tolerance=0.0, rootdir=None)
 
 Fail only when the evidence says the agent **really** got worse – not on noise.
@@ -1475,9 +1572,6 @@ Wrap a plain `input -> answer` function into the harness’s `TaskSpec -> Episod
 
 Progressive disclosure: the trivial agent should not have to learn the Episode type.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
-
 ### Example
 
 ```pycon
@@ -1487,6 +1581,9 @@ Progressive disclosure: the trivial agent should not have to learn the Episode t
 'HI'
 ```
 
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
+
 ### ek.agents.as_call(x)
 
 Coerce a [`Step`](_autosummary/ek.agents.html.md#ek.agents.Step), `(tool, args)` tuple, or `{"tool":…, "args":…}` dict.
@@ -1494,9 +1591,6 @@ Coerce a [`Step`](_autosummary/ek.agents.html.md#ek.agents.Step), `(tool, args)`
 Gold tool calls are usually written as bare pairs or dicts (no observation), while a
 prediction arrives as a [`Step`](_autosummary/ek.agents.html.md#ek.agents.Step); both must compare. Progressive disclosure: the
 simple literal works, the rich object works.
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### Example
 
@@ -1511,15 +1605,15 @@ simple literal works, the rich object works.
 ('search', {})
 ```
 
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
+
 ### ek.agents.bootstrap_ci(values, statistic, , resamples=2000, alpha=0.05, seed=0)
 
 Percentile bootstrap CI for any `statistic` over `values` (deterministic by seed).
 
 Used for the **cost-per-success ratio**, whose distribution is skewed and heavy-tailed
 (a normal interval on it is meaningless).
-
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### Example
 
@@ -1529,15 +1623,22 @@ Used for the **cost-per-success ratio**, whose distribution is skewed and heavy-
 True
 ```
 
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
+
+### ek.agents.bundled_prices_path()
+
+Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### ek.agents.cost_from_usage(usage, , latency_s=None)
 
 Build a [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.
 
 Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 (`input_tokens` / `output_tokens` / `cache_read_input_tokens`) spellings.
-
-* **Return type:**
-  [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)
 
 ### Example
 
@@ -1547,15 +1648,15 @@ Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 (100, 20)
 ```
 
+* **Return type:**
+  [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)
+
 ### ek.agents.cost_of_pass(total_cost, n_success)
 
 Expected monetary cost of one *successful* task: `total_cost / n_success`.
 
 Returns `inf` when nothing succeeded – infeasibility is the honest answer, not a
 cheap-looking zero (this divergence is the point of the metric).
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -1565,6 +1666,9 @@ cheap-looking zero (this divergence is the point of the metric).
 >>> cost_of_pass(10.0, 0)
 inf
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.agents.cost_report(episodes, , prices=None, price=None)
 
@@ -1577,9 +1681,6 @@ a report that omits cost is not a report. Returns `n`, `n_success`, `success_rat
 With **no** `price`/`prices`, dollar figures are `None` rather than a fabricated zero:
 `ek` will not invent rates, and a silent 0.0 would make a costly agent look free. Tokens
 and latency are still reported.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -1594,6 +1695,9 @@ and latency are still reported.
 >>> cost_report(eps)["cost_per_success"] is None      # no rates -> no dollars invented
 True
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### ek.agents.difference_upper_bound(value_a, ci_a, value_b, ci_b, , z=1.96)
 
@@ -1612,7 +1716,7 @@ Monetary cost of one [`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base
 
 * **Parameters:**
   * **cost** ([`Cost`](_autosummary/ek.agents.base.html.md#ek.agents.base.Cost)) – The token/retry tally.
-  * **price** (`Union`[[`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](_autosummary/ek.agents.html.md#ek.agents.ModelPrice), or a model name to resolve against `prices`.
+  * **price** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](_autosummary/ek.agents.html.md#ek.agents.ModelPrice), or a model name to resolve against `prices`.
   * **prices** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)]]) – The injected price catalog (required when `price` is a name).
   * **batch** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Apply the batch-API discount (`DEFAULT_BATCH_DISCOUNT`).
 * **Raises:**
@@ -1702,19 +1806,17 @@ Load a named agent baseline (or `None`).
 * **Return type:**
   [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
 
-### ek.agents.load_prices(source)
+### ek.agents.load_prices(source=None)
 
 Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.
 
 `source` is a path to (or an already-parsed mapping of) LiteLLM’s MIT-licensed
-`model_prices_and_context_window.json`. We read the **data file only** and never
+`model_prices_and_context_window.json`; `None` (default) uses the bundled snapshot
+([`bundled_prices_path()`](_autosummary/ek.agents.html.md#ek.agents.bundled_prices_path)). We read the **data file only** and never
 import the `litellm` SDK – its `enterprise/` subtree is a proprietary carve-out,
 and the SDK drags a large transitive tree in just to look up a rate.
 
 Entries lacking token rates (embeddings, unpriced models) are skipped.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -1724,6 +1826,9 @@ Entries lacking token rates (embeddings, unpriced models) are skipped.
 >>> table["m"].output
 2e-06
 ```
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### ek.agents.match_calls(pred, gold, , canon=None)
 
@@ -1742,9 +1847,6 @@ worth a dependency here.
 
 Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, gold_call)`.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -1753,6 +1855,9 @@ Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, go
 >>> len(pairs), up, ug          # order-insensitive within a tool name
 (2, [], [])
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### ek.agents.newcombe_difference(successes_a, n_a, successes_b, n_b, , z=1.96)
 
@@ -1829,9 +1934,6 @@ The HumanEval estimator `1 - C(n-c, k) / C(n, k)` over `n` trials with `c`
 successes. This is the **capability** metric – right when a single success is enough
 (offline candidate generation behind a verifier).
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -1841,6 +1943,9 @@ successes. This is the **capability** metric – right when a single success is 
 1.0
 ```
 
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 ### ek.agents.pass_hat_k(, n, c, k)
 
 Unbiased `pass^k`: probability that **all k** independent trials succeed.
@@ -1848,9 +1953,6 @@ Unbiased `pass^k`: probability that **all k** independent trials succeed.
 The tau-bench estimator `C(c, k) / C(n, k)`; for a per-trial success probability `p`
 it decays to `p**k`. This is the **reliability** metric – the one that matters when
 consistency *is* the product.
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -1861,12 +1963,12 @@ consistency *is* the product.
 0.21428571428571427
 ```
 
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 ### ek.agents.per_million(input, output, , cached_input=None, reasoning=None)
 
 Build a [`ModelPrice`](_autosummary/ek.agents.html.md#ek.agents.ModelPrice) from the human-facing **USD per 1M tokens** figures.
-
-* **Return type:**
-  [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
 
 ### Example
 
@@ -1876,13 +1978,15 @@ Build a [`ModelPrice`](_autosummary/ek.agents.html.md#ek.agents.ModelPrice) from
 (3e-06, 1.5e-05)
 ```
 
+* **Return type:**
+  [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
+
 ### ek.agents.price_of(model, , prices=None)
 
 Resolve a model’s rates from an injected catalog, or fail *actionably*.
 
-`ek` deliberately ships no built-in price table (rates go stale monthly and would be
-magic numbers). Supply one with `prices=`, or load the LiteLLM catalog with
-[`load_prices()`](_autosummary/ek.agents.html.md#ek.agents.load_prices).
+`ek` never guesses a rate (they go stale monthly). Supply a catalog with `prices=`;
+[`load_prices()`](_autosummary/ek.agents.html.md#ek.agents.load_prices) loads the bundled LiteLLM snapshot or your own file.
 
 * **Return type:**
   [`ModelPrice`](_autosummary/ek.agents.cost.html.md#ek.agents.cost.ModelPrice)
@@ -1978,9 +2082,6 @@ Build the Layer-A [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGra
 The resulting grammar is the frozen cost SSOT every agent metric reads: node cost =
 the tool’s call weight, field cost = the argument’s importance.
 
-* **Return type:**
-  [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)
-
 ### Example
 
 ```pycon
@@ -1990,6 +2091,9 @@ the tool’s call weight, field cost = the argument’s importance.
 >>> g.node_cost("send")
 10.0
 ```
+
+* **Return type:**
+  [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)
 
 ### ek.agents.trajectory_from_messages(messages)
 
@@ -2009,9 +2113,6 @@ Wilson score interval for a proportion – correct in the tails, unlike Wald/CLT
 The naive normal (“Wald”) interval is badly wrong at small n and near 0/1 – exactly
 where agent success rates live. Wilson is the cheap, dependency-free fix.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -2019,6 +2120,9 @@ where agent success rates live. Wilson is the cheap, dependency-free fix.
 >>> lo == 0.0, round(hi, 3)
 (True, 0.278)
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### Modules
 
@@ -2031,6 +2135,7 @@ where agent success rates live. Wilson is the cheap, dependency-free fix.
 | [`metrics`](_autosummary/ek.agents.metrics.html.md#module-ek.agents.metrics)       | Task-success and cost-per-successful-task: the two metrics that drive the whole thing.                                                                                                                                                        |
 | [`toolcalls`](_autosummary/ek.agents.toolcalls.html.md#module-ek.agents.toolcalls)   | Tool-call correctness: BFCL-style AST matching over a *multiset* of calls.                                                                                                                                                                    |
 | [`trajectory`](_autosummary/ek.agents.trajectory.html.md#module-ek.agents.trajectory) | Trajectory (process) evaluation: a cost-weighted **sequence** edit distance over steps.                                                                                                                                                       |
+| [`wrappers`](_autosummary/ek.agents.wrappers.html.md#module-ek.agents.wrappers)     | Optional WRAP adapters behind `ek[agents]`: uqlm, Ragas and DeepEval as ek strategies.                                                                                                                                                        |
 
 
 # _autosummary/ek.agents.judge.html.md
@@ -2420,9 +2525,6 @@ worth a dependency here.
 
 Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, gold_call)`.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -2431,6 +2533,9 @@ Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, go
 >>> len(pairs), up, ug          # order-insensitive within a tool name
 (2, [], [])
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 
 # _autosummary/ek.agents.trajectory.html.md
@@ -2518,6 +2623,169 @@ Corpus distance = total raw distance / total maximum distance (never a mean).
 
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
+
+# _autosummary/ek.agents.wrappers.html.md
+
+# ek.agents.wrappers
+
+Optional WRAP adapters behind `ek[agents]`: uqlm, Ragas and DeepEval as ek strategies.
+
+`ek.agents` scores episodes in pure python; this module is the batteries-included layer for
+teams who already run these libraries. Every adapter imports its backend **lazily** (at call
+time, guarded by [`requires_extra()`](_autosummary/ek.registry.html.md#ek.registry.requires_extra)), so `import ek` stays light, and each
+takes an injectable backend object so it can be tested – and used – without network access.
+
+- [`UqlmConsistencySignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.UqlmConsistencySignal) – black-box sample-and-vote self-consistency from `uqlm`
+  (a `[0, 1]` confidence), a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) (expensive: `cost_tier=3`).
+- [`RagasSignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RagasSignal) – reference-free Ragas metrics (faithfulness, answer relevancy,
+  context precision) as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) over a RAG sample.
+- [`DeepEvalMetric`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DeepEvalMetric) – DeepEval’s `ToolCorrectnessMetric` / `TaskCompletionMetric` /
+  `GEval` as ek `metrics`. Confident-AI telemetry is **disabled** before the import.
+  Note `ToolCorrectnessMetric` divides by `len(expected_tools)` – it is
+  *recall-flavored*, not F1 (compare `ek`’s own cost-aware `tool_call`).
+
+Example (a fake backend, no extra needed):
+
+```pycon
+>>> class FakeUQ:
+...     def score(self, prompt):
+...         return 0.75
+>>> UqlmConsistencySignal(scorer=FakeUQ())("What is 2+2?")
+0.75
+```
+
+### Module Attributes
+
+| [`DEEPEVAL_TELEMETRY_ENV`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV)   | Env var that opts out of DeepEval's Confident-AI telemetry (set before importing it).   |
+|---------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| [`DEFAULT_NUM_RESPONSES`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_NUM_RESPONSES)    | Sample count for uqlm's black-box scorers (a keyword default, not a magic number).      |
+| [`DEFAULT_UQLM_SCORER`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_UQLM_SCORER)      | uqlm black-box scorer used when none is named.                                          |
+| [`DEFAULT_RAGAS_METRIC`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEFAULT_RAGAS_METRIC)     | Ragas metric used when none is named.                                                   |
+| [`RAGAS_METRICS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RAGAS_METRICS)            | ek's metric name -> Ragas class name.                                                   |
+| [`DEEPEVAL_KINDS`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DEEPEVAL_KINDS)           | ek name -> (DeepEval class name, needs an LLM judge).                                   |
+
+### Functions
+
+| [`disable_deepeval_telemetry`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.disable_deepeval_telemetry)()   | Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choice).   |
+|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+
+### Classes
+
+| [`DeepEvalMetric`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.DeepEvalMetric)([kind, metric])              | A DeepEval metric as an ek `Metric` over an [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode).   |
+|----------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| [`RagasSignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.RagasSignal)([metric, name, llm, cost_tier]) | A reference-free Ragas metric as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) over a RAG sample.   |
+| [`UqlmConsistencySignal`](_autosummary/ek.agents.wrappers.html.md#ek.agents.wrappers.UqlmConsistencySignal)([scorer, llm, ...])   | Self-consistency confidence in `[0, 1]` from `uqlm`'s black-box scorers.                                                       |
+
+### ek.agents.wrappers.DEEPEVAL_KINDS *= {'geval': 'GEval', 'task_completion': 'TaskCompletionMetric', 'tool_correctness': 'ToolCorrectnessMetric'}*
+
+ek name -> (DeepEval class name, needs an LLM judge).
+
+### ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV *= 'DEEPEVAL_TELEMETRY_OPT_OUT'*
+
+Env var that opts out of DeepEval’s Confident-AI telemetry (set before importing it).
+
+### ek.agents.wrappers.DEFAULT_NUM_RESPONSES *= 5*
+
+Sample count for uqlm’s black-box scorers (a keyword default, not a magic number).
+
+### ek.agents.wrappers.DEFAULT_RAGAS_METRIC *= 'faithfulness'*
+
+Ragas metric used when none is named.
+
+### ek.agents.wrappers.DEFAULT_UQLM_SCORER *= 'noncontradiction'*
+
+uqlm black-box scorer used when none is named.
+
+### *class* ek.agents.wrappers.DeepEvalMetric(kind='tool_correctness', , metric=None, \*\*metric_kwargs)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A DeepEval metric as an ek `Metric` over an [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode).
+
+`score(episode, gold)` builds a DeepEval `LLMTestCase` from the episode’s output and
+tool calls (`gold` is the expected output string, or a mapping with `expected_output`
+/ `expected_tools`) and returns DeepEval’s score as an ek `Score`.
+
+`tool_correctness` is **recall-flavored** (divides by `len(expected_tools)`), not F1:
+the label says so, and `detail['flavor']` records it.
+
+* **Parameters:**
+  * **kind** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `tool_correctness` | `task_completion` | `geval`.
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – An injected DeepEval-shaped metric (`.measure(case)`, `.score`); `None`
+    builds the real one lazily (telemetry disabled first).
+  * **\*\*metric_kwargs** – Passed to the DeepEval constructor (e.g. `criteria=` for GEval).
+
+#### aggregate(scores)
+
+Mean of the per-episode scores (DeepEval scores are per-case, not count-based).
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
+### ek.agents.wrappers.RAGAS_METRICS *= {'answer_relevancy': 'ResponseRelevancy', 'context_precision': 'LLMContextPrecisionWithoutReference', 'faithfulness': 'Faithfulness'}*
+
+ek’s metric name -> Ragas class name.
+
+### *class* ek.agents.wrappers.RagasSignal(metric=None, , name='faithfulness', llm=None, cost_tier=3)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A reference-free Ragas metric as a [`Signal`](_autosummary/ek.base.html.md#ek.base.Signal) over a RAG sample.
+
+The sample is a mapping/object with `user_input` (or `question`), `response` (or
+`answer`) and `retrieved_contexts` (or `contexts`). The score is in `[0, 1]`.
+Ragas metrics call an LLM, so pass a configured `metric` (or `llm=` to build one).
+
+* **Parameters:**
+  * **metric** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A Ragas metric object exposing `single_turn_ascore(sample)` (injected), or
+    `None` to build `name` from `llm`.
+  * **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `faithfulness` | `answer_relevancy` | `context_precision`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A `ragas` LLM wrapper, used when `metric` is `None`.
+  * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – an LLM call per sample.
+
+### Example
+
+```pycon
+>>> class Fake:
+...     async def single_turn_ascore(self, sample): return 0.5
+>>> RagasSignal(Fake())({"question": "q", "answer": "a", "contexts": ["c"]})
+0.5
+```
+
+### *class* ek.agents.wrappers.UqlmConsistencySignal(scorer=None, , llm=None, scorer_name='noncontradiction', num_responses=5, cost_tier=3)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Self-consistency confidence in `[0, 1]` from `uqlm`’s black-box scorers.
+
+Samples `num_responses` generations for the prompt and measures how much they agree
+(non-contradiction, exact match, semantic negentropy, …). Raw and **uncalibrated**:
+calibrate before gating (Hard Rule 1).
+
+* **Parameters:**
+  * **scorer** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A backend with `score(prompt) -> float` (tests / custom sampling), or
+    `None` to build uqlm’s `BlackBoxUQ` from `llm`.
+  * **llm** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – A LangChain chat model, required when `scorer` is `None`.
+  * **scorer_name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – The uqlm scorer column to read (default `"noncontradiction"`).
+  * **num_responses** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Samples per prompt.
+  * **cost_tier** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – `3` – it pays for `num_responses` extra generations.
+
+### Example
+
+```pycon
+>>> class Fake:
+...     def score(self, prompt): return 2.0   # out-of-range is clamped
+>>> UqlmConsistencySignal(scorer=Fake())("q")
+1.0
+```
+
+### ek.agents.wrappers.disable_deepeval_telemetry()
+
+Opt out of Confident-AI telemetry (idempotent; never overrides an explicit choice).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 
 # _autosummary/ek.base.html.md
@@ -2611,7 +2879,7 @@ every layer stays replaceable (open-closed).
 | [`TypeRef`](_autosummary/ek.base.html.md#ek.base.TypeRef)(kind, name[, field])                     | A reference into the schema, so an injected cost function can read weights.                                             |
 | [`Validator`](_autosummary/ek.base.html.md#ek.base.Validator)(\*args, \*\*kwargs)                    | Reference-free check on a value, yielding zero or more [`Finding`](_autosummary/ek.base.html.md#ek.base.Finding) s.      |
 
-### *class* ek.base.AnnotatedExtraction(grammar, estimates=<factory>)
+### *class* ek.base.AnnotatedExtraction(grammar, estimates=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2656,7 +2924,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A directed relation kind between two [`NodeType`](_autosummary/ek.base.html.md#ek.base.NodeType) names.
 
-### *class* ek.base.FieldEstimate(value, raw_signals=<factory>, confidence=None, findings=(), provenance=None, decision=None)
+### *class* ek.base.FieldEstimate(value, raw_signals=dict(), confidence=None, findings=(), provenance=None, decision=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2690,7 +2958,7 @@ A `suggestion` is present iff the producing layer can *correct* (only the
 deterministic canonicalizer and the gated LLM corrector freely do so). The
 original value is always retained elsewhere; a Finding never mutates.
 
-### *class* ek.base.GraphGrammar(node_types=<factory>, edge_types=<factory>)
+### *class* ek.base.GraphGrammar(node_types=dict(), edge_types=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2739,7 +3007,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Addresses a node (or one of its fields) in an extracted graph; keys Layer B.
 
-### *class* ek.base.NodeType(name, fields=<factory>, importance=1.0)
+### *class* ek.base.NodeType(name, fields=dict(), importance=1.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2768,7 +3036,7 @@ Where an extracted value came from, for audit and click-to-source review.
 `bbox` is intentionally typed `Any` so `ek` core need not import any OCR
 package; the OCR instance stores normalized `[0, 1]` top-left-origin geometry.
 
-### *class* ek.base.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=<factory>, provenance=<factory>, per_field=None)
+### *class* ek.base.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=dict(), provenance=dict(), per_field=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2780,7 +3048,7 @@ updated [`FieldEstimate`](_autosummary/ek.base.html.md#ek.base.FieldEstimate) (c
 scalar fields summarize: `calibrated_confidence` is the weakest field, and
 `decision` the most severe (`block` > `flag` > `accept`).
 
-### *class* ek.base.Report(metric='', aggregate=None, n=0, scores=<factory>, per_slice=<factory>, detail=<factory>)
+### *class* ek.base.Report(metric='', aggregate=None, n=0, scores=list(), per_slice=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2790,7 +3058,7 @@ Aggregate of many [`Score`](_autosummary/ek.base.html.md#ek.base.Score) s over a
 aggregator – e.g. globally accumulated WER – not a naive mean of per-item
 values). `per_slice` maps a slice label to its own aggregate.
 
-### *class* ek.base.Score(value, precision=None, recall=None, f1=None, metric='', detail=<factory>)
+### *class* ek.base.Score(value, precision=None, recall=None, f1=None, metric='', detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2901,7 +3169,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 An ordered, named, versioned pipeline of `str -> str` steps.
 
 * **Parameters:**
-  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
+  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
     plain callables. Applied left to right.
   * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Override the auto-derived version string (the `+`-joined names).
   * **audit_marks** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If true, warn when a step would run on text carrying combining
@@ -2969,7 +3237,7 @@ Accepts `None`, a registered normalizer name, a callable, a sequence of
 steps, or an existing [`Canonicalizer`](_autosummary/ek.canonicalize.html.md#ek.canonicalize.Canonicalizer).
 
 * **Return type:**
-  `Union`[[`Canonicalizer`](_autosummary/ek.canonicalize.html.md#ek.canonicalize.Canonicalizer), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]
+  [`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Canonicalizer`](_autosummary/ek.canonicalize.html.md#ek.canonicalize.Canonicalizer), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]
 
 ### ek.canonicalize.strip(s)
 
@@ -3077,7 +3345,7 @@ Aggregate many comparisons into a [`Report`](_autosummary/ek.base.html.md#ek.bas
 
 * **Parameters:**
   * **cases** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)) – Iterable of `(pred, gold)` or `(pred, gold, slice_label)` tuples.
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – As in [`score()`](_autosummary/ek.facade.html.md#ek.facade.score) (resolved once from the first case’s types).
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – As in [`score()`](_autosummary/ek.facade.html.md#ek.facade.score) (resolved once from the first case’s types).
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A grammar passed to every comparison.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer applied before every comparison.
 * **Return type:**
@@ -3094,7 +3362,7 @@ Score one prediction against one gold reference (reference-based).
   * **pred** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The predicted output (string, record dict, or anything with `.text`).
   * **gold** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The gold reference, same shape as `pred`.
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar) (carries cost weights).
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
     callable [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric), or `None` to dispatch by type.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer (name, callable, step list, or
     [`Canonicalizer`](_autosummary/ek.canonicalize.html.md#ek.canonicalize.Canonicalizer)) applied before comparison.
@@ -3146,7 +3414,7 @@ IAA conventions, golden-set CI).
 | [`GateResult`](_autosummary/ek.harness.html.md#ek.harness.GateResult)(passed, metric, higher_is_better, ...)   | Outcome of a [`regression_gate()`](_autosummary/ek.harness.html.md#ek.harness.regression_gate) check.   |
 |------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
 
-### *class* ek.harness.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=<factory>)
+### *class* ek.harness.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3191,9 +3459,6 @@ for perfect agreement, `0.0` at chance, and goes negative for systematic
 disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
 observed vs expected disagreement under the level-specific difference metric.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -3201,6 +3466,9 @@ observed vs expected disagreement under the level-specific difference metric.
 >>> krippendorff_alpha(data)
 1.0
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.harness.load_baseline(name, , rootdir=None)
 
@@ -3451,7 +3719,7 @@ mean of the per-item scores.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.AnnotatedExtraction(grammar, estimates=<factory>)
+### *class* ek.AnnotatedExtraction(grammar, estimates=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3473,7 +3741,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 An ordered, named, versioned pipeline of `str -> str` steps.
 
 * **Parameters:**
-  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
+  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
     plain callables. Applied left to right.
   * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Override the auto-derived version string (the `+`-joined names).
   * **audit_marks** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If true, warn when a step would run on text carrying combining
@@ -3493,7 +3761,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One logical table cell: its text plus its row/column span (>=1 each).
 
-### *class* ek.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3581,7 +3849,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A directed relation kind between two [`NodeType`](_autosummary/ek.html.md#ek.NodeType) names.
 
-### *class* ek.Episode(task_id='', trajectory=<factory>, output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=<factory>)
+### *class* ek.Episode(task_id='', trajectory=Trajectory(), output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3619,7 +3887,7 @@ the “copy” would share the original’s mutable `meta` dict.
 * **Return type:**
   [`Episode`](_autosummary/ek.agents.base.html.md#ek.agents.base.Episode)
 
-### *class* ek.FieldEstimate(value, raw_signals=<factory>, confidence=None, findings=(), provenance=None, decision=None)
+### *class* ek.FieldEstimate(value, raw_signals=dict(), confidence=None, findings=(), provenance=None, decision=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3670,13 +3938,13 @@ A `suggestion` is present iff the producing layer can *correct* (only the
 deterministic canonicalizer and the gated LLM corrector freely do so). The
 original value is always retained elsewhere; a Finding never mutates.
 
-### *class* ek.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=<factory>)
+### *class* ek.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Outcome of a [`regression_gate()`](_autosummary/ek.html.md#ek.regression_gate) check.
 
-### *class* ek.GraphGrammar(node_types=<factory>, edge_types=<factory>)
+### *class* ek.GraphGrammar(node_types=dict(), edge_types=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3747,7 +4015,7 @@ denominators globally – never a mean of per-table F1s.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3782,7 +4050,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3809,7 +4077,7 @@ Aggregate an extractor’s per-unit confidences into a field score.
 0.4
 ```
 
-### *class* ek.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3907,7 +4175,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Addresses a node (or one of its fields) in an extracted graph; keys Layer B.
 
-### *class* ek.NodeType(name, fields=<factory>, importance=1.0)
+### *class* ek.NodeType(name, fields=dict(), importance=1.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3942,7 +4210,7 @@ Where an extracted value came from, for audit and click-to-source review.
 `bbox` is intentionally typed `Any` so `ek` core need not import any OCR
 package; the OCR instance stores normalized `[0, 1]` top-left-origin geometry.
 
-### *class* ek.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=<factory>, provenance=<factory>, per_field=None)
+### *class* ek.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=dict(), provenance=dict(), per_field=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3954,7 +4222,7 @@ updated [`FieldEstimate`](_autosummary/ek.html.md#ek.FieldEstimate) (confidence/
 scalar fields summarize: `calibrated_confidence` is the weakest field, and
 `decision` the most severe (`block` > `flag` > `accept`).
 
-### *class* ek.Report(metric='', aggregate=None, n=0, scores=<factory>, per_slice=<factory>, detail=<factory>)
+### *class* ek.Report(metric='', aggregate=None, n=0, scores=list(), per_slice=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3990,7 +4258,7 @@ Find the smallest accept threshold whose risk bound is <= `target`.
 * **Return type:**
   [`RiskControlGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.RiskControlGate)
 
-### *class* ek.RoverConsensus(tokens=<factory>, slots=<factory>, agreement=<factory>, n_engines=0)
+### *class* ek.RoverConsensus(tokens=list(), slots=list(), agreement=list(), n_engines=0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4011,7 +4279,7 @@ the calibrator/gate). A single engine – or none – is vacuously `1.0`.
 
 The consensus transcription (space-joined winning tokens).
 
-### *class* ek.Score(value, precision=None, recall=None, f1=None, metric='', detail=<factory>)
+### *class* ek.Score(value, precision=None, recall=None, f1=None, metric='', detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4038,7 +4306,7 @@ A reference-free quality signal: extractor output -> raw scalar score.
 The `cost_tier` attribute (lower is cheaper) lets an escalation policy run
 cheap signals first and pay for expensive ones only on residual uncertainty.
 
-### *class* ek.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4105,13 +4373,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -4301,7 +4569,7 @@ Fit `T` by minimising NLL with a bounded 1-D search.
 
 Golden-section search bounds and iteration count (config, not magic numbers).
 
-### *class* ek.ToolSpec(name, params=<factory>, importance=None, destructive=False)
+### *class* ek.ToolSpec(name, params=dict(), importance=None, destructive=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4376,7 +4644,7 @@ Corpus normalized distance = total raw distance / total max-distance.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.TypedNode(node_id, node_type, fields=<factory>)
+### *class* ek.TypedNode(node_id, node_type, fields=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4409,7 +4677,7 @@ Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protoco
 
 Reference-free check on a value, yielding zero or more [`Finding`](_autosummary/ek.html.md#ek.Finding) s.
 
-### *class* ek.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4480,8 +4748,8 @@ Unlike functools.cached_property (properties only) and lru_cache (memory-only wi
 cache_this provides a unified interface for both use cases with persistent storage options.
 
 * **Parameters:**
-  * **func** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`VT`)]) – The function to be decorated (usually left empty).
-  * **cache** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`), [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`VT`)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – 
+  * **func** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], `VT`]) – The function to be decorated (usually left empty).
+  * **cache** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[`KT`, `VT`], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – 
 
     The cache storage. Can be:
     - A MutableMapping instance (shared across instances)
@@ -4489,7 +4757,7 @@ cache_this provides a unified interface for both use cases with persistent stora
     - A callable taking (instance) and returning a MutableMapping
       This enables instance-specific caching, e.g.:
       cache=lambda self: Files(f’/cache/{self.user_id}/’)
-  * **key** (`Union`[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`), [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – For properties: the key to store the cache value, can be a callable
+  * **key** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[`KT`, [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], `KT`], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – For properties: the key to store the cache value, can be a callable
     that will be applied to the method name to make a key, or an explicit string.
     For methods: a callable that takes `(self, *args, **kwargs)` and returns a cache key.
   * **pre_cache** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool) | [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)) – Default is False. If True, adds an in-memory cache to the method
@@ -4952,7 +5220,7 @@ Aggregate many comparisons into a [`Report`](_autosummary/ek.base.html.md#ek.bas
 
 * **Parameters:**
   * **cases** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)) – Iterable of `(pred, gold)` or `(pred, gold, slice_label)` tuples.
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – As in [`score()`](_autosummary/ek.html.md#ek.score) (resolved once from the first case’s types).
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – As in [`score()`](_autosummary/ek.html.md#ek.score) (resolved once from the first case’s types).
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A grammar passed to every comparison.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer applied before every comparison.
 * **Return type:**
@@ -5043,9 +5311,6 @@ for perfect agreement, `0.0` at chance, and goes negative for systematic
 disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
 observed vs expected disagreement under the level-specific difference metric.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -5053,6 +5318,9 @@ observed vs expected disagreement under the level-specific difference metric.
 >>> krippendorff_alpha(data)
 1.0
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.lexicon_corrector(vocabulary, , threshold=0.8, scorer=None, field_name='', layer='lexicon', flag_unmatched=True)
 
@@ -5150,13 +5418,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.min_probability(probs)
 
@@ -5164,13 +5432,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.names(namespace)
 
@@ -5198,9 +5466,6 @@ The HumanEval estimator `1 - C(n-c, k) / C(n, k)` over `n` trials with `c`
 successes. This is the **capability** metric – right when a single success is enough
 (offline candidate generation behind a verifier).
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -5210,6 +5475,9 @@ successes. This is the **capability** metric – right when a single success is 
 1.0
 ```
 
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 ### ek.pass_hat_k(, n, c, k)
 
 Unbiased `pass^k`: probability that **all k** independent trials succeed.
@@ -5217,9 +5485,6 @@ Unbiased `pass^k`: probability that **all k** independent trials succeed.
 The tau-bench estimator `C(c, k) / C(n, k)`; for a per-trial success probability `p`
 it decays to `p**k`. This is the **reliability** metric – the one that matters when
 consistency *is* the product.
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -5229,6 +5494,9 @@ consistency *is* the product.
 >>> pass_hat_k(n=8, c=4, k=2)
 0.21428571428571427
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.percent_agreement(rater_a, rater_b)
 
@@ -5461,7 +5729,7 @@ Score one prediction against one gold reference (reference-based).
   * **pred** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The predicted output (string, record dict, or anything with `.text`).
   * **gold** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The gold reference, same shape as `pred`.
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A [`GraphGrammar`](_autosummary/ek.base.html.md#ek.base.GraphGrammar) (carries cost weights).
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
     callable [`Metric`](_autosummary/ek.base.html.md#ek.base.Metric), or `None` to dispatch by type.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer (name, callable, step list, or
     [`Canonicalizer`](_autosummary/ek.canonicalize.html.md#ek.canonicalize.Canonicalizer)) applied before comparison.
@@ -5511,7 +5779,7 @@ recoverable table structure.
     engine-specific payload), `.markdown` (VLM/markdown engines), and
     `.meta` – never ocracy types, so any `image -> OcrResult` callable’s
     output works.
-  * **parser** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
+  * **parser** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
 
     How to turn the raw payload into a table (dependency injection /
     open-closed). One of:
@@ -5826,7 +6094,7 @@ Corpus normalized distance = total raw distance / total max-distance.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.metrics.graphs.TypedNode(node_id, node_type, fields=<factory>)
+### *class* ek.metrics.graphs.TypedNode(node_id, node_type, fields=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -6166,7 +6434,7 @@ Corpus normalized distance = total raw distance / total max-distance.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.metrics.TypedNode(node_id, node_type, fields=<factory>)
+### *class* ek.metrics.TypedNode(node_id, node_type, fields=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -6591,7 +6859,7 @@ Add one gold example to the `gold` store.
 Benchmark an OCR engine against a gold corpus.
 
 * **Parameters:**
-  * **engine** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
+  * **engine** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
   * **gold** ([`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)) – A mapping `key -> {image, reference_text, [slice], ...}` – a plain
     dict or a `ek` gold store.
   * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `"cer"` (default) or `"wer"` (or any registered string metric).
@@ -6731,7 +6999,7 @@ table scoring for engines that cannot emit cells in the first place.
 Benchmark an OCR engine against a gold corpus.
 
 * **Parameters:**
-  * **engine** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
+  * **engine** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
   * **gold** ([`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)) – A mapping `key -> {image, reference_text, [slice], ...}` – a plain
     dict or a `ek` gold store.
   * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `"cer"` (default) or `"wer"` (or any registered string metric).
@@ -6813,7 +7081,7 @@ recoverable table structure.
     engine-specific payload), `.markdown` (VLM/markdown engines), and
     `.meta` – never ocracy types, so any `image -> OcrResult` callable’s
     output works.
-  * **parser** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
+  * **parser** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
 
     How to turn the raw payload into a table (dependency injection /
     open-closed). One of:
@@ -7044,7 +7312,7 @@ recoverable table structure.
     engine-specific payload), `.markdown` (VLM/markdown engines), and
     `.meta` – never ocracy types, so any `image -> OcrResult` callable’s
     output works.
-  * **parser** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
+  * **parser** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
 
     How to turn the raw payload into a table (dependency injection /
     open-closed). One of:
@@ -7158,7 +7426,7 @@ True
 
 Default number of bins for [`expected_calibration_error()`](_autosummary/ek.qe.calibrate.html.md#ek.qe.calibrate.expected_calibration_error) / reliability curves.
 
-### *class* ek.qe.calibrate.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.qe.calibrate.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7193,7 +7461,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.qe.calibrate.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.qe.calibrate.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7230,7 +7498,7 @@ Fit `a, b` to maximise the likelihood of `correct` given `scores`.
 * **Return type:**
   [`PlattCalibrator`](_autosummary/ek.qe.calibrate.html.md#ek.qe.calibrate.PlattCalibrator)
 
-### *class* ek.qe.calibrate.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.qe.calibrate.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7297,13 +7565,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -7386,13 +7654,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.calibrate.min_probability(probs)
 
@@ -7400,13 +7668,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.calibrate.netcal_ece(probs, correct, , bins=10)
 
@@ -7503,7 +7771,7 @@ True
 | [`GroupConformalGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.GroupConformalGate)([alpha, nonconformity, ...])   | Mondrian (class-conditional) conformal: one [`ConformalGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.ConformalGate) per group. |
 | [`RiskControlGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.RiskControlGate)([target, loss, loss_bound, lam])  | Conformal Risk Control: accept `p >= lambda` bounding the accepted-error rate.                                        |
 
-### *class* ek.qe.decide.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.qe.decide.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7571,7 +7839,7 @@ Default target miscoverage for conformal gates (flag at most ~alpha of correct i
 
 Default risk bound for [`RiskControlGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.RiskControlGate) (accepted-error rate ceiling).
 
-### *class* ek.qe.decide.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.qe.decide.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7732,7 +8000,7 @@ free intrinsic confidence first. Called on a collection of hypotheses, it runs
 0.778
 ```
 
-### *class* ek.qe.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.qe.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7792,7 +8060,7 @@ costlier than reviews) raises the bar to auto-accept (`tau -> 1` as
 
 The accept threshold on calibrated probability (derived from `rho`).
 
-### *class* ek.qe.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.qe.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7827,7 +8095,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.qe.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.qe.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7854,7 +8122,7 @@ Aggregate an extractor’s per-unit confidences into a field score.
 0.4
 ```
 
-### *class* ek.qe.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.qe.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7936,7 +8204,7 @@ Find the smallest accept threshold whose risk bound is <= `target`.
 * **Return type:**
   [`RiskControlGate`](_autosummary/ek.qe.decide.html.md#ek.qe.decide.RiskControlGate)
 
-### *class* ek.qe.RoverConsensus(tokens=<factory>, slots=<factory>, agreement=<factory>, n_engines=0)
+### *class* ek.qe.RoverConsensus(tokens=list(), slots=list(), agreement=list(), n_engines=0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -7957,13 +8225,13 @@ the calibrator/gate). A single engine – or none – is vacuously `1.0`.
 
 The consensus transcription (space-joined winning tokens).
 
-### *class* ek.qe.RoverSlot(entries=<factory>, winner=None, score=0.0, vote_share=0.0)
+### *class* ek.qe.RoverSlot(entries=list(), winner=None, score=0.0, vote_share=0.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One branch point of the transition network: each engine’s token (or NULL).
 
-### *class* ek.qe.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.qe.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -8030,13 +8298,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -8091,7 +8359,7 @@ Fit `T` by minimising NLL with a bounded 1-D search.
 
 Golden-section search bounds and iteration count (config, not magic numbers).
 
-### *class* ek.qe.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.qe.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -8206,13 +8474,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.min_prob(logps)
 
@@ -8227,13 +8495,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.range_validator(lo, hi, , field_name='', layer='range')
 
@@ -8555,7 +8823,7 @@ Built-in checksum checks, by name (register more under the `checks` namespace).
 
 Default absolute tolerance for the cross-field totals reconciliation check.
 
-### *class* ek.qe.verifiers.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.qe.verifiers.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -9386,18 +9654,18 @@ caught; a *truly* constant column (no spread at all) yields no findings. For
 
 # About this build
 
-This documentation was built on **2026-10-14 03:58 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/3c8454e725c57eb49c22b27db1f2b21838f6dcff"><code>3c8454e</code></a> on branch <code>main</code>, for **ek 0.1.11** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 12:21 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/b249552e61a257e0b215e7518d713b04eb55ca2f"><code>b249552</code></a> on branch <code>main</code>, for **ek 0.1.12** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.11) is behind the latest release on PyPI (0.1.12): `pip install ek` gives newer code than these docs describe.
+- The documented version (0.1.12) is behind the latest release on PyPI (0.1.13): `pip install ek` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                      |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/ek/commit/3c8454e725c57eb49c22b27db1f2b21838f6dcff"><code>3c8454e725c57eb49c22b27db1f2b21838f6dcff</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/ek/commit/b249552e61a257e0b215e7518d713b04eb55ca2f"><code>b249552e61a257e0b215e7518d713b04eb55ca2f</code></a> |
 | Branch              | <code>main</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                 |
 | Working tree        | clean                                                                                                                                                |
@@ -9408,16 +9676,16 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/ek</code>                                                                 |
-| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/38508869172">38508869172</a>        |
+| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/39421415869">39421415869</a>        |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>3c8454e725c57eb49c22b27db1f2b21838f6dcff</code> (in the history of the built commit) |
+| Event commit | <code>b249552e61a257e0b215e7518d713b04eb55ca2f</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.17  |
-| Sphinx   | 9.1.0   |
+| epythet  | 0.2.20  |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
 
@@ -9435,14 +9703,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/ek/0.1.12/">0.1.12</a>, newer than the documented version (0.1.11).
+Latest release: <a href="https://pypi.org/project/ek/0.1.13/">0.1.13</a>, newer than the documented version (0.1.12).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/ek && cd ek
-git checkout 3c8454e725c57eb49c22b27db1f2b21838f6dcff
-pip install "epythet==0.2.17"
+git checkout b249552e61a257e0b215e7518d713b04eb55ca2f
+pip install "epythet==0.2.20"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

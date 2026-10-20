@@ -60,7 +60,7 @@ True
 | [`GroupConformalGate`](#ek.qe.decide.GroupConformalGate)([alpha, nonconformity, ...])   | Mondrian (class-conditional) conformal: one [`ConformalGate`](#ek.qe.decide.ConformalGate) per group. |
 | [`RiskControlGate`](#ek.qe.decide.RiskControlGate)([target, loss, loss_bound, lam])  | Conformal Risk Control: accept `p >= lambda` bounding the accepted-error rate.                                        |
 
-### *class* ek.qe.decide.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.qe.decide.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -128,7 +128,7 @@ Default target miscoverage for conformal gates (flag at most ~alpha of correct i
 
 Default risk bound for [`RiskControlGate`](#ek.qe.decide.RiskControlGate) (accepted-error rate ceiling).
 
-### *class* ek.qe.decide.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.qe.decide.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

@@ -329,7 +329,7 @@ Corpus normalized distance = total raw distance / total max-distance.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.metrics.TypedNode(node_id, node_type, fields=<factory>)
+### *class* ek.metrics.TypedNode(node_id, node_type, fields=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

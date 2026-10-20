@@ -29,6 +29,7 @@ ek.agents
       cost_of_pass
       cost_report
       load_prices
+      bundled_prices_path
       price_of
       judge_validation
       pairwise_judge
@@ -62,6 +63,9 @@ ek.agents
       Checker
       ReliabilityReport
       ModelPrice
+      UqlmConsistencySignal
+      RagasSignal
+      DeepEvalMetric
       JudgeSignal
       AgentGateResult
    
@@ -85,3 +89,4 @@ ek.agents
    metrics
    toolcalls
    trajectory
+   wrappers

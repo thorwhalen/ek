@@ -99,7 +99,7 @@ Multiplier applied to a destructive tool’s importance when it is not set expli
 Calling a destructive tool wrongly is categorically worse than calling a read-only one;
 a keyword-tunable default, never a magic number buried in a metric.
 
-### *class* ek.agents.base.Episode(task_id='', trajectory=<factory>, output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=<factory>)
+### *class* ek.agents.base.Episode(task_id='', trajectory=Trajectory(), output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -168,7 +168,7 @@ version and the scaffold are not – changing them invalidates a baseline.
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
-### *class* ek.agents.base.Step(tool, args=<factory>, observation=None, error=None)
+### *class* ek.agents.base.Step(tool, args=dict(), observation=None, error=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -206,7 +206,7 @@ The Layer-A grammar for this task’s tool set.
 * **Return type:**
   [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)
 
-### *class* ek.agents.base.ToolSpec(name, params=<factory>, importance=None, destructive=False)
+### *class* ek.agents.base.ToolSpec(name, params=dict(), importance=None, destructive=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -266,9 +266,6 @@ Gold tool calls are usually written as bare pairs or dicts (no observation), whi
 prediction arrives as a [`Step`](#ek.agents.base.Step); both must compare. Progressive disclosure: the
 simple literal works, the rich object works.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -281,6 +278,9 @@ simple literal works, the rich object works.
 >>> as_call("search")
 ('search', {})
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
 
 ### ek.agents.base.is_episode(x)
 
@@ -303,9 +303,6 @@ Build the Layer-A [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar) from [`
 The resulting grammar is the frozen cost SSOT every agent metric reads: node cost =
 the tool’s call weight, field cost = the argument’s importance.
 
-* **Return type:**
-  [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)
-
 ### Example
 
 ```pycon
@@ -315,3 +312,6 @@ the tool’s call weight, field cost = the argument’s importance.
 >>> g.node_cost("send")
 10.0
 ```
+
+* **Return type:**
+  [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)

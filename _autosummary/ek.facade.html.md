@@ -87,7 +87,7 @@ Aggregate many comparisons into a [`Report`](ek.base.html.md#ek.base.Report) (co
 
 * **Parameters:**
   * **cases** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)) – Iterable of `(pred, gold)` or `(pred, gold, slice_label)` tuples.
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – As in [`score()`](#ek.facade.score) (resolved once from the first case’s types).
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – As in [`score()`](#ek.facade.score) (resolved once from the first case’s types).
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A grammar passed to every comparison.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer applied before every comparison.
 * **Return type:**
@@ -104,7 +104,7 @@ Score one prediction against one gold reference (reference-based).
   * **pred** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The predicted output (string, record dict, or anything with `.text`).
   * **gold** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The gold reference, same shape as `pred`.
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar) (carries cost weights).
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
     callable [`Metric`](ek.base.html.md#ek.base.Metric), or `None` to dispatch by type.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer (name, callable, step list, or
     [`Canonicalizer`](ek.canonicalize.html.md#ek.canonicalize.Canonicalizer)) applied before comparison.

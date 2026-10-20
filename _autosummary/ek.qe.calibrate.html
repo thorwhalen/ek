@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=6dc7e26d" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=1e825a29"></script>
+    <script src="../_static/documentation_options.js?v=297ad043"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -335,6 +336,7 @@
 <li class="toctree-l3"><a class="reference internal" href="ek.agents.metrics.html">ek.agents.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ek.agents.toolcalls.html">ek.agents.toolcalls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ek.agents.trajectory.html">ek.agents.trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ek.agents.wrappers.html">ek.agents.wrappers</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="ek.metrics.html">ek.metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -540,7 +542,7 @@ is dataset-specific and decays, so re-fit on drift.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.qe.calibrate.GroupCalibrator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">GroupCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'group'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">GroupCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dict()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'group'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#GroupCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.GroupCalibrator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Per-group (Mondrian) calibration: one calibrator per <code class="docutils literal notranslate"><span class="pre">NodeType</span></code>/<code class="docutils literal notranslate"><span class="pre">FieldSpec</span></code>.</p>
 <p>Distribution-free <em>conditional</em> (per-field-type) coverage is impossible
@@ -587,7 +589,7 @@ Group keys are stringified (they are <code class="docutils literal notranslate">
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.qe.calibrate.IsotonicCalibrator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">IsotonicCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'isotonic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#IsotonicCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.IsotonicCalibrator" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">IsotonicCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'isotonic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#IsotonicCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.IsotonicCalibrator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Isotonic (monotonic non-decreasing) calibration via pool-adjacent-violators.</p>
 <p>More flexible than Platt; needs more calibration data and can overfit small
@@ -636,7 +638,7 @@ calibration sets.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ek.qe.calibrate.SignalFamilyCalibrator">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">SignalFamilyCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">mean_probability&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'signal_family'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.SignalFamilyCalibrator" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">SignalFamilyCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibrators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dict()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">mean_probability&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'ek.qe.calibrate.PlattCalibrator'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'signal_family'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#SignalFamilyCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.SignalFamilyCalibrator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>One calibrator per signal family, fused by a documented combination rule.</p>
 <p>Averaging heterogeneous raw signals (an LLM-judge score, a token logprob, a ROVER
@@ -701,15 +703,15 @@ callable of that shape (e.g. a learned stacker).</p></li>
 <dd><p>Fuse calibrated per-family probabilities by their mean (the default combiner).</p>
 <p>Each family’s calibrated value estimates the <em>same</em> event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.8</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
 </dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
-<span class="go">0.8</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -820,15 +822,15 @@ actionable error rather than a raw <code class="docutils literal notranslate"><s
 <dd><p>Fuse calibrated per-family probabilities by their mean (the default combiner).</p>
 <p>Each family’s calibrated value estimates the <em>same</em> event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.8</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
 </dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
-<span class="go">0.8</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py function">
@@ -836,15 +838,15 @@ correct”), so the mean is a defensible, assumption-light pooling rule.</p>
 <span class="sig-prename descclassname"><span class="pre">ek.qe.calibrate.</span></span><span class="sig-name descname"><span class="pre">min_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ek/qe/calibrate.html#min_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ek.qe.calibrate.min_probability" title="Link to this definition">#</a></dt>
 <dd><p>Fuse calibrated per-family probabilities by their minimum (conservative).</p>
 <p>Use when any one family flagging a problem should be enough to lower the gate.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">min_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
+<span class="go">0.7</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
 </dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">min_probability</span><span class="p">({</span><span class="s2">"judge"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"logprob"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">})</span>
-<span class="go">0.7</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py function">

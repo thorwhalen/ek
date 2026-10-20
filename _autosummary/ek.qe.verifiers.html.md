@@ -66,7 +66,7 @@ Built-in checksum checks, by name (register more under the `checks` namespace).
 
 Default absolute tolerance for the cross-field totals reconciliation check.
 
-### *class* ek.qe.verifiers.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.qe.verifiers.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

@@ -20,6 +20,7 @@
 - [ek.agents.metrics](ek.agents.metrics.html.md): Task-success and cost-per-successful-task: the two metrics that drive the whole thing.
 - [ek.agents.toolcalls](ek.agents.toolcalls.html.md): Tool-call correctness: BFCL-style AST matching over a &#42;multiset&#42; of calls.
 - [ek.agents.trajectory](ek.agents.trajectory.html.md): Trajectory (process) evaluation: a cost-weighted &#42;&#42;sequence&#42;&#42; edit distance over steps.
+- [ek.agents.wrappers](ek.agents.wrappers.html.md): Optional WRAP adapters behind &#96;ek&#91;agents&#93;&#96;: uqlm, Ragas and DeepEval as ek strategies.
 - [ek.metrics](ek.metrics.html.md): Reference-based (offline) metrics: the &#96;score()&#96; side of &#96;ek&#96;.
 - [ek.metrics.anls](ek.metrics.anls.html.md): ANLS / ANLS&#92;&#42; (nested-JSON) similarity, wrapping &#96;anls_star&#96;.
 - [ek.metrics.fields](ek.metrics.fields.html.md): Field-level metric for record / dict-shaped extractions.

@@ -31,6 +31,7 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/epythet.css?v=6dc7e26d" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=1e825a29"></script>
+    <script src="_static/documentation_options.js?v=297ad043"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.11" />
+  <meta name="docsearch:version" content="0.1.12" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -737,6 +738,8 @@ window.runMermaid = runMermaid;</script>
       <li><a href="_autosummary/ek.agents.html#ek.agents.CostPerSuccessMetric.aggregate">aggregate() (ek.agents.CostPerSuccessMetric method)</a>
 
       <ul>
+        <li><a href="_autosummary/ek.agents.html#ek.agents.DeepEvalMetric.aggregate">(ek.agents.DeepEvalMetric method)</a>
+</li>
         <li><a href="_autosummary/ek.agents.judge.html#ek.agents.judge.JudgeMetric.aggregate">(ek.agents.judge.JudgeMetric method)</a>
 </li>
         <li><a href="_autosummary/ek.agents.html#ek.agents.JudgeMetric.aggregate">(ek.agents.JudgeMetric method)</a>
@@ -754,6 +757,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/ek.agents.trajectory.html#ek.agents.trajectory.TrajectoryMetric.aggregate">(ek.agents.trajectory.TrajectoryMetric method)</a>
 </li>
         <li><a href="_autosummary/ek.agents.html#ek.agents.TrajectoryMetric.aggregate">(ek.agents.TrajectoryMetric method)</a>
+</li>
+        <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DeepEvalMetric.aggregate">(ek.agents.wrappers.DeepEvalMetric method)</a>
 </li>
         <li><a href="_autosummary/ek.html#ek.AnlsMetric.aggregate">(ek.AnlsMetric method)</a>
 </li>
@@ -874,6 +879,14 @@ window.runMermaid = runMermaid;</script>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/ek.agents.html#ek.agents.bootstrap_ci">bootstrap_ci() (in module ek.agents)</a>
 </li>
+      <li><a href="_autosummary/ek.agents.cost.html#ek.agents.cost.BUNDLED_PRICES_FILENAME">BUNDLED_PRICES_FILENAME (in module ek.agents.cost)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.html#ek.agents.bundled_prices_path">bundled_prices_path() (in module ek.agents)</a>
+
+      <ul>
+        <li><a href="_autosummary/ek.agents.cost.html#ek.agents.cost.bundled_prices_path">(in module ek.agents.cost)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1106,6 +1119,16 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/ek.base.html#ek.base.DecisionPolicy">(class in ek.base)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DEEPEVAL_KINDS">DEEPEVAL_KINDS (in module ek.agents.wrappers)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DEEPEVAL_TELEMETRY_ENV">DEEPEVAL_TELEMETRY_ENV (in module ek.agents.wrappers)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.html#ek.agents.DeepEvalMetric">DeepEvalMetric (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DeepEvalMetric">(class in ek.agents.wrappers)</a>
+</li>
+      </ul></li>
       <li><a href="_autosummary/ek.qe.decide.html#ek.qe.decide.DEFAULT_ALPHA">DEFAULT_ALPHA (in module ek.qe.decide)</a>
 </li>
       <li><a href="_autosummary/ek.agents.cost.html#ek.agents.cost.DEFAULT_BATCH_DISCOUNT">DEFAULT_BATCH_DISCOUNT (in module ek.agents.cost)</a>
@@ -1138,9 +1161,13 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="_autosummary/ek.qe.calibrate.html#ek.qe.calibrate.DEFAULT_N_BINS">DEFAULT_N_BINS (in module ek.qe.calibrate)</a>
 </li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DEFAULT_NUM_RESPONSES">DEFAULT_NUM_RESPONSES (in module ek.agents.wrappers)</a>
+</li>
       <li><a href="_autosummary/ek.qe.signals.html#ek.qe.signals.DEFAULT_PROB_FLOOR">DEFAULT_PROB_FLOOR (in module ek.qe.signals)</a>
 </li>
       <li><a href="_autosummary/ek.ocr.profiles.html#ek.ocr.profiles.DEFAULT_PROFILE">DEFAULT_PROFILE (in module ek.ocr.profiles)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DEFAULT_RAGAS_METRIC">DEFAULT_RAGAS_METRIC (in module ek.agents.wrappers)</a>
 </li>
       <li><a href="_autosummary/ek.qe.decide.html#ek.qe.decide.DEFAULT_RISK_TARGET">DEFAULT_RISK_TARGET (in module ek.qe.decide)</a>
 </li>
@@ -1148,11 +1175,15 @@ window.runMermaid = runMermaid;</script>
 </li>
       <li><a href="_autosummary/ek.qe.verifiers.html#ek.qe.verifiers.DEFAULT_TOTALS_TOL">DEFAULT_TOTALS_TOL (in module ek.qe.verifiers)</a>
 </li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.DEFAULT_UQLM_SCORER">DEFAULT_UQLM_SCORER (in module ek.agents.wrappers)</a>
+</li>
       <li><a href="_autosummary/ek.validate.html#ek.validate.DEFAULT_ZSCORE_THRESHOLD">DEFAULT_ZSCORE_THRESHOLD (in module ek.validate)</a>
 </li>
       <li><a href="_autosummary/ek.agents.base.html#ek.agents.base.DESTRUCTIVE_WEIGHT">DESTRUCTIVE_WEIGHT (in module ek.agents.base)</a>
 </li>
       <li><a href="_autosummary/ek.agents.html#ek.agents.difference_upper_bound">difference_upper_bound() (in module ek.agents)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.disable_deepeval_telemetry">disable_deepeval_telemetry() (in module ek.agents.wrappers)</a>
 </li>
       <li><a href="_autosummary/ek.agents.html#ek.agents.dollars">dollars() (in module ek.agents)</a>
 
@@ -1249,6 +1280,13 @@ window.runMermaid = runMermaid;</script>
 </li>
       </ul></li>
       <li>
+    ek.agents.wrappers
+
+      <ul>
+        <li><a href="_autosummary/ek.agents.wrappers.html#module-ek.agents.wrappers">module</a>
+</li>
+      </ul></li>
+      <li>
     ek.base
 
       <ul>
@@ -1339,6 +1377,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/ek.ocr.benchmark.html#module-ek.ocr.benchmark">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.ocr.bridge
 
@@ -1346,8 +1386,6 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/ek.ocr.bridge.html#module-ek.ocr.bridge">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     ek.ocr.profiles
 
@@ -2031,6 +2069,8 @@ window.runMermaid = runMermaid;</script>
 </li>
         <li><a href="_autosummary/ek.agents.trajectory.html#module-ek.agents.trajectory">ek.agents.trajectory</a>
 </li>
+        <li><a href="_autosummary/ek.agents.wrappers.html#module-ek.agents.wrappers">ek.agents.wrappers</a>
+</li>
         <li><a href="_autosummary/ek.base.html#module-ek.base">ek.base</a>
 </li>
         <li><a href="_autosummary/ek.canonicalize.html#module-ek.canonicalize">ek.canonicalize</a>
@@ -2258,6 +2298,14 @@ window.runMermaid = runMermaid;</script>
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.RAGAS_METRICS">RAGAS_METRICS (in module ek.agents.wrappers)</a>
+</li>
+      <li><a href="_autosummary/ek.agents.html#ek.agents.RagasSignal">RagasSignal (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.RagasSignal">(class in ek.agents.wrappers)</a>
+</li>
+      </ul></li>
       <li><a href="_autosummary/ek.html#ek.range_validator">range_validator() (in module ek)</a>
 
       <ul>
@@ -2322,14 +2370,14 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/ek.base.html#ek.base.Report">(class in ek.base)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/ek.html#ek.requires_extra">requires_extra() (in module ek)</a>
 
       <ul>
         <li><a href="_autosummary/ek.registry.html#ek.registry.requires_extra">(in module ek.registry)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/ek.html#ek.resolve">resolve() (in module ek)</a>
 
       <ul>
@@ -2770,6 +2818,14 @@ window.runMermaid = runMermaid;</script>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/ek.agents.cost.html#ek.agents.cost.UnknownModelPrice">UnknownModelPrice</a>, <a href="_autosummary/ek.agents.html#ek.agents.UnknownModelPrice">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/ek.agents.html#ek.agents.UqlmConsistencySignal">UqlmConsistencySignal (class in ek.agents)</a>
+
+      <ul>
+        <li><a href="_autosummary/ek.agents.wrappers.html#ek.agents.wrappers.UqlmConsistencySignal">(class in ek.agents.wrappers)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

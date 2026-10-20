@@ -56,7 +56,7 @@ Add one gold example to the `gold` store.
 Benchmark an OCR engine against a gold corpus.
 
 * **Parameters:**
-  * **engine** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
+  * **engine** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)]) – An `image -> OcrResult` callable, or an `ocracy` backend id.
   * **gold** ([`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)) – A mapping `key -> {image, reference_text, [slice], ...}` – a plain
     dict or a `ek` gold store.
   * **metric** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – `"cer"` (default) or `"wer"` (or any registered string metric).

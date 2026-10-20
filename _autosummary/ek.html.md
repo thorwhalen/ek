@@ -206,7 +206,7 @@ mean of the per-item scores.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.AnnotatedExtraction(grammar, estimates=<factory>)
+### *class* ek.AnnotatedExtraction(grammar, estimates=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -228,7 +228,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 An ordered, named, versioned pipeline of `str -> str` steps.
 
 * **Parameters:**
-  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
+  * **steps** ([`Sequence`](https://docs.python.org/3/library/typing.html#typing.Sequence)[[`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]]) – Step references – names registered under `"normalizers"` or
     plain callables. Applied left to right.
   * **version** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Override the auto-derived version string (the `+`-joined names).
   * **audit_marks** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If true, warn when a step would run on text carrying combining
@@ -248,7 +248,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One logical table cell: its text plus its row/column span (>=1 each).
 
-### *class* ek.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -336,7 +336,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 A directed relation kind between two [`NodeType`](#ek.NodeType) names.
 
-### *class* ek.Episode(task_id='', trajectory=<factory>, output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=<factory>)
+### *class* ek.Episode(task_id='', trajectory=Trajectory(), output=None, final_state=None, cost=None, success=None, run=None, provenance=None, meta=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -374,7 +374,7 @@ the “copy” would share the original’s mutable `meta` dict.
 * **Return type:**
   [`Episode`](ek.agents.base.html.md#ek.agents.base.Episode)
 
-### *class* ek.FieldEstimate(value, raw_signals=<factory>, confidence=None, findings=(), provenance=None, decision=None)
+### *class* ek.FieldEstimate(value, raw_signals=dict(), confidence=None, findings=(), provenance=None, decision=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -425,13 +425,13 @@ A `suggestion` is present iff the producing layer can *correct* (only the
 deterministic canonicalizer and the gated LLM corrector freely do so). The
 original value is always retained elsewhere; a Finding never mutates.
 
-### *class* ek.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=<factory>)
+### *class* ek.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Outcome of a [`regression_gate()`](#ek.regression_gate) check.
 
-### *class* ek.GraphGrammar(node_types=<factory>, edge_types=<factory>)
+### *class* ek.GraphGrammar(node_types=dict(), edge_types=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -502,7 +502,7 @@ denominators globally – never a mean of per-table F1s.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -537,7 +537,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -564,7 +564,7 @@ Aggregate an extractor’s per-unit confidences into a field score.
 0.4
 ```
 
-### *class* ek.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -662,7 +662,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Addresses a node (or one of its fields) in an extracted graph; keys Layer B.
 
-### *class* ek.NodeType(name, fields=<factory>, importance=1.0)
+### *class* ek.NodeType(name, fields=dict(), importance=1.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -697,7 +697,7 @@ Where an extracted value came from, for audit and click-to-source review.
 `bbox` is intentionally typed `Any` so `ek` core need not import any OCR
 package; the OCR instance stores normalized `[0, 1]` top-left-origin geometry.
 
-### *class* ek.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=<factory>, provenance=<factory>, per_field=None)
+### *class* ek.QualityReport(calibrated_confidence=None, decision=None, findings=(), raw_signals=dict(), provenance=dict(), per_field=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -709,7 +709,7 @@ updated [`FieldEstimate`](#ek.FieldEstimate) (confidence/findings/decision fille
 scalar fields summarize: `calibrated_confidence` is the weakest field, and
 `decision` the most severe (`block` > `flag` > `accept`).
 
-### *class* ek.Report(metric='', aggregate=None, n=0, scores=<factory>, per_slice=<factory>, detail=<factory>)
+### *class* ek.Report(metric='', aggregate=None, n=0, scores=list(), per_slice=dict(), detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -745,7 +745,7 @@ Find the smallest accept threshold whose risk bound is <= `target`.
 * **Return type:**
   [`RiskControlGate`](ek.qe.decide.html.md#ek.qe.decide.RiskControlGate)
 
-### *class* ek.RoverConsensus(tokens=<factory>, slots=<factory>, agreement=<factory>, n_engines=0)
+### *class* ek.RoverConsensus(tokens=list(), slots=list(), agreement=list(), n_engines=0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -766,7 +766,7 @@ the calibrator/gate). A single engine – or none – is vacuously `1.0`.
 
 The consensus transcription (space-joined winning tokens).
 
-### *class* ek.Score(value, precision=None, recall=None, f1=None, metric='', detail=<factory>)
+### *class* ek.Score(value, precision=None, recall=None, f1=None, metric='', detail=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -793,7 +793,7 @@ A reference-free quality signal: extractor output -> raw scalar score.
 The `cost_tier` attribute (lower is cheaper) lets an escalation policy run
 cheap signals first and pay for expensive ones only on residual uncertainty.
 
-### *class* ek.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -860,13 +860,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -1056,7 +1056,7 @@ Fit `T` by minimising NLL with a bounded 1-D search.
 
 Golden-section search bounds and iteration count (config, not magic numbers).
 
-### *class* ek.ToolSpec(name, params=<factory>, importance=None, destructive=False)
+### *class* ek.ToolSpec(name, params=dict(), importance=None, destructive=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1131,7 +1131,7 @@ Corpus normalized distance = total raw distance / total max-distance.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### *class* ek.TypedNode(node_id, node_type, fields=<factory>)
+### *class* ek.TypedNode(node_id, node_type, fields=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1164,7 +1164,7 @@ Bases: [`Protocol`](https://docs.python.org/3/library/typing.html#typing.Protoco
 
 Reference-free check on a value, yielding zero or more [`Finding`](#ek.Finding) s.
 
-### *class* ek.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1235,8 +1235,8 @@ Unlike functools.cached_property (properties only) and lru_cache (memory-only wi
 cache_this provides a unified interface for both use cases with persistent storage options.
 
 * **Parameters:**
-  * **func** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`VT`)]) – The function to be decorated (usually left empty).
-  * **cache** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`), [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`VT`)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – 
+  * **func** ([`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], `VT`]) – The function to be decorated (usually left empty).
+  * **cache** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[`KT`, `VT`], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – 
 
     The cache storage. Can be:
     - A MutableMapping instance (shared across instances)
@@ -1244,7 +1244,7 @@ cache_this provides a unified interface for both use cases with persistent stora
     - A callable taking (instance) and returning a MutableMapping
       This enables instance-specific caching, e.g.:
       cache=lambda self: Files(f’/cache/{self.user_id}/’)
-  * **key** (`Union`[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`), [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`KT`)], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – For properties: the key to store the cache value, can be a callable
+  * **key** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[`KT`, [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], `KT`], [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – For properties: the key to store the cache value, can be a callable
     that will be applied to the method name to make a key, or an explicit string.
     For methods: a callable that takes `(self, *args, **kwargs)` and returns a cache key.
   * **pre_cache** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool) | [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)) – Default is False. If True, adds an in-memory cache to the method
@@ -1707,7 +1707,7 @@ Aggregate many comparisons into a [`Report`](ek.base.html.md#ek.base.Report) (co
 
 * **Parameters:**
   * **cases** ([`Iterable`](https://docs.python.org/3/library/typing.html#typing.Iterable)) – Iterable of `(pred, gold)` or `(pred, gold, slice_label)` tuples.
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – As in [`score()`](#ek.score) (resolved once from the first case’s types).
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – As in [`score()`](#ek.score) (resolved once from the first case’s types).
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A grammar passed to every comparison.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer applied before every comparison.
 * **Return type:**
@@ -1798,9 +1798,6 @@ for perfect agreement, `0.0` at chance, and goes negative for systematic
 disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
 observed vs expected disagreement under the level-specific difference metric.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -1808,6 +1805,9 @@ observed vs expected disagreement under the level-specific difference metric.
 >>> krippendorff_alpha(data)
 1.0
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.lexicon_corrector(vocabulary, , threshold=0.8, scorer=None, field_name='', layer='lexicon', flag_unmatched=True)
 
@@ -1905,13 +1905,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.min_probability(probs)
 
@@ -1919,13 +1919,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.names(namespace)
 
@@ -1953,9 +1953,6 @@ The HumanEval estimator `1 - C(n-c, k) / C(n, k)` over `n` trials with `c`
 successes. This is the **capability** metric – right when a single success is enough
 (offline candidate generation behind a verifier).
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -1965,6 +1962,9 @@ successes. This is the **capability** metric – right when a single success is 
 1.0
 ```
 
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 ### ek.pass_hat_k(, n, c, k)
 
 Unbiased `pass^k`: probability that **all k** independent trials succeed.
@@ -1972,9 +1972,6 @@ Unbiased `pass^k`: probability that **all k** independent trials succeed.
 The tau-bench estimator `C(c, k) / C(n, k)`; for a per-trial success probability `p`
 it decays to `p**k`. This is the **reliability** metric – the one that matters when
 consistency *is* the product.
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -1984,6 +1981,9 @@ consistency *is* the product.
 >>> pass_hat_k(n=8, c=4, k=2)
 0.21428571428571427
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.percent_agreement(rater_a, rater_b)
 
@@ -2216,7 +2216,7 @@ Score one prediction against one gold reference (reference-based).
   * **pred** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The predicted output (string, record dict, or anything with `.text`).
   * **gold** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – The gold reference, same shape as `pred`.
   * **grammar** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar)]) – Optional Layer-A [`GraphGrammar`](ek.base.html.md#ek.base.GraphGrammar) (carries cost weights).
-  * **metric** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
+  * **metric** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Metric`](ek.base.html.md#ek.base.Metric)]) – A registered metric name (`"cer"`, `"wer"`, `"fields"`, …), a
     callable [`Metric`](ek.base.html.md#ek.base.Metric), or `None` to dispatch by type.
   * **normalize** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Optional canonicalizer (name, callable, step list, or
     [`Canonicalizer`](ek.canonicalize.html.md#ek.canonicalize.Canonicalizer)) applied before comparison.
@@ -2266,7 +2266,7 @@ recoverable table structure.
     engine-specific payload), `.markdown` (VLM/markdown engines), and
     `.meta` – never ocracy types, so any `image -> OcrResult` callable’s
     output works.
-  * **parser** (`Union`[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
+  * **parser** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`None`](https://docs.python.org/3/builtins/constants.html#None), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)[[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – 
 
     How to turn the raw payload into a table (dependency injection /
     open-closed). One of:

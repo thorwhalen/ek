@@ -36,7 +36,7 @@ IAA conventions, golden-set CI).
 | [`GateResult`](#ek.harness.GateResult)(passed, metric, higher_is_better, ...)   | Outcome of a [`regression_gate()`](#ek.harness.regression_gate) check.   |
 |------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
 
-### *class* ek.harness.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=<factory>)
+### *class* ek.harness.GateResult(passed, metric, higher_is_better, tolerance, aggregate_current=None, aggregate_baseline=None, regressions=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -81,9 +81,6 @@ for perfect agreement, `0.0` at chance, and goes negative for systematic
 disagreement. Computed via the coincidence-matrix method (Krippendorff 2011):
 observed vs expected disagreement under the level-specific difference metric.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ### Example
 
 ```pycon
@@ -91,6 +88,9 @@ observed vs expected disagreement under the level-specific difference metric.
 >>> krippendorff_alpha(data)
 1.0
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.harness.load_baseline(name, , rootdir=None)
 

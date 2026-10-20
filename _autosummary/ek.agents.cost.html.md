@@ -15,9 +15,10 @@ per token. Two facts force it (`misc/docs/ek_11`):
    any price is not cheap, it is unusable; a per-token metric that reports it as
    “$0.003/call” is actively misleading).
 
-**No hardcoded prices.** Rates go stale monthly, so this module ships *no* built-in price
-table: a [`ModelPrice`](#ek.agents.cost.ModelPrice) is either passed directly or resolved from an injected
-catalog ([`load_prices()`](#ek.agents.cost.load_prices) reads LiteLLM’s MIT-licensed
+**No hardcoded prices in code.** Rates go stale monthly, so no price is baked into a
+function: a [`ModelPrice`](#ek.agents.cost.ModelPrice) is either passed directly or resolved from an injected
+catalog. [`load_prices()`](#ek.agents.cost.load_prices) with no argument reads the bundled *data file* snapshot
+([`bundled_prices_path()`](#ek.agents.cost.bundled_prices_path), may be stale – pass your own to refresh); it reads LiteLLM’s MIT-licensed
 `model_prices_and_context_window.json` – **the data file, never the SDK**, whose
 `enterprise/` subtree is a proprietary carve-out). Missing rates raise an *actionable*
 error rather than silently guessing.
@@ -37,15 +38,17 @@ error rather than silently guessing.
 | [`DEFAULT_CACHE_DISCOUNT`](#ek.agents.cost.DEFAULT_CACHE_DISCOUNT)   | Cached input is billed at a fraction of the normal input rate (~10% across the major providers).   |
 |---------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
 | [`DEFAULT_BATCH_DISCOUNT`](#ek.agents.cost.DEFAULT_BATCH_DISCOUNT)   | Batch/deferred APIs are ~50% off.                                                                  |
+| [`BUNDLED_PRICES_FILENAME`](#ek.agents.cost.BUNDLED_PRICES_FILENAME)  | The bundled LiteLLM price snapshot (MIT; see `data/LITELLM_LICENSE.md`).                           |
 
 ### Functions
 
-| [`cost_of_pass`](#ek.agents.cost.cost_of_pass)(total_cost, n_success)                | Expected monetary cost of one *successful* task: `total_cost / n_success`.                                                     |
+| [`bundled_prices_path`](#ek.agents.cost.bundled_prices_path)()                              | Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).                                            |
 |-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| [`cost_of_pass`](#ek.agents.cost.cost_of_pass)(total_cost, n_success)                | Expected monetary cost of one *successful* task: `total_cost / n_success`.                                                     |
 | [`cost_report`](#ek.agents.cost.cost_report)(episodes, \*[, prices, price])         | The quality x cost x latency triple, reported **together**.                                                                    |
 | [`dollars`](#ek.agents.cost.dollars)(cost, price, \*[, prices, batch])          | Monetary cost of one [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) tally, in USD.                  |
 | [`episode_dollars`](#ek.agents.cost.episode_dollars)(episode, \*[, prices, price, ...]) | Monetary cost of one episode (0.0 if it carries no [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost)). |
-| [`load_prices`](#ek.agents.cost.load_prices)(source)                                | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                       |
+| [`load_prices`](#ek.agents.cost.load_prices)([source])                              | Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.                                                       |
 | [`per_million`](#ek.agents.cost.per_million)(input, output, \*[, ...])              | Build a [`ModelPrice`](#ek.agents.cost.ModelPrice) from the human-facing **USD per 1M tokens** figures.       |
 | [`price_of`](#ek.agents.cost.price_of)(model, \*[, prices])                      | Resolve a model's rates from an injected catalog, or fail *actionably*.                                                        |
 
@@ -58,6 +61,10 @@ error rather than silently guessing.
 
 | [`UnknownModelPrice`](#ek.agents.cost.UnknownModelPrice)   | Raised when a model's rates are not in the injected price catalog.   |
 |----------------------------------------------------------------------|----------------------------------------------------------------------|
+
+### ek.agents.cost.BUNDLED_PRICES_FILENAME *= 'model_prices_and_context_window.json'*
+
+The bundled LiteLLM price snapshot (MIT; see `data/LITELLM_LICENSE.md`).
 
 ### ek.agents.cost.DEFAULT_BATCH_DISCOUNT *= 0.5*
 
@@ -96,15 +103,19 @@ Bases: [`KeyError`](https://docs.python.org/3/builtins/exceptions.html#KeyError)
 
 Raised when a model’s rates are not in the injected price catalog.
 
+### ek.agents.cost.bundled_prices_path()
+
+Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot).
+
+* **Return type:**
+  [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
+
 ### ek.agents.cost.cost_of_pass(total_cost, n_success)
 
 Expected monetary cost of one *successful* task: `total_cost / n_success`.
 
 Returns `inf` when nothing succeeded – infeasibility is the honest answer, not a
 cheap-looking zero (this divergence is the point of the metric).
-
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### Example
 
@@ -114,6 +125,9 @@ cheap-looking zero (this divergence is the point of the metric).
 >>> cost_of_pass(10.0, 0)
 inf
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.agents.cost.cost_report(episodes, , prices=None, price=None)
 
@@ -126,9 +140,6 @@ a report that omits cost is not a report. Returns `n`, `n_success`, `success_rat
 With **no** `price`/`prices`, dollar figures are `None` rather than a fabricated zero:
 `ek` will not invent rates, and a silent 0.0 would make a costly agent look free. Tokens
 and latency are still reported.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -144,13 +155,16 @@ and latency are still reported.
 True
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 ### ek.agents.cost.dollars(cost, price, , prices=None, batch=False)
 
 Monetary cost of one [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) tally, in USD.
 
 * **Parameters:**
   * **cost** ([`Cost`](ek.agents.base.html.md#ek.agents.base.Cost)) – The token/retry tally.
-  * **price** (`Union`[[`ModelPrice`](#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](#ek.agents.cost.ModelPrice), or a model name to resolve against `prices`.
+  * **price** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ModelPrice`](#ek.agents.cost.ModelPrice), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – A [`ModelPrice`](#ek.agents.cost.ModelPrice), or a model name to resolve against `prices`.
   * **prices** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`ModelPrice`](#ek.agents.cost.ModelPrice)]]) – The injected price catalog (required when `price` is a name).
   * **batch** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Apply the batch-API discount ([`DEFAULT_BATCH_DISCOUNT`](#ek.agents.cost.DEFAULT_BATCH_DISCOUNT)).
 * **Raises:**
@@ -165,19 +179,17 @@ Monetary cost of one episode (0.0 if it carries no [`Cost`](ek.agents.base.html.
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
-### ek.agents.cost.load_prices(source)
+### ek.agents.cost.load_prices(source=None)
 
 Parse a LiteLLM-format price catalog into a `{model: ModelPrice}` table.
 
 `source` is a path to (or an already-parsed mapping of) LiteLLM’s MIT-licensed
-`model_prices_and_context_window.json`. We read the **data file only** and never
+`model_prices_and_context_window.json`; `None` (default) uses the bundled snapshot
+([`bundled_prices_path()`](#ek.agents.cost.bundled_prices_path)). We read the **data file only** and never
 import the `litellm` SDK – its `enterprise/` subtree is a proprietary carve-out,
 and the SDK drags a large transitive tree in just to look up a rate.
 
 Entries lacking token rates (embeddings, unpriced models) are skipped.
-
-* **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
 ### Example
 
@@ -188,12 +200,12 @@ Entries lacking token rates (embeddings, unpriced models) are skipped.
 2e-06
 ```
 
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+
 ### ek.agents.cost.per_million(input, output, , cached_input=None, reasoning=None)
 
 Build a [`ModelPrice`](#ek.agents.cost.ModelPrice) from the human-facing **USD per 1M tokens** figures.
-
-* **Return type:**
-  [`ModelPrice`](#ek.agents.cost.ModelPrice)
 
 ### Example
 
@@ -203,13 +215,15 @@ Build a [`ModelPrice`](#ek.agents.cost.ModelPrice) from the human-facing **USD p
 (3e-06, 1.5e-05)
 ```
 
+* **Return type:**
+  [`ModelPrice`](#ek.agents.cost.ModelPrice)
+
 ### ek.agents.cost.price_of(model, , prices=None)
 
 Resolve a model’s rates from an injected catalog, or fail *actionably*.
 
-`ek` deliberately ships no built-in price table (rates go stale monthly and would be
-magic numbers). Supply one with `prices=`, or load the LiteLLM catalog with
-[`load_prices()`](#ek.agents.cost.load_prices).
+`ek` never guesses a rate (they go stale monthly). Supply a catalog with `prices=`;
+[`load_prices()`](#ek.agents.cost.load_prices) loads the bundled LiteLLM snapshot or your own file.
 
 * **Return type:**
   [`ModelPrice`](#ek.agents.cost.ModelPrice)

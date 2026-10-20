@@ -59,7 +59,7 @@ not exist.
 | [`AgentGateResult`](#ek.agents.harness.AgentGateResult)([passed, reasons, ...])   | Outcome of a variance-aware agent regression check.   |
 |--------------------------------------------------------------------------------------------|-------------------------------------------------------|
 
-### *class* ek.agents.harness.AgentGateResult(passed=True, reasons=<factory>, pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
+### *class* ek.agents.harness.AgentGateResult(passed=True, reasons=list(), pass_hat_k=None, pass_hat_k_baseline=None, success_rate=None, success_rate_baseline=None, cost_per_success=None, cost_per_success_baseline=None, underpowered=False)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

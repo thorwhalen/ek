@@ -84,9 +84,6 @@ worth a dependency here.
 
 Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, gold_call)`.
 
-* **Return type:**
-  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)
-
 ### Example
 
 ```pycon
@@ -95,3 +92,6 @@ Returns `(pairs, unmatched_pred, unmatched_gold)`, `pairs` being `(pred_call, go
 >>> len(pairs), up, ug          # order-insensitive within a tool name
 (2, [], [])
 ```
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)

@@ -10,11 +10,13 @@ ek.agents.cost
    
       DEFAULT_CACHE_DISCOUNT
       DEFAULT_BATCH_DISCOUNT
+      BUNDLED_PRICES_FILENAME
    
    .. rubric:: Functions
 
    .. autosummary::
    
+      bundled_prices_path
       cost_of_pass
       cost_report
       dollars

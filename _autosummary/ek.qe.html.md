@@ -90,7 +90,7 @@ free intrinsic confidence first. Called on a collection of hypotheses, it runs
 0.778
 ```
 
-### *class* ek.qe.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=<factory>)
+### *class* ek.qe.ConformalGate(alpha=0.1, nonconformity=<function ConformalGate.<lambda>>, q=inf, \_cal=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -150,7 +150,7 @@ costlier than reviews) raises the bar to auto-accept (`tau -> 1` as
 
 The accept threshold on calibrated probability (derived from `rho`).
 
-### *class* ek.qe.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.qe.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -185,7 +185,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.qe.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=<factory>, pooled=None)
+### *class* ek.qe.GroupConformalGate(alpha=0.1, nonconformity=<function GroupConformalGate.<lambda>>, by_group=dict(), pooled=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -212,7 +212,7 @@ Aggregate an extractor’s per-unit confidences into a field score.
 0.4
 ```
 
-### *class* ek.qe.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.qe.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -294,7 +294,7 @@ Find the smallest accept threshold whose risk bound is <= `target`.
 * **Return type:**
   [`RiskControlGate`](ek.qe.decide.html.md#ek.qe.decide.RiskControlGate)
 
-### *class* ek.qe.RoverConsensus(tokens=<factory>, slots=<factory>, agreement=<factory>, n_engines=0)
+### *class* ek.qe.RoverConsensus(tokens=list(), slots=list(), agreement=list(), n_engines=0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -315,13 +315,13 @@ the calibrator/gate). A single engine – or none – is vacuously `1.0`.
 
 The consensus transcription (space-joined winning tokens).
 
-### *class* ek.qe.RoverSlot(entries=<factory>, winner=None, score=0.0, vote_share=0.0)
+### *class* ek.qe.RoverSlot(entries=list(), winner=None, score=0.0, vote_share=0.0)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 One branch point of the transition network: each engine’s token (or NULL).
 
-### *class* ek.qe.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.qe.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -388,13 +388,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -449,7 +449,7 @@ Fit `T` by minimising NLL with a bounded 1-D search.
 
 Golden-section search bounds and iteration count (config, not magic numbers).
 
-### *class* ek.qe.VerifierSignal(validators=<factory>, cost_tier=1)
+### *class* ek.qe.VerifierSignal(validators=list(), cost_tier=1)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -564,13 +564,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.min_prob(logps)
 
@@ -585,13 +585,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.range_validator(lo, hi, , field_name='', layer='range')
 

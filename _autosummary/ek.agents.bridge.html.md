@@ -47,9 +47,6 @@ Wrap a plain `input -> answer` function into the harness’s `TaskSpec -> Episod
 
 Progressive disclosure: the trivial agent should not have to learn the Episode type.
 
-* **Return type:**
-  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
-
 ### Example
 
 ```pycon
@@ -59,15 +56,15 @@ Progressive disclosure: the trivial agent should not have to learn the Episode t
 'HI'
 ```
 
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/typing.html#typing.Callable)
+
 ### ek.agents.bridge.cost_from_usage(usage, , latency_s=None)
 
 Build a [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost) from a provider `usage` object or dict.
 
 Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 (`input_tokens` / `output_tokens` / `cache_read_input_tokens`) spellings.
-
-* **Return type:**
-  [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost)
 
 ### Example
 
@@ -76,6 +73,9 @@ Understands the OpenAI (`prompt_tokens` / `completion_tokens`) and Anthropic
 >>> c.input_tokens, c.output_tokens
 (100, 20)
 ```
+
+* **Return type:**
+  [`Cost`](ek.agents.base.html.md#ek.agents.base.Cost)
 
 ### ek.agents.bridge.episode_from_messages(messages, , task_id='', usage=None, output=None, final_state=None, latency_s=None)
 

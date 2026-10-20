@@ -77,7 +77,7 @@ True
 
 Default number of bins for [`expected_calibration_error()`](#ek.qe.calibrate.expected_calibration_error) / reliability curves.
 
-### *class* ek.qe.calibrate.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=<factory>, pooled=None, kind='group')
+### *class* ek.qe.calibrate.GroupCalibrator(factory=<class 'ek.qe.calibrate.PlattCalibrator'>, by_group=dict(), pooled=None, kind='group')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -112,7 +112,7 @@ Group keys are stringified (they are `NodeType`/`FieldSpec` names).
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
 
-### *class* ek.qe.calibrate.IsotonicCalibrator(x=<factory>, y=<factory>, kind='isotonic')
+### *class* ek.qe.calibrate.IsotonicCalibrator(x=list(), y=list(), kind='isotonic')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -149,7 +149,7 @@ Fit `a, b` to maximise the likelihood of `correct` given `scores`.
 * **Return type:**
   [`PlattCalibrator`](#ek.qe.calibrate.PlattCalibrator)
 
-### *class* ek.qe.calibrate.SignalFamilyCalibrator(calibrators=<factory>, combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
+### *class* ek.qe.calibrate.SignalFamilyCalibrator(calibrators=dict(), combine=<function mean_probability>, factory=<class 'ek.qe.calibrate.PlattCalibrator'>, fusion=None, kind='signal_family')
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -216,13 +216,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 #### factory
 
@@ -305,13 +305,13 @@ Fuse calibrated per-family probabilities by their mean (the default combiner).
 Each family’s calibrated value estimates the *same* event (“this field is
 correct”), so the mean is a defensible, assumption-light pooling rule.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> mean_probability({"judge": 0.9, "logprob": 0.7})
 0.8
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.calibrate.min_probability(probs)
 
@@ -319,13 +319,13 @@ Fuse calibrated per-family probabilities by their minimum (conservative).
 
 Use when any one family flagging a problem should be enough to lower the gate.
 
-* **Return type:**
-  [`float`](https://docs.python.org/3/builtins/functions.html#float)
-
 ```pycon
 >>> min_probability({"judge": 0.9, "logprob": 0.7})
 0.7
 ```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
 
 ### ek.qe.calibrate.netcal_ece(probs, correct, , bins=10)
 
