@@ -31,9 +31,10 @@ from __future__ import annotations
 
 import json
 from collections.abc import Mapping, Sequence
-from typing import Any, Callable, Optional
+from dataclasses import replace
+from typing import Any, Callable, Iterator, Optional
 
-from .base import Cost, Episode, Step, TaskSpec, Trajectory
+from .base import Cost, Episode, RunProvenance, Step, TaskSpec, Trajectory
 
 
 def _loads(args: Any) -> dict:
@@ -245,6 +246,105 @@ def from_inspect_sample(sample: Any, *, task_id: str = "") -> Episode:
         usage=usage,
         output=completion,
     )
+
+
+#: Inspect's letter grades (CORRECT / INCORRECT / PARTIAL / NOANSWER) and common word grades
+#: as numbers -- the mapping ``inspect_ai.scorer.value_to_float`` uses, restated so reading a
+#: log needs no ``inspect_ai`` import.
+INSPECT_SCORE_VALUES = {
+    "C": 1.0,
+    "I": 0.0,
+    "P": 0.5,
+    "N": 0.0,
+    "yes": 1.0,
+    "no": 0.0,
+    "true": 1.0,
+    "false": 0.0,
+}
+
+#: A sample counts as a success when its score reaches this (1.0 = fully correct; a PARTIAL
+#: "P" grade is 0.5, so it is a failure unless the threshold is lowered).
+DEFAULT_SUCCESS_THRESHOLD = 1.0
+
+
+def inspect_score_value(value: Any) -> Optional[float]:
+    """An Inspect ``Score.value`` as a float, or ``None`` when it is not a scalar grade.
+
+    Example:
+        >>> inspect_score_value("C"), inspect_score_value("P"), inspect_score_value(0.25)
+        (1.0, 0.5, 0.25)
+        >>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
+        True
+    """
+    if isinstance(value, bool):
+        return float(value)
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        text = value.strip()
+        if text in INSPECT_SCORE_VALUES:
+            return INSPECT_SCORE_VALUES[text]
+        if text.lower() in INSPECT_SCORE_VALUES:
+            return INSPECT_SCORE_VALUES[text.lower()]
+        try:
+            return float(text)
+        except ValueError:
+            return None
+    return None
+
+
+def _str_or_empty(value: Any) -> str:
+    return "" if value is None else str(value)
+
+
+def episodes_from_inspect_log(
+    log: Any,
+    *,
+    scorer: Optional[str] = None,
+    success_threshold: float = DEFAULT_SUCCESS_THRESHOLD,
+) -> Iterator[Episode]:
+    """Yield one graded :class:`Episode` per sample *per epoch* of an Inspect ``EvalLog``.
+
+    Duck-typed like :func:`from_inspect_sample` (no ``inspect_ai`` import): reads
+    ``log.samples`` and ``log.eval``. Each sample's score -- the ``scorer`` named, else the
+    first -- is read with :func:`inspect_score_value` and the episode is graded
+    ``success = value >= success_threshold``; a sample with no scalar score stays ungraded
+    (``success=None``) rather than being silently counted as a failure.
+
+    Inspect's ``epochs`` are ek's *trials*: an eval run with ``epochs=k`` yields k episodes per
+    ``task_id`` (the sample id), which is exactly what :func:`~ek.agents.reliability` needs for
+    ``pass^k``. The run's model and task version are recorded as :class:`RunProvenance`.
+
+    Example (a log-shaped stand-in; a real ``EvalLog`` has the same attributes):
+        >>> from types import SimpleNamespace as NS
+        >>> sample = NS(id="q1", epoch=1, messages=[], output=NS(completion="4", usage=None),
+        ...             scores={"match": NS(value="C")})
+        >>> log = NS(samples=[sample], eval=NS(model="mockllm/model", task_version=0))
+        >>> [(e.task_id, e.success, e.meta["epoch"]) for e in episodes_from_inspect_log(log)]
+        [('q1', True, 1)]
+    """
+    info = getattr(log, "eval", None)
+    run = RunProvenance(
+        model=_str_or_empty(getattr(info, "model", None)),
+        suite_version=_str_or_empty(getattr(info, "task_version", None)),
+    )
+    for sample in getattr(log, "samples", None) or ():
+        scores = getattr(sample, "scores", None) or {}
+        name = scorer if scorer is not None else next(iter(scores), None)
+        score = scores.get(name) if name is not None else None
+        value = inspect_score_value(getattr(score, "value", score))
+        episode = from_inspect_sample(sample)
+        yield replace(
+            episode,
+            success=None if value is None else value >= success_threshold,
+            run=run,
+            meta={
+                **episode.meta,
+                "epoch": getattr(sample, "epoch", None),
+                "score": value,
+                "scorer": name,
+            },
+        )
 
 
 def _message_dict(message: Any) -> dict:

@@ -50,7 +50,9 @@ from .bridge import (
     cost_from_usage,
     episode_from_messages,
     from_deepeval_test_case,
+    episodes_from_inspect_log,
     from_inspect_sample,
+    inspect_score_value,
     trajectory_from_messages,
 )
 from .cost import (
@@ -69,6 +71,7 @@ from .wrappers import (
     DeepEvalMetric,
     RagasSignal,
     UqlmConsistencySignal,
+    run_inspect,
 )
 from .harness import (
     AgentGateResult,
@@ -175,5 +178,8 @@ __all__ = [
     "episode_from_messages",
     "cost_from_usage",
     "from_inspect_sample",
+    "episodes_from_inspect_log",
+    "inspect_score_value",
+    "run_inspect",
     "from_deepeval_test_case",
 ]

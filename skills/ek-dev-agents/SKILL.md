@@ -104,6 +104,7 @@ Success is a **final-state** check, not a surface-text check. `Checker = (episod
 - **A checker** → `@register("checkers", "<name>")` on an `(episode, gold) -> bool`.
 - **A signal** → follow `ek-dev-add-signal`; set `cost_tier` honestly (cheap signals run first).
 - **A bridge** → **duck-type it** (`trajectory_from_messages`, `from_inspect_sample`). The dependency direction is the `ek → ocracy` rule restated: **`ek → inspect_ai / deepeval / ragas`, never the reverse.**
+- **A WRAP adapter** (`ek/agents/wrappers.py`) → import the backend lazily under `@requires_extra`, accept an injected backend so it is testable offline, and decide "real backend or fake?" **per package** (`_is_backend(obj, "deepeval")`) — one shared "is it Ragas?" check once handed every real DeepEval metric a `dict`. CI does not install these libraries, so `tests/test_agents_real_backends.py` skips there: after a library upgrade, install it in a scratch venv and run that file (all judges are local fakes — Inspect `mockllm/model`, a scripted LangChain chat model, canned Ragas/DeepEval judges; no key, no cost). Last validated (2026-10): inspect-ai 0.3.282, deepeval 4.3.1, ragas 0.4.3, uqlm 0.6.7. Known upstream drift: DeepEval ≥ 4 builds an OpenAI judge at *construction* (so `tool_correctness`, which never calls it, gets a refusing stub judge) and GEval needs `evaluation_params`; Ragas ≥ 0.4 moved to `ragas.metrics.collections` (`ascore(**fields) -> MetricResult`, `llm_factory` judges) and 0.4.3 fails to import with `langchain-community` ≥ 0.4; uqlm reads `llm.temperature` and its fresh install can pull a pyarrow that needs NumPy 2 against its NumPy 1 pin.
 - **A dependency** → consult `ek-dev-licensing` FIRST. Quarantined: **Arize Phoenix (Elastic-2.0** — source-available, not OSI; declares ELv2 in its License *field* but ships **no trove classifier**, so a classifier-only scanner misses it), LangSmith/Braintrust (proprietary SaaS — HTTP sinks only). DeepEval is permissive but **phones home**; disable telemetry.
 
 ## Where things are
@@ -118,4 +119,5 @@ Success is a **final-state** check, not a surface-text check. `Checker = (episod
 | `ek/agents/cost.py` | `ModelPrice`, `dollars`, `cost_of_pass`, `cost_report`, `load_prices` |
 | `ek/agents/judge.py` | `JudgeSignal`, `JudgeMetric`, `pairwise_judge`, `judge_validation` |
 | `ek/agents/harness.py` | `run_suite`, `save_agent_baseline`, `agent_regression_gate` |
-| `ek/agents/bridge.py` | duck-typed adapters (messages / Inspect / DeepEval → `Episode`) |
+| `ek/agents/bridge.py` | duck-typed adapters (messages / Inspect sample or whole log / DeepEval → `Episode`) |
+| `ek/agents/wrappers.py` | optional backends, lazily imported: `run_inspect`, `UqlmConsistencySignal`, `RagasSignal`, `DeepEvalMetric` |
