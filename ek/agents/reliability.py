@@ -191,11 +191,86 @@ def difference_upper_bound(
     Used for ``pass^k`` (a mean of per-task estimators, not a raw proportion), where a Newcombe
     interval does not apply but the same principle does: test the **difference**, combining both
     runs' uncertainty, rather than asking whether two intervals happen to overlap.
+
+    Back-deriving an SE from a CI is the *fallback*: it under-estimates near p = 1 (a truncated
+    percentile interval) and reads a zero-width CI as certainty. When the per-task SD is known,
+    prefer :func:`mean_standard_error` (the regression gate does, for any summary that persists
+    ``pass_hat_k_sd``).
     """
     se_a, se_b = _se_from_ci(ci_a, z=z), _se_from_ci(ci_b, z=z)
     if se_a is None or se_b is None:
         return None
     return (value_a - value_b) + z * math.sqrt(se_a**2 + se_b**2)
+
+
+def mean_standard_error(
+    mean: float,
+    sd: Optional[float],
+    n: int,
+    *,
+    z: float = DEFAULT_Z,
+    bounds: tuple = (0.0, 1.0),
+) -> Optional[float]:
+    """Standard error of a mean of ``n`` per-unit values in ``bounds``, floored near the bounds.
+
+    The plain ``sd / sqrt(n)`` is the right SE for a mean of independent per-task estimators
+    (``pass^k`` is exactly that) -- but it collapses to **zero** when every task scored the same,
+    which is common at the boundary (a *perfect* baseline: every task passed every trial). A
+    zero SE claims certainty and turns a two-sample test back into interval-vs-point.
+
+    The floor is Agresti--Coull's trick generalised to bounded values: add ``z**2 / 2``
+    pseudo-units at *each* bound, and take the SE of the augmented mean. For 0/1 values this is
+    (up to the sample-variance ``n - 1``) the Agresti--Coull SE ``sqrt(p~(1-p~)/(n+z**2))``. With
+    well-spread per-task values it is within a few percent of ``sd / sqrt(n)``; it binds where the
+    spread is small -- near the bounds, or when every task scores about the same -- which is
+    conservative there. The result is ``max(plain, floor)``. It is a normal (``z``) SE with no
+    small-sample t-correction, so with fewer than ~20 tasks it is somewhat optimistic.
+
+    Returns ``None`` when there is nothing to estimate from (``n <= 0`` or no ``mean``). A
+    missing ``sd`` (fewer than two units) contributes nothing; the floor still applies.
+
+    Example:
+        >>> round(mean_standard_error(0.5, 0.3, 100), 4)        # interior: ~ sd/sqrt(n) = 0.03
+        0.0304
+        >>> mean_standard_error(1.0, 0.0, 60) > 0               # perfect: never zero
+        True
+        >>> round(mean_standard_error(1.0, 0.0, 60), 4)         # ~ Agresti-Coull for 60/60
+        0.0215
+    """
+    if mean is None or n is None or n <= 0:
+        return None
+    lo, hi = bounds
+    sd = 0.0 if sd is None or not math.isfinite(sd) else float(sd)
+    plain = sd / math.sqrt(n)
+    w = z * z / 2  # pseudo-units added at each bound
+    n_aug = n + 2 * w
+    p_aug = (n * mean + w * (lo + hi)) / n_aug
+    # Sum of squares about the augmented mean, rebuilt from (mean, sd, n) alone -- so the floor
+    # needs nothing beyond what a persisted summary already carries.
+    ss = (
+        (n - 1) * sd * sd
+        + n * (mean - p_aug) ** 2
+        + w * (hi - p_aug) ** 2
+        + w * (lo - p_aug) ** 2
+    )
+    floor = math.sqrt(ss / (n_aug - 1) / n_aug)
+    return max(plain, floor)
+
+
+def _sample_sd(values: Sequence[float]) -> Optional[float]:
+    """Sample standard deviation (``n - 1`` denominator); ``None`` for fewer than two values.
+
+    Example:
+        >>> _sample_sd([1.0, 1.0, 1.0])
+        0.0
+        >>> _sample_sd([0.5]) is None
+        True
+    """
+    n = len(values)
+    if n < 2:
+        return None
+    m = sum(values) / n
+    return math.sqrt(sum((v - m) ** 2 for v in values) / (n - 1))
 
 
 def bootstrap_ci(
@@ -256,6 +331,10 @@ class ReliabilityReport:
     pass_at_k: Optional[float] = None
     pass_hat_k: Optional[float] = None
     pass_hat_k_ci: tuple = (0.0, 1.0)
+    # Per-task sample SD of the pass^k estimators (``None`` with fewer than two tasks). With
+    # ``n_tasks`` it gives the SE of ``pass_hat_k`` directly (see :meth:`pass_hat_k_se`) -- the
+    # regression gate uses that, not an SE back-derived from the bootstrap CI.
+    pass_hat_k_sd: Optional[float] = None
     stochastic: bool = True
     per_task: dict = field(default_factory=dict)
     per_slice: dict = field(default_factory=dict)
@@ -265,6 +344,13 @@ class ReliabilityReport:
     def __float__(self) -> float:
         """The headline number is the *reliability* one (``nan`` if it could not be measured)."""
         return float("nan") if self.pass_hat_k is None else float(self.pass_hat_k)
+
+    def pass_hat_k_se(self, *, z: float = DEFAULT_Z) -> Optional[float]:
+        """SE of ``pass_hat_k``: ``sd / sqrt(n_tasks)`` with the boundary floor
+        (:func:`mean_standard_error`); ``None`` if ``pass^k`` could not be measured."""
+        if self.pass_hat_k is None:
+            return None
+        return mean_standard_error(self.pass_hat_k, self.pass_hat_k_sd, self.n_tasks, z=z)
 
 
 def _group_trials(source: Any) -> dict:
@@ -401,6 +487,7 @@ def reliability(
         pass_at_k=mean_at,
         pass_hat_k=mean_hat,
         pass_hat_k_ci=hat_ci,
+        pass_hat_k_sd=_sample_sd(hat_values),
         stochastic=stochastic,
         per_task=per_task,
         per_slice=per_slice,

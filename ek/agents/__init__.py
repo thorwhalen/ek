@@ -100,6 +100,7 @@ from .reliability import (
     ReliabilityReport,
     bootstrap_ci,
     difference_upper_bound,
+    mean_standard_error,
     newcombe_difference,
     pass_at_k,
     pass_hat_k,
@@ -147,6 +148,7 @@ __all__ = [
     "bootstrap_ci",
     "newcombe_difference",
     "difference_upper_bound",
+    "mean_standard_error",
     # cost (the other half of the objective)
     "ModelPrice",
     "per_million",
