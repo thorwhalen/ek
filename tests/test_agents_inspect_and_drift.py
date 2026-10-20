@@ -90,7 +90,15 @@ def test_episodes_from_inspect_log_scorer_threshold_and_ungraded():
     assert next(episodes_from_inspect_log(log, scorer="other")).success is False
     # A non-scalar score stays UNGRADED (None), never a silent failure.
     assert next(episodes_from_inspect_log(_log([_sample("a", 1, {"acc": 1})]))).success is None
-    assert next(episodes_from_inspect_log(_log([_sample("a", 1, "C")]), scorer="nope")).success is None
+    assert next(episodes_from_inspect_log(_log([_sample("a", 1, "nan")]))).success is None
+    # A scorer NO sample has is a typo, not "ungraded": fail loudly.
+    with pytest.raises(ValueError, match="no sample has a score named 'nope'"):
+        list(episodes_from_inspect_log(_log([_sample("a", 1, "C")]), scorer="nope"))
+
+
+def test_episodes_from_inspect_log_task_prefix():
+    ep = next(episodes_from_inspect_log(_log([_sample("1", 1, "C")]), task_prefix="math"))
+    assert ep.task_id == "math/1"
 
 
 def test_episodes_from_inspect_log_reads_inspect_tool_calls():
@@ -129,6 +137,28 @@ def test_run_inspect_passes_through_and_uses_a_temp_log_dir(fake_inspect_ai, tmp
 
     run_inspect("my_task", log_dir=str(tmp_path))
     assert fake_inspect_ai["log_dir"] == str(tmp_path)
+
+
+def test_run_inspect_keeps_tasks_apart_when_pooling_logs(fake_inspect_ai):
+    """Two tasks reusing sample ids must not merge into extra trials of one task."""
+    def task_log(name):
+        log = _log([_sample("1", 1, "C")])
+        log.eval.task = name
+        return log
+
+    fake_inspect_ai["logs"] = [task_log("math"), task_log("code")]
+    assert [e.task_id for e in run_inspect(["m", "c"])] == ["math/1", "code/1"]
+    fake_inspect_ai["logs"] = [task_log("t"), task_log("t")]
+    assert [e.task_id for e in run_inspect(["t", "t"])] == ["t#0/1", "t#1/1"]
+
+
+def test_run_inspect_warns_on_ungraded_or_empty(fake_inspect_ai):
+    fake_inspect_ai["logs"] = [_log([])]
+    with pytest.warns(UserWarning, match="0 episode"):
+        assert run_inspect("t") == []
+    fake_inspect_ai["logs"] = [_log([_sample("a", 1, {"acc": 1})])]
+    with pytest.warns(UserWarning, match="1 ungraded"):
+        run_inspect("t")
 
 
 def test_run_inspect_refuses_a_failed_eval(fake_inspect_ai):
@@ -194,6 +224,19 @@ def test_ragas_collections_api_is_scored():
     sig = RagasSignal(AnswerRelevancy())
     assert sig({"question": "q", "answer": "a", "contexts": ["c"]}) == 0.7
     assert seen == {"user_input": "q", "response": "a"}
+
+
+def test_ragas_kwargs_only_backend_gets_every_field():
+    class Wrapped:
+        async def ascore(self, **fields):
+            return NS(value=len(fields) / 10)
+
+    assert RagasSignal(Wrapped())({"question": "q", "answer": "a", "contexts": ["c"]}) == 0.3
+
+
+def test_deepeval_calls_tolerate_odd_shapes():
+    calls = DeepEvalMetric._calls(["a", ("b", {"x": 1}), ("search", "query"), Step("c", {})])
+    assert calls == [("a", {}), ("b", {"x": 1}), ("('search', 'query')", {}), ("c", {})]
 
 
 def test_ragas_extra_kwargs_reach_the_constructor():

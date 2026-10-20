@@ -30,6 +30,7 @@ Example:
 from __future__ import annotations
 
 import json
+import math
 from collections.abc import Mapping, Sequence
 from dataclasses import replace
 from typing import Any, Callable, Iterator, Optional
@@ -276,21 +277,22 @@ def inspect_score_value(value: Any) -> Optional[float]:
         >>> inspect_score_value({"accuracy": 1.0}) is None   # a multi-value score: no scalar
         True
     """
-    if isinstance(value, bool):
-        return float(value)
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
+    if isinstance(value, (bool, int, float)):
+        number = float(value)
+    elif isinstance(value, str):
         text = value.strip()
         if text in INSPECT_SCORE_VALUES:
             return INSPECT_SCORE_VALUES[text]
         if text.lower() in INSPECT_SCORE_VALUES:
             return INSPECT_SCORE_VALUES[text.lower()]
         try:
-            return float(text)
+            number = float(text)
         except ValueError:
             return None
-    return None
+    else:
+        return None
+    # NaN/inf is "no grade", not a failure (nan >= threshold would silently read as False).
+    return number if math.isfinite(number) else None
 
 
 def _str_or_empty(value: Any) -> str:
@@ -302,8 +304,14 @@ def episodes_from_inspect_log(
     *,
     scorer: Optional[str] = None,
     success_threshold: float = DEFAULT_SUCCESS_THRESHOLD,
+    task_prefix: str = "",
 ) -> Iterator[Episode]:
     """Yield one graded :class:`Episode` per sample *per epoch* of an Inspect ``EvalLog``.
+
+    ``task_prefix`` (e.g. the Inspect task name) is prepended as ``"<prefix>/<sample id>"`` --
+    needed when pooling several logs, whose sample ids (often ``1, 2, 3``) would otherwise
+    collide and be counted as extra trials of one task. A ``scorer`` that no sample has raises
+    ``ValueError`` (a typo would otherwise leave every episode silently ungraded).
 
     Duck-typed like :func:`from_inspect_sample` (no ``inspect_ai`` import): reads
     ``log.samples`` and ``log.eval``. Each sample's score -- the ``scorer`` named, else the
@@ -328,12 +336,22 @@ def episodes_from_inspect_log(
         model=_str_or_empty(getattr(info, "model", None)),
         suite_version=_str_or_empty(getattr(info, "task_version", None)),
     )
-    for sample in getattr(log, "samples", None) or ():
+    samples = list(getattr(log, "samples", None) or ())
+    if scorer is not None and samples:
+        known = {name for s in samples for name in (getattr(s, "scores", None) or {})}
+        if scorer not in known:
+            raise ValueError(
+                f"episodes_from_inspect_log: no sample has a score named {scorer!r} "
+                f"(scorers in this log: {sorted(known)}) -- every episode would be ungraded."
+            )
+    for sample in samples:
         scores = getattr(sample, "scores", None) or {}
         name = scorer if scorer is not None else next(iter(scores), None)
         score = scores.get(name) if name is not None else None
         value = inspect_score_value(getattr(score, "value", score))
         episode = from_inspect_sample(sample)
+        if task_prefix:
+            episode = replace(episode, task_id=f"{task_prefix}/{episode.task_id}")
         yield replace(
             episode,
             success=None if value is None else value >= success_threshold,

@@ -31,6 +31,7 @@ from __future__ import annotations
 import asyncio
 import inspect
 import os
+import warnings
 from collections.abc import Mapping
 from typing import Any, Callable, Optional
 
@@ -134,14 +135,31 @@ def run_inspect(
                 f"run_inspect: {len(failed)} of {len(logs)} Inspect eval(s) did not succeed: "
                 f"{errors[:3]}"
             )
+        # Several logs (a list of tasks) pool their samples; prefix the task name so sample ids
+        # that repeat across tasks are not counted as extra trials of one task.
+        names = [str(getattr(getattr(log, "eval", None), "task", "") or "") for log in logs]
+        if len(logs) > 1 and len(set(names)) < len(names):
+            names = [f"{name}#{i}" for i, name in enumerate(names)]
         # Read the samples while the log files still exist (Inspect may load them lazily).
-        return [
+        episodes = [
             episode
-            for log in logs
+            for log, name in zip(logs, names)
             for episode in episodes_from_inspect_log(
-                log, scorer=scorer, success_threshold=success_threshold
+                log,
+                scorer=scorer,
+                success_threshold=success_threshold,
+                task_prefix=name if len(logs) > 1 else "",
             )
         ]
+        ungraded = sum(e.success is None for e in episodes)
+        if not episodes or ungraded:
+            warnings.warn(
+                f"run_inspect: {len(episodes)} episode(s), {ungraded} ungraded (no scalar "
+                "score). Check log_samples / fail_on_error / the scorer before trusting a "
+                "success rate.",
+                stacklevel=3,
+            )
+        return episodes
 
     if log_dir is not None:
         return collect(log_dir)
@@ -333,8 +351,9 @@ class RagasSignal:
             real = _is_backend(metric, "ragas")
             sample = self._make_sample(fields) if real else fields
             return _run(metric.single_turn_ascore(sample))
-        accepted = inspect.signature(metric.ascore).parameters
-        kwargs = {k: v for k, v in fields.items() if k in accepted}
+        params = inspect.signature(metric.ascore).parameters
+        takes_any = any(p.kind is p.VAR_KEYWORD for p in params.values())
+        kwargs = {k: v for k, v in fields.items() if takes_any or k in params}
         result = _run(metric.ascore(**kwargs))
         return getattr(result, "value", result)  # a MetricResult carries .value
 
@@ -507,10 +526,16 @@ class DeepEvalMetric:
         for item in items or ():
             if isinstance(item, str):
                 out.append((item, {}))
-            elif isinstance(item, tuple) and len(item) == 2:
+            elif (
+                isinstance(item, tuple)
+                and len(item) == 2
+                and isinstance(item[1], (Mapping, type(None)))
+            ):
                 out.append((str(item[0]), dict(item[1] or {})))
             else:
-                out.append((getattr(item, "tool", str(item)), dict(getattr(item, "args", {}) or {})))
+                args = getattr(item, "args", None)
+                name = getattr(item, "tool", item)
+                out.append((str(name), dict(args) if isinstance(args, Mapping) else {}))
         return out
 
     def _case_args(self, episode: Any, gold: Any) -> dict:
