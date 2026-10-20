@@ -56,6 +56,7 @@ from .bridge import (
 from .cost import (
     ModelPrice,
     UnknownModelPrice,
+    bundled_prices_path,
     cost_of_pass,
     cost_report,
     dollars,
@@ -63,6 +64,11 @@ from .cost import (
     load_prices,
     per_million,
     price_of,
+)
+from .wrappers import (
+    DeepEvalMetric,
+    RagasSignal,
+    UqlmConsistencySignal,
 )
 from .harness import (
     AgentGateResult,
@@ -146,6 +152,11 @@ __all__ = [
     "cost_of_pass",
     "cost_report",
     "load_prices",
+    "bundled_prices_path",
+    # optional WRAP adapters (ek[agents]; lazy imports)
+    "UqlmConsistencySignal",
+    "RagasSignal",
+    "DeepEvalMetric",
     "price_of",
     "UnknownModelPrice",
     # reference-free QE

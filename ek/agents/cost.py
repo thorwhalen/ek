@@ -13,9 +13,10 @@ per token. Two facts force it (``misc/docs/ek_11``):
    any price is not cheap, it is unusable; a per-token metric that reports it as
    "$0.003/call" is actively misleading).
 
-**No hardcoded prices.** Rates go stale monthly, so this module ships *no* built-in price
-table: a :class:`ModelPrice` is either passed directly or resolved from an injected
-catalog (:func:`load_prices` reads LiteLLM's MIT-licensed
+**No hardcoded prices in code.** Rates go stale monthly, so no price is baked into a
+function: a :class:`ModelPrice` is either passed directly or resolved from an injected
+catalog. :func:`load_prices` with no argument reads the bundled *data file* snapshot
+(:func:`bundled_prices_path`, may be stale -- pass your own to refresh); it reads LiteLLM's MIT-licensed
 ``model_prices_and_context_window.json`` -- **the data file, never the SDK**, whose
 ``enterprise/`` subtree is a proprietary carve-out). Missing rates raise an *actionable*
 error rather than silently guessing.
@@ -34,6 +35,7 @@ import json
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Iterable, Optional, Union
 
 from .base import Cost, Episode
@@ -134,25 +136,34 @@ def price_of(
 ) -> ModelPrice:
     """Resolve a model's rates from an injected catalog, or fail *actionably*.
 
-    ``ek`` deliberately ships no built-in price table (rates go stale monthly and would be
-    magic numbers). Supply one with ``prices=``, or load the LiteLLM catalog with
-    :func:`load_prices`.
+    ``ek`` never guesses a rate (they go stale monthly). Supply a catalog with ``prices=``;
+    :func:`load_prices` loads the bundled LiteLLM snapshot or your own file.
     """
     if prices and model in prices:
         return prices[model]
     raise UnknownModelPrice(
-        f"No price for model {model!r}. ek ships no built-in price table (rates go stale). "
+        f"No price for model {model!r}. ek never guesses a rate (they go stale). "
         "Pass prices={'<model>': ModelPrice(...)} (see ek.agents.per_million), or load a "
-        "catalog with ek.agents.load_prices(<path to LiteLLM "
-        "model_prices_and_context_window.json>)."
+        "catalog with ek.agents.load_prices() (bundled snapshot) or "
+        "ek.agents.load_prices(<path to LiteLLM model_prices_and_context_window.json>)."
     )
 
 
-def load_prices(source: Any) -> dict:
+#: The bundled LiteLLM price snapshot (MIT; see ``data/LITELLM_LICENSE.md``).
+BUNDLED_PRICES_FILENAME = "model_prices_and_context_window.json"
+
+
+def bundled_prices_path() -> Path:
+    """Path of the vendored LiteLLM price catalog shipped with ek (a stale-able snapshot)."""
+    return Path(__file__).parent / "data" / BUNDLED_PRICES_FILENAME
+
+
+def load_prices(source: Any = None) -> dict:
     """Parse a LiteLLM-format price catalog into a ``{model: ModelPrice}`` table.
 
     ``source`` is a path to (or an already-parsed mapping of) LiteLLM's MIT-licensed
-    ``model_prices_and_context_window.json``. We read the **data file only** and never
+    ``model_prices_and_context_window.json``; ``None`` (default) uses the bundled snapshot
+    (:func:`bundled_prices_path`). We read the **data file only** and never
     import the ``litellm`` SDK -- its ``enterprise/`` subtree is a proprietary carve-out,
     and the SDK drags a large transitive tree in just to look up a rate.
 
@@ -164,6 +175,8 @@ def load_prices(source: Any) -> dict:
         >>> table["m"].output
         2e-06
     """
+    if source is None:
+        source = bundled_prices_path()
     if isinstance(source, Mapping):
         raw = source
     else:
