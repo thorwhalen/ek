@@ -8,7 +8,6 @@ resolver = "3"
 members = ["core", "py"]
 
 [workspace.package]
-version = "0.0.0"      # not a release version; see each crate
 edition = "2024"
 rust-version = "1.85"  # PyO3 0.30's MSRV; also the floor for users building from the sdist
 publish = false

@@ -32,8 +32,12 @@ import os
 import string
 
 import pytest
-from hypothesis import example, given, note, settings
-from hypothesis import strategies as st
+
+# The wads CI installs no hypothesis; rust-ci (which runs these on the native backend) does.
+pytest.importorskip("hypothesis")
+
+from hypothesis import example, given, note, settings  # noqa: E402
+from hypothesis import strategies as st  # noqa: E402
 
 # isort: split
 from ek import _reference as ref  # the frozen pre-port implementation

@@ -104,7 +104,7 @@ all = [
 # Built from rust/ in this repo (MIT); deliberately not in `all`. See misc/docs/port-log.md.
 rust = ["ek-rs"]
 # --- tooling ---
-dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy", "hypothesis"]
 docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 
 # NOTE: copyleft / non-commercial libraries are NEVER listed above. They are
