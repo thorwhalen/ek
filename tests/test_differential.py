@@ -288,12 +288,14 @@ odd_seq = st.one_of(
 test_align = differential(
     ref._align,
     port_align,
-    args=st.tuples(seqs(spine_tok), seqs(any_tok)),
+    args=st.tuples(seqs(spine_tok), seqs(st.one_of(any_tok, any_tok, st.none()))),
     examples=[
         ((["a"], ["a", "a"]), {}),  # rapidfuzz takes the other insertion
         ((["a", "b", "a"], ["b", "a", "b"]), {}),  # deletion beats insertion
         ((["a", "b"], ["b", "a"]), {}),  # diagonal beats both
         (([None, "a"], ["a"]), {}),
+        (([None], [None, "a"]), {}),  # None == None: interned to one id
+        ((["a", None], [None, None]), {}),
         (([], []), {}),
         ((["\ud800"], ["\ud800", "x"]), {}),  # a lone surrogate token
     ],

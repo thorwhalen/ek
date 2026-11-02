@@ -137,12 +137,35 @@ cases are in `tests/test_port_surface.py`.
 | 2 oracle | done | coverage, tie tests, frozen reference, differential tests, before benchmark |
 | 3 layout | done | `rust/` workspace, `maturin develop -m rust/py/Cargo.toml` builds, `import ek_rs` loads |
 | 4 skeleton | done | `ek_rs.align(spine, hyp, /)` raising `NotImplementedError`; facade routes `backend="rust"` to it. **Failing run, as required**: 239 failed / 29 passed in `test_differential.py` + `test_port_surface.py`. Every native-path case failed; the passes were the Python-backend params, the off-domain inputs (routed to the reference by design), and `test_native_extension_is_loaded` |
+| 5 `align` leaf | done | `rover_align::align` (core) + `ek_rs.align` (binding). Core: 5 unit tests, 660 golden cases from the reference, an exhaustive property test (complete, ordered, minimal scripts on all pairs over `{a,b,c}` up to length 5), 3 doctests (README included). Python on the release build: fast 271 passed, **thorough 224 passed** (5 000 examples per test), whole suite with `EK_ROVER_ALIGN_BACKEND=rust` 720 passed. Hand mutants, each caught by the suite: insertion wins deletion ties (4 failures), the diagonal loses ties (9), an off-by-one in column 0 (5) |
+| review | done | `rust-reviewer` (fresh context, Opus-class): **0 blockers, 0 majors, 4 minors, all fixed**: the stub was untracked; no `None` in `hyp` strategies; `@requires_extra` ran before the domain check (off-domain input with no `ek-rs` raised instead of falling back); `EK_ROVER_ALIGN_BACKEND` was not validated at import. After the fixes: 724 passed on each backend; thorough rerun below |
+| 6 errors | done | `AlignError::TableTooLarge` (from `checked_mul` / `try_reserve_exact`, never an abort or a panic) maps to `MemoryError`, which is what the Python table allocation raises. Not tested from Python: no safe input reaches it. The Rust unit test covers it with zero-sized tokens |
+| 7 interpreter | done | the DP runs in `py.detach`. `gil_used`: PyO3's free-threading default is kept, because the module has no globals and no interior mutability. **Not run on 3.14t**, and abi3 wheels do not load there anyway, so free-threading is not claimed |
+| 8 stubs | done | `rust/py/ek_rs.pyi` becomes `ek_rs/__init__.pyi` plus `py.typed` in the wheel. `mypy.stubtest ek_rs` is clean; the allowlist has one entry, maturin's inner `ek_rs.ek_rs` module |
+| 9 packaging and CI | done locally; GitHub runs pending | the release wheel installed in a clean venv with ek installed from source, tested from outside the repo with `--import-mode=importlib`: 286 passed. The sdist builds and imports in a clean 3.10 venv (the core is inside it). `rover-align` passes `cargo +1.85 test` (MSRV). New workflows: `rust-ci.yml` (fmt, clippy with warnings denied, core tests, the full suite twice on the native backend on 3.10 and 3.14, stubtest, cargo-deny, core publishability: dry-run, MSRV, docs.rs build) and `rust-wheels.yml` (abi3 wheel matrix plus sdist on PRs touching `rust/`; publish on an `ek-rs-v*` tag through PyPI trusted publishing, no secret). Not run here: actionlint (this session was not allowed to download it) and cargo-deny (not installed; it runs in CI) |
 
 ## Benchmarks
 
 Conditions: Intel(R) Xeon(R) Processor @ 2.10GHz (model 207), 4 vCPU, Linux
 x86_64 cloud VM, CPython 3.13.18 (GIL build). The output of `lscpu | head -15` is in
 the PR body.
+
+### After (step 5, release build; same machine and harness as the before run)
+
+| case | size | before: Python (median, min-max) | after: Rust via the facade (median, min-max) | ratio (spread) |
+|---|---|---|---|---|
+| `_align` | 300 tokens | 17.3 ms (15.1 ms-19 ms) | 357 µs (355 µs-381 µs) | **48x** (40-54x) |
+| `_align` | 1000 tokens | 220 ms (209 ms-239 ms) | 4.48 ms (3.66 ms-4.94 ms) | **49x** (42-65x) |
+| `_align` | 5000 tokens | 8.51 s (7.91 s-8.89 s) | 99.4 ms (96.1 ms-119 ms) | **86x** (67-93x) |
+| `rover (3 hypotheses)` | 1000 tokens | 457 ms (436 ms-562 ms) | 12 ms (11.1 ms-12.9 ms) | **38x** (34-50x) |
+
+Ratios come from one process timing both columns, so they are valid on a noisy VM;
+the absolute times are not comparable with another machine. The `rust-reviewer` subagent
+was running `cargo` on the same 4 vCPUs during part of this run, so spreads are wider
+than they would be on an idle machine. The kernel costs about 4 ns per cell, boundary
+and interning included (1 000 tokens: 4.5 ms for 10^6 cells). The 5 000-token ratio is
+higher (86x) because the Python table (200 MB of lists) also stresses the allocator.
+Every function that moved gains, so none goes back to the reference.
 
 ### Before (step 2; both columns time Python, which checks the harness)
 
@@ -160,8 +183,67 @@ because both columns are Python.
 
 ## Publish rule
 
-To do (step 7).
+Applied to `rover-align` (`rust/core`) with `rust-port-assess`'s `publish-rule.md`
+(2026-11-02):
+
+```text
+Publish: yes: flagship (a = 3, b = 2): the user publishes; this session never does
+  (a) 3/3  a pure transformation: two &[T: PartialEq] in, Vec<AlignOp> out, no config,
+           no callbacks, deterministic (rust/core/src/lib.rs `align`)
+  (b) 2/3  incumbents: levenshtein-diff 0.2.4 (MIT, generic edit script, last release
+           2022-11-15, so unmaintained by the rule's two-year test); edit-distance 2.2.2
+           (Apache-2.0, distance only, strings); strsim 0.11 (distances only); similar 3.2
+           (Apache-2.0, LCS/Myers diff: no substitutions, other semantics); bio 4.2 (MIT,
+           pairwise alignment over byte slices, heavy); sesdiff 0.3 (GPL-3.0+). None
+           documents a tie order. ROVER: nothing (`cargo search rover`, crates.io
+           q=rover voting / word transition network: unrelated crates only)
+  name: rover-align, free (crates.io API 404 for rover-align and rover_align)
+  layout: (i) publish rust/core; ek-rs (rust/py) stays publish = false
+```
+
+Vetoes, checked: none applies. It is meaningful without Python: the types are plain
+Rust, and the tie order is a documented contract, not a Python quirk. It has no
+private data. Its only dependency is `thiserror` (on crates.io). The name is free. The
+API is one function plus two types, small enough to commit to at 0.1. The licence is
+MIT, and so is its only dependency.
+
+Done for publishing: version 0.1.0 and `publish = true` on the core only; description,
+keywords, categories, readme, repository and docs.rs metadata; `README.md` (its example
+is a doctest), `CHANGELOG.md` and `LICENSE` in `rust/core/`; `cargo package --list`
+holds only the crate's files; `cargo publish --dry-run -p rover-align --locked` passes
+(see the PR body for the run); MSRV 1.85 tested; rustdoc with `-D warnings` is clean;
+every public item is documented with `# Errors` / `# Examples`; `AlignError` is
+`#[non_exhaustive]`. `AlignOp` is deliberately exhaustive: the three edit operations
+are a closed set, and `#[non_exhaustive]` would force a useless wildcard arm on every
+user.
+
+**Owed for flagship** (before or after the first publish; the user decides):
+criterion benchmarks against `levenshtein-diff` and `edit-distance` with numbers in the
+README; the Rust API Guidelines checklist walked item by item; `examples/`; a second
+owner; `cargo-semver-checks` in CI once a baseline exists; an announcement. The first
+publish needs `CARGO_REGISTRY_TOKEN` from the user's machine, because trusted
+publishing cannot create a crate. After that, crates.io trusted publishing for
+`rust-wheels.yml` (or a `crates` job) is an option.
 
 ## Landing owed
 
-To do (wrap-up).
+This session (cloud, unattended) pushed the branch and opened the PR. It did not merge
+it, and it did not publish anything. The package's own session must:
+
+1. Re-run here, on the user's machine: `uv pip install -e ".[dev,metrics]"`,
+   `maturin develop --release -m rust/py/Cargo.toml`,
+   `EK_DIFF_BACKEND=rust HYPOTHESIS_PROFILE=thorough pytest tests/test_differential.py`,
+   `EK_ROVER_ALIGN_BACKEND=rust pytest`, `python benchmarks/bench_port.py`
+   (macOS arm64 numbers are not comparable with the table above; ratios are).
+2. Check that `rust-ci` and `rust-wheels` ran green on the PR. The macOS and Windows
+   wheels have only ever been built there; this VM is Linux x86_64 only.
+3. Decide the packaging (decision 4): keep `ek-rs` as a separate optional wheel (this
+   PR), or fold it into ek as a mixed maturin package. The second makes every ek
+   install compiled and conflicts with wads publishing (i2mint/wads#166).
+4. Before the first `ek-rs` release: register `rust-wheels.yml` (environment `pypi`)
+   as a trusted publisher of `ek-rs` on PyPI, then tag `ek-rs-v0.0.1`. Until `ek-rs`
+   is on PyPI, `pip install ek[rust]` fails (the extra is not in `all`, so the
+   licence gate is unaffected).
+5. Decide on publishing `rover-align` (verdict above). If yes, run
+   `cargo publish -p rover-align --locked` from a clean checkout with the user's token.
+6. Squash-merge. ek's version is untouched; the wads bump happens on merge as usual.

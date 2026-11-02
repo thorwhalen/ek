@@ -70,6 +70,10 @@ _ALIGN_BACKENDS = ("python", "rust")
 #: The :func:`_align` backend :func:`rover` uses. ``"python"`` unless the environment
 #: variable ``EK_ROVER_ALIGN_BACKEND`` says otherwise (read once, at import).
 _ALIGN_BACKEND = os.environ.get("EK_ROVER_ALIGN_BACKEND", "python")
+if _ALIGN_BACKEND not in _ALIGN_BACKENDS:  # fail fast: a typo must not wait for rover()
+    raise ValueError(
+        f"EK_ROVER_ALIGN_BACKEND={_ALIGN_BACKEND!r}; expected one of {_ALIGN_BACKENDS}"
+    )
 
 #: Default per-hypothesis token cap for the O(N*l*L*L') aligner (DoS guard).
 DEFAULT_MAX_TOKENS = 5000
@@ -175,19 +179,30 @@ def _in_native_domain(seq: Any) -> bool:
     )
 
 
-@requires_extra("rust", packages=["ek_rs"])
 def _align_native(
     spine: Sequence[Optional[str]], hyp: Sequence[str]
 ) -> List[Tuple[str, int, int]]:
-    """:func:`_align` on the native kernel: tokens interned to ints, the DP in Rust."""
+    """:func:`_align` on the native kernel: tokens interned to ints, the DP in Rust.
+
+    Inputs outside the native domain go to the reference before ``ek_rs`` is even
+    looked for, so they never need the extension.
+    """
     if not (_in_native_domain(spine) and _in_native_domain(hyp)):
         return _reference._align(spine, hyp)
-    import ek_rs
-
     ids: dict = {}
     # setdefault evaluates len(ids) first, so a new token gets the next free id.
     spine_ids = [ids.setdefault(tok, len(ids)) for tok in spine]
     hyp_ids = [ids.setdefault(tok, len(ids)) for tok in hyp]
+    return _native_align_ids(spine_ids, hyp_ids)
+
+
+@requires_extra("rust", packages=["ek_rs"])
+def _native_align_ids(
+    spine_ids: List[int], hyp_ids: List[int]
+) -> List[Tuple[str, int, int]]:
+    """``ek_rs.align`` on interned ids; :class:`MissingExtraError` without ``ek-rs``."""
+    import ek_rs
+
     return ek_rs.align(spine_ids, hyp_ids)
 
 

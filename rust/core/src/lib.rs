@@ -32,6 +32,11 @@
 //! # Ok::<(), rover_align::AlignError>(())
 //! ```
 
+/// The README's example, compiled and run by `cargo test` so it cannot rot.
+#[doc = include_str!("../README.md")]
+#[cfg(doctest)]
+pub struct ReadmeDoctests;
+
 /// One step of an alignment script, in left-to-right order.
 ///
 /// The set is closed by definition (the three edit operations), so the enum is

@@ -1,0 +1,3 @@
+# maturin wraps the pure-Rust module as ek_rs/__init__.py + ek_rs/ek_rs.<abi>.so; the stub
+# (ek_rs.pyi -> ek_rs/__init__.pyi) describes the package, which re-exports the inner module.
+ek_rs.ek_rs

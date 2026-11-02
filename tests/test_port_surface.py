@@ -188,3 +188,27 @@ def test_rover_default_backend_is_python():
         or "EK_ROVER_ALIGN_BACKEND" in __import__("os").environ
     )
     assert rover_mod._align.__kwdefaults__ == {"backend": "python"}
+
+
+def test_align_rust_backend_off_domain_needs_no_extension(monkeypatch):
+    monkeypatch.setitem(__import__("sys").modules, "ek_rs", None)  # import fails
+    assert rover_mod._align([1], [1.0], backend="rust") == [("match", 0, 0)]
+
+
+@pytest.mark.parametrize("backend", BACKENDS)
+def test_align_none_tokens_on_both_sides(backend):
+    assert _aligner(backend)([None], [None, "a"]) == [("match", 0, 0), ("ins", -1, 1)]
+
+
+def test_a_bad_backend_environment_variable_fails_at_import():
+    import subprocess
+    import sys
+
+    proc = subprocess.run(
+        [sys.executable, "-c", "import ek"],
+        env={**__import__("os").environ, "EK_ROVER_ALIGN_BACKEND": "Rust"},
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode != 0
+    assert "EK_ROVER_ALIGN_BACKEND='Rust'" in proc.stderr

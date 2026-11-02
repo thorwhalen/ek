@@ -1,18 +1,26 @@
 [package]
 name = "rover-align"
-description = "The alignment stage of ROVER: a token-level edit-distance alignment with a fixed, documented tie order"
-version.workspace = true
+description = "ROVER's alignment step: a token-level Levenshtein edit script, generic over the token type, with a fixed and documented tie order"
+version = "0.1.0"                      # the crate's own semver, independent of ek and ek-rs
+publish = true                         # overrides the workspace's publish = false
 edition.workspace = true
 rust-version.workspace = true
-publish.workspace = true
 license.workspace = true
 repository.workspace = true
+readme = "README.md"
+keywords = ["rover", "alignment", "levenshtein", "edit-distance", "speech"]
+categories = ["algorithms", "text-processing"]
+include = ["src/**/*.rs", "tests/**/*.rs", "tests/golden/align.json", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 thiserror = { workspace = true }
 
+[dev-dependencies]
+serde_json = "1.0.154"
+
 [lints]
 workspace = true
-
-[dev-dependencies]
-serde_json = "1"

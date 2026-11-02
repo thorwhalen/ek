@@ -1,0 +1,140 @@
+# Pull-request CI for the optional Rust half of ek (rust/: the rover-align core crate and
+# the ek-rs binding). Linux only. The wads CI (ci.yml) still validates the Python package;
+# this adds the Rust checks and runs the test suite with the native backend.
+# From the rust-project-setup template, adapted to ek's layout (misc/docs/port-log.md).
+name: rust-ci
+on:
+  push:
+    branches: [main]
+    paths:
+      - "rust/**"
+      - "ek/_reference.py"
+      - "ek/qe/rover.py"
+      - "tests/test_differential.py"
+      - "tests/test_port_surface.py"
+      - "tests/test_rover.py"
+      - "benchmarks/**"
+      - ".github/workflows/rust-*.yml"
+  pull_request:
+    paths:
+      - "rust/**"
+      - "ek/_reference.py"
+      - "ek/qe/rover.py"
+      - "tests/test_differential.py"
+      - "tests/test_port_surface.py"
+      - "tests/test_rover.py"
+      - "benchmarks/**"
+      - ".github/workflows/rust-*.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rust-ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_WARNINGS: deny   # Rust >= 1.97: warnings fail the build without busting the cache
+  RUST_BACKTRACE: "1"
+
+defaults:
+  run:
+    working-directory: rust
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable   # rust/rust-toolchain.toml pins the version
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+          save-if: ${{ github.ref_name == github.event.repository.default_branch }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --locked
+
+  test:
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.14"]   # the abi3 floor and the newest CPython
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+          save-if: ${{ github.ref_name == github.event.repository.default_branch }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v7
+      - name: Rust tests (core crate, no libpython; golden cases from the Python reference)
+        run: cargo test -p rover-align --locked
+      - name: Install ek (editable) and build ek-rs into the same environment
+        working-directory: .
+        run: |
+          uv venv .venv --python "${{ matrix.python }}"
+          uv pip install --python .venv -e ".[metrics]" pytest hypothesis mypy maturin
+          VIRTUAL_ENV="$PWD/.venv" .venv/bin/maturin develop --release --locked -m rust/py/Cargo.toml --uv
+      - name: Tests, differential tests required to run on the native backend
+        working-directory: .
+        env:
+          EK_DIFF_BACKEND: rust
+        run: .venv/bin/python -m pytest -q -p no:cacheprovider
+      - name: Tests again with every rover() call on the native backend
+        working-directory: .
+        env:
+          EK_DIFF_BACKEND: rust
+          EK_ROVER_ALIGN_BACKEND: rust
+        run: .venv/bin/python -m pytest -q -p no:cacheprovider
+      - name: The hand-written stub matches the extension
+        working-directory: .
+        run: .venv/bin/python -m mypy.stubtest ek_rs --allowlist rust/py/stubtest-allowlist.txt
+
+  deny:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        checks: [advisories, "bans licenses sources"]
+    continue-on-error: ${{ matrix.checks == 'advisories' }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          manifest-path: rust/Cargo.toml
+          command: check ${{ matrix.checks }}
+          arguments: --all-features
+
+  core-publishable:
+    # rover-align (rust/core) is meant for crates.io (publish rule: misc/docs/port-log.md).
+    # cargo-semver-checks joins this job after the first publish, when a baseline exists.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+          save-if: ${{ github.ref_name == github.event.repository.default_branch }}
+      - name: Package and verify the core as crates.io would
+        run: cargo publish -p rover-align --dry-run --locked
+      - name: MSRV builds and tests
+        run: |
+          msrv=$(cargo metadata --no-deps --format-version 1 --locked \
+                   | jq -r '.packages[] | select(.name == "rover-align") | .rust_version')
+          rustup toolchain install "$msrv" --profile minimal
+          cargo "+$msrv" test -p rover-align --locked
+      - name: docs.rs-equivalent doc build
+        run: |
+          rustup toolchain install nightly --profile minimal
+          RUSTDOCFLAGS="--cfg docsrs -D warnings" cargo +nightly doc -p rover-align --no-deps --all-features
