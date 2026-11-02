@@ -44,6 +44,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Iterable, List, Optional, Tuple
 
 from .. import _reference
+from ..registry import requires_extra
 
 # A slot entry is (token, confidence); a NULL (engine produced nothing here) is
 # represented by a ``None`` token.
@@ -64,7 +65,7 @@ DEFAULT_CONF_WEIGHT = 0.5
 DEFAULT_NULL_CONF = 0.7
 
 #: The implementations of :func:`_align` (see its ``backend`` argument).
-_ALIGN_BACKENDS = ("python",)
+_ALIGN_BACKENDS = ("python", "rust")
 
 #: The :func:`_align` backend :func:`rover` uses. ``"python"`` unless the environment
 #: variable ``EK_ROVER_ALIGN_BACKEND`` says otherwise (read once, at import).
@@ -154,9 +155,40 @@ def _align(
     """
     if backend == "python":
         return _reference._align(spine, hyp)
+    if backend == "rust":
+        return _align_native(spine, hyp)
     raise ValueError(
         f"unknown _align backend {backend!r}; expected one of {_ALIGN_BACKENDS}"
     )
+
+
+def _in_native_domain(seq: Any) -> bool:
+    """Whether the native kernel reproduces ``==`` on ``seq``'s tokens exactly.
+
+    True for a ``list`` or ``tuple`` of exact ``str`` / ``None`` tokens, whose ``==``
+    is the dict equality used to intern them. Everything else -- other sequence
+    types, ``str`` subclasses (which may override ``==``), and non-``str`` tokens
+    (``nan != nan``, ``1 == 1.0``) -- is left to the reference.
+    """
+    return type(seq) in (list, tuple) and all(
+        tok is None or type(tok) is str for tok in seq
+    )
+
+
+@requires_extra("rust", packages=["ek_rs"])
+def _align_native(
+    spine: Sequence[Optional[str]], hyp: Sequence[str]
+) -> List[Tuple[str, int, int]]:
+    """:func:`_align` on the native kernel: tokens interned to ints, the DP in Rust."""
+    if not (_in_native_domain(spine) and _in_native_domain(hyp)):
+        return _reference._align(spine, hyp)
+    import ek_rs
+
+    ids: dict = {}
+    # setdefault evaluates len(ids) first, so a new token gets the next free id.
+    spine_ids = [ids.setdefault(tok, len(ids)) for tok in spine]
+    hyp_ids = [ids.setdefault(tok, len(ids)) for tok in hyp]
+    return ek_rs.align(spine_ids, hyp_ids)
 
 
 @dataclass

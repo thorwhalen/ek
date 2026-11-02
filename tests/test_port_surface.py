@@ -167,3 +167,24 @@ def test_rover_network_under_ties_is_pinned(hyps, slot_entries, tokens):
     c = rover(hyps)
     assert [s.entries for s in c.slots] == slot_entries
     assert c.tokens == tokens
+
+
+def test_align_rejects_an_unknown_backend():
+    with pytest.raises(ValueError, match="unknown _align backend 'fortran'"):
+        rover_mod._align(["a"], ["a"], backend="fortran")
+
+
+def test_align_rust_backend_without_ek_rs_names_the_extra(monkeypatch):
+    from ek.registry import MissingExtraError
+
+    monkeypatch.setitem(__import__("sys").modules, "ek_rs", None)  # import fails
+    with pytest.raises(MissingExtraError, match=r"pip install ek\[rust\]"):
+        rover_mod._align(["a"], ["a"], backend="rust")
+
+
+def test_rover_default_backend_is_python():
+    assert (
+        rover_mod._ALIGN_BACKEND == "python"
+        or "EK_ROVER_ALIGN_BACKEND" in __import__("os").environ
+    )
+    assert rover_mod._align.__kwdefaults__ == {"backend": "python"}

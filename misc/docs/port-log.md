@@ -135,6 +135,8 @@ cases are in `tests/test_port_surface.py`.
 |---|---|---|
 | 1 assessment | done | above |
 | 2 oracle | done | coverage, tie tests, frozen reference, differential tests, before benchmark |
+| 3 layout | done | `rust/` workspace, `maturin develop -m rust/py/Cargo.toml` builds, `import ek_rs` loads |
+| 4 skeleton | done | `ek_rs.align(spine, hyp, /)` raising `NotImplementedError`; facade routes `backend="rust"` to it. **Failing run, as required**: 239 failed / 29 passed in `test_differential.py` + `test_port_surface.py`. Every native-path case failed; the passes were the Python-backend params, the off-domain inputs (routed to the reference by design), and `test_native_extension_is_loaded` |
 
 ## Benchmarks
 
