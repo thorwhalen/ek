@@ -38,9 +38,12 @@ Example:
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any, Callable, Iterable, List, Optional, Tuple
+
+from .. import _reference
 
 # A slot entry is (token, confidence); a NULL (engine produced nothing here) is
 # represented by a ``None`` token.
@@ -59,6 +62,13 @@ DEFAULT_CONF_WEIGHT = 0.5
 #: Default confidence credited to a NULL vote (an engine that emitted no token at a
 #: slot) -- the lever for how readily a deletion wins.
 DEFAULT_NULL_CONF = 0.7
+
+#: The implementations of :func:`_align` (see its ``backend`` argument).
+_ALIGN_BACKENDS = ("python",)
+
+#: The :func:`_align` backend :func:`rover` uses. ``"python"`` unless the environment
+#: variable ``EK_ROVER_ALIGN_BACKEND`` says otherwise (read once, at import).
+_ALIGN_BACKEND = os.environ.get("EK_ROVER_ALIGN_BACKEND", "python")
 
 #: Default per-hypothesis token cap for the O(N*l*L*L') aligner (DoS guard).
 DEFAULT_MAX_TOKENS = 5000
@@ -124,7 +134,10 @@ def _word_level_block_units(hyp: Any, *, default_conf: float) -> Optional[List[_
 
 
 def _align(
-    spine: Sequence[Optional[str]], hyp: Sequence[str]
+    spine: Sequence[Optional[str]],
+    hyp: Sequence[str],
+    *,
+    backend: str = "python",
 ) -> List[Tuple[str, int, int]]:
     """Needleman-Wunsch alignment of a network ``spine`` to a hypothesis token list.
 
@@ -133,37 +146,17 @@ def _align(
     ``"del"`` (a spine slot the hypothesis skips -> NULL), or ``"ins"`` (a
     hypothesis token with no spine slot -> a new slot). Pure-Python so the engine
     runs in a bare environment and over arbitrary (non-string) tokens.
-    """
-    s, t = len(spine), len(hyp)
-    # dp[i][j] = min edit cost aligning spine[:i] with hyp[:j].
-    dp = [[0] * (t + 1) for _ in range(s + 1)]
-    for i in range(1, s + 1):
-        dp[i][0] = i
-    for j in range(1, t + 1):
-        dp[0][j] = j
-    for i in range(1, s + 1):
-        for j in range(1, t + 1):
-            sub = dp[i - 1][j - 1] + (0 if spine[i - 1] == hyp[j - 1] else 1)
-            dp[i][j] = min(sub, dp[i - 1][j] + 1, dp[i][j - 1] + 1)
 
-    ops: List[Tuple[str, int, int]] = []
-    i, j = s, t
-    while i > 0 or j > 0:
-        if (
-            i > 0
-            and j > 0
-            and dp[i][j] == dp[i - 1][j - 1] + (0 if spine[i - 1] == hyp[j - 1] else 1)
-        ):
-            ops.append(("match", i - 1, j - 1))
-            i, j = i - 1, j - 1
-        elif i > 0 and dp[i][j] == dp[i - 1][j] + 1:
-            ops.append(("del", i - 1, -1))  # spine slot, hypothesis has no token
-            i -= 1
-        else:
-            ops.append(("ins", -1, j - 1))  # hypothesis token, no spine slot
-            j -= 1
-    ops.reverse()
-    return ops
+    ``backend`` selects the implementation: ``"python"`` (the default, the frozen
+    pure-Python DP in :mod:`ek._reference`) or ``"rust"`` (the optional native kernel
+    from the ``ek-rs`` package; inputs outside its domain fall back to Python). Every
+    backend returns identical operations on every input.
+    """
+    if backend == "python":
+        return _reference._align(spine, hyp)
+    raise ValueError(
+        f"unknown _align backend {backend!r}; expected one of {_ALIGN_BACKENDS}"
+    )
 
 
 @dataclass
@@ -301,7 +294,7 @@ def rover(
     for i in range(1, n):
         units = hyps[i]
         spine = [_slot_majority(slot) for slot in slots]
-        ops = _align(spine, [tok for tok, _ in units])
+        ops = _align(spine, [tok for tok, _ in units], backend=_ALIGN_BACKEND)
         merged: List[List[_Entry]] = []
         for op, s_idx, h_idx in ops:
             if op == "match":
