@@ -121,3 +121,7 @@ venv.bak/
 
 # Background-agent isolation worktrees
 .claude/worktrees/
+
+# Compiled extensions from the optional Rust half (rust/; misc/docs/port-log.md)
+*.pyd
+*.dylib

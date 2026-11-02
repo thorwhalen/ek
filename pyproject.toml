@@ -99,6 +99,10 @@ all = [
     "ocracy", "uqlm",
     "inspect-ai", "agentevals", "deepeval", "ragas",
 ]
+# Optional native (Rust) kernels: today ROVER's alignment, selected with
+# _align(backend="rust") / EK_ROVER_ALIGN_BACKEND=rust; the default stays pure Python.
+# Built from rust/ in this repo (MIT); deliberately not in `all`. See misc/docs/port-log.md.
+rust = ["ek-rs"]
 # --- tooling ---
 dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
 docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
@@ -127,6 +131,11 @@ docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 # The CI license gate (.github/workflows/license-gate.yml) fails the build if any
 # of these resolve into the core..agents dependency closure, and now also flags any package
 # declaring NO license (the scanner-invisible case) for manual audit.
+
+# ek's own wheel and sdist stay pure Python: the optional Rust half (rust/) ships as the
+# separate ek-rs distribution, built by maturin from rust/py/pyproject.toml.
+[tool.hatch.build.targets.sdist]
+exclude = ["/rust"]
 
 [tool.ruff]
 line-length = 88
