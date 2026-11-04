@@ -174,12 +174,15 @@ def test_align_rejects_an_unknown_backend():
         rover_mod._align(["a"], ["a"], backend="fortran")
 
 
-def test_align_rust_backend_without_ek_rs_names_the_extra(monkeypatch):
+def test_align_rust_backend_without_ek_rs_names_the_package(monkeypatch):
     from ek.registry import MissingExtraError
 
     monkeypatch.setitem(__import__("sys").modules, "ek_rs", None)  # import fails
-    with pytest.raises(MissingExtraError, match=r"pip install ek\[rust\]"):
+    with pytest.raises(MissingExtraError, match=r"ek-rs") as info:
         rover_mod._align(["a"], ["a"], backend="rust")
+    # there is no such extra: ek-rs is not on PyPI
+    assert "ek[rust]" not in str(info.value)
+    assert isinstance(info.value.__cause__, ImportError)  # the real cause is kept
 
 
 def test_rover_default_backend_is_python():

@@ -3,7 +3,7 @@
 The state of the port, kept where the next session will find it. Method: the
 `pyo3-port` skill (oracle first, one function per step, each gated on a
 differential test), with `rust-port-assess` for the assessment and the publish
-rule. Status: **landing owed**. A cloud session did the port and opened the PR. The
+rule. Status: **landed** (see [Landing record](#landing-record)). A cloud session did the port and opened the PR. The
 package's own session must land it (see [Landing](#landing-owed)). (It lives in
 `misc/docs/` rather than `docs/` because `docs/` is gitignored build output here.)
 
@@ -120,8 +120,9 @@ cases are in `tests/test_port_surface.py`.
    compiled wheel (and need Rust for the sdist) for a function no pipeline calls hot.
    It would also force wads publishing off (i2mint/wads#166). So `ek`'s build,
    version and release are untouched. `rust/py` builds the extension module `ek_rs`
-   with its own `pyproject.toml` (maturin). `ek` declares `ek[rust] = ["ek-rs"]` (not
-   in `all`). The landing session may still choose the mixed package.
+   with its own `pyproject.toml` (maturin). `ek` declares **no** `rust` extra for now (landing session: `uv lock` / `uv sync`
+   resolve every extra and fail while `ek-rs` is not on PyPI; add `rust = ["ek-rs"]`
+   after the first `ek-rs` release). The landing session may still choose the mixed package.
 5. **The core keeps one byte per cell, not the cost matrix.** It stores each cell's
    backtrace direction, chosen with the reference's own preference (diagonal if it
    is optimal, else deletion if optimal, else insertion), plus two rows of costs. The
@@ -242,8 +243,58 @@ it, and it did not publish anything. The package's own session must:
    install compiled and conflicts with wads publishing (i2mint/wads#166).
 4. Before the first `ek-rs` release: register `rust-wheels.yml` (environment `pypi`)
    as a trusted publisher of `ek-rs` on PyPI, then tag `ek-rs-v0.0.1`. Until `ek-rs`
-   is on PyPI, `pip install ek[rust]` fails (the extra is not in `all`, so the
-   licence gate is unaffected).
+   is on PyPI, `pip install ek-rs` fails; build it from `rust/`. After the first release, add
+   `rust = ["ek-rs"]` to ek's extras and point the missing-extension error at `pip install ek[rust]`.
 5. Decide on publishing `rover-align` (verdict above). If yes, run
    `cargo publish -p rover-align --locked` from a clean checkout with the user's token.
 6. Squash-merge. ek's version is untouched; the wads bump happens on merge as usual.
+
+## Landing record
+
+Second session (cloud, unattended), 2026-11-04, Linux x86_64 4 vCPU, CPython 3.13.18,
+rustc 1.99.1 (the pinned toolchain). Everything below was re-run, not copied.
+
+| check | result | PR body said |
+|---|---|---|
+| `maturin develop --release --uv` (rust/py) | built, `ek_rs` imports | n/a |
+| full suite, default backend | 724 passed / 0 failed / 5 skipped | 724 / 0 / 5 |
+| full suite, `EK_ROVER_ALIGN_BACKEND=rust` | 724 passed / 0 failed / 5 skipped | same |
+| differential, `HYPOTHESIS_PROFILE=thorough EK_DIFF_BACKEND=rust` | 224 passed | 224 |
+| `cargo test --locked` | core: 5 unit, 1 golden, 1 property, 3 doctests, all passed | same |
+| `cargo clippy --all-targets` with `CARGO_BUILD_WARNINGS=deny`, `cargo fmt --check` | clean | n/a |
+| benchmark (ratios) | 42x (300), 50x (1000), 87x (5000), 44x (rover, 3 hyp, 1000) | 48x / 49x / 86x / 38x |
+
+Independent review (fresh Opus-class subagent over `git diff origin/main...HEAD`, B1-B6,
+P1-P5, O1): **0 blockers, 0 majors, 6 minors**. It also fed the built extension hostile
+inputs (`-1`, `2**64`, `['a']`, `True`: `OverflowError` / `TypeError`, no panic) and ran two
+mutants of `ek_rs.align` against the differential suite (a rapidfuzz-style tie order failed
+154 tests, a repeated-token bug failed 8). Minors, not fixed here: (1) a direct
+`_align(..., backend="rust")` call has no token cap, so a huge input raises `MemoryError`
+with a message, or hits the OOM killer under overcommit (`rover()` caps at 5 000 tokens);
+(2) `#[pymodule]` keeps PyO3's default `gil_used` without a comment at the site (the reason
+is in step 7); (3) `_EXTRA_PROBES` has no entry for the missing-extension case; (4) a bad
+`EK_ROVER_ALIGN_BACKEND` makes `import ek` itself fail (deliberate fail-fast); (5) `_align`'s
+docstring still says "Pure-Python"; (6) `rust-wheels.yml` `publish` also runs on a manual
+dispatch with `publish` ticked from any ref (intended: a manual dispatch is an explicit act).
+
+**Fixed in the landing session (a blocker under the landing brief):** the `ek[rust]` extra named
+`ek-rs`, which is not on PyPI (404). `uv lock` failed with "ek[rust]'s requirements are
+unsatisfiable" (ek has no committed `uv.lock`, and the wads CI does not lock, but any
+`uv lock` / `uv sync` / `uv run` in a checkout would fail). The extra is dropped; the
+missing-extension error now names `ek-rs` and how to build it, and keeps the original
+`ImportError` as `__cause__`. The test was changed first and failed against the old code.
+`uv lock` then resolves (430 packages).
+
+Release safety: the push-to-main path of `rust-ci.yml` only runs `cargo publish --dry-run`;
+`rust-wheels.yml` publishes only on an `ek-rs-v*` tag or a manual dispatch with `publish`
+ticked; nothing publishes `rover-align` (no `cargo publish` without `--dry-run` anywhere).
+`uv build` gives `ek-0.1.15` as a pure-Python wheel with no `rust/` or `ek_rs` files, and an
+sdist with no `rust/` tree. In a fresh venv holding only that wheel, `import ek`, `rover()`
+and `_align` on the default backend work, and `backend="rust"` / `EK_ROVER_ALIGN_BACKEND=rust`
+raise `MissingExtraError` with the message above. A plain `pip install` of the wheel works.
+
+**Deferred to the user:** re-run the benchmark on the Mac (ratios here stand in); register
+`rust-wheels.yml` (environment `pypi`) as a PyPI trusted publisher of `ek-rs` and tag
+`ek-rs-v0.0.1`; then add `rust = ["ek-rs"]` to ek's extras; set `CARGO_REGISTRY_TOKEN` and run
+`cargo publish -p rover-align --locked` if rover-align should go to crates.io; the flagship items
+for `rover-align` (criterion benchmarks, API-guidelines checklist, examples, a second owner).

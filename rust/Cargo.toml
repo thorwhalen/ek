@@ -1,7 +1,7 @@
 # Cargo workspace for the optional Rust half of ek (see misc/docs/port-log.md).
 # rust/core: rover-align, pure Rust (no PyO3), tested with `cargo test -p rover-align`.
 # rust/py:   ek-rs, the binding cdylib built by maturin into the `ek_rs` extension module,
-#            shipped as the separate, optional `ek-rs` wheel (`pip install ek[rust]`).
+#            shipped as the separate, optional `ek-rs` wheel (`pip install ek-rs` once published).
 # ek itself stays a pure-Python (hatchling) package: nothing here is in its wheel.
 [workspace]
 resolver = "3"

@@ -44,7 +44,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Iterable, List, Optional, Tuple
 
 from .. import _reference
-from ..registry import requires_extra
+from ..registry import MissingExtraError
 
 # A slot entry is (token, confidence); a NULL (engine produced nothing here) is
 # represented by a ``None`` token.
@@ -196,13 +196,20 @@ def _align_native(
     return _native_align_ids(spine_ids, hyp_ids)
 
 
-@requires_extra("rust", packages=["ek_rs"])
 def _native_align_ids(
     spine_ids: List[int], hyp_ids: List[int]
 ) -> List[Tuple[str, int, int]]:
     """``ek_rs.align`` on interned ids; :class:`MissingExtraError` without ``ek-rs``."""
-    import ek_rs
-
+    try:
+        import ek_rs
+    except ImportError as e:  # not an ek[...] extra: ek-rs is not on PyPI yet
+        raise MissingExtraError(
+            'the native backend (backend="rust" / EK_ROVER_ALIGN_BACKEND=rust) needs the '
+            "optional ek-rs package, which is not installed or cannot be imported "
+            f"({e}). Build it from rust/ in the ek repository "
+            "(`maturin develop --release -m rust/py/Cargo.toml`); `pip install ek-rs` "
+            "will work once it is published. The default backend is pure Python."
+        ) from e
     return ek_rs.align(spine_ids, hyp_ids)
 
 

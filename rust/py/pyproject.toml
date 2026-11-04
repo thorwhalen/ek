@@ -5,7 +5,7 @@ build-backend = "maturin"
 [project]
 name = "ek-rs"
 version = "0.0.1"                     # SSOT for the ek-rs release version (keep Cargo.toml equal)
-description = "Optional native (Rust) kernels for ek: install with `pip install ek[rust]`"
+description = "Optional native (Rust) kernels for ek: build from the ek repository (not yet on PyPI)"
 readme = "README.md"
 requires-python = ">=3.10"            # matches the abi3-py310 floor in Cargo.toml
 license = "MIT"
