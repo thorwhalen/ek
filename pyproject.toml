@@ -99,8 +99,13 @@ all = [
     "ocracy", "uqlm",
     "inspect-ai", "agentevals", "deepeval", "ragas",
 ]
+# NOTE: there is deliberately no `rust` extra. The optional native kernels ship as the separate
+# `ek-rs` distribution (built from rust/; selected with _align(backend="rust") or
+# EK_ROVER_ALIGN_BACKEND=rust; the default stays pure Python). An extra naming `ek-rs` would make
+# `uv lock` / `uv sync` unsatisfiable while ek-rs is not on PyPI. Add `rust = ["ek-rs"]` once
+# it is published. See misc/docs/port-log.md.
 # --- tooling ---
-dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy", "hypothesis"]
 docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 
 # NOTE: copyleft / non-commercial libraries are NEVER listed above. They are
@@ -127,6 +132,11 @@ docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 # The CI license gate (.github/workflows/license-gate.yml) fails the build if any
 # of these resolve into the core..agents dependency closure, and now also flags any package
 # declaring NO license (the scanner-invisible case) for manual audit.
+
+# ek's own wheel and sdist stay pure Python: the optional Rust half (rust/) ships as the
+# separate ek-rs distribution, built by maturin from rust/py/pyproject.toml.
+[tool.hatch.build.targets.sdist]
+exclude = ["/rust"]
 
 [tool.ruff]
 line-length = 88

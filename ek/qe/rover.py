@@ -38,9 +38,13 @@ Example:
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any, Callable, Iterable, List, Optional, Tuple
+
+from .. import _reference
+from ..registry import MissingExtraError
 
 # A slot entry is (token, confidence); a NULL (engine produced nothing here) is
 # represented by a ``None`` token.
@@ -59,6 +63,17 @@ DEFAULT_CONF_WEIGHT = 0.5
 #: Default confidence credited to a NULL vote (an engine that emitted no token at a
 #: slot) -- the lever for how readily a deletion wins.
 DEFAULT_NULL_CONF = 0.7
+
+#: The implementations of :func:`_align` (see its ``backend`` argument).
+_ALIGN_BACKENDS = ("python", "rust")
+
+#: The :func:`_align` backend :func:`rover` uses. ``"python"`` unless the environment
+#: variable ``EK_ROVER_ALIGN_BACKEND`` says otherwise (read once, at import).
+_ALIGN_BACKEND = os.environ.get("EK_ROVER_ALIGN_BACKEND", "python")
+if _ALIGN_BACKEND not in _ALIGN_BACKENDS:  # fail fast: a typo must not wait for rover()
+    raise ValueError(
+        f"EK_ROVER_ALIGN_BACKEND={_ALIGN_BACKEND!r}; expected one of {_ALIGN_BACKENDS}"
+    )
 
 #: Default per-hypothesis token cap for the O(N*l*L*L') aligner (DoS guard).
 DEFAULT_MAX_TOKENS = 5000
@@ -124,7 +139,10 @@ def _word_level_block_units(hyp: Any, *, default_conf: float) -> Optional[List[_
 
 
 def _align(
-    spine: Sequence[Optional[str]], hyp: Sequence[str]
+    spine: Sequence[Optional[str]],
+    hyp: Sequence[str],
+    *,
+    backend: str = "python",
 ) -> List[Tuple[str, int, int]]:
     """Needleman-Wunsch alignment of a network ``spine`` to a hypothesis token list.
 
@@ -133,37 +151,66 @@ def _align(
     ``"del"`` (a spine slot the hypothesis skips -> NULL), or ``"ins"`` (a
     hypothesis token with no spine slot -> a new slot). Pure-Python so the engine
     runs in a bare environment and over arbitrary (non-string) tokens.
-    """
-    s, t = len(spine), len(hyp)
-    # dp[i][j] = min edit cost aligning spine[:i] with hyp[:j].
-    dp = [[0] * (t + 1) for _ in range(s + 1)]
-    for i in range(1, s + 1):
-        dp[i][0] = i
-    for j in range(1, t + 1):
-        dp[0][j] = j
-    for i in range(1, s + 1):
-        for j in range(1, t + 1):
-            sub = dp[i - 1][j - 1] + (0 if spine[i - 1] == hyp[j - 1] else 1)
-            dp[i][j] = min(sub, dp[i - 1][j] + 1, dp[i][j - 1] + 1)
 
-    ops: List[Tuple[str, int, int]] = []
-    i, j = s, t
-    while i > 0 or j > 0:
-        if (
-            i > 0
-            and j > 0
-            and dp[i][j] == dp[i - 1][j - 1] + (0 if spine[i - 1] == hyp[j - 1] else 1)
-        ):
-            ops.append(("match", i - 1, j - 1))
-            i, j = i - 1, j - 1
-        elif i > 0 and dp[i][j] == dp[i - 1][j] + 1:
-            ops.append(("del", i - 1, -1))  # spine slot, hypothesis has no token
-            i -= 1
-        else:
-            ops.append(("ins", -1, j - 1))  # hypothesis token, no spine slot
-            j -= 1
-    ops.reverse()
-    return ops
+    ``backend`` selects the implementation: ``"python"`` (the default, the frozen
+    pure-Python DP in :mod:`ek._reference`) or ``"rust"`` (the optional native kernel
+    from the ``ek-rs`` package; inputs outside its domain fall back to Python). Every
+    backend returns identical operations on every input.
+    """
+    if backend == "python":
+        return _reference._align(spine, hyp)
+    if backend == "rust":
+        return _align_native(spine, hyp)
+    raise ValueError(
+        f"unknown _align backend {backend!r}; expected one of {_ALIGN_BACKENDS}"
+    )
+
+
+def _in_native_domain(seq: Any) -> bool:
+    """Whether the native kernel reproduces ``==`` on ``seq``'s tokens exactly.
+
+    True for a ``list`` or ``tuple`` of exact ``str`` / ``None`` tokens, whose ``==``
+    is the dict equality used to intern them. Everything else -- other sequence
+    types, ``str`` subclasses (which may override ``==``), and non-``str`` tokens
+    (``nan != nan``, ``1 == 1.0``) -- is left to the reference.
+    """
+    return type(seq) in (list, tuple) and all(
+        tok is None or type(tok) is str for tok in seq
+    )
+
+
+def _align_native(
+    spine: Sequence[Optional[str]], hyp: Sequence[str]
+) -> List[Tuple[str, int, int]]:
+    """:func:`_align` on the native kernel: tokens interned to ints, the DP in Rust.
+
+    Inputs outside the native domain go to the reference before ``ek_rs`` is even
+    looked for, so they never need the extension.
+    """
+    if not (_in_native_domain(spine) and _in_native_domain(hyp)):
+        return _reference._align(spine, hyp)
+    ids: dict = {}
+    # setdefault evaluates len(ids) first, so a new token gets the next free id.
+    spine_ids = [ids.setdefault(tok, len(ids)) for tok in spine]
+    hyp_ids = [ids.setdefault(tok, len(ids)) for tok in hyp]
+    return _native_align_ids(spine_ids, hyp_ids)
+
+
+def _native_align_ids(
+    spine_ids: List[int], hyp_ids: List[int]
+) -> List[Tuple[str, int, int]]:
+    """``ek_rs.align`` on interned ids; :class:`MissingExtraError` without ``ek-rs``."""
+    try:
+        import ek_rs
+    except ImportError as e:  # not an ek[...] extra: ek-rs is not on PyPI yet
+        raise MissingExtraError(
+            'the native backend (backend="rust" / EK_ROVER_ALIGN_BACKEND=rust) needs the '
+            "optional ek-rs package, which is not installed or cannot be imported "
+            f"({e}). Build it from rust/ in the ek repository "
+            "(`maturin develop --release -m rust/py/Cargo.toml`); `pip install ek-rs` "
+            "will work once it is published. The default backend is pure Python."
+        ) from e
+    return ek_rs.align(spine_ids, hyp_ids)
 
 
 @dataclass
@@ -301,7 +348,7 @@ def rover(
     for i in range(1, n):
         units = hyps[i]
         spine = [_slot_majority(slot) for slot in slots]
-        ops = _align(spine, [tok for tok, _ in units])
+        ops = _align(spine, [tok for tok, _ in units], backend=_ALIGN_BACKEND)
         merged: List[List[_Entry]] = []
         for op, s_idx, h_idx in ops:
             if op == "match":

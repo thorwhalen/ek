@@ -1,0 +1,24 @@
+# Project cargo configuration (committed). Keep it free of machine-specific paths.
+#
+# Build output: set once per machine in ~/.cargo/config.toml, never here, so ./target never
+# lands in a synced folder (Dropbox, iCloud, OneDrive). Relative paths there resolve against $HOME:
+#
+#   [build]
+#   target-dir = "Library/Caches/cargo-target"                           # Linux: ".cache/cargo-target"
+#   build-dir = "Library/Caches/cargo-build/{workspace-path-hash}"       # Linux: ".cache/cargo-build/..."
+#
+# The per-workspace build-dir is not optional: with only a shared target-dir, two mixed packages
+# (both build a `_core` cdylib) overwrite each other's artifact and maturin installs the wrong one.
+#
+# Check the effective location with:
+#   python3 <rust-project-setup>/scripts/check_requirements.py --project .
+#
+# Interpreter pin (optional): PyO3's build script picks the interpreter from PYO3_PYTHON, then
+# the active venv, then python3 on PATH. When an editor's PATH differs from the shell's, every
+# check reconfigures and rebuilds PyO3. If this project has its own venv at .venv, pin it:
+#
+# [env]
+# PYO3_PYTHON = { value = "../.venv/bin/python", relative = true }   # Windows: .venv/Scripts/python.exe
+#
+# Leave it commented when the package is installed into a shared interpreter (pyenv, conda):
+# a pin to a missing .venv breaks every build.

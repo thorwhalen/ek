@@ -1,0 +1,41 @@
+[build-system]
+requires = ["maturin>=1.16,<2"]
+build-backend = "maturin"
+
+[project]
+name = "ek-rs"
+version = "0.0.1"                     # SSOT for the ek-rs release version (keep Cargo.toml equal)
+description = "Optional native (Rust) kernels for ek: build from the ek repository (not yet on PyPI)"
+readme = "README.md"
+requires-python = ">=3.10"            # matches the abi3-py310 floor in Cargo.toml
+license = "MIT"
+authors = [{ name = "Thor Whalen" }]
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+    "License :: OSI Approved :: MIT License",
+]
+
+[project.urls]
+Homepage = "https://github.com/thorwhalen/ek"
+
+[tool.maturin]
+manifest-path = "Cargo.toml"          # this binding crate (workspace root: ../Cargo.toml)
+module-name = "ek_rs"
+bindings = "pyo3"
+locked = true                         # fail if Cargo.lock is stale (CI and sdist builds)
+strip = true
+exclude = ["**/__pycache__", "**/*.pyc"]
+
+[tool.uv]
+# Without these, `uv run` / `uv sync` never rebuild after a Rust edit and silently test a stale binary.
+cache-keys = [
+  { file = "pyproject.toml" },
+  { file = "Cargo.toml" },
+  { file = "../Cargo.toml" },
+  { file = "../Cargo.lock" },
+  { file = "../core/Cargo.toml" },
+  { file = "**/*.rs" },
+  { file = "../core/**/*.rs" },
+]

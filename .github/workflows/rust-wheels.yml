@@ -1,0 +1,133 @@
+# Wheels for the optional ek-rs package (rust/py): abi3 wheels for the fleet's platforms and
+# an sdist, smoke-tested from outside the repo. ek itself stays a pure-Python package released
+# by wads (ci.yml); this workflow never touches it.
+#
+# On a pull request that changes rust/: build and smoke-test only (the repo is public, so the
+# matrix costs nothing). To release ek-rs: bump [project].version in rust/py/pyproject.toml
+# (and rust/py/Cargo.toml), merge, then push a tag ek-rs-vX.Y.Z equal to it, or run this
+# workflow by hand with "publish" ticked.
+#
+# Publishing uses PyPI trusted publishing (no token, no secret): register this repository,
+# this workflow file and the environment "pypi" as a trusted publisher of the ek-rs project
+# on PyPI before the first release.
+name: rust-wheels
+on:
+  pull_request:
+    paths: ["rust/**", ".github/workflows/rust-wheels.yml"]
+  push:
+    tags: ["ek-rs-v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Upload ek-rs to PyPI"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: pyproject and Cargo agree, and a tag equals them
+        run: |
+          python - <<'PY'
+          import os, tomllib
+          py = tomllib.load(open("rust/py/pyproject.toml", "rb"))["project"]["version"]
+          rs = tomllib.load(open("rust/py/Cargo.toml", "rb"))["package"]["version"]
+          assert py == rs, f"rust/py/pyproject.toml {py} != rust/py/Cargo.toml {rs}"
+          ref = os.environ["GITHUB_REF"]
+          if ref.startswith("refs/tags/"):
+              tag = ref.removeprefix("refs/tags/")
+              assert tag == f"ek-rs-v{py}", f"tag {tag} != ek-rs-v{py}"
+          PY
+
+  wheels:
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-latest,    target: x86_64,  manylinux: auto, smoke: true }
+          - { runner: ubuntu-24.04-arm, target: aarch64, manylinux: auto, smoke: true }
+          - { runner: macos-latest,     target: aarch64, smoke: true }
+          - { runner: macos-latest,     target: x86_64,  smoke: false }   # cross-compiled: cannot run
+          - { runner: windows-latest,   target: x64,     python_arch: x64, smoke: true }
+          # On demand: musllinux_1_2 (Alpine) on ubuntu-latest; windows-11-arm with python_arch arm64.
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          architecture: ${{ matrix.python_arch }}
+      - name: Build abi3 wheel
+        uses: PyO3/maturin-action@v1
+        with:
+          working-directory: rust/py
+          target: ${{ matrix.target }}
+          manylinux: ${{ matrix.manylinux }}   # Linux builds run in the manylinux container
+          args: --release --locked --out dist
+          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+      - name: Smoke-test the wheel from outside the repo
+        if: matrix.smoke
+        shell: bash
+        working-directory: ${{ runner.temp }}
+        # Outside the repo and --import-mode=importlib, so the tests import the installed ek
+        # and the installed ek_rs wheel, never the source tree.
+        env:
+          EK_DIFF_BACKEND: rust
+        run: |
+          python -m pip install --no-index --no-deps --find-links "$GITHUB_WORKSPACE/rust/py/dist" ek-rs
+          python -m pip install "$GITHUB_WORKSPACE" pytest hypothesis
+          python -m pytest --import-mode=importlib -q -p no:cacheprovider \
+            "$GITHUB_WORKSPACE/tests/test_differential.py" \
+            "$GITHUB_WORKSPACE/tests/test_port_surface.py" \
+            "$GITHUB_WORKSPACE/tests/test_rover.py"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: wheels-${{ matrix.runner }}-${{ matrix.target }}
+          path: rust/py/dist
+
+  sdist:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: PyO3/maturin-action@v1
+        with:
+          working-directory: rust/py
+          command: sdist
+          args: --out dist
+      - uses: actions/setup-python@v6   # the runner's system Python is PEP 668 "externally managed"
+        with:
+          python-version: "3.12"
+      - name: Prove the sdist builds on its own
+        run: python -m pip install rust/py/dist/*.tar.gz
+      - uses: actions/upload-artifact@v6
+        with:
+          name: sdist
+          path: rust/py/dist
+
+  publish:
+    needs: [wheels, sdist]
+    if: startsWith(github.ref, 'refs/tags/ek-rs-v') || inputs.publish
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write   # trusted publishing; no token or secret
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: astral-sh/setup-uv@v7
+      - run: uv publish --trusted-publishing always dist/*
