@@ -5,19 +5,19 @@ orphan: true
 
 # About this build
 
-This documentation was built on **2026-10-20 15:28 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/51e0be4b3f996835e09099a13f80efc0f7ea0cce"><code>51e0be4</code></a> on branch <code>main</code>, for **ek 0.1.14** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-04 09:42 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/f110221acd053ce1bc1da407c1606a032d0422ae"><code>f110221</code></a> on branch <code>main</code>, for **ek 0.1.15** (from <code>pyproject.toml</code>).
 
 :::{warning}
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.14) is behind the latest release on PyPI (0.1.15): `pip install ek` gives newer code than these docs describe.
+- The documented version (0.1.15) is behind the latest release on PyPI (0.1.16): `pip install ek` gives newer code than these docs describe.
 :::
 
 ## Source
 
 | | |
 |---|---|
-| Commit | <a href="https://github.com/thorwhalen/ek/commit/51e0be4b3f996835e09099a13f80efc0f7ea0cce"><code>51e0be4b3f996835e09099a13f80efc0f7ea0cce</code></a> |
+| Commit | <a href="https://github.com/thorwhalen/ek/commit/f110221acd053ce1bc1da407c1606a032d0422ae"><code>f110221acd053ce1bc1da407c1606a032d0422ae</code></a> |
 | Branch | <code>main</code> |
 | Tags at this commit | none |
 | Working tree | clean |
@@ -28,15 +28,15 @@ The documentation and the package may be misaligned:
 | | |
 |---|---|
 | Repository | <code>thorwhalen/ek</code> |
-| Run | <a href="https://github.com/thorwhalen/ek/actions/runs/39448454576">39448454576</a> |
+| Run | <a href="https://github.com/thorwhalen/ek/actions/runs/41809222424">41809222424</a> |
 | Ref | <code>refs/heads/main</code> |
-| Event commit | <code>51e0be4b3f996835e09099a13f80efc0f7ea0cce</code> (in the history of the built commit) |
+| Event commit | <code>f110221acd053ce1bc1da407c1606a032d0422ae</code> (in the history of the built commit) |
 
 ## Tools
 
 | | |
 |---|---|
-| epythet | 0.2.21 |
+| epythet | 0.2.22 |
 | Sphinx | 9.1.1 |
 | docutils | 0.22.4 |
 | Python | 3.12.15 |
@@ -55,14 +55,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/ek/0.1.15/">0.1.15</a>, newer than the documented version (0.1.14).
+Latest release: <a href="https://pypi.org/project/ek/0.1.16/">0.1.16</a>, newer than the documented version (0.1.15).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/ek && cd ek
-git checkout 51e0be4b3f996835e09099a13f80efc0f7ea0cce
-pip install "epythet==0.2.21"
+git checkout f110221acd053ce1bc1da407c1606a032d0422ae
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
