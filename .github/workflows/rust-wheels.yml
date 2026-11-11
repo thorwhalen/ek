@@ -4,8 +4,9 @@
 #
 # On a pull request that changes rust/: build and smoke-test only (the repo is public, so the
 # matrix costs nothing). To release ek-rs: bump [project].version in rust/py/pyproject.toml
-# (and rust/py/Cargo.toml), merge, then push a tag ek-rs-vX.Y.Z equal to it, or run this
-# workflow by hand with "publish" ticked.
+# (and rust/py/Cargo.toml), merge, then push a tag ek-rs-vX.Y.Z equal to it. Publishing
+# happens ONLY from such a tag (the version job fails the run when the tag differs from the
+# versions in the files); a manual run builds and smoke-tests without uploading.
 #
 # Publishing uses PyPI trusted publishing (no token, no secret): register this repository,
 # this workflow file and the environment "pypi" as a trusted publisher of the ek-rs project
@@ -17,11 +18,6 @@ on:
   push:
     tags: ["ek-rs-v*"]
   workflow_dispatch:
-    inputs:
-      publish:
-        description: "Upload ek-rs to PyPI"
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -119,7 +115,7 @@ jobs:
 
   publish:
     needs: [wheels, sdist]
-    if: startsWith(github.ref, 'refs/tags/ek-rs-v') || inputs.publish
+    if: startsWith(github.ref, 'refs/tags/ek-rs-v')
     runs-on: ubuntu-latest
     environment: pypi
     permissions:

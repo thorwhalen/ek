@@ -298,3 +298,17 @@ raise `MissingExtraError` with the message above. A plain `pip install` of the w
 `ek-rs-v0.0.1`; then add `rust = ["ek-rs"]` to ek's extras; set `CARGO_REGISTRY_TOKEN` and run
 `cargo publish -p rover-align --locked` if rover-align should go to crates.io; the flagship items
 for `rover-align` (criterion benchmarks, API-guidelines checklist, examples, a second owner).
+
+## Mac benchmark and workflow tightening (2026-11-11)
+
+Re-run on the user's Mac (Apple M1 Max, arm64, CPython 3.12.1 GIL build, release build of `ek-rs` 0.0.1 from `maturin develop --release --uv`), `python benchmarks/bench_port.py --repeat 5`, reference and native in the same process. Ratios only; absolute times are not comparable with the cloud VM above.
+
+| case | size | reference | native | ratio (spread) |
+|---|---|---|---|---|
+| `_align` | 300 tokens | 19.05 ms | 486.93 µs | 39.1x (38.8-39.3x) |
+| `_align` | 1000 tokens | 274.46 ms | 5.00 ms | 54.9x (54.4-55.9x) |
+| `_align` | 5000 tokens | 7.49 s | 120.89 ms | 62.0x (61.4-62.3x) |
+| `rover (3 hypotheses)` | 1000 tokens | 578.63 ms | 14.36 ms | 40.3x (39.9-40.7x) |
+
+The Mac ratios (39-62x) sit within the cloud VM's range (38-86x); the 5000-token case is lower on the Mac because the Python reference is relatively faster there. Minor 6 above is fixed: `rust-wheels.yml` now publishes only from an `ek-rs-v*` tag (the `publish` input on manual dispatch is gone, so a manual run only builds and smoke-tests), and the `version` job already fails a tag that differs from the versions in `rust/py/`. The redundant `claude/land-pr-*` branch was already deleted from the remote.
+
