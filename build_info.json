@@ -1,34 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-11-11T12:19:33Z",
+  "built_at": "2026-11-11T12:26:52Z",
   "package": {
     "name": "ek",
-    "version": "0.1.16",
+    "version": "0.1.17",
     "display_name": "ek",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "0e417d3db620a6d612ef54ee522112630c5909a8",
-    "short_commit": "0e417d3",
+    "commit": "b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf",
+    "short_commit": "b002d26",
     "branch": "main",
-    "tags": [
-      "ek-rs-v0.0.1"
-    ],
+    "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/ek",
-    "commit_url": "https://github.com/thorwhalen/ek/commit/0e417d3db620a6d612ef54ee522112630c5909a8",
+    "commit_url": "https://github.com/thorwhalen/ek/commit/b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/ek",
-    "sha": "0e417d3db620a6d612ef54ee522112630c5909a8",
+    "sha": "b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "43019094181",
-    "run_url": "https://github.com/thorwhalen/ek/actions/runs/43019094181",
+    "run_id": "43020094595",
+    "run_url": "https://github.com/thorwhalen/ek/actions/runs/43020094595",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -62,16 +60,16 @@
   },
   "pypi": {
     "checked": true,
-    "latest": "0.1.17",
+    "latest": "0.1.18",
     "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout 0e417d3db620a6d612ef54ee522112630c5909a8\npip install \"epythet==0.2.22\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/ek && cd ek\ngit checkout b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf\npip install \"epythet==0.2.22\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": false,
     "notes": [
-      "The documented version (0.1.16) is behind the latest release on PyPI (0.1.17): `pip install ek` gives newer code than these docs describe."
+      "The documented version (0.1.17) is behind the latest release on PyPI (0.1.18): `pip install ek` gives newer code than these docs describe."
     ]
   }
 }

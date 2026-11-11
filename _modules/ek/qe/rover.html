@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=d50bcae4"></script>
+    <script src="../../../_static/documentation_options.js?v=71734efd"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.16" />
+  <meta name="docsearch:version" content="0.1.17" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -916,13 +916,14 @@ window.runMermaid = runMermaid;</script>
 <span class="w">    </span><span class="sd">"""``ek_rs.align`` on interned ids; :class:`MissingExtraError` without ``ek-rs``."""</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">ek_rs</span>
-    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># not an ek[...] extra: ek-rs is not on PyPI yet</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingExtraError</span><span class="p">(</span>
             <span class="s1">'the native backend (backend="rust" / EK_ROVER_ALIGN_BACKEND=rust) needs the '</span>
             <span class="s2">"optional ek-rs package, which is not installed or cannot be imported "</span>
-            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">). Build it from rust/ in the ek repository "</span>
-            <span class="s2">"(`maturin develop --release -m rust/py/Cargo.toml`); `pip install ek-rs` "</span>
-            <span class="s2">"will work once it is published. The default backend is pure Python."</span>
+            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">). Install it with `pip install ek[rust]` (or `pip install ek-rs`), or "</span>
+            <span class="s2">"build it from rust/ in the ek repository "</span>
+            <span class="s2">"(`maturin develop --release -m rust/py/Cargo.toml`). "</span>
+            <span class="s2">"The default backend is pure Python."</span>
         <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
     <span class="k">return</span> <span class="n">ek_rs</span><span class="o">.</span><span class="n">align</span><span class="p">(</span><span class="n">spine_ids</span><span class="p">,</span> <span class="n">hyp_ids</span><span class="p">)</span>
 
