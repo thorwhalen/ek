@@ -312,3 +312,7 @@ Re-run on the user's Mac (Apple M1 Max, arm64, CPython 3.12.1 GIL build, release
 
 The Mac ratios (39-62x) sit within the cloud VM's range (38-86x); the 5000-token case is lower on the Mac because the Python reference is relatively faster there. Minor 6 above is fixed: `rust-wheels.yml` now publishes only from an `ek-rs-v*` tag (the `publish` input on manual dispatch is gone, so a manual run only builds and smoke-tests), and the `version` job already fails a tag that differs from the versions in `rust/py/`. The redundant `claude/land-pr-*` branch was already deleted from the remote.
 
+## ek-rs 0.0.1 published; the `rust` extra is back (2026-11-11)
+
+`ek-rs` 0.0.1 was released from the tag `ek-rs-v0.0.1` through PyPI trusted publishing (wheels for manylinux x86_64 and aarch64, macOS arm64 and x86_64, Windows x64, plus the sdist). `ek[rust]` (`rust = ["ek-rs"]`) is restored and `uv lock` resolves (434 packages; ek commits no `uv.lock`). The missing-extension error now points to `ek[rust]`; its test changed first and failed against the old message. With `ek[rust]` installed from PyPI into a fresh venv: `tests/test_port_surface.py`, `tests/test_differential.py` and `tests/test_rover.py` 290 passed.
+

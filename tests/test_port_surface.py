@@ -180,8 +180,8 @@ def test_align_rust_backend_without_ek_rs_names_the_package(monkeypatch):
     monkeypatch.setitem(__import__("sys").modules, "ek_rs", None)  # import fails
     with pytest.raises(MissingExtraError, match=r"ek-rs") as info:
         rover_mod._align(["a"], ["a"], backend="rust")
-    # there is no such extra: ek-rs is not on PyPI
-    assert "ek[rust]" not in str(info.value)
+    # the install hint is the extra, which pulls in the ek-rs wheel
+    assert "ek[rust]" in str(info.value)
     assert isinstance(info.value.__cause__, ImportError)  # the real cause is kept
 
 
