@@ -202,13 +202,14 @@ def _native_align_ids(
     """``ek_rs.align`` on interned ids; :class:`MissingExtraError` without ``ek-rs``."""
     try:
         import ek_rs
-    except ImportError as e:  # not an ek[...] extra: ek-rs is not on PyPI yet
+    except ImportError as e:
         raise MissingExtraError(
             'the native backend (backend="rust" / EK_ROVER_ALIGN_BACKEND=rust) needs the '
             "optional ek-rs package, which is not installed or cannot be imported "
-            f"({e}). Build it from rust/ in the ek repository "
-            "(`maturin develop --release -m rust/py/Cargo.toml`); `pip install ek-rs` "
-            "will work once it is published. The default backend is pure Python."
+            f"({e}). Install it with `pip install ek[rust]` (or `pip install ek-rs`), or "
+            "build it from rust/ in the ek repository "
+            "(`maturin develop --release -m rust/py/Cargo.toml`). "
+            "The default backend is pure Python."
         ) from e
     return ek_rs.align(spine_ids, hyp_ids)
 
