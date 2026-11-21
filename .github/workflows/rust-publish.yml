@@ -1,0 +1,20 @@
+# Manual publish of the rover-align core crate to crates.io (publish rule: misc/docs/port-log.md).
+# Run: gh workflow run rust-publish.yml -R thorwhalen/ek
+name: rust-publish
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Publish rover-align
+        working-directory: rust
+        run: cargo publish -p rover-align --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
