@@ -1,4 +1,4 @@
-> built 2026-11-11 12:26 UTC from b002d26 (main) · ek 0.1.17. Details: build_info.json
+> built 2026-11-21 09:11 UTC from 7113a8d (main) · ek 0.1.18. Details: build_info.json
 
 # index.html.md
 
@@ -9936,18 +9936,18 @@ caught; a *truly* constant column (no spread at all) yields no findings. For
 
 # About this build
 
-This documentation was built on **2026-11-11 12:26 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf"><code>b002d26</code></a> on branch <code>main</code>, for **ek 0.1.17** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-21 09:11 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5"><code>7113a8d</code></a> on branch <code>main</code>, for **ek 0.1.18** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.1.17) is behind the latest release on PyPI (0.1.18): `pip install ek` gives newer code than these docs describe.
+- The documented version (0.1.18) is behind the latest release on PyPI (0.1.19): `pip install ek` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                      |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/ek/commit/b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf"><code>b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/ek/commit/7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5"><code>7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5</code></a> |
 | Branch              | <code>main</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                 |
 | Working tree        | clean                                                                                                                                                |
@@ -9958,9 +9958,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/ek</code>                                                                 |
-| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/43020094595">43020094595</a>        |
+| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/44888245126">44888245126</a>        |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf</code> (in the history of the built commit) |
+| Event commit | <code>7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -9985,13 +9985,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/ek/0.1.18/">0.1.18</a>, newer than the documented version (0.1.17).
+Latest release: <a href="https://pypi.org/project/ek/0.1.19/">0.1.19</a>, newer than the documented version (0.1.18).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/ek && cd ek
-git checkout b002d26ea0e5e1b03cbb50a34a1cbfc68c5d1bbf
+git checkout 7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5
 pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
