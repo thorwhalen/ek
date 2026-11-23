@@ -1,4 +1,4 @@
-> built 2026-11-21 09:11 UTC from 7113a8d (main) · ek 0.1.18. Details: build_info.json
+> built 2026-11-23 22:43 UTC from 837101e (main) · ek 0.1.19. Details: build_info.json
 
 # index.html.md
 
@@ -9936,18 +9936,16 @@ caught; a *truly* constant column (no spread at all) yields no findings. For
 
 # About this build
 
-This documentation was built on **2026-11-21 09:11 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5"><code>7113a8d</code></a> on branch <code>main</code>, for **ek 0.1.18** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-11-23 22:43 UTC** from commit <a href="https://github.com/thorwhalen/ek/commit/837101e6a06d9ea5ea3a4156924f1f802d186215"><code>837101e</code></a> on branch <code>main</code>, for **ek 0.1.19** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.1.18) is behind the latest release on PyPI (0.1.19): `pip install ek` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                      |
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/ek/commit/7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5"><code>7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/ek/commit/837101e6a06d9ea5ea3a4156924f1f802d186215"><code>837101e6a06d9ea5ea3a4156924f1f802d186215</code></a> |
 | Branch              | <code>main</code>                                                                                                                                    |
 | Tags at this commit | none                                                                                                                                                 |
 | Working tree        | clean                                                                                                                                                |
@@ -9958,15 +9956,15 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/ek</code>                                                                 |
-| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/44888245126">44888245126</a>        |
+| Run          | <a href="https://github.com/thorwhalen/ek/actions/runs/45282056180">45282056180</a>        |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5</code> (in the history of the built commit) |
+| Event commit | <code>837101e6a06d9ea5ea3a4156924f1f802d186215</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.22  |
+| epythet  | 0.2.25  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.16 |
@@ -9985,14 +9983,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/ek/0.1.19/">0.1.19</a>, newer than the documented version (0.1.18).
+Latest release: <a href="https://pypi.org/project/ek/0.1.19/">0.1.19</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/ek && cd ek
-git checkout 7113a8d63ba33a2a9c4d0fc123599ab4aed38fb5
-pip install "epythet==0.2.22"
+git checkout 837101e6a06d9ea5ea3a4156924f1f802d186215
+pip install "epythet==0.2.25"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 
@@ -10035,7 +10033,7 @@ Source: [`skills/ek-dev-add-signal`](https://github.com/thorwhalen/ek/tree/HEAD/
 
 ### `ek-dev-agents`
 
-How to build and extend ek’s AGENT/ASSISTANT evaluation instance (ek/agents/) — the second concrete instance after ek.ocr. Covers the episode object (Episode/Trajectory/Step/Cost/RunProvenance as Layer B) and the task/tool grammar (ToolSpec/TaskSpec building a GraphGrammar as Layer A, where FieldSpec.importance is the cost of a wrong tool argument), the agent metrics (TaskSuccessMetric with an injected Checker oracle, CostPerSuccessMetric implementing Cost-of-Pass E[cost]/P(success), ToolCallMetric doing BFCL AST match over a multiset of calls, TrajectoryMetric doing a Needleman-Wunsch sequence edit distance), the reliability estimators (pass@k capability vs pass^k reliability — pure functions, NOT Metrics), the LLM-as-judge seams (JudgeSignal reference-free vs JudgeMetric reference-based vs pairwise_judge, plus judge_validation reusing Krippendorff/Cohen IAA), the agent harness (run_suite with k trials, and the variance-aware agent_regression_gate using Wilson/bootstrap intervals), and the duck-typed bridges (trajectory_from_messages, from_inspect_sample). Use when implementing, debugging, or extending anything under ek/agents/, adding an agent metric/signal/checker, scoring an episode or trajectory or tool call, computing pass^k or cost per successful task, evaluating an LLM judge, or wiring an external agent harness (Inspect AI, DeepEval, Ragas). Read BEFORE touching ek/agents/.
+How to build and extend ek’s AGENT/ASSISTANT evaluation instance (ek/agents/), the second after ek.ocr. Covers the episode object (Episode/Trajectory/Step/Cost/RunProvenance, Layer B), the task/tool grammar (ToolSpec/TaskSpec as a GraphGrammar, Layer A), the agent metrics (TaskSuccessMetric with an injected Checker, CostPerSuccessMetric, ToolCallMetric as BFCL AST match, TrajectoryMetric as Needleman-Wunsch distance), pass@k vs pass^k (pure functions, NOT Metrics), the LLM-as-judge seams (JudgeSignal, JudgeMetric, pairwise_judge, judge_validation with Krippendorff/Cohen IAA), the harness (run_suite, the variance-aware agent_regression_gate) and the bridges (trajectory_from_messages, from_inspect_sample). Use when implementing, debugging or extending anything under ek/agents/, adding an agent metric, signal or checker, scoring an episode, trajectory or tool call, computing pass^k or cost per success, evaluating an LLM judge, or wiring Inspect AI, DeepEval or Ragas. Read BEFORE touching ek/agents/.
 
 ```bash
 gh skill install thorwhalen/ek ek-dev-agents --agent claude-code

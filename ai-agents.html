@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=9969ed3f"></script>
+    <script src="_static/documentation_options.js?v=3d116926"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +57,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.18" />
+  <meta name="docsearch:version" content="0.1.19" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -400,7 +400,7 @@ machine-readable copies of this documentation.</p>
 </section>
 <section id="ek-dev-agents">
 <h3><code class="docutils literal notranslate"><span class="pre">ek-dev-agents</span></code><a class="headerlink" href="#ek-dev-agents" title="Link to this heading">#</a></h3>
-<p>How to build and extend ek’s AGENT/ASSISTANT evaluation instance (ek/agents/) — the second concrete instance after ek.ocr. Covers the episode object (Episode/Trajectory/Step/Cost/RunProvenance as Layer B) and the task/tool grammar (ToolSpec/TaskSpec building a GraphGrammar as Layer A, where FieldSpec.importance is the cost of a wrong tool argument), the agent metrics (TaskSuccessMetric with an injected Checker oracle, CostPerSuccessMetric implementing Cost-of-Pass E[cost]/P(success), ToolCallMetric doing BFCL AST match over a multiset of calls, TrajectoryMetric doing a Needleman-Wunsch sequence edit distance), the reliability estimators (pass&#64;k capability vs pass^k reliability — pure functions, NOT Metrics), the LLM-as-judge seams (JudgeSignal reference-free vs JudgeMetric reference-based vs pairwise_judge, plus judge_validation reusing Krippendorff/Cohen IAA), the agent harness (run_suite with k trials, and the variance-aware agent_regression_gate using Wilson/bootstrap intervals), and the duck-typed bridges (trajectory_from_messages, from_inspect_sample). Use when implementing, debugging, or extending anything under ek/agents/, adding an agent metric/signal/checker, scoring an episode or trajectory or tool call, computing pass^k or cost per successful task, evaluating an LLM judge, or wiring an external agent harness (Inspect AI, DeepEval, Ragas). Read BEFORE touching ek/agents/.</p>
+<p>How to build and extend ek’s AGENT/ASSISTANT evaluation instance (ek/agents/), the second after ek.ocr. Covers the episode object (Episode/Trajectory/Step/Cost/RunProvenance, Layer B), the task/tool grammar (ToolSpec/TaskSpec as a GraphGrammar, Layer A), the agent metrics (TaskSuccessMetric with an injected Checker, CostPerSuccessMetric, ToolCallMetric as BFCL AST match, TrajectoryMetric as Needleman-Wunsch distance), pass&#64;k vs pass^k (pure functions, NOT Metrics), the LLM-as-judge seams (JudgeSignal, JudgeMetric, pairwise_judge, judge_validation with Krippendorff/Cohen IAA), the harness (run_suite, the variance-aware agent_regression_gate) and the bridges (trajectory_from_messages, from_inspect_sample). Use when implementing, debugging or extending anything under ek/agents/, adding an agent metric, signal or checker, scoring an episode, trajectory or tool call, computing pass^k or cost per success, evaluating an LLM judge, or wiring Inspect AI, DeepEval or Ragas. Read BEFORE touching ek/agents/.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gh<span class="w"> </span>skill<span class="w"> </span>install<span class="w"> </span>thorwhalen/ek<span class="w"> </span>ek-dev-agents<span class="w"> </span>--agent<span class="w"> </span>claude-code
 </pre></div>
 </div>
